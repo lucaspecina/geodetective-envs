@@ -30,6 +30,7 @@ Una idea entra por `notes/`. Si se decanta y vale la pena consolidar → pasa a 
 - `leverage_landscape.md` — Tier 2-5 y trabajos recientes (últimos 6-12 meses). Cubre GeoVista, GeoAgent, Pigeon, GeoRC, Verifiers, TRL, smolagents, StreetLearn, datasets secundarios, GeoBrowse, SpotAgent, GEO-Detective, GeoChain.
 - `E001_test3_no_tools_results.md` — Test 3 (VLM sin tools) sobre 17 fotos PastVu, N=3 runs. Filtro v2 simplificado (source + VLM-no-tools). 53% sobrevive. Sweet spot = cotidiano sin landmark.
 - `E002_react_websearch_first_run.md` — Primer ReAct + web_search en #1748874 (SP barrio). Mejora 300x: 2573 km → 8.5 km. Concepto del benchmark validado.
+- `E003_react_full_tools.md` — ReAct con stack completo (12 tools). Hallazgos: tools no siempre ayudan, modelo a veces no usa tools óptimas, decisión de NO forzar uso para no sesgar benchmark.
 
 ### `synthesis/`
 - `related_work_decisions.md` — canon post-crítica Codex sobre qué apalancar / replicar / descartar. Si choca con un note, este gana.

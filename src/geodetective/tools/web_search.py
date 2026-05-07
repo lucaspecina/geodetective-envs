@@ -73,14 +73,16 @@ class SearchResponse:
         }
 
 
-def web_search(query: str, max_results: int = 5, search_depth: str = "basic") -> SearchResponse:
+def web_search(query: str, max_results: int = 5, search_depth: str = "advanced") -> SearchResponse:
     """Buscar en la web con Tavily, filtrando dominios shortcut.
+
+    Default: search_depth="advanced" → contenido más rico (1000-5000 chars vs 200).
 
     Args:
         query: texto de búsqueda.
         max_results: cuántos resultados pedirle a Tavily ANTES del filtrado.
                      Si se filtra mucho, devolverá menos.
-        search_depth: "basic" o "advanced" (más caro pero más rico).
+        search_depth: "basic" (rápido, snippets cortos) o "advanced" (más rico).
 
     Returns:
         SearchResponse con resultados filtrados + meta.

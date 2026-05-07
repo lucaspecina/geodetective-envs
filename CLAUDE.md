@@ -61,28 +61,64 @@ conda activate geodetective
 # pip install -e ".[dev]"   # cuando exista pyproject.toml
 ```
 
-Variables de entorno (`.env`, todavía no creado):
+Variables de entorno (`.env`, gitignored):
 
 ```
-GOOGLE_MAPS_API_KEY=...
-TAVILY_API_KEY=...                       # o BRAVE_SEARCH_API_KEY / SERPER_API_KEY
-AZURE_FOUNDRY_BASE_URL=...               # para LLM judge / VLM si aplica
+# Azure Foundry (LLM)
 AZURE_INFERENCE_CREDENTIAL=...
+AZURE_FOUNDRY_BASE_URL=https://amalia-resource.openai.azure.com/openai/v1
+AZURE_MODEL=gpt-5.4
+
+# Tavily (web search + image search)
+TAVILY_API_KEY=...
+
+# Google Maps Platform (Static Maps + Street View Static)
+GOOGLE_MAPS_API_KEY=...
+
+# Otros (legacy de arcagi3 .env compartido)
+ARC_API_KEY=...
 ```
+
+Modelos confirmados disponibles en Foundry: `gpt-4o`, `gpt-4.1`, `gpt-5`, `gpt-5.4` (todos con visión).
 
 ---
 
-## Tech stack (planeado)
+## Tech stack (implementado)
 
 - **Python 3.11** + **conda** (env: `geodetective`).
-- **LangGraph** — loop ReAct (esqueleto clonado de GeoBenchX).
-- **Pydantic v2** — contratos de tools, observaciones, reward.
-- **httpx / requests** — clientes HTTP de Maps APIs.
-- **Pillow / imagehash** — manipulación de imágenes y hashing perceptual para anti-shortcut.
-- **Hugging Face datasets** — para descargar PastVu.
-- **pytest** + **ruff** — tests y lint.
+- **OpenAI SDK** (`openai`) — cliente para Foundry, OpenAI tool calling format nativo.
+- **httpx** — clientes HTTP (Tavily, Nominatim, Overpass, Google Maps, etc.).
+- **Pillow + imagehash** — manipulación de imágenes y hash perceptual `phash` para anti-shortcut.
+- **BeautifulSoup4 + lxml** — parsing HTML para `fetch_url`.
+- **geopy** — distancia geodésica.
+- **python-dotenv** (no usado, parseo manual de `.env`).
+- **pydantic** — schemas (instalado, uso minimal por ahora).
+- **tavily-python** — Tavily SDK.
 
-Detalle de qué se usa cuando esté implementado: `pyproject.toml` + `ARCHITECTURE.md`.
+Pendiente / planeado:
+- **LangGraph** — NO se usa por ahora (decisión: plain Python suficiente para v1, evaluar Verifiers/LangGraph en Fase 6).
+- **pytest + ruff** — sin tests todavía.
+- **Hugging Face datasets** — para bajar PastVu en bulk (cuando se haga issue #3).
+- **`pyproject.toml`** — pendiente, todas las deps en pip por ahora.
+
+---
+
+## Tools del agente (12 implementadas)
+
+Ver `src/geodetective/tools/` y `src/geodetective/agents/react.py`.
+
+| # | Tool | Backend |
+|---|---|---|
+| 1 | `web_search` (advanced) | Tavily |
+| 2 | `fetch_url` | httpx + bs4 |
+| 3 | `fetch_url_with_images` | httpx + bs4 + imagehash |
+| 4 | `image_search` (con hash flag) | Tavily images |
+| 5 | `geocode` / `reverse_geocode` | Nominatim OSM |
+| 6 | `historical_query` ⭐ | OpenHistoricalMap Overpass (CC0) |
+| 7 | `crop_image` / `crop_image_relative` | PIL local |
+| 8 | `static_map` | Google Maps Static (roadmap/satellite/terrain/hybrid) |
+| 9 | `street_view` | Google Street View Static + metadata |
+| 10 | `submit_answer` | terminal |
 
 ---
 
@@ -91,19 +127,28 @@ Detalle de qué se usa cuando esté implementado: `pyproject.toml` + `ARCHITECTU
 ```
 .
 ├── README.md, PROJECT.md, CLAUDE.md, CURRENT_STATE.md, CHANGELOG.md, AUTORESEARCH.md
+├── .env                            # gitignored: AZURE/TAVILY/GOOGLE_MAPS keys
+├── src/geodetective/
+│   ├── tools/                      # 11 tools del agente (web, fetch, image, geocode, OHM, crop, maps, sv)
+│   └── agents/
+│       └── react.py                # ReAct loop multi-paso con tool calling
+├── scripts/
+│   ├── sample_pastvu.py            # muestrear fotos PastVu por bbox
+│   ├── test3_no_tools.py           # baseline VLM sin tools (N runs)
+│   └── run_react_websearch.py      # ReAct con stack completo
+├── experiments/                    # gitignored excepto candidates.json + results.json
+│   ├── E001_test3_pastvu/
+│   └── E002_react_websearch/
 ├── research/
-│   ├── notes/         # working docs, debates, exploración
-│   ├── synthesis/     # conclusiones consolidadas (canon)
-│   ├── examples/      # ejemplos canónicos worked-out
-│   └── archive/       # superseded
-├── experiments/       # gitignored, manifest.yaml por experimento
+│   ├── notes/                      # working docs, deep dives, resultados E001-E003
+│   ├── synthesis/                  # conclusiones canon (related_work, viability, validation_plan)
+│   ├── examples/                   # ejemplos canónicos worked-out (vacío)
+│   └── archive/                    # superseded
 └── .claude/
     └── skills/
-        ├── test/      # /test — correr tests del proyecto
-        └── status/    # /status — resumen rápido del estado
+        ├── test/                   # /test — correr tests
+        └── status/                 # /status — resumen rápido del estado
 ```
-
-Cuando arranque el código: `src/geodetective/` + `tests/` + `scripts/`.
 
 ---
 

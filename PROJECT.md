@@ -6,6 +6,20 @@
 
 ---
 
+## ⚠️ Framing actual (mayo 2026): BENCHMARK primario, env como deuda futura
+
+**Foco actual = benchmark de evaluación de agentes geo-investigativos.** El sistema no entrena policies — las **mide**. Un agente / modelo se conecta, se le presentan fotos del corpus, llama tools, y el sistema score su capacidad investigativa.
+
+La idea original de exponer esto como **environment de RL** (consumible por Verifiers / TRL / OpenEnv para training) queda como **deuda futura** — válida, pero no es lo que construimos primero.
+
+**Por qué el shift**: la evaluación de viabilidad (`research/synthesis/viability_assessment.md`, mayo 2026) confirmó que (a) el TOS de Google Maps prohíbe explícitamente usar Maps Content para training/validating ML, (b) el reverse image search web-scale para filtrado adversarial no tiene solución a costo razonable a escala de 1M+ fotos, (c) el cost de una corrida de RL serio con tools comerciales es $30K-$80K USD. Estos bloqueadores son críticos para la versión env, **no** para la versión benchmark (1K-10K fotos, costo trivial, ToS para inference es zona aceptable).
+
+El nombre "GeoDetective **Envs**" refleja la idea original. Cambio de naming a "GeoDetective Benchmark" o similar es deuda explícita.
+
+Las secciones que siguen (Misión, Invariantes, etc.) siguen redactadas en el lenguaje original ("environment", "policy entrenada", "RL"). **Lectura del documento**: donde dice "environment" / "training", interpretar como benchmark a menos que se indique explícitamente lo contrario. Iteración posterior reescribirá las secciones para reflejar el framing benchmark de forma nativa.
+
+---
+
 ## Misión
 
 Construir un **environment de RL** donde un agente recibe una fotografía —especialmente fotos antiguas— y tiene que **descubrir dónde fue tomada investigando activamente con tools**: mapas, satelital, Street View, archivos históricos, búsqueda web.
@@ -94,19 +108,22 @@ Si el environment no puede crear estas presiones, no cumple su propósito.
 
 ## Invariantes (NO negociables)
 
-1. **Filtrado adversarial del corpus.** Antes de aceptar una foto al dataset, debe resistir tres tests: (a) reverse image search en Google Lens / Yandex / TinEye no la resuelve, (b) una descripción textual generada por VLM no la encuentra googleando, (c) VLMs grandes no la ubican sin tools. Sobreviven solo fotos que ya demostraron forzar investigación.
+1. **Filtrado adversarial del corpus completo.** Antes de aceptar una foto al dataset, debe resistir tres tests: (a) reverse image search en Google Lens / Yandex / TinEye no la resuelve, (b) una descripción textual generada por VLM no la encuentra googleando, (c) VLMs grandes no la ubican sin tools. Sobreviven solo fotos que ya demostraron forzar investigación. **El filtrado aplica al corpus entero, training incluido** — no solo al held-out. Razón: si una foto está indexada o estaba en el pretraining del modelo base, entrenar con ella enseña memorización en lugar de investigación.
 
-2. **El reward es continuo y geodésico.** Distancia al ground truth en kilómetros (estilo GeoGuessr), no binario. Permite gradiente de aprendizaje.
+2. **El reward principal optimizable es continuo y geodésico.** Distancia al ground truth en kilómetros (estilo GeoGuessr), no binario. Permite gradiente de aprendizaje. **Componentes adicionales del reward** (penalizadores de proceso, no señales optimizables directamente):
+   - **Tool spam penalty**: penalizar trayectorias con muchos tool calls sin resultados útiles (insight de GeoBrowse: "coherent plans > more tool calls").
+   - **Tool error penalty**: penalizar calls que fallan por mal uso, discriminando hipótesis genuinas de spam.
+   - **LLM judge / rúbrica investigativa**: SOLO para eval offline. **NO entra al training loop** — meterlo como señal optimizable expone al sistema a reward hacking (el agente aprende a satisfacer al judge, no a investigar).
 
 3. **Las tools NO pueden ser shortcuts disfrazados.** Filtros en runtime bloquean dominios de origen del dataset (pastvu.com, smapshot.ch, etc.) y un hash perceptual descarta resultados que contengan la imagen objetivo. Si un agente llega vía reverse image search, el filtro falló — corregirlo.
 
-4. **El proceso importa, no solo el outcome.** El environment debe instrumentar trayectorias: qué tools llamó, qué hipótesis formuló, cómo refinó. El reward de outcome solo no alcanza para entrenar investigación; mitigar shortcuts requiere diseño adversarial del corpus + filtrado de tools.
+4. **El proceso importa, no solo el outcome.** El environment debe instrumentar trayectorias: qué tools llamó, qué hipótesis formuló, cómo refinó. El reward de outcome solo no alcanza para entrenar investigación; mitigar shortcuts requiere diseño adversarial del corpus + filtrado de tools + penalizadores de proceso (ver invariante 2).
 
 5. **Foco histórico, no moderno.** Fotos modernas son trivializables y están cubiertas por la literatura. El nicho defendible y el problema interesante son las fotos antiguas (1826-2000 aprox., sweet spot 1900-1980).
 
 6. **El environment es reusable y open source.** El artefacto final es el environment empaquetado, no un modelo entrenado. Tiene público natural en la comunidad de RL environments (Prime Intellect Hub, etc.).
 
-7. **Compliance con TOS.** Google Maps Platform tiene zonas grises para entrenamiento RL a escala. Mezclar con alternativas libres (OSM, Mapillary, Sentinel-2) y leer los TOS antes de publicar a escala.
+7. **Compliance con TOS — distinción benchmark vs training.** El TOS de Google Maps Platform **prohíbe explícitamente** usar Maps Content para entrenar / validar / fine-tunear modelos ML. Para el framing actual (benchmark de inference), el uso es defendible bajo standard API consumption, pero hay zonas grises (caching long-term de tile outputs, machine interpretation per Map Tiles Policy). Para la versión env futura (training), Google Maps tools son **opcionales con user-supplied key + flag explícito "non-training mode"**, y el stack canónico tiene que correr completo solo con fuentes open (OSM, OpenHistoricalMap, Mapillary, open DEM, archivos públicos). Detalle en `research/synthesis/viability_assessment.md`.
 
 ---
 

@@ -33,11 +33,7 @@ SUBMIT_TOOL_SCHEMA = {
     "type": "function",
     "function": {
         "name": "submit_answer",
-        "description": (
-            "Submit tu respuesta final. Llamá esta función cuando tengas suficiente "
-            "información para dar coordenadas. Si no podés precisar, devolvé la mejor "
-            "estimación con confidence='baja'."
-        ),
+        "description": "Submit tu respuesta final con coordenadas, año y razonamiento estructurado.",
         "parameters": {
             "type": "object",
             "properties": {
@@ -45,8 +41,32 @@ SUBMIT_TOOL_SCHEMA = {
                 "lat": {"type": "number"},
                 "lon": {"type": "number"},
                 "year": {"type": "string", "description": "Año o rango (ej '1965', '1960-1970')."},
-                "reasoning": {"type": "string", "description": "Resumen breve del razonamiento."},
+                "reasoning": {"type": "string", "description": "Resumen breve del razonamiento general."},
                 "confidence": {"type": "string", "enum": ["alta", "media", "baja"]},
+                "visual_clues": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Pistas visuales concretas que extrajiste de la foto target (arquitectura, idioma de carteles, vehículos, vestimenta, vegetación, etc.).",
+                },
+                "external_evidence": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Evidencia externa que recolectaste vía tools (URL + qué confirma). Vacío si solo razonaste sin tools.",
+                },
+                "rejected_alternatives": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Hipótesis alternativas que consideraste y descartaste, con la razón.",
+                },
+                "verification_checks": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Chequeos independientes que hiciste (ej: 'comparé Street View con foto y matchea fachada', 'historical_query confirmó iglesia existía en año X'). Vacío si NO hiciste verificación.",
+                },
+                "uncertainty_reason": {
+                    "type": "string",
+                    "description": "Si confidence != alta, explicá qué información falta o por qué dudás.",
+                },
             },
             "required": ["location", "lat", "lon", "reasoning", "confidence"],
         },
@@ -54,53 +74,54 @@ SUBMIT_TOOL_SCHEMA = {
 }
 
 
-SYSTEM_PROMPT = """Sos un detective geográfico investigativo. Recibís una fotografía histórica y tu tarea es descubrir DÓNDE fue tomada (coords lat/lon) y CUÁNDO (año aproximado).
+SYSTEM_PROMPT = """Recibís una fotografía. Tu tarea es descubrir DÓNDE fue tomada (coords lat/lon) y CUÁNDO (año aproximado), y devolver la respuesta vía `submit_answer`.
 
-## Tus herramientas
+## Herramientas disponibles (qué hace cada una)
 
-### Investigación textual
-1. `web_search(query)` — buscar en la web. Recibís URLs + snippets.
-2. `fetch_url(url)` — entrar a una página específica y leer su texto completo.
+**`web_search(query, max_results)`**
+Busca texto en la web vía Tavily. Devuelve lista de resultados con `url`, `title`, `content` (snippet largo en modo advanced, ~1000-3000 chars).
 
-### Investigación visual
-3. `fetch_url_with_images(url)` — entrar a una página y ver sus imágenes embebidas.
-4. `image_search(query)` — buscar imágenes en la web (similar a Google Images).
-5. `crop_image(x, y, w, h)` o `crop_image_relative(region)` — hacer ZOOM en una región específica de la foto target. Útil para detalles chiquitos (carteles, números, marcas) que no se leen al ver la foto entera.
+**`fetch_url(url)`**
+Baja una página web específica. Devuelve `title` + `text` (hasta 12000 chars del contenido principal de la página).
 
-### Geo
-6. `geocode(query)` — convertir nombre/dirección a coords. Ej: "Plaza Mayor Madrid" → (40.41, -3.71).
-7. `reverse_geocode(lat, lon)` — convertir coords a nombre/dirección.
-8. `historical_query(bbox, year, preset)` — buscar features históricos (edificios, iglesias, calles) en una zona, OPCIONALMENTE filtrados por año. Pieza ÚNICA del proyecto. Ej: "qué iglesias había en Buenos Aires en 1900".
-9. `static_map(lat, lon, zoom, map_type)` — pedir imagen de mapa (roadmap/satellite/terrain/hybrid). type=terrain muestra relieve 2D con curvas de nivel — útil para identificar montañas/valles.
-10. `street_view(lat, lon, heading, pitch)` — pedir foto de Street View desde un punto y ángulo. Útil para verificar visualmente si un lugar moderno coincide con la foto histórica.
+**`fetch_url_with_images(url)`**
+Igual que `fetch_url` pero ADEMÁS baja hasta 5 imágenes embebidas en la página. Las imágenes se muestran en el siguiente turn. Cada imagen incluye `is_likely_target` (true si su hash perceptual coincide casi-exacto con la foto que estás investigando).
 
-### Final
-11. `submit_answer(...)` — devolver respuesta.
+**`image_search(query, max_results)`**
+Busca imágenes en la web (estilo Google Images). Las imágenes vienen en el siguiente turn con metadata: `url` de origen, `hamming_distance` y `is_likely_target` (true si coincide visualmente con la foto que estás investigando).
 
-## Estrategia recomendada
+**`crop_image(x, y, width, height)`**
+Recorta una región rectangular de la foto target con coordenadas en pixels. La región recortada se muestra ampliada en el siguiente turn.
 
-1. **Examiná la foto** cuidadosamente. Identificá pistas: arquitectura, vegetación, vehículos, vestimenta, idiomas, modelos, iluminación. Si hay un detalle chiquito (cartel, número), hacé `crop_image` para verlo mejor.
-2. **Hipótesis**: 2-3 candidatos sobre dónde puede ser.
-3. **Buscá texto** con `web_search` para validar/discriminar hipótesis. Ej: identificar arquitectura, idioma de carteles, época.
-4. **Profundizá** con `fetch_url` en URLs prometedores.
-5. **Compará visualmente**: `image_search` para imágenes generales del estilo, `street_view` para vistas modernas de un lugar específico, `static_map(terrain)` para verificar relieve.
-6. **Verificá ubicación específica** con `geocode` (nombre→coords) o `reverse_geocode` (coords→nombre).
-7. **Si es foto antigua**: `historical_query` para saber qué edificios existían en zona X en año Y.
-8. **Refiná** hipótesis con cada paso. Pivotá si evidencia contradice.
-9. **Submit** cuando tengas confianza razonable.
+**`crop_image_relative(region)`**
+Igual pero con regiones nombradas: `top_left`, `top_right`, `top_center`, `bottom_left`, `bottom_right`, `bottom_center`, `middle`, `center`, `left_half`, `right_half`, `top_half`, `bottom_half`.
 
-## Filtros anti-shortcut
+**`geocode(query, language)`**
+Convierte un nombre o dirección a coordenadas usando Nominatim (OSM). Ej: "Plaza Mayor Madrid" devuelve coords + dirección estructurada + tipo (residential/city/street/etc).
 
-- Los dominios de archivos públicos (pastvu.com, wikimedia, flickr, vk, yandex, lens, tineye) están BLOQUEADOS automáticamente.
-- Las imágenes que devuelven `image_search` o `fetch_url_with_images` vienen con flag `is_likely_target`. Si =true, esa imagen es la foto objetivo o casi-igual — NO cuenta como evidencia válida. Pivotá.
+**`reverse_geocode(lat, lon, zoom)`**
+Convierte coords a dirección. `zoom` controla el detalle: 3=país, 10=ciudad, 17=edificio, 18=calle.
 
-## Reglas
+**`historical_query(south, west, north, east, preset, year, require_dated, max_features)`**
+Busca features de OpenHistoricalMap en un bounding box. `preset` puede ser: `buildings`, `churches`, `schools`, `factories`, `railway_stations`, `monuments`, `houses`, `all_named`. Si `year` está dado, filtra features que existían en ese año. Cada feature trae `temporal_confidence`: `high` si tiene `start_date`/`end_date` confirmados; `low` si no tiene tags temporales (asumido pero no confirmado). OHM tiene cobertura DESIGUAL: ausencia de resultados no prueba ausencia histórica.
 
-- Sé EFICIENTE: cada tool call cuesta. Mejor 5 calls específicas que 15 vagas.
-- `image_search`, `fetch_url_with_images`, `static_map`, `street_view` son más caros en tokens — usalos cuando vale la pena.
-- `historical_query` es free (no Tavily) y útil para fotos antiguas.
-- Si después de varias búsquedas no podés precisar, devolvé tu mejor estimación con confidence='baja'.
-- Pensás y respondés en español. Las queries pueden estar en cualquier idioma."""
+**`static_map(lat, lon, zoom, map_type)`**
+Pide imagen de mapa de Google Maps. `map_type`: `roadmap`, `satellite`, `terrain` (relieve 2D con curvas de nivel), `hybrid`. La imagen se muestra en el siguiente turn.
+
+**`street_view(lat, lon, heading, pitch, fov, contact_sheet)`**
+Pide imagen(es) de Google Street View. Modo single (1 imagen al heading dado) o `contact_sheet=true` (4 imágenes en N/E/S/W). Devuelve fecha del panorama y distancia entre coords pedidas y panorama real. Si no hay cobertura, devuelve error `no_coverage`.
+
+**`submit_answer(...)`**
+Devolver respuesta. Campos: `location`, `lat`, `lon`, `year`, `reasoning`, `confidence` (alta/media/baja), `visual_clues`, `external_evidence`, `rejected_alternatives`, `verification_checks`, `uncertainty_reason`.
+
+## Filtros automáticos (no podés desactivarlos)
+
+- Los dominios de archivos públicos están bloqueados en `web_search`, `fetch_url`, `fetch_url_with_images`, `image_search`. No vas a poder consultar pastvu.com, wikimedia, flickr, vk, yandex, tineye, lens.google, pinterest, reddit, ebay y otros agregadores conocidos.
+- Las imágenes con `is_likely_target=true` son la foto objetivo o casi-igual (hash perceptual coincidente). Te las mostramos para transparencia, pero no son evidencia válida sobre la ubicación.
+
+## Idioma
+
+Las queries pueden estar en cualquier idioma. Tus respuestas y razonamiento, en español."""
 
 
 @dataclass
@@ -134,16 +155,22 @@ def run_react_agent(
         api_key=os.environ["AZURE_INFERENCE_CREDENTIAL"],
     )
     image_path = Path(image_path)
-
     img_b64 = base64.b64encode(image_path.read_bytes()).decode()
     data_url = f"data:image/jpeg;base64,{img_b64}"
+    # Tamaño de la foto target (para que el modelo sepa coords máximas para crop_image)
+    try:
+        from PIL import Image as _PILImage
+        with _PILImage.open(image_path) as _im:
+            img_w, img_h = _im.size
+    except Exception:
+        img_w, img_h = 0, 0
 
     messages: list[dict] = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {
             "role": "user",
             "content": [
-                {"type": "text", "text": user_prompt + "\n\n[Foto target abajo]"},
+                {"type": "text", "text": user_prompt + f"\n\nFoto target: {img_w}x{img_h} pixels (ancho x alto). Crop coordinates deben estar dentro de ese rango.\n\n[Foto target abajo]"},
                 {"type": "image_url", "image_url": {"url": data_url}},
             ],
         },
@@ -422,6 +449,7 @@ def run_react_agent(
                         heading=float(args.get("heading", 0)),
                         pitch=float(args.get("pitch", 0)),
                         fov=int(args.get("fov", 90)),
+                        contact_sheet=bool(args.get("contact_sheet", False)),
                     )
                     if isinstance(sv, StreetViewError):
                         if verbose:
@@ -429,16 +457,27 @@ def run_react_agent(
                         messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps({"error": sv.error, "detail": sv.detail})})
                         result.trace.append({"step": step + 1, "type": "street_view_error", "error": sv.error})
                     else:
+                        n_imgs = len(sv.images)
                         if verbose:
-                            print(f"     → street_view ok pano={sv.panorama_id}")
-                        meta = {"lat": sv.lat, "lon": sv.lon, "heading": sv.heading, "pitch": sv.pitch, "panorama_id": sv.panorama_id, "actual_lat": sv.actual_lat, "actual_lon": sv.actual_lon, "note": sv.note}
+                            print(f"     → street_view ok n_images={n_imgs} pano={sv.panorama_id} dist={sv.distance_to_pano_m:.0f}m" if sv.distance_to_pano_m else f"     → street_view ok n_images={n_imgs}")
+                        meta = {
+                            "lat": sv.lat, "lon": sv.lon,
+                            "n_images": n_imgs,
+                            "headings": [im.heading for im in sv.images],
+                            "panorama_id": sv.panorama_id,
+                            "pano_date": sv.pano_date,
+                            "actual_lat": sv.actual_lat,
+                            "actual_lon": sv.actual_lon,
+                            "distance_to_pano_m": sv.distance_to_pano_m,
+                            "note": sv.note,
+                        }
                         messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps(meta, ensure_ascii=False)})
-                        parts = [
-                            {"type": "text", "text": f"[Street View en ({sv.lat}, {sv.lon}) heading={sv.heading} pitch={sv.pitch}]"},
-                            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{sv.base64_jpeg}"}},
-                        ]
+                        parts = [{"type": "text", "text": f"[Street View en ({sv.lat}, {sv.lon}). {sv.note or ''}]"}]
+                        for im in sv.images:
+                            parts.append({"type": "text", "text": f"[heading={im.heading} pitch={im.pitch} fov={im.fov}]"})
+                            parts.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{im.base64_jpeg}"}})
                         pending_image_injections.append(("street_view", parts))
-                        result.trace.append({"step": step + 1, "type": "street_view", "args": args})
+                        result.trace.append({"step": step + 1, "type": "street_view", "args": args, "n_images": n_imgs})
                 except Exception as e:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"street_view error: {e}"})
                     result.trace.append({"step": step + 1, "type": "street_view_error", "error": str(e)})

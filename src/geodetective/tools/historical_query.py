@@ -14,15 +14,25 @@ import httpx
 # OHM Overpass endpoint (CC0)
 OHM_OVERPASS = "https://overpass-api.openhistoricalmap.org/api/interpreter"
 
-# Categorías comunes preconfiguradas para queries más simples
+# Categorías comunes preconfiguradas. Algunos presets compinan múltiples tags Overpass.
+# Forma single-tag: '"key"="value"' o '"key"'.
+# Forma multi-tag: lista de filtros que se OR en el body Overpass.
 PRESET_QUERIES = {
-    "buildings": '"building"',
-    "churches": '"amenity"="place_of_worship"',
-    "schools": '"amenity"="school"',
-    "factories": '"man_made"="works"',
-    "railway_stations": '"railway"="station"',
-    "monuments": '"historic"="monument"',
-    "all_named": '"name"',
+    "buildings": ['"building"'],
+    "churches": [
+        '"amenity"="place_of_worship"',
+        '"building"="church"',
+        '"building"="cathedral"',
+        '"building"="chapel"',
+        '"historic"="church"',
+        '"religion"',
+    ],
+    "schools": ['"amenity"="school"', '"building"="school"'],
+    "factories": ['"man_made"="works"', '"landuse"="industrial"'],
+    "railway_stations": ['"railway"="station"', '"public_transport"="station"'],
+    "monuments": ['"historic"="monument"', '"historic"="memorial"', '"tourism"="monument"'],
+    "houses": ['"building"="residential"', '"building"="house"', '"building"="apartments"'],
+    "all_named": ['"name"'],
 }
 
 
@@ -36,6 +46,10 @@ class HistoricalFeature:
     lon: Optional[float] = None
     start_date: Optional[str] = None
     end_date: Optional[str] = None
+    # "high" si tiene start_date confirmado <= year + (no end o end>=year).
+    # "low" si NO tiene fechas (asumimos pero sin confirmar).
+    # "n/a" si no se filtró por año.
+    temporal_confidence: str = "n/a"
 
     def to_dict(self) -> dict:
         return {
@@ -46,6 +60,7 @@ class HistoricalFeature:
             "lon": self.lon,
             "start_date": self.start_date,
             "end_date": self.end_date,
+            "temporal_confidence": self.temporal_confidence,
             "tags": self.tags,
         }
 
@@ -114,6 +129,7 @@ def historical_query(
     preset: Optional[str] = None,
     custom_overpass: Optional[str] = None,
     year: Optional[int] = None,
+    require_dated: bool = False,
     max_features: int = 30,
 ) -> HistoricalQueryResponse:
     """Buscar features OHM en un bounding box, opcionalmente filtrando por año.
@@ -122,11 +138,17 @@ def historical_query(
         south, west, north, east: bounding box (lat sur, lon oeste, lat norte, lon este).
         preset: categoría predefinida. Ver PRESET_QUERIES. Ej: "buildings", "churches".
         custom_overpass: Overpass QL custom (avanzado). Ignora preset si está dado.
-        year: año a filtrar. Si dado, usa OHM date filter para devolver features que existían en ese año.
-        max_features: cap de features devueltas para limitar respuesta.
+        year: año a filtrar. Si dado, devuelve solo features que existían en esa fecha.
+        require_dated: si True y year is not None, descarta features sin start_date/end_date.
+                       Útil para queries estrictas sobre OHM (cobertura desigual: muchas
+                       features no tienen tags temporales).
+        max_features: cap de features devueltas.
 
     Returns:
-        HistoricalQueryResponse con features matched.
+        HistoricalQueryResponse con features. Cada feature incluye `temporal_confidence`:
+        - "high" si tiene start_date <= year y (no end_date o end_date >= year).
+        - "low" si NO tiene fechas (asumimos pero no podemos confirmar).
+        - "n/a" si no se filtró por año.
     """
     if preset and preset not in PRESET_QUERIES and not custom_overpass:
         return HistoricalQueryResponse(
@@ -137,9 +159,12 @@ def historical_query(
     if custom_overpass:
         body = custom_overpass
     elif preset:
-        body = f'nwr[{PRESET_QUERIES[preset]}]({south},{west},{north},{east});'
+        # Preset puede ser lista de tags — generar múltiples nwr OR'd
+        tags = PRESET_QUERIES[preset]
+        if isinstance(tags, str):
+            tags = [tags]
+        body = "\n".join(f'nwr[{t}]({south},{west},{north},{east});' for t in tags)
     else:
-        # default: cualquier feature con name
         body = f'nwr["name"]({south},{west},{north},{east});'
 
     # Filtrado temporal en Python (más robusto que [date:] de Overpass OHM).
@@ -166,14 +191,29 @@ def historical_query(
     elements = data.get("elements", [])
     features = []
     filtered_by_year = 0
+    seen_ids = set()  # dedupe (porque pueden venir en múltiples queries OR'd)
     for el in elements:
         if len(features) >= max_features:
             break
-        tags = el.get("tags", {})
-        # Filtrar por año si fue dado
-        if year is not None and not _feature_existed_in_year(tags, year):
-            filtered_by_year += 1
+        osm_id = f"{el['type']}/{el['id']}"
+        if osm_id in seen_ids:
             continue
+        seen_ids.add(osm_id)
+        tags = el.get("tags", {})
+        start_d = tags.get("start_date")
+        end_d = tags.get("end_date")
+        has_dates = bool(start_d or end_d)
+        # Filtrar por año si fue dado
+        if year is not None:
+            if require_dated and not has_dates:
+                filtered_by_year += 1
+                continue
+            if not _feature_existed_in_year(tags, year):
+                filtered_by_year += 1
+                continue
+            tc = "high" if has_dates else "low"
+        else:
+            tc = "n/a"
         name = tags.get("name") or tags.get("name:en") or tags.get("name:ru")
         if "lat" in el and "lon" in el:
             lat, lon = el["lat"], el["lon"]
@@ -182,14 +222,15 @@ def historical_query(
         else:
             lat, lon = None, None
         features.append(HistoricalFeature(
-            osm_id=f"{el['type']}/{el['id']}",
+            osm_id=osm_id,
             name=name,
             type=el["type"],
             tags=tags,
             lat=lat,
             lon=lon,
-            start_date=tags.get("start_date"),
-            end_date=tags.get("end_date"),
+            start_date=start_d,
+            end_date=end_d,
+            temporal_confidence=tc,
         ))
 
     return HistoricalQueryResponse(
@@ -206,11 +247,11 @@ TOOL_SCHEMA = {
         "name": "historical_query",
         "description": (
             "Buscar features históricos (edificios, iglesias, calles, etc.) en una zona geográfica, "
-            "OPCIONALMENTE filtrando por año (qué existía en esa fecha). Usa OpenHistoricalMap "
-            "(versión histórica de OSM con dimensión temporal). "
-            "Útil para fotos antiguas: 'qué iglesias había en Buenos Aires en 1900?', "
-            "'qué edificios estaban en estas coords en 1950?'. "
-            "Devuelve lista de features con nombre, coords, tags, fecha de existencia."
+            "opcionalmente filtrando por año. Usa OpenHistoricalMap (versión histórica de OSM con "
+            "dimensión temporal). Devuelve lista de features con nombre, coords, tags, fechas. "
+            "Cada feature trae `temporal_confidence`: 'high' si tiene start_date confirmado, 'low' "
+            "si no tiene tags temporales (asume que existía en el año pero sin confirmar). "
+            "OHM tiene cobertura DESIGUAL: ausencia de resultados NO prueba ausencia histórica."
         ),
         "parameters": {
             "type": "object",
@@ -227,6 +268,11 @@ TOOL_SCHEMA = {
                 "year": {
                     "type": "integer",
                     "description": "Año a filtrar. Si dado, devuelve solo features que existían en esa fecha.",
+                },
+                "require_dated": {
+                    "type": "boolean",
+                    "description": "Si true (con year dado), descarta features sin start_date/end_date. Útil para queries estrictas.",
+                    "default": False,
                 },
                 "max_features": {
                     "type": "integer",

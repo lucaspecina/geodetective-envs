@@ -21,20 +21,42 @@ BLOCKED_DOMAINS = {
     "oldnyc.org",
     "oldsf.org",
     "historypin.org",
-    # Agregadores con thumbnails georreferenciados
+    "sepiatown.com",
+    # Agregadores con thumbnails georreferenciados / mirrors de archivo
     "commons.wikimedia.org",
     "upload.wikimedia.org",
+    "wikipedia.org",
     "flickr.com",
     "vk.com",  # comparte fotos con coords
+    "ok.ru",   # OK Odnoklassniki — agregador ruso
+    # Sitios de stock que indexan fotos históricas
+    "alamy.com",
+    "gettyimages.com",
+    "shutterstock.com",
+    "istockphoto.com",
+    "dreamstime.com",
+    "depositphotos.com",
     # Reverse image search
     "lens.google.com",
     "images.google.com",
+    "google.com/search",  # google image tab
     "yandex.com",
     "yandex.ru",
     "tineye.com",
-    # Hosting platforms con metadata exif
+    "bing.com/images",
+    # Hosting / pin platforms (pueden re-publicar fotos del corpus)
     "imgur.com",
     "postimg.cc",
+    "pinterest.com",
+    "pinterest.ca",
+    "pinterest.co.uk",
+    "reddit.com",
+    "redd.it",
+    "ebay.com",
+    "ebay.co.uk",
+    # Telegram (mirrors de archivos)
+    "t.me",
+    "telegram.org",
 }
 
 

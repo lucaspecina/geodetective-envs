@@ -1,6 +1,6 @@
 # GeoDetective Envs — Estado Actual
 
-> **Hoy no corre nada todavía.** El proyecto está en bootstrap (mayo 2026): docs y estructura armadas, código por venir.
+> **Mayo 2026**: en validación de viabilidad técnica. Ya hay primer prototipo end-to-end del agente con tools sobre fotos PastVu. El proyecto pivotó a **benchmark primario** (env como deuda futura) — ver disclaimer en `PROJECT.md`.
 >
 > Para visión y norte: `PROJECT.md` · Para roadmap: [Project v2](https://github.com/users/lucaspecina/projects/6) · Para historial: `CHANGELOG.md`.
 
@@ -8,61 +8,104 @@
 
 ## 1. Qué corre HOY
 
-**Nada ejecutable todavía.** Lo que existe:
+### Código operacional
 
-- Set de docs raíz (`README.md`, `PROJECT.md`, `CLAUDE.md`, `CURRENT_STATE.md`, `CHANGELOG.md`, `AUTORESEARCH.md`).
-- Estructura de directorios (`research/`, `experiments/`, `.claude/skills/`).
-- Project v2 en GitHub con `Status` + `Worktree` configurados.
-- Skills mínimas de Claude Code (`/test`, `/status`).
-- Memoria del proyecto inicializada.
-- Documento semilla con la idea original en `research/notes/genesis-intro.md`.
+```
+src/geodetective/
+├── tools/
+│   └── web_search.py          # Tavily backend + filtros anti-shortcut
+└── agents/
+    └── react.py               # Loop ReAct multi-paso con tool calling
+```
 
-No hay todavía:
+```
+scripts/
+├── sample_pastvu.py           # Muestrear fotos de PastVu por bbox geográficas
+├── test3_no_tools.py          # Test 3 (VLM sin tools) con N runs
+└── run_react_websearch.py     # Run agente ReAct + web_search
+```
 
-- `pyproject.toml` ni dependencias instalables.
-- Código en `src/`.
-- Tests.
-- Dataset descargado o filtrado.
-- Tools implementadas.
-- Loop ReAct funcionando.
+```
+experiments/
+├── E001_test3_pastvu/         # 19 candidatos, 17 testeados, results.json
+└── E002_react_websearch/      # 1 foto testeada (proof of concept)
+```
+
+### Stack
+
+- **Python 3.11** + conda env `geodetective`.
+- **OpenAI SDK** vía Azure Foundry (`https://amalia-resource.openai.azure.com/openai/v1`).
+- **Modelos disponibles**: gpt-4o, gpt-4.1, gpt-5, gpt-5.4 (visión OK).
+- **Tavily** para web search (1000 calls/mes free tier).
+- **PIL, geopy, httpx, pydantic** para utilidades.
+
+### Capacidades validadas
+
+1. ✅ **Sample de fotos PastVu** por API (bbox geográficas, mix de zonas).
+2. ✅ **Test 3 (VLM sin tools)** con N runs por foto, métricas de distancia + año.
+3. ✅ **Filtro adversarial v2** (source blacklist + dist_min<10km AND conf≥media) — sample 17 fotos, 53% sobrevive.
+4. ✅ **ReAct loop con tool calling** sobre Foundry (gpt-5.4).
+5. ✅ **Web search filtrada** (Tavily + blacklist de dominios shortcut).
+6. ✅ **Agente investigativo end-to-end**: sobre 1 foto sobreviviente, cerró 2573 km → 8.5 km de distancia (300x mejor que sin tools).
+
+### Lo que NO corre todavía
+
+- ❌ Tools adicionales: geocoding (Nominatim), places search (Overpass), OpenHistoricalMap, Static Maps, Street View, OCR, image manipulation.
+- ❌ Reward / scoring formal.
+- ❌ Eval suite con baselines.
+- ❌ Filtrado adversarial estratificado en sample grande.
+- ❌ Tests automáticos (pytest).
+- ❌ `pyproject.toml` con deps formal.
+- ❌ Rúbrica investigativa formal.
+- ❌ Decisión Verifiers vs custom (postpuesta a Fase 6).
 
 ---
 
 ## 2. Cómo usar el sistema hoy
 
-No hay sistema runneable todavía. El uso actual es **navegacional**:
+### Setup
 
 ```bash
-# clonar repo
-git clone https://github.com/lucaspecina/geodetective-envs.git
 cd geodetective-envs
+conda activate geodetective  # Python 3.11
+# .env tiene: AZURE_INFERENCE_CREDENTIAL, AZURE_FOUNDRY_BASE_URL, AZURE_MODEL=gpt-5.4, TAVILY_API_KEY
+```
 
-# leer la visión
-$EDITOR PROJECT.md
+### Samplear fotos
 
-# ver qué hay pendiente
-gh issue list
-gh project view 6 --owner lucaspecina --web
+```bash
+python scripts/sample_pastvu.py
+# Genera: experiments/E001_test3_pastvu/candidates.json
+```
+
+### Correr Test 3 (sin tools) en N runs
+
+```bash
+python scripts/test3_no_tools.py
+# Genera: experiments/E001_test3_pastvu/results.json
+# Tabla resumen en stdout
+```
+
+### Correr ReAct con web_search sobre fotos específicas
+
+```bash
+python scripts/run_react_websearch.py 1748874  # cid de foto
+# O sin args: usa default (5 fotos sobrevivientes).
+# Genera: experiments/E002_react_websearch/results.json
 ```
 
 ---
 
 ## 3. Qué se está construyendo
 
-**Foco inmediato (próximas issues, sujeto a priorización en Project v2):**
+**Foco inmediato**: validación incremental por fases. Ver `research/synthesis/validation_plan.md` para detalle.
 
-1. Setup de stack Python (`pyproject.toml` con conda env `geodetective`, dependencias core).
-2. Exploración inicial del dataset PastVu (descargar dump de Hugging Face `nyuuzyou/pastvu`, inspeccionar formato webdataset, evaluar tamaño y splits).
-3. Spike de related work: replicar baseline de GeoBenchX local para tener el esqueleto ReAct funcionando.
-4. Primer prototipo de tools mínimas envueltas como functions Python (Static Maps, Street View Static, web search).
+- **Fase 0** ✅ — concepto manual (E001 + E002).
+- **Fase 1** ⏳ — datos + cobertura (issues #3, #4, #5).
+- **Fase 2** ⏳ — más tools (geocode, OHM, places, etc.).
+- **Fase 3-6** — anti-shortcut estratificado, loop con rúbrica, reward, eval suite.
 
-**Fuera de scope inmediato (futuro):**
-
-- Filtrado adversarial completo (los 3 tests anti-contaminación) → v1.5.
-- Tool de archivos históricos custom → v1.5.
-- Entrenamiento RL real → v2.
-
-Para detalle del roadmap: `PROJECT.md` sección "Roadmap conceptual" + Project v2.
+**Próximo paso lógico**: correr ReAct + web_search en las **otras 4 fotos sobrevivientes** del E001 para confirmar el patrón en más casos.
 
 ---
 
@@ -71,8 +114,12 @@ Para detalle del roadmap: `PROJECT.md` sección "Roadmap conceptual" + Project v
 | Si querés... | Andá a |
 |---|---|
 | Por qué existe el proyecto, invariantes | `PROJECT.md` |
+| Plan paso a paso de validación | `research/synthesis/validation_plan.md` |
+| Decisiones canónicas post-crítica Codex | `research/synthesis/related_work_decisions.md` |
+| Análisis de viabilidad técnica | `research/synthesis/viability_assessment.md` |
+| Resultados E001 (test sin tools) | `research/notes/E001_test3_no_tools_results.md` |
+| Resultados E002 (ReAct + web search) | `research/notes/E002_react_websearch_first_run.md` |
 | Trabajo pendiente con prioridad | [Project v2](https://github.com/users/lucaspecina/projects/6) |
 | Operativa de Claude Code | `CLAUDE.md` |
 | Idea original (semilla histórica) | `research/notes/genesis-intro.md` |
-| Análisis de related work cuando se haga | `research/synthesis/` |
 | Historial de cambios | `CHANGELOG.md` |

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-05-08
+
+- **Diseño operativo del pipeline de filtrado del corpus** documentado como issue #21 (epic) + 3 sub-issues accionables. Decisiones canónicas: (a) atacante adversarial barato con modelo chico en 3 rondas (sin tools / con búsqueda / TinEye sampleado), no solo Test 3 estático; (b) Paso 0 de limpieza pre-filtro con strip EXIF + crop watermark por regla de fuente + RGBA→RGB (cierra #18, sub-issue #22); (c) blacklist de dominios runtime cambia de global a per-photo — el resto del archivo histórico queda accesible para investigación legítima (sub-issue #23); (d) Paso 2A multi-modelo en sample diverso antes de aplicar el filtro a escala, evita overfit del corpus a un solo modelo (sub-issue #24). Decisiones pendientes (modelo atacante exacto, threshold de confianza, buckets de estratificación) quedan en el body de #21 como checklist. Relacionado a #10 (threat model conceptual).
+
 ## 2026-05-07
 
 - Bootstrap del proyecto (#1): repo + Project v2 #6 + set de docs raíz (README, PROJECT, CLAUDE, CURRENT_STATE, CHANGELOG, AUTORESEARCH) + estructura `research/` y `experiments/` + skills mínimas (`/test`, `/status`) + memoria del proyecto + documento semilla movido a `research/notes/genesis-intro.md`.

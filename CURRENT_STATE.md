@@ -13,7 +13,8 @@
 ```
 src/geodetective/
 ├── corpus/
-│   └── clean_image.py           # Paso 0 del filtrado: strip EXIF + crop watermark + RGBA→RGB
+│   ├── clean_image.py           # Paso 0 del filtrado: strip EXIF + crop watermark + RGBA→RGB
+│   └── blacklist.py             # GLOBAL minimal + PROVIDER_DOMAINS + per-photo runtime
 ├── tools/
 │   ├── web_search.py            # Tavily backend con search_depth=advanced + filtros
 │   ├── fetch_url.py             # Bajar páginas (texto y/o imágenes con hash)
@@ -30,6 +31,7 @@ scripts/
 ├── sample_pastvu.py             # Muestrear fotos de PastVu por bbox geográficas
 ├── test3_no_tools.py            # Test 3 (VLM sin tools) con N runs
 ├── test_clean_image.py          # Tests sintéticos del módulo corpus.clean_image (13 escenarios)
+├── test_blacklist.py            # Tests sintéticos del módulo corpus.blacklist (14 grupos, 65 checks)
 └── run_react_websearch.py       # Run agente ReAct con todo el stack
 
 experiments/

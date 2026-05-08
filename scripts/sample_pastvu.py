@@ -102,11 +102,12 @@ for name, z, bounds in zones:
         added += 1
         all_candidates.append({
             "cid": meta["cid"],
+            "provider": "pastvu",  # de qué archivo bajamos la foto (controla blacklist runtime).
             "zone": name,
             "title": meta.get("title", ""),
             "year": meta.get("year"),
             "country": country,
-            "source": meta.get("source", ""),
+            "source": meta.get("source", ""),  # provenance original (free-text con URLs).
             "contamination": cont,
             "geo": meta.get("geo"),
             "file": meta.get("file"),

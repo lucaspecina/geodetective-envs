@@ -13,24 +13,16 @@ import os
 import base64
 from dataclasses import dataclass, field
 from io import BytesIO
-from typing import Optional
+from typing import Iterable, Optional
 import httpx
 from PIL import Image
 import imagehash
 from tavily import TavilyClient
 
-from .web_search import BLOCKED_DOMAINS
+from ..corpus.blacklist import is_blocked
 
 
 MATCH_THRESHOLD = 8  # hamming distance < esto = "casi igual a target"
-
-
-def _domain_blocked(url: str) -> bool:
-    url_lower = url.lower()
-    for d in BLOCKED_DOMAINS:
-        if d in url_lower:
-            return True
-    return False
 
 
 @dataclass
@@ -58,6 +50,7 @@ def image_search(
     query: str,
     max_results: int = 3,
     target_image_path: Optional[str] = None,
+    excluded_domains: Optional[Iterable[str]] = None,
 ) -> ImageSearchResponse:
     """Buscar imágenes en la web con Tavily.
 
@@ -66,12 +59,14 @@ def image_search(
         max_results: cuántas imágenes (después de filtros). Default 3 para limitar tokens.
         target_image_path: ruta a la foto target. Si dada, se calcula hash perceptual y
                            cada imagen viene con flag is_likely_target.
+        excluded_domains: lista per-photo de hosts a bloquear además del GLOBAL.
 
     Returns:
         ImageSearchResponse con imágenes (base64) + metadata.
     """
     if not os.environ.get("TAVILY_API_KEY"):
         raise RuntimeError("TAVILY_API_KEY no está en environment.")
+    excluded = list(excluded_domains) if excluded_domains else []
 
     target_hash: Optional[imagehash.ImageHash] = None
     if target_image_path:
@@ -91,11 +86,15 @@ def image_search(
     for img_url in image_urls:
         if len(response.images) >= max_results:
             break
-        if _domain_blocked(img_url):
+        if is_blocked(img_url, excluded):
             response.blocked_domain_count += 1
             continue
         try:
             ir = httpx.get(img_url, timeout=10.0, follow_redirects=True, headers=headers)
+            # Recheck post-redirect: el download pudo terminar en otro host.
+            if is_blocked(str(ir.url), excluded):
+                response.blocked_domain_count += 1
+                continue
             if ir.status_code != 200 or len(ir.content) > 5_000_000:
                 response.download_failed_count += 1
                 continue

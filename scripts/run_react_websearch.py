@@ -81,7 +81,14 @@ for cid in cids:
         print(f"  Ground truth: {c['geo']}, year {c['year']}")
         print(f"{'=' * 80}")
 
-        res = run_react_agent(image_path=img_path, model="gpt-5.4", max_steps=12, verbose=True)
+        res = run_react_agent(
+            image_path=img_path,
+            model="gpt-5.4",
+            max_steps=12,
+            verbose=True,
+            provider=c.get("provider"),
+            provenance_source=c.get("source"),
+        )
 
         truth = c["geo"]
         dist_km = None

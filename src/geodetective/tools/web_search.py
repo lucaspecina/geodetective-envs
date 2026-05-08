@@ -1,71 +1,24 @@
 """Web search tool con filtros anti-shortcut.
 
-Backend: Tavily API. Filtra dominios que constituirían shortcut directo
-(fuentes del corpus, reverse image search, agregadores de fotos).
+Backend: Tavily API. Filtra dominios shortcut según `corpus.blacklist`:
+- GLOBAL: reverse search engines, agregadores con metadata estructurada, hosting/sharing.
+- PER-PHOTO: el caller pasa `excluded_domains` (provider de la foto + provenance).
 """
 from __future__ import annotations
 import os
 from dataclasses import dataclass
-from typing import Optional
+from typing import Iterable, Optional
 from tavily import TavilyClient
 
+from ..corpus.blacklist import is_blocked, BLOCKED_DOMAINS_GLOBAL
 
-# Dominios que descartamos en results (shortcut directo a la foto/respuesta)
-BLOCKED_DOMAINS = {
-    # Fuentes del corpus
-    "pastvu.com",
-    "smapshot.heig-vd.ch",
-    "smapshot.ch",
-    "etoretro.ru",
-    "humus.livejournal.com",
-    "oldnyc.org",
-    "oldsf.org",
-    "historypin.org",
-    "sepiatown.com",
-    # Agregadores con thumbnails georreferenciados / mirrors de archivo
-    "commons.wikimedia.org",
-    "upload.wikimedia.org",
-    "wikipedia.org",
-    "flickr.com",
-    "vk.com",  # comparte fotos con coords
-    "ok.ru",   # OK Odnoklassniki — agregador ruso
-    # Sitios de stock que indexan fotos históricas
-    "alamy.com",
-    "gettyimages.com",
-    "shutterstock.com",
-    "istockphoto.com",
-    "dreamstime.com",
-    "depositphotos.com",
-    # Reverse image search
-    "lens.google.com",
-    "images.google.com",
-    "google.com/search",  # google image tab
-    "yandex.com",
-    "yandex.ru",
-    "tineye.com",
-    "bing.com/images",
-    # Hosting / pin platforms (pueden re-publicar fotos del corpus)
-    "imgur.com",
-    "postimg.cc",
-    "pinterest.com",
-    "pinterest.ca",
-    "pinterest.co.uk",
-    "reddit.com",
-    "redd.it",
-    "ebay.com",
-    "ebay.co.uk",
-    # Telegram (mirrors de archivos)
-    "t.me",
-    "telegram.org",
-}
-
-
-def _domain_blocked(url: str) -> bool:
-    url_lower = url.lower()
-    for d in BLOCKED_DOMAINS:
-        if d in url_lower:
-            return True
-    return False
+# Re-export por back-compat de import (`from .web_search import BLOCKED_DOMAINS`).
+# ATENCIÓN: el comportamiento cambió en #23. Antes contenía las fuentes del corpus
+# (pastvu, smapshot, etc.) — ahora SOLO el GLOBAL minimal (reverse search + agregadores
+# masivos + hosting). Las fuentes del corpus se aplican per-photo vía
+# `corpus.compute_excluded_domains(provider, source)`. Migrá a esa función si esperabas
+# que `pastvu.com` esté siempre bloqueado.
+BLOCKED_DOMAINS = BLOCKED_DOMAINS_GLOBAL
 
 
 @dataclass
@@ -95,34 +48,46 @@ class SearchResponse:
         }
 
 
-def web_search(query: str, max_results: int = 5, search_depth: str = "advanced") -> SearchResponse:
+def web_search(
+    query: str,
+    max_results: int = 5,
+    search_depth: str = "advanced",
+    excluded_domains: Optional[Iterable[str]] = None,
+) -> SearchResponse:
     """Buscar en la web con Tavily, filtrando dominios shortcut.
 
     Default: search_depth="advanced" → contenido más rico (1000-5000 chars vs 200).
 
     Args:
         query: texto de búsqueda.
-        max_results: cuántos resultados pedirle a Tavily ANTES del filtrado.
-                     Si se filtra mucho, devolverá menos.
+        max_results: cuántos resultados devolver post-filtrado. Internamente pedimos
+            *3 a Tavily para tener buffer cuando el filtrado per-photo descarta varios.
         search_depth: "basic" (rápido, snippets cortos) o "advanced" (más rico).
+        excluded_domains: lista per-photo de hosts a bloquear además del GLOBAL
+            (típicamente `corpus.compute_excluded_domains(provider, source)`).
 
     Returns:
         SearchResponse con resultados filtrados + meta.
     """
     if not os.environ.get("TAVILY_API_KEY"):
         raise RuntimeError("TAVILY_API_KEY no está en environment.")
+    excluded = list(excluded_domains) if excluded_domains else []
     client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
-    raw = client.search(query, max_results=max_results, search_depth=search_depth)
+    # Overfetch *3 para que el filtrado per-photo no nos deje con < max_results.
+    raw = client.search(query, max_results=max_results * 3, search_depth=search_depth)
     raw_items = raw.get("results", [])
-    filtered = []
+    filtered: list[SearchResult] = []
     blocked = 0
     for r in raw_items:
-        if _domain_blocked(r.get("url", "")):
+        if len(filtered) >= max_results:
+            break
+        url = r.get("url", "")
+        if is_blocked(url, excluded):
             blocked += 1
             continue
         filtered.append(SearchResult(
             title=r.get("title", ""),
-            url=r.get("url", ""),
+            url=url,
             content=r.get("content", ""),
             score=r.get("score"),
         ))
@@ -141,9 +106,10 @@ TOOL_SCHEMA = {
         "name": "web_search",
         "description": (
             "Buscar en la web información de contexto sobre un lugar, edificio, "
-            "evento histórico, idioma de un cartel, vehículo, etc. NO sirve para "
-            "buscar la foto en sí (los dominios de archivos públicos están bloqueados). "
-            "Usá queries específicas en el idioma apropiado (español, inglés, ruso, etc.)."
+            "evento histórico, idioma de un cartel, vehículo, etc. Algunos dominios "
+            "se filtran automáticamente como anti-shortcut según la foto que estás "
+            "investigando — no necesitás especificarlos. Usá queries específicas en "
+            "el idioma apropiado (español, inglés, ruso, etc.)."
         ),
         "parameters": {
             "type": "object",

@@ -19,14 +19,15 @@ from typing import Any, Optional
 from dataclasses import dataclass, field
 from openai import OpenAI
 
+from ..corpus.blacklist import compute_excluded_domains
 from ..tools.web_search import web_search, TOOL_SCHEMA as WEB_SEARCH_SCHEMA
 from ..tools.fetch_url import fetch_url, TOOL_SCHEMA_TEXT as FETCH_URL_SCHEMA, TOOL_SCHEMA_WITH_IMAGES as FETCH_URL_IMG_SCHEMA
 from ..tools.image_search import image_search, TOOL_SCHEMA as IMAGE_SEARCH_SCHEMA
 from ..tools.geocode import geocode, reverse_geocode, TOOL_SCHEMA_GEOCODE, TOOL_SCHEMA_REVERSE
 from ..tools.historical_query import historical_query, TOOL_SCHEMA as HISTORICAL_QUERY_SCHEMA
-from ..tools.crop_image import crop_image, crop_image_relative, TOOL_SCHEMA_CROP, TOOL_SCHEMA_CROP_RELATIVE, CropResult
-from ..tools.static_map import static_map, StaticMapResult, StaticMapError, TOOL_SCHEMA as STATIC_MAP_SCHEMA
-from ..tools.street_view import street_view, StreetViewResult, StreetViewError, TOOL_SCHEMA as STREET_VIEW_SCHEMA
+from ..tools.crop_image import crop_image, crop_image_relative, TOOL_SCHEMA_CROP, TOOL_SCHEMA_CROP_RELATIVE
+from ..tools.static_map import static_map, StaticMapError, TOOL_SCHEMA as STATIC_MAP_SCHEMA
+from ..tools.street_view import street_view, StreetViewError, TOOL_SCHEMA as STREET_VIEW_SCHEMA
 
 
 SUBMIT_TOOL_SCHEMA = {
@@ -116,7 +117,7 @@ Devolver respuesta. Campos: `location`, `lat`, `lon`, `year`, `reasoning`, `conf
 
 ## Filtros automáticos (no podés desactivarlos)
 
-- Los dominios de archivos públicos están bloqueados en `web_search`, `fetch_url`, `fetch_url_with_images`, `image_search`. No vas a poder consultar pastvu.com, wikimedia, flickr, vk, yandex, tineye, lens.google, pinterest, reddit, ebay y otros agregadores conocidos.
+- En `web_search`, `fetch_url`, `fetch_url_with_images`, `image_search` se bloquean automáticamente algunos dominios para evitar shortcuts: reverse image search engines, agregadores masivos con metadata estructurada (caption + geotag), hosting/sharing platforms con propensión a re-publicar archivos, y la fuente específica de la foto que estás investigando. La lista exacta depende de cada foto; no necesitás conocerla.
 - Las imágenes con `is_likely_target=true` son la foto objetivo o casi-igual (hash perceptual coincidente). Te las mostramos para transparencia, pero no son evidencia válida sobre la ubicación.
 
 ## Idioma
@@ -148,12 +149,24 @@ def run_react_agent(
     max_steps: int = 12,
     verbose: bool = True,
     user_prompt: str = "Investigá esta foto y devolvé las coordenadas (lat, lon) y año con submit_answer.",
+    provider: Optional[str] = None,
+    provenance_source: Optional[str] = None,
 ) -> ReActResult:
-    """Correr el agente ReAct con todas las tools."""
+    """Correr el agente ReAct con todas las tools.
+
+    Anti-shortcut runtime:
+    - `provider`: identifica la fuente del corpus (pastvu, smapshot, ...). Sus dominios
+      van al excluido per-photo además del GLOBAL.
+    - `provenance_source`: campo `source` del candidate (free-text con URLs originales).
+      Se extraen hosts y se agregan al excluido.
+    """
     client = OpenAI(
         base_url=os.environ["AZURE_FOUNDRY_BASE_URL"],
         api_key=os.environ["AZURE_INFERENCE_CREDENTIAL"],
     )
+    excluded_domains = compute_excluded_domains(provider=provider, source=provenance_source)
+    if verbose and excluded_domains:
+        print(f"[run_react_agent] excluded_domains per-photo: {excluded_domains}")
     image_path = Path(image_path)
     img_b64 = base64.b64encode(image_path.read_bytes()).decode()
     data_url = f"data:image/jpeg;base64,{img_b64}"
@@ -248,7 +261,11 @@ def run_react_agent(
             if fname == "web_search":
                 result.web_search_count += 1
                 try:
-                    sr = web_search(query=args.get("query", ""), max_results=int(args.get("max_results", 5)))
+                    sr = web_search(
+                        query=args.get("query", ""),
+                        max_results=int(args.get("max_results", 5)),
+                        excluded_domains=excluded_domains,
+                    )
                     if verbose:
                         print(f"     → {len(sr.results)} results (filtered {sr.blocked_count}/{sr.total_raw})")
                     messages.append({"role": "tool", "tool_call_id": tc.id,
@@ -263,7 +280,7 @@ def run_react_agent(
                 result.fetch_url_count += 1
                 url = args.get("url", "")
                 try:
-                    fp = fetch_url(url, include_images=False)
+                    fp = fetch_url(url, include_images=False, excluded_domains=excluded_domains)
                     if verbose:
                         size = len(fp.text)
                         print(f"     → status={fp.status_code} text={size}c err={fp.error}")
@@ -279,7 +296,12 @@ def run_react_agent(
                 result.fetch_url_count += 1
                 url = args.get("url", "")
                 try:
-                    fp = fetch_url(url, include_images=True, target_image_path=target_path_str)
+                    fp = fetch_url(
+                        url,
+                        include_images=True,
+                        target_image_path=target_path_str,
+                        excluded_domains=excluded_domains,
+                    )
                     n_imgs = len(fp.images)
                     n_target = sum(1 for i in fp.images if i.is_likely_target)
                     result.target_match_count += n_target
@@ -311,6 +333,7 @@ def run_react_agent(
                         query=args.get("query", ""),
                         max_results=int(args.get("max_results", 3)),
                         target_image_path=target_path_str,
+                        excluded_domains=excluded_domains,
                     )
                     result.target_match_count += isr.target_match_count
                     if verbose:

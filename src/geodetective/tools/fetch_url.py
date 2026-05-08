@@ -1,37 +1,28 @@
 """fetch_url: bajar el contenido de una página web y devolver texto (+ imágenes opcional).
 
 Filtros:
-- Domain blacklist (mismo que web_search) — no bajar páginas shortcut.
+- Blacklist (GLOBAL + per-photo) — re-chequea URL post-redirect.
 - Tamaño cap (no bajar páginas gigantes).
 
 Si include_images=True, también baja las imágenes embebidas y calcula hash perceptual
 para flagear las que coincidan con la foto target.
 """
 from __future__ import annotations
-import os
 import re
 from dataclasses import dataclass, field
 from io import BytesIO
-from typing import Optional
+from typing import Iterable, Optional
 import httpx
 from bs4 import BeautifulSoup
 from PIL import Image
 import imagehash
 
-from .web_search import BLOCKED_DOMAINS
+from ..corpus.blacklist import is_blocked
 
 
 MAX_PAGE_SIZE = 2_000_000  # 2 MB
 MAX_TEXT_CHARS = 12_000  # truncate para no inflar tokens
 MAX_IMAGES_PER_PAGE = 5  # no más de 5 imágenes por página
-
-
-def _domain_blocked(url: str) -> bool:
-    url_lower = url.lower()
-    for d in BLOCKED_DOMAINS:
-        if d in url_lower:
-            return True
-    return False
 
 
 def _extract_text(html: str) -> str:
@@ -139,6 +130,7 @@ def fetch_url(
     include_images: bool = False,
     target_image_path: Optional[str] = None,
     timeout: float = 20.0,
+    excluded_domains: Optional[Iterable[str]] = None,
 ) -> FetchedPage:
     """Bajar una página y devolver su texto principal (+ imágenes opcional).
 
@@ -147,11 +139,13 @@ def fetch_url(
         include_images: si True, también baja las imágenes embebidas.
         target_image_path: ruta a la foto target (para hash perceptual). Si None, no compara.
         timeout: timeout en segundos.
+        excluded_domains: lista per-photo de hosts a bloquear además del GLOBAL.
 
     Returns:
         FetchedPage con texto + imágenes (con flags).
     """
-    if _domain_blocked(url):
+    excluded = list(excluded_domains) if excluded_domains else []
+    if is_blocked(url, excluded):
         return FetchedPage(url=url, status_code=0, title="", text="", text_truncated=False, error="domain_blocked")
 
     headers = {"User-Agent": "geodetective-research/0.1 (https://github.com/lucaspecina/geodetective-envs)"}
@@ -160,6 +154,11 @@ def fetch_url(
         r = httpx.get(url, timeout=timeout, follow_redirects=True, headers=headers)
     except Exception as e:
         return FetchedPage(url=url, status_code=0, title="", text="", text_truncated=False, error=f"fetch_error: {e}")
+
+    # Recheck post-redirect: la URL inicial puede ser un redirector neutral.
+    final_url = str(r.url)
+    if is_blocked(final_url, excluded):
+        return FetchedPage(url=url, status_code=r.status_code, title="", text="", text_truncated=False, error="domain_blocked_after_redirect")
 
     if r.status_code != 200:
         return FetchedPage(url=url, status_code=r.status_code, title="", text="", text_truncated=False, error=f"http_{r.status_code}")
@@ -184,14 +183,19 @@ def fetch_url(
                 target_hash = imagehash.phash(Image.open(target_image_path))
             except Exception:
                 target_hash = None
-        urls = _extract_image_urls(html, url)
-        # Filter blocked domains
-        urls = [u for u in urls if not _domain_blocked(u)]
+        # Resolver URLs relativas contra final_url, no la inicial — si hubo redirect
+        # cross-host, `<img src="/foo.jpg">` debe armarse con el host final.
+        urls = _extract_image_urls(html, final_url)
+        # Filter blocked domains (initial src URL).
+        urls = [u for u in urls if not is_blocked(u, excluded)]
         for img_url in urls[:MAX_IMAGES_PER_PAGE * 3]:  # buffer por si fallan algunas
             if len(images) >= MAX_IMAGES_PER_PAGE:
                 break
             try:
                 ir = httpx.get(img_url, timeout=10.0, follow_redirects=True, headers=headers)
+                # Recheck post-redirect: la imagen puede venir de un CDN bloqueado.
+                if is_blocked(str(ir.url), excluded):
+                    continue
                 if ir.status_code != 200 or len(ir.content) > 5_000_000:
                     continue
                 fi = _process_image(ir.content, target_hash)
@@ -220,8 +224,8 @@ TOOL_SCHEMA_TEXT = {
         "description": (
             "Entrar a una página web específica y leer su contenido completo. "
             "Útil cuando un resultado de web_search se ve prometedor y querés "
-            "el texto entero de la página, no solo el snippet. "
-            "Los dominios shortcut (pastvu.com, wikimedia, flickr, etc.) están bloqueados."
+            "el texto entero de la página, no solo el snippet. Algunos dominios se filtran "
+            "automáticamente como anti-shortcut según la foto que estás investigando."
         ),
         "parameters": {
             "type": "object",

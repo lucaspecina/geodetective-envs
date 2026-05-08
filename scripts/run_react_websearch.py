@@ -22,6 +22,7 @@ for line in Path(".env").read_text().splitlines():
 # Path setup para src/
 sys.path.insert(0, str(Path("src").resolve()))
 from geodetective.agents.react import run_react_agent
+from geodetective.corpus import CLEAN_VERSION
 
 EXP = Path("experiments/E001_test3_pastvu")
 OUT = Path("experiments/E002_react_websearch")
@@ -63,9 +64,14 @@ for cid in cids:
         print(f"⚠️  cid {cid} no está en candidates.json")
         continue
     c = by_cid[cid]
-    img_path = PHOTOS / f"{cid}_nowm.jpg"
+    img_path = PHOTOS / f"{cid}_clean_v{CLEAN_VERSION}.jpg"
+    legacy_path = PHOTOS / f"{cid}_nowm.jpg"
     if not img_path.exists():
-        print(f"  ⚠️  imagen no encontrada en {img_path}")
+        if legacy_path.exists():
+            print(f"  ⚠️  imagen vieja en {legacy_path} (sin EXIF strip / RGBA fix)."
+                  f" Re-correr scripts/test3_no_tools.py para regenerar como v{CLEAN_VERSION}.")
+        else:
+            print(f"  ⚠️  imagen no encontrada en {img_path}")
         continue
 
     runs = []

@@ -3,12 +3,15 @@
 Input: experiments/E001_test3_pastvu/candidates.json
 Output: experiments/E001_test3_pastvu/results.json
 """
-import os, base64, json, re, time
+import os, sys, base64, json, re, time
 from pathlib import Path
-from PIL import Image
 import httpx
 from openai import OpenAI
 from geopy.distance import geodesic
+
+# Path setup para src/
+sys.path.insert(0, str(Path("src").resolve()))
+from geodetective.corpus import clean_image, CLEAN_VERSION
 
 N_RUNS = int(os.environ.get("N_RUNS", "3"))
 
@@ -44,24 +47,26 @@ Respondé en español y en JSON con keys: location, lat, lon, year, reasoning, c
 
 
 def download_photo(c):
-    """Bajar foto de PastVu y cropear watermark."""
+    """Bajar foto de PastVu y limpiarla (strip EXIF + crop watermark + RGBA→RGB)."""
     url = f"https://pastvu.com/_p/a/{c['file']}"
     out_raw = PHOTOS / f"{c['cid']}_raw.jpg"
-    out_clean = PHOTOS / f"{c['cid']}_nowm.jpg"
+    out_clean = PHOTOS / f"{c['cid']}_clean_v{CLEAN_VERSION}.jpg"
     if out_clean.exists():
         return out_clean
     try:
         r = httpx.get(url, timeout=30.0, follow_redirects=True)
         r.raise_for_status()
         out_raw.write_bytes(r.content)
-        # Cropear watermark proporcional
-        img = Image.open(out_raw)
-        w, h = img.size
-        waterh = c.get("waterh", 42) or 42
-        orig_h = c.get("h") or 1801
-        crop_px = int(waterh * h / orig_h) if orig_h else 42
-        img.crop((0, 0, w, h - crop_px)).save(out_clean, quality=92)
-        return out_clean
+        result = clean_image(
+            raw_path=out_raw,
+            provider="pastvu",
+            provider_meta={"waterh": c.get("waterh"), "h": c.get("h")},
+            out_dir=PHOTOS,
+        )
+        if result.path is None:
+            print(f"  ⚠️  clean_image descartó {c['cid']}: {result.notes}")
+            return None
+        return result.path
     except Exception as e:
         print(f"  ⚠️  Error bajando {c['cid']}: {e}")
         return None

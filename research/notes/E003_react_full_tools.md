@@ -137,3 +137,50 @@ Confirma deuda en issue #16: cobertura OHM por región necesita audit antes de c
 2. **Comparar 2+ modelos** sobre las mismas fotos (gpt-4o vs gpt-5.4) para empezar a ver discriminación entre modelos.
 3. **Documentar la rúbrica** que el benchmark va a usar para evaluar el "uso investigativo" de tools.
 4. **Decisión Verifiers vs custom** queda postpuesta hasta tener más data.
+
+---
+
+## Anexo — Iteración E003-v2 (post-fixes Codex)
+
+Aplicamos los fixes propuestos por Codex (commit `06b4a9a`):
+- System prompt 100% **descriptivo** (no prescriptivo): solo describe qué hace cada tool, sin recomendar estrategia ni "sé eficiente". Decisión de no sesgar al modelo.
+- `submit_answer` schema expandido: `visual_clues`, `external_evidence`, `rejected_alternatives`, `verification_checks`, `uncertainty_reason`.
+- `historical_query` preset `churches` expandido a 6 tags + `temporal_confidence` per-feature + flag `require_dated`.
+- `street_view` modo `contact_sheet=true` (4 imágenes auto N/E/S/W) + `pano_date` + `distance_to_pano_m`.
+- Image dimensions `WxH` inyectadas al user prompt inicial (para crops válidos).
+- Blacklist expandida: 17 → 39 dominios (+ Pinterest, Reddit, Telegram, Alamy, Getty, Shutterstock, eBay, etc.).
+
+### Resultado run #1748874 con prompt minimal + schema rich
+
+Distancia: **1494 km** (mismo Strahov Praga que antes — anclaje persistente).
+
+**Pero ahora el modelo respondió completamente los campos nuevos del submit_answer**:
+
+| Campo | Output |
+|---|---|
+| `confidence` | `baja` (auto-calibrado vs antes que era `media`) |
+| `visual_clues` | 5 items concretos (bloque 8-9 plantas, ventanas, abedules, ropa 90s, prefab) |
+| `external_evidence` | 2 items con fuentes (TripAdvisor Strahov, image_search) |
+| `rejected_alternatives` | "Rusia/ex-URSS: plausible por arquitectura, descartada por evidencia textual a Praga" + "Paneláks Chequia: descartado por escala" |
+| `verification_checks` | 2 items honestos (contrasté tipología, busqué referencias específicas) |
+| `uncertainty_reason` | "No apareció match exacto e inequívoco. Identificación basada en tipología parcial" |
+
+→ **El schema expandido actúa como rúbrica forzada SIN SESGAR**. El modelo decide cómo investigar pero **debe estructurar su razonamiento**. Esto es **ORO para el benchmark** — permite medir:
+- Calibración (confidence vs distancia real).
+- Diversidad de hipótesis (cuántas alternativas consideró).
+- Profundidad investigativa (verification_checks count).
+- Honestidad (cross-check verification_checks vs tools usadas).
+
+### Test técnico: las tools de Maps SÍ funcionan al 100%
+
+Antes de concluir que el modelo "ignora" las tools de Google Maps, hicimos test directo:
+- Prompt: "usá street_view contact_sheet + static_map satellite sobre Plaza Mayor Madrid".
+- Resultado: ✅ ambas tools llamadas con args correctos, ✅ imágenes ejecutadas y devueltas (4 SV imágenes a 2m, satellite 640x640), ✅ modelo describió correctamente "estatua ecuestre, edificios rojos con arcadas, casco histórico denso".
+
+→ **NO es bug técnico**. Es decisión del modelo en el contexto de geolocalización: prioriza razonamiento textual sobre verificación visual con Maps. **Eso ES el comportamiento que el benchmark va a medir** entre modelos (gpt-5.4 vs gpt-5.5+ vs Claude Opus 5+).
+
+### Idea registrada para v2 — submit_tentative iterativo (issue #20)
+
+Patrón "frío/caliente" tipo Wordle. El agente puede llamar `submit_tentative(lat, lon)` y recibir feedback ("estás >1000 km", "100-1000 km", "<10 km"), iterando hasta `submit_final`. Postergada a v2 — primero validar one-shot.
+
+Tradeoffs y variantes documentadas en issue #20.

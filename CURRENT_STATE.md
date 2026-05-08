@@ -12,6 +12,8 @@
 
 ```
 src/geodetective/
+├── corpus/
+│   └── clean_image.py           # Paso 0 del filtrado: strip EXIF + crop watermark + RGBA→RGB
 ├── tools/
 │   ├── web_search.py            # Tavily backend con search_depth=advanced + filtros
 │   ├── fetch_url.py             # Bajar páginas (texto y/o imágenes con hash)
@@ -27,6 +29,7 @@ src/geodetective/
 scripts/
 ├── sample_pastvu.py             # Muestrear fotos de PastVu por bbox geográficas
 ├── test3_no_tools.py            # Test 3 (VLM sin tools) con N runs
+├── test_clean_image.py          # Tests sintéticos del módulo corpus.clean_image (13 escenarios)
 └── run_react_websearch.py       # Run agente ReAct con todo el stack
 
 experiments/

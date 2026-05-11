@@ -160,11 +160,12 @@ results = json.load(open("experiments/E002_react_websearch/results.json"))
 
 **Epic #21 — pipeline de filtrado del corpus**: ✅ **CERRADO** (2026-05-11). Sub-issues #22 (clean_image), #23 (blacklist runtime per-photo), #3 (audit metadata), #17 (sample diverso), #24 (atacante GPT-4o) — todas cerradas. Deuda hash perceptual implementada como hard reject en `react.py`.
 
-**Corpus filtrado disponible (E004, ver `research/notes/E004_attacker_filter.md`)**: 101 fotos sobrevivientes del sample inicial de 180 (56% survival rate). Distribución por bucket país: Russia-EU 22, Russia-Asia 26, Ex-URSS 19, Europa-no-URSS 15, Norteamerica 6, Resto 13. Por bucket década: 1890s 13, 1900s 14, 1910s 19, 1920s 19, 1930s 21, 1940s 15. Output en `experiments/E004_attacker_filter/results.json` (gitignored).
+**Piloto del pipeline validado (K=5, ver `research/notes/E004_attacker_filter.md`)**: el pipeline completo (sample → atacker → filtro) corrió end-to-end sobre 180 fotos (K_PER_CELL=5 en sample_diverso.py). 101 sobrevivieron al atacante GPT-4o (56%). Distribución por bucket país: Russia-EU 22, Russia-Asia 26, Ex-URSS 19, Europa-no-URSS 15, Norteamerica 6, Resto 13. Por bucket década: 1890s 13, 1900s 14, 1910s 19, 1920s 19, 1930s 21, 1940s 15. Output en `experiments/E004_attacker_filter/results.json` (gitignored). **No es el corpus de producción** — para eso hay que escalar K_PER_CELL (cada celda tiene de 247 a ~3700 unique geohashes disponibles).
 
-**Próximos pasos posibles** (sin issue creada todavía — necesita decisión):
+**Próximos pasos posibles**:
+- Probar end-to-end con el agente ReAct sobre algunas fotos del piloto (issue a crear).
+- Escalar K_PER_CELL para corpus de producción (issue a crear).
 - Eval suite formal con baselines + ablations (Fase 6 del plan de validación).
-- Escalar K_PER_CELL en `sample_diverso.py` y re-filtrar para corpus más grande.
 - Rúbrica investigativa formal (Fase 4).
 
 ---

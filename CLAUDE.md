@@ -129,18 +129,29 @@ Ver `src/geodetective/tools/` y `src/geodetective/agents/react.py`.
 ├── README.md, PROJECT.md, CLAUDE.md, CURRENT_STATE.md, CHANGELOG.md, AUTORESEARCH.md
 ├── .env                            # gitignored: AZURE/TAVILY/GOOGLE_MAPS keys
 ├── src/geodetective/
-│   ├── tools/                      # 11 tools del agente (web, fetch, image, geocode, OHM, crop, maps, sv)
+│   ├── corpus/                     # módulos del pipeline de filtrado (#21)
+│   │   ├── clean_image.py          # Paso 0: strip EXIF + crop watermark + RGBA→RGB (#22)
+│   │   └── blacklist.py            # blacklist runtime per-photo (#23)
+│   ├── tools/                      # 12 tools del agente (web, fetch, image, geocode, OHM, crop, maps, sv)
 │   └── agents/
-│       └── react.py                # ReAct loop multi-paso con tool calling
+│       └── react.py                # ReAct loop multi-paso con tool calling (12 tools)
 ├── scripts/
-│   ├── sample_pastvu.py            # muestrear fotos PastVu por bbox
+│   ├── sample_pastvu.py            # legacy: muestrear PastVu por bbox manual (corpus E001)
+│   ├── audit_pastvu_metadata.py    # audit del dump 2M records (#3)
+│   ├── sample_diverso.py           # sampler balanceado país×década desde dump (#17)
+│   ├── run_attacker_filter.py     # atacante GPT-4o sin tools (#24)
 │   ├── test3_no_tools.py           # baseline VLM sin tools (N runs)
-│   └── run_react_websearch.py      # ReAct con stack completo
+│   ├── test_clean_image.py         # tests sintéticos clean_image
+│   ├── test_blacklist.py           # tests sintéticos blacklist
+│   └── run_react_websearch.py      # ReAct con stack completo (lee corpus E001)
 ├── experiments/                    # gitignored excepto candidates.json + results.json
-│   ├── E001_test3_pastvu/
-│   └── E002_react_websearch/
+│   ├── E001_test3_pastvu/          # baseline + ReAct piloto manual
+│   ├── E002_react_websearch/
+│   ├── E004_attacker_filter/       # output del atacante (#24) — 180→101 sobrevivientes
+│   ├── E006_pastvu_audit/          # dump 282MB + results.json del audit (#3)
+│   └── E007_sample_diverso/        # 180 fotos balanceadas (#17)
 ├── research/
-│   ├── notes/                      # working docs, deep dives, resultados E001-E003
+│   ├── notes/                      # working docs, deep dives, audits, resultados E001-E004
 │   ├── synthesis/                  # conclusiones canon (related_work, viability, validation_plan)
 │   ├── examples/                   # ejemplos canónicos worked-out (vacío)
 │   └── archive/                    # superseded

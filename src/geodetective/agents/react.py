@@ -86,10 +86,10 @@ Busca texto en la web vía Tavily. Devuelve lista de resultados con `url`, `titl
 Baja una página web específica. Devuelve `title` + `text` (hasta 12000 chars del contenido principal de la página).
 
 **`fetch_url_with_images(url)`**
-Igual que `fetch_url` pero ADEMÁS baja hasta 5 imágenes embebidas en la página. Las imágenes se muestran en el siguiente turn. Cada imagen incluye `is_likely_target` (true si su hash perceptual coincide casi-exacto con la foto que estás investigando).
+Igual que `fetch_url` pero ADEMÁS baja hasta 5 imágenes embebidas en la página. Las imágenes que NO son la foto target se muestran en el siguiente turn; las que coinciden visualmente con la foto target se cuentan pero no se exponen (ni bytes ni URL).
 
 **`image_search(query, max_results)`**
-Busca imágenes en la web (estilo Google Images). Las imágenes vienen en el siguiente turn con metadata: `url` de origen, `hamming_distance` y `is_likely_target` (true si coincide visualmente con la foto que estás investigando).
+Busca imágenes en la web (estilo Google Images). Las imágenes que NO son la foto target vienen en el siguiente turn con metadata: `url` de origen y `hamming_distance`. Las imágenes que coinciden visualmente con la foto target se cuentan pero no se exponen.
 
 **`crop_image(x, y, width, height)`**
 Recorta una región rectangular de la foto target con coordenadas en pixels. La región recortada se muestra ampliada en el siguiente turn.
@@ -118,7 +118,7 @@ Devolver respuesta. Campos: `location`, `lat`, `lon`, `year`, `reasoning`, `conf
 ## Filtros automáticos (no podés desactivarlos)
 
 - En `web_search`, `fetch_url`, `fetch_url_with_images`, `image_search` se bloquean automáticamente algunos dominios para evitar shortcuts: reverse image search engines, agregadores masivos con metadata estructurada (caption + geotag), hosting/sharing platforms con propensión a re-publicar archivos, y la fuente específica de la foto que estás investigando. La lista exacta depende de cada foto; no necesitás conocerla.
-- Las imágenes con `is_likely_target=true` son la foto objetivo o casi-igual (hash perceptual coincidente). Te las mostramos para transparencia, pero no son evidencia válida sobre la ubicación.
+- Cuando una imagen tiene hash perceptual coincidente con la foto target, la ocultamos: te informamos su cantidad pero no te mostramos los bytes (la foto objetivo no es evidencia sobre dónde fue tomada).
 
 ## Idioma
 
@@ -307,20 +307,34 @@ def run_react_agent(
                     result.target_match_count += n_target
                     if verbose:
                         print(f"     → status={fp.status_code} text={len(fp.text)}c imgs={n_imgs} target_match={n_target}")
-                    # Tool result: solo metadata + texto, NO base64.
+                    # Tool result: solo metadata + texto, NO base64. Para target matches
+                    # ocultamos también la URL — el dominio puede ser shortcut (#24 review Codex).
                     summary = fp.to_dict(include_images_b64=False)
+                    if "images" in summary:
+                        summary["images"] = [
+                            ({"hidden_reason": "hash_match_target", "hamming_distance": im_d.get("hamming_distance")}
+                             if im_d.get("is_likely_target") else
+                             {"url": im_d.get("url"), "hamming_distance": im_d.get("hamming_distance")})
+                            for im_d in summary["images"]
+                        ]
                     messages.append({"role": "tool", "tool_call_id": tc.id,
                                      "content": json.dumps(summary, ensure_ascii=False)[:10000]})
                     result.trace.append({"step": step + 1, "type": "fetch_url_with_images", "url": url, "n_images": n_imgs, "target_match": n_target})
 
-                    # Build user message with images for next turn
+                    # Build user message with images for next turn.
+                    # Hard reject images where hash perceptual matches target (#21 / #24 deuda):
+                    # listamos metadata pero NO inyectamos los bytes. La política canon es
+                    # "descartar" (PROJECT.md), no "flaggear" como el comportamiento previo.
                     if fp.images:
-                        parts: list[dict] = [{"type": "text", "text": f"[Imágenes encontradas en {url}. Mostradas en orden. is_likely_target indica si una imagen coincide visualmente con la foto target]"}]
-                        for im in fp.images:
-                            label = f"[img: hamming={im.hamming_distance}, is_likely_target={im.is_likely_target}]"
+                        visible = [im for im in fp.images if not im.is_likely_target]
+                        hidden = [im for im in fp.images if im.is_likely_target]
+                        parts: list[dict] = [{"type": "text", "text": f"[Imágenes encontradas en {url}. Mostradas en orden. {len(hidden)} imágenes ocultadas porque coinciden visualmente con la foto target (hash perceptual match — no son evidencia válida)]"}]
+                        for im in visible:
+                            label = f"[img: hamming={im.hamming_distance}]"
                             parts.append({"type": "text", "text": label})
                             parts.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{im.base64_jpeg}"}})
-                        pending_image_injections.append(("fetch_url_images", parts))
+                        if visible:
+                            pending_image_injections.append(("fetch_url_images", parts))
                 except Exception as e:
                     err = f"fetch_url_with_images error: {e}"
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": err})
@@ -338,26 +352,36 @@ def run_react_agent(
                     result.target_match_count += isr.target_match_count
                     if verbose:
                         print(f"     → {len(isr.images)} imgs target_match={isr.target_match_count} blocked_dom={isr.blocked_domain_count} dl_failed={isr.download_failed_count}")
-                    # Tool result: metadata only.
+                    # Tool result: metadata only. Para target matches ocultamos URL también
+                    # — el dominio del match puede ser shortcut por sí solo (#24 review Codex).
+                    def _redact(im) -> dict:
+                        if im.is_likely_target:
+                            return {"hidden_reason": "hash_match_target", "hamming_distance": im.hamming_distance}
+                        return im.metadata_only()
                     meta = {
                         "query": isr.query,
                         "n_images": len(isr.images),
                         "target_match_count": isr.target_match_count,
                         "blocked_domain_count": isr.blocked_domain_count,
-                        "images_metadata": [im.metadata_only() for im in isr.images],
+                        "images_metadata": [_redact(im) for im in isr.images],
                     }
                     messages.append({"role": "tool", "tool_call_id": tc.id,
                                      "content": json.dumps(meta, ensure_ascii=False)})
                     result.trace.append({"step": step + 1, "type": "image_search", "query": args.get("query"), "n_images": len(isr.images), "target_match": isr.target_match_count})
 
-                    # Inject images as user message in next turn
+                    # Inject images as user message in next turn.
+                    # Hard reject images where hash perceptual matches target (#21 / #24 deuda):
+                    # listamos metadata pero NO inyectamos bytes — no son evidencia válida.
                     if isr.images:
-                        parts = [{"type": "text", "text": f"[Imágenes encontradas para image_search '{isr.query}'. is_likely_target=true significa coincide casi-exacto con la foto target — pivotá si aparece]"}]
-                        for im in isr.images:
-                            label = f"[img: hamming={im.hamming_distance}, is_likely_target={im.is_likely_target}, source={im.url[:80]}]"
+                        visible = [im for im in isr.images if not im.is_likely_target]
+                        hidden = [im for im in isr.images if im.is_likely_target]
+                        parts = [{"type": "text", "text": f"[Imágenes encontradas para image_search '{isr.query}'. {len(hidden)} imágenes ocultadas porque coinciden visualmente con la foto target (hash perceptual match)]"}]
+                        for im in visible:
+                            label = f"[img: hamming={im.hamming_distance}, source={im.url[:80]}]"
                             parts.append({"type": "text", "text": label})
                             parts.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{im.base64_jpeg}"}})
-                        pending_image_injections.append(("image_search", parts))
+                        if visible:
+                            pending_image_injections.append(("image_search", parts))
                 except Exception as e:
                     err = f"image_search error: {e}"
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": err})

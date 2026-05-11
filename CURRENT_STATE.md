@@ -158,11 +158,14 @@ results = json.load(open("experiments/E002_react_websearch/results.json"))
 - **Fase 5** ⏳ — reward/scoring formal con tests sintéticos.
 - **Fase 6** ⏳ — eval suite + baselines + ablations + decisión contrato del env.
 
-**Foco operativo activo**: epic #21 — pipeline de filtrado del corpus. (#22 limpieza ✅, #23 blacklist per-photo ✅, #3 audit metadata ✅, #17 sample diverso ✅, #24 pendiente). Decisiones canon en body de #21 (2026-05-11): atacante GPT-4o sin tools, umbral `dist_min<10km AND conf≥media` en N=3, balance **país × década**, de-clustering geohash 5, hash match = hard reject.
+**Epic #21 — pipeline de filtrado del corpus**: ✅ **CERRADO** (2026-05-11). Sub-issues #22 (clean_image), #23 (blacklist runtime per-photo), #3 (audit metadata), #17 (sample diverso), #24 (atacante GPT-4o) — todas cerradas. Deuda hash perceptual implementada como hard reject en `react.py`.
 
-**Corpus diverso listo (#17, ver `research/notes/sample_diverso_audit.md`)**: 180 fotos balanceadas en 36 celdas (6 buckets país × 6 décadas, K=5 por celda), seed fijo. Output en `experiments/E007_sample_diverso/candidates.json` (gitignored). Schema nuevo: `file_url`/`provenance_source` (no `file`/`source` como E001).
+**Corpus filtrado disponible (E004, ver `research/notes/E004_attacker_filter.md`)**: 101 fotos sobrevivientes del sample inicial de 180 (56% survival rate). Distribución por bucket país: Russia-EU 22, Russia-Asia 26, Ex-URSS 19, Europa-no-URSS 15, Norteamerica 6, Resto 13. Por bucket década: 1890s 13, 1900s 14, 1910s 19, 1920s 19, 1930s 21, 1940s 15. Output en `experiments/E004_attacker_filter/results.json` (gitignored).
 
-**Próximo paso concreto**: #24 — atacante GPT-4o sin tools sobre las 180 fotos. N=3 corridas por foto. Descartar `dist_min<10km AND conf≥media`. Más: aplicar deuda del hash perceptual (cambiar `react.py` `is_likely_target` flag → hard reject). Output: `experiments/E004_attacker_filter/`.
+**Próximos pasos posibles** (sin issue creada todavía — necesita decisión):
+- Eval suite formal con baselines + ablations (Fase 6 del plan de validación).
+- Escalar K_PER_CELL en `sample_diverso.py` y re-filtrar para corpus más grande.
+- Rúbrica investigativa formal (Fase 4).
 
 ---
 

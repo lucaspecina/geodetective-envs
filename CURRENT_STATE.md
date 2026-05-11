@@ -158,11 +158,11 @@ results = json.load(open("experiments/E002_react_websearch/results.json"))
 - **Fase 5** ⏳ — reward/scoring formal con tests sintéticos.
 - **Fase 6** ⏳ — eval suite + baselines + ablations + decisión contrato del env.
 
-**Foco operativo activo**: epic #21 — pipeline de filtrado del corpus. (#22 limpieza ✅, #23 blacklist per-photo ✅, #3 audit metadata ✅, #17/#24 pendientes en ese orden). Decisiones canon en body de #21 (2026-05-11): atacante GPT-4o sin tools, umbral `dist_min<10km AND conf≥media` en N=3, balance **país × década** (urbano/rural dropeado post-audit), de-clustering geohash 5, hash match = hard reject.
+**Foco operativo activo**: epic #21 — pipeline de filtrado del corpus. (#22 limpieza ✅, #23 blacklist per-photo ✅, #3 audit metadata ✅, #17 sample diverso ✅, #24 pendiente). Decisiones canon en body de #21 (2026-05-11): atacante GPT-4o sin tools, umbral `dist_min<10km AND conf≥media` en N=3, balance **país × década**, de-clustering geohash 5, hash match = hard reject.
 
-**Findings de #3 (audit PastVu, ver `research/notes/pastvu_metadata_audit.md`)**: 2.08M records, 98% fotos, 97% con geo, 100% con país. Sesgo Rusia 62% (74% ex-URSS). **100% tienen watermark** (`clean_image` confirmado obligatorio). **676K fotos elegibles** (type=1 + geo + year + 1850-1950).
+**Corpus diverso listo (#17, ver `research/notes/sample_diverso_audit.md`)**: 180 fotos balanceadas en 36 celdas (6 buckets país × 6 décadas, K=5 por celda), seed fijo. Output en `experiments/E007_sample_diverso/candidates.json` (gitignored). Schema nuevo: `file_url`/`provenance_source` (no `file`/`source` como E001).
 
-**Próximo paso concreto**: #17 — script `scripts/sample_diverso.py` que sortea 100-200 fotos balanceadas por 6 buckets país × 6 buckets década, con de-clustering geohash 5. Output: `experiments/E007_sample_diverso/candidates.json`.
+**Próximo paso concreto**: #24 — atacante GPT-4o sin tools sobre las 180 fotos. N=3 corridas por foto. Descartar `dist_min<10km AND conf≥media`. Más: aplicar deuda del hash perceptual (cambiar `react.py` `is_likely_target` flag → hard reject). Output: `experiments/E004_attacker_filter/`.
 
 ---
 

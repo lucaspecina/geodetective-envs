@@ -158,9 +158,9 @@ results = json.load(open("experiments/E002_react_websearch/results.json"))
 - **Fase 5** ⏳ — reward/scoring formal con tests sintéticos.
 - **Fase 6** ⏳ — eval suite + baselines + ablations + decisión contrato del env.
 
-**Próximo paso lógico** (cuando Tavily se renueve o tengamos backend alternativo):
-- Batch limpio sobre 5-10 fotos diversas con N=3 runs.
-- Empezar a comparar 2+ modelos (gpt-4o vs gpt-5.4) para ver discriminación entre modelos.
+**Foco operativo activo**: epic #21 — pipeline de filtrado del corpus. (#22 limpieza ✅, #23 blacklist per-photo ✅, #3/#17/#24 pendientes en ese orden). Decisiones canon cerradas 2026-05-11 en body de #21: atacante GPT-4o sin tools, umbral `dist_min<10km AND conf≥media` en N=3, balance país/región × década × urbano/rural + de-clustering, hash match = hard reject. Detalle en `CHANGELOG.md` (2026-05-11).
+
+**Próximo paso concreto**: #3 — bajar `pastvu.jsonl.zst` (296 MB, ~2M entradas) y auditar metadata real (distribución por año/país/type, completitud, presencia de field urbano/rural). Output: `research/notes/pastvu_metadata_audit.md`. Sin esto, el sorteo balanceado de #17 no es robusto.
 
 ---
 

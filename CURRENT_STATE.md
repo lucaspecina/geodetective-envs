@@ -162,7 +162,9 @@ results = json.load(open("experiments/E002_react_websearch/results.json"))
 
 **Piloto del pipeline validado (K=5, ver `research/notes/E004_attacker_filter.md`)**: el pipeline completo (sample → atacker → filtro) corrió end-to-end sobre 180 fotos (K_PER_CELL=5 en sample_diverso.py). 101 sobrevivieron al atacante GPT-4o (56%). Output en `experiments/E004_attacker_filter/results.json` (gitignored). **No es el corpus de producción** — para eso hay que escalar K_PER_CELL (issue #25).
 
-**Pilot E005 — ReAct end-to-end sobre 6 fotos** (`research/notes/E005_react_pilot.md`): 1 acierto preciso (Tomsk 1.8 km), 3 respuestas off, 2 hit max_steps sin submit. **Hallazgo crítico**: el agente nunca usa `historical_query`, `static_map`, `street_view` — actúa como web-search bot. Detalle en doc.
+**Pilot E005 — ReAct end-to-end sobre 6 fotos** (`research/notes/E005_react_pilot.md`): 1 acierto preciso (Tomsk 1.8 km), 3 respuestas off, 2 hit max_steps sin submit en v1. **Hallazgo crítico v1**: el agente nunca usa `historical_query`, `static_map`, `street_view` — actúa como web-search bot.
+
+**Ablación de prompt v1/v2/v3** (CHANGELOG 2026-05-11): 3 corridas del pilot con variantes de SYSTEM_PROMPT. v2 (descriptive: agrega "Aporta" por tool) + v3 (v2 + verbalización ReAct) activan tools diferenciales solo en Basel; en las otras 5 fotos siguen en 0. v3 nailed Dealey Plaza (0km) pero perdió el acierto de Tomsk. Reports HTML interactivos en `experiments/E005_react_pilot/report_{v1,v2,v3,compare}.html` (gitignored excepto E005 — share entre máquinas habilitado).
 
 **Próximos pasos posibles**:
 - Mini-ablation de prompt para diagnosticar por qué no se usan tools visuales (issue a crear).

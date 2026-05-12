@@ -219,6 +219,12 @@ __marimo__/
 
 # Project-specific
 experiments/*/
+# Exceptions: shareable artefacts del pilot E005 (results JSON + reports HTML).
+# Permite trabajar entre maquinas sin re-correr el pilot.
+!experiments/E005_react_pilot/
+experiments/E005_react_pilot/*
+!experiments/E005_react_pilot/results_*.json
+!experiments/E005_react_pilot/report_*.html
 results/
 .claude/settings.local.json
 .claude/worktrees/

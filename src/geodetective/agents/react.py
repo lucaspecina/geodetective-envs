@@ -77,43 +77,52 @@ SUBMIT_TOOL_SCHEMA = {
 
 SYSTEM_PROMPT = """Recibís una fotografía. Tu tarea es descubrir DÓNDE fue tomada (coords lat/lon) y CUÁNDO (año aproximado), y devolver la respuesta vía `submit_answer`.
 
-## Herramientas disponibles (qué hace cada una)
+## Herramientas disponibles
+
+Para cada tool: qué hace mecánicamente + qué tipo de información te aporta. NO te decimos cuándo usar cada una — vos decidís según el caso.
 
 **`web_search(query, max_results)`**
-Busca texto en la web vía Tavily. Devuelve lista de resultados con `url`, `title`, `content` (snippet largo en modo advanced, ~1000-3000 chars).
+Busca texto en la web vía Tavily. Devuelve resultados con `url`, `title`, `content` (snippet ~1000-3000 chars en modo advanced).
+*Aporta*: información textual disponible en internet — descripciones de lugares, fechas de eventos, biografías, archivos digitalizados con catalog text, blogs, papers académicos. Lo que la web "dice" sobre una consulta.
 
 **`fetch_url(url)`**
-Baja una página web específica. Devuelve `title` + `text` (hasta 12000 chars del contenido principal de la página).
+Baja una página web específica. Devuelve `title` + `text` (hasta 12000 chars del contenido principal).
+*Aporta*: el contenido completo de una página identificada por URL.
 
 **`fetch_url_with_images(url)`**
-Igual que `fetch_url` pero ADEMÁS baja hasta 5 imágenes embebidas en la página. Las imágenes que NO son la foto target se muestran en el siguiente turn; las que coinciden visualmente con la foto target se cuentan pero no se exponen (ni bytes ni URL).
+Igual que `fetch_url` pero además baja hasta 5 imágenes embebidas. Las que NO coincidan visualmente con la foto target se muestran en el siguiente turn con metadata; las que sí coincidan se cuentan pero no se exponen.
+*Aporta*: además del texto, las imágenes ilustrativas de la página — fotos de archivo, mapas, fachadas, retratos.
 
 **`image_search(query, max_results)`**
-Busca imágenes en la web (estilo Google Images). Las imágenes que NO son la foto target vienen en el siguiente turn con metadata: `url` de origen y `hamming_distance`. Las imágenes que coinciden visualmente con la foto target se cuentan pero no se exponen.
+Busca imágenes en la web (estilo Google Images). Las imágenes vienen en el siguiente turn con `url` de origen y `hamming_distance`. Las que coincidan visualmente con la foto target se cuentan pero no se exponen.
+*Aporta*: colección de imágenes que internet asocia con tu query — fotos de tipos de edificio, fachadas, plazas, vehículos de época, vestimenta, vegetación, paisajes.
 
-**`crop_image(x, y, width, height)`**
-Recorta una región rectangular de la foto target con coordenadas en pixels. La región recortada se muestra ampliada en el siguiente turn.
-
-**`crop_image_relative(region)`**
-Igual pero con regiones nombradas: `top_left`, `top_right`, `top_center`, `bottom_left`, `bottom_right`, `bottom_center`, `middle`, `center`, `left_half`, `right_half`, `top_half`, `bottom_half`.
+**`crop_image(x, y, width, height)` / `crop_image_relative(region)`**
+Recorta una región de la foto target. La región se muestra ampliada en el siguiente turn. `crop_image_relative` acepta regiones nombradas: `top_left`, `top_right`, `top_center`, `bottom_left`, `bottom_right`, `bottom_center`, `middle`, `center`, `left_half`, `right_half`, `top_half`, `bottom_half`.
+*Aporta*: detalle visual a alta resolución de una zona de la foto target — texto en carteles, fachadas, vehículos, vestimenta, vegetación, postes, idiomas. Detalles que se pierden al ver la foto entera.
 
 **`geocode(query, language)`**
-Convierte un nombre o dirección a coordenadas usando Nominatim (OSM). Ej: "Plaza Mayor Madrid" devuelve coords + dirección estructurada + tipo (residential/city/street/etc).
+Convierte un nombre o dirección a coords vía Nominatim (OSM). Ej: "Plaza Mayor Madrid" → coords + dirección estructurada + tipo (residential/city/street/etc).
+*Aporta*: dos cosas — (1) coordenadas precisas de un lugar nombrado, y (2) confirmación de que ese lugar existe en OSM. Es decir, valida la existencia de hipótesis tipo "hay un X en Y".
 
 **`reverse_geocode(lat, lon, zoom)`**
-Convierte coords a dirección. `zoom` controla el detalle: 3=país, 10=ciudad, 17=edificio, 18=calle.
+Convierte coords a dirección. `zoom` controla detalle: 3=país, 10=ciudad, 17=edificio, 18=calle.
+*Aporta*: el "qué hay" en un punto geográfico — nombre administrativo, calle, edificio.
 
 **`historical_query(south, west, north, east, preset, year, require_dated, max_features)`**
-Busca features de OpenHistoricalMap en un bounding box. `preset` puede ser: `buildings`, `churches`, `schools`, `factories`, `railway_stations`, `monuments`, `houses`, `all_named`. Si `year` está dado, filtra features que existían en ese año. Cada feature trae `temporal_confidence`: `high` si tiene `start_date`/`end_date` confirmados; `low` si no tiene tags temporales (asumido pero no confirmado). OHM tiene cobertura DESIGUAL: ausencia de resultados no prueba ausencia histórica.
+Busca features de OpenHistoricalMap en un bounding box. `preset`: `buildings`, `churches`, `schools`, `factories`, `railway_stations`, `monuments`, `houses`, `all_named`. Si `year` está dado, filtra features que existían ese año. Cada feature trae `temporal_confidence` (`high` si tiene `start_date`/`end_date` confirmados, `low` si no). OHM cobertura DESIGUAL: ausencia de resultados no prueba ausencia histórica.
+*Aporta*: información temporal-espacial sobre estructuras del pasado. Qué iglesias / fábricas / estaciones / monumentos / casas registra OpenHistoricalMap en una zona, en un año específico, con sus coords y fechas de construcción/demolición. Permite saber qué estaba físicamente en un lugar y momento.
 
 **`static_map(lat, lon, zoom, map_type)`**
-Pide imagen de mapa de Google Maps. `map_type`: `roadmap`, `satellite`, `terrain` (relieve 2D con curvas de nivel), `hybrid`. La imagen se muestra en el siguiente turn.
+Pide imagen de mapa de Google Maps en las coords dadas. `map_type`: `roadmap` (calles), `satellite` (foto aérea actual), `terrain` (relieve 2D con curvas de nivel), `hybrid` (sat+calles).
+*Aporta*: vista cenital del entorno geográfico de un punto cualquiera del planeta — relieve, ríos, layout urbano, costas, montañas, vegetación. Cada `map_type` revela una dimensión distinta del mismo lugar (la geometría del callejero es distinta de la topografía real del satélite).
 
 **`street_view(lat, lon, heading, pitch, fov, contact_sheet)`**
-Pide imagen(es) de Google Street View. Modo single (1 imagen al heading dado) o `contact_sheet=true` (4 imágenes en N/E/S/W). Devuelve fecha del panorama y distancia entre coords pedidas y panorama real. Si no hay cobertura, devuelve error `no_coverage`.
+Imagen(es) actuales de Google Street View en coords arbitrarias. Modo single (1 imagen al heading dado) o `contact_sheet=true` (4 imágenes en N/E/S/W). Devuelve fecha del panorama y distancia entre coords pedidas y panorama real. Error `no_coverage` si no hay panorama disponible.
+*Aporta*: la realidad fotográfica observable HOY desde cualquier punto del planeta — fachadas, calles, perspectivas, paisaje. Cobertura global con huecos (rural, países con regulaciones).
 
 **`submit_answer(...)`**
-Devolver respuesta. Campos: `location`, `lat`, `lon`, `year`, `reasoning`, `confidence` (alta/media/baja), `visual_clues`, `external_evidence`, `rejected_alternatives`, `verification_checks`, `uncertainty_reason`.
+Devolver respuesta final. Campos: `location`, `lat`, `lon`, `year`, `reasoning`, `confidence` (alta/media/baja), `visual_clues`, `external_evidence`, `rejected_alternatives`, `verification_checks`, `uncertainty_reason`.
 
 ## Filtros automáticos (no podés desactivarlos)
 
@@ -122,7 +131,20 @@ Devolver respuesta. Campos: `location`, `lat`, `lon`, `year`, `reasoning`, `conf
 
 ## Idioma
 
-Las queries pueden estar en cualquier idioma. Tus respuestas y razonamiento, en español."""
+Las queries pueden estar en cualquier idioma. Tus respuestas y razonamiento, en español.
+
+## Razonamiento visible (formato ReAct)
+
+Antes de cada turn de acciones, escribí en TEXTO breve (1-3 oraciones):
+1. Qué observás ahora mismo de la foto target o de las observaciones previas.
+2. Qué hipótesis estás considerando (idealmente >1, ranqueadas por plausibilidad).
+3. Qué esperás conseguir de la(s) próxima(s) acción(es).
+
+Ese texto va como `content` de tu respuesta, separado de los `tool_calls`. Es
+para que un investigador humano pueda seguir tu proceso paso a paso — no es
+input para las tools.
+
+Si en algún turn realmente no tenés nada nuevo que razonar, podés saltearlo."""
 
 
 @dataclass
@@ -227,6 +249,11 @@ def run_react_agent(
         assistant_turn: dict[str, Any] = {"role": "assistant"}
         if msg.content:
             assistant_turn["content"] = msg.content
+            # Guardamos el texto que el modelo emite junto con sus tool_calls
+            # (cuando lo hay) para inspección de trayectorias. Algunos modelos
+            # (tipo gpt-5.4) rara vez generan texto explícito en pasos intermedios,
+            # otros sí — esto nos deja ver eso cuando ocurre.
+            result.trace.append({"step": step + 1, "type": "thinking", "content": msg.content})
             if verbose:
                 print(f"[assistant] {msg.content[:300]}")
         if msg.tool_calls:
@@ -270,7 +297,17 @@ def run_react_agent(
                         print(f"     → {len(sr.results)} results (filtered {sr.blocked_count}/{sr.total_raw})")
                     messages.append({"role": "tool", "tool_call_id": tc.id,
                                      "content": json.dumps(sr.to_dict(), ensure_ascii=False)[:8000]})
-                    result.trace.append({"step": step + 1, "type": "web_search", "query": args.get("query"), "result_count": len(sr.results), "blocked": sr.blocked_count})
+                    top_results = [
+                        {"title": r.title, "url": r.url, "snippet": (r.content or "")[:400]}
+                        for r in sr.results[:3]
+                    ]
+                    result.trace.append({
+                        "step": step + 1, "type": "web_search",
+                        "query": args.get("query"),
+                        "result_count": len(sr.results),
+                        "blocked": sr.blocked_count,
+                        "top_results": top_results,
+                    })
                 except Exception as e:
                     err = f"web_search error: {e}"
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": err})
@@ -286,7 +323,11 @@ def run_react_agent(
                         print(f"     → status={fp.status_code} text={size}c err={fp.error}")
                     messages.append({"role": "tool", "tool_call_id": tc.id,
                                      "content": json.dumps(fp.to_dict(include_images_b64=False), ensure_ascii=False)[:10000]})
-                    result.trace.append({"step": step + 1, "type": "fetch_url", "url": url, "text_len": len(fp.text), "error": fp.error})
+                    result.trace.append({
+                        "step": step + 1, "type": "fetch_url",
+                        "url": url, "text_len": len(fp.text), "error": fp.error,
+                        "title": fp.title, "text_snippet": (fp.text or "")[:500],
+                    })
                 except Exception as e:
                     err = f"fetch_url error: {e}"
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": err})
@@ -319,7 +360,16 @@ def run_react_agent(
                         ]
                     messages.append({"role": "tool", "tool_call_id": tc.id,
                                      "content": json.dumps(summary, ensure_ascii=False)[:10000]})
-                    result.trace.append({"step": step + 1, "type": "fetch_url_with_images", "url": url, "n_images": n_imgs, "target_match": n_target})
+                    visible_imgs = [
+                        {"url": im.url, "hamming_distance": im.hamming_distance, "base64_jpeg": im.base64_jpeg}
+                        for im in fp.images if not im.is_likely_target
+                    ]
+                    result.trace.append({
+                        "step": step + 1, "type": "fetch_url_with_images",
+                        "url": url, "n_images": n_imgs, "target_match": n_target,
+                        "title": fp.title, "text_snippet": (fp.text or "")[:500],
+                        "visible_images": visible_imgs,
+                    })
 
                     # Build user message with images for next turn.
                     # Hard reject images where hash perceptual matches target (#21 / #24 deuda):
@@ -367,7 +417,17 @@ def run_react_agent(
                     }
                     messages.append({"role": "tool", "tool_call_id": tc.id,
                                      "content": json.dumps(meta, ensure_ascii=False)})
-                    result.trace.append({"step": step + 1, "type": "image_search", "query": args.get("query"), "n_images": len(isr.images), "target_match": isr.target_match_count})
+                    visible_imgs = [
+                        {"url": im.url, "hamming_distance": im.hamming_distance, "base64_jpeg": im.base64_jpeg}
+                        for im in isr.images if not im.is_likely_target
+                    ]
+                    result.trace.append({
+                        "step": step + 1, "type": "image_search",
+                        "query": args.get("query"),
+                        "n_images": len(isr.images),
+                        "target_match": isr.target_match_count,
+                        "visible_images": visible_imgs,
+                    })
 
                     # Inject images as user message in next turn.
                     # Hard reject images where hash perceptual matches target (#21 / #24 deuda):
@@ -399,13 +459,28 @@ def run_react_agent(
                         out = [r.to_dict() for r in results_list]
                         if verbose:
                             print(f"     → {len(results_list)} results")
+                        # Top 3 resultados con coords + display_name (para visualizar en el mapa)
+                        top_results = [
+                            {"lat": r.lat, "lon": r.lon, "display_name": r.display_name,
+                             "type": r.type}
+                            for r in results_list[:3]
+                        ]
                     else:
                         gr = reverse_geocode(float(args["lat"]), float(args["lon"]), zoom=int(args.get("zoom", 18)))
                         out = gr.to_dict() if gr else None
                         if verbose:
                             print(f"     → {gr.display_name[:80] if gr else 'no result'}")
+                        top_results = (
+                            [{"lat": gr.lat, "lon": gr.lon, "display_name": gr.display_name}]
+                            if gr else []
+                        )
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps(out, ensure_ascii=False)[:4000]})
-                    result.trace.append({"step": step + 1, "type": fname, "args": args, "n_results": len(out) if isinstance(out, list) else (1 if out else 0)})
+                    result.trace.append({
+                        "step": step + 1, "type": fname,
+                        "args": args,
+                        "n_results": len(out) if isinstance(out, list) else (1 if out else 0),
+                        "top_results": top_results,
+                    })
                 except Exception as e:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"{fname} error: {e}"})
                     result.trace.append({"step": step + 1, "type": f"{fname}_error", "error": str(e)})
@@ -482,7 +557,11 @@ def run_react_agent(
                             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{sm.base64_jpeg}"}},
                         ]
                         pending_image_injections.append(("static_map", parts))
-                        result.trace.append({"step": step + 1, "type": "static_map", "args": args})
+                        result.trace.append({
+                            "step": step + 1, "type": "static_map",
+                            "args": args, "map_type": sm.type, "lat": sm.lat, "lon": sm.lon,
+                            "zoom": sm.zoom, "base64_jpeg": sm.base64_jpeg,
+                        })
                 except Exception as e:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"static_map error: {e}"})
                     result.trace.append({"step": step + 1, "type": "static_map_error", "error": str(e)})
@@ -524,7 +603,16 @@ def run_react_agent(
                             parts.append({"type": "text", "text": f"[heading={im.heading} pitch={im.pitch} fov={im.fov}]"})
                             parts.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{im.base64_jpeg}"}})
                         pending_image_injections.append(("street_view", parts))
-                        result.trace.append({"step": step + 1, "type": "street_view", "args": args, "n_images": n_imgs})
+                        result.trace.append({
+                            "step": step + 1, "type": "street_view",
+                            "args": args, "n_images": n_imgs,
+                            "panorama_id": sv.panorama_id,
+                            "pano_date": sv.pano_date,
+                            "actual_lat": sv.actual_lat,
+                            "actual_lon": sv.actual_lon,
+                            "distance_to_pano_m": sv.distance_to_pano_m,
+                            "images": [{"heading": im.heading, "pitch": im.pitch, "fov": im.fov, "base64_jpeg": im.base64_jpeg} for im in sv.images],
+                        })
                 except Exception as e:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"street_view error: {e}"})
                     result.trace.append({"step": step + 1, "type": "street_view_error", "error": str(e)})

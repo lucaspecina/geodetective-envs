@@ -1,0 +1,1869 @@
+[
+  {
+    "cid": 2034885,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/2034885",
+    "file_url": "https://pastvu.com/_p/a/g/u/5/gu55wxvvte4bx3fy21.jpg",
+    "title": "Baslerstrasse im Bau (alt Bäckerstrasse). Teilstück Luggwegstrasse--Mürtschenstrasse",
+    "year": 1928,
+    "year2": 1928,
+    "country": "Switzerland",
+    "bucket_pais": "Europa-no-URSS",
+    "bucket_decada": "1920s",
+    "geo": [
+      47.388489,
+      8.490464
+    ],
+    "geohash5": "u0qj9",
+    "type": 1,
+    "h": 2918,
+    "w": 4463,
+    "waterh": 68,
+    "dir": "se",
+    "runs": [
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Alemania\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"1920s\",\n  \"reasoning\": \"La arquitectura de las casas con tejados inclinados y persianas sugiere un estilo típico alemán o europeo central. La presencia de una fábrica con chimenea humeante también indica una época industrial temprana, posiblemente alrededor de las décadas de 1920 o 1930. No hay autos visibles, lo que sugiere un entorno más antiguo posterior a la Primera Guerra Mundial.\",\n  \"confidence\": \"media\",\n  \"missing_info\": \"Se necesitarían más detalles específicos del entorno urbano o elementos identificables, como nombres de calles o señales, para aumentar la precisión.\"\n}\n```",
+        "parsed": {
+          "location": "Alemania",
+          "lat": null,
+          "lon": null,
+          "year": "1920s",
+          "reasoning": "La arquitectura de las casas con tejados inclinados y persianas sugiere un estilo típico alemán o europeo central. La presencia de una fábrica con chimenea humeante también indica una época industrial temprana, posiblemente alrededor de las décadas de 1920 o 1930. No hay autos visibles, lo que sugiere un entorno más antiguo posterior a la Primera Guerra Mundial.",
+          "confidence": "media",
+          "missing_info": "Se necesitarían más detalles específicos del entorno urbano o elementos identificables, como nombres de calles o señales, para aumentar la precisión."
+        },
+        "distance_km": null,
+        "confidence": "media"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Posiblemente Alemania\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"1920s o 1930s\",\n  \"reasoning\": \"La arquitectura de los edificios, el tipo de ventanas y tejados son características de ciudades en Europa Central, especialmente Alemania. La presencia de fábricas con chimeneas sugiere un entorno industrial típico de principios del siglo XX. La fotografía en blanco y negro indica un periodo anterior a los años 1940.\",\n  \"confidence\": \"media\",\n  \"missing_info\": \"Información específica sobre elementos únicos del paisaje, carteles, o arquitectura que permitirían identificar la ubicación exacta. También más datos históricos del lugar y época serían útiles.\"\n}\n```",
+        "parsed": {
+          "location": "Posiblemente Alemania",
+          "lat": null,
+          "lon": null,
+          "year": "1920s o 1930s",
+          "reasoning": "La arquitectura de los edificios, el tipo de ventanas y tejados son características de ciudades en Europa Central, especialmente Alemania. La presencia de fábricas con chimeneas sugiere un entorno industrial típico de principios del siglo XX. La fotografía en blanco y negro indica un periodo anterior a los años 1940.",
+          "confidence": "media",
+          "missing_info": "Información específica sobre elementos únicos del paisaje, carteles, o arquitectura que permitirían identificar la ubicación exacta. También más datos históricos del lugar y época serían útiles."
+        },
+        "distance_km": null,
+        "confidence": "media"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Europa, probablemente Alemania\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"Década de 1920 o 1930\",\n  \"reasoning\": \"El estilo arquitectónico de las casas y el diseño de las ventanas son típicos de Europa central en el período de entreguerras. La presencia de una chimenea industrial sugiere una ubicación industrial en esa región. La fotografía parece antigua, en blanco y negro, con un tono sepia característico de las fotos de principios del siglo XX.\",\n  \"confidence\": \"media\",\n  \"missing_info\": \"Información sobre detalles específicos del paisaje urbano que permitan identificar una ciudad concreta.\"\n}\n```",
+        "parsed": {
+          "location": "Europa, probablemente Alemania",
+          "lat": null,
+          "lon": null,
+          "year": "Década de 1920 o 1930",
+          "reasoning": "El estilo arquitectónico de las casas y el diseño de las ventanas son típicos de Europa central en el período de entreguerras. La presencia de una chimenea industrial sugiere una ubicación industrial en esa región. La fotografía parece antigua, en blanco y negro, con un tono sepia característico de las fotos de principios del siglo XX.",
+          "confidence": "media",
+          "missing_info": "Información sobre detalles específicos del paisaje urbano que permitan identificar una ciudad concreta."
+        },
+        "distance_km": null,
+        "confidence": "media"
+      }
+    ],
+    "stats": {
+      "dist_min": null,
+      "dist_median": null,
+      "dist_max": null,
+      "n_with_coords": 0,
+      "confidences": [
+        "media",
+        "media",
+        "media"
+      ]
+    },
+    "decision": "keep",
+    "reject_reason": null,
+    "attacker_model": "gpt-4o",
+    "attacker_prompt_version": "v1",
+    "triggering_runs": [],
+    "react": {
+      "model": "gpt-5.4",
+      "max_steps": 12,
+      "prompt_version": "v2_descriptive",
+      "elapsed_seconds": 321.1,
+      "final_answer": {
+        "location": "Piesteritzer Werkssiedlung (colonia obrera de las Reichsstickstoffwerke), Piesteritz, Lutherstadt Wittenberg, Sajonia-Anhalt, Alemania",
+        "lat": 51.8697955,
+        "lon": 12.594299,
+        "year": "1916-1919",
+        "reasoning": "La foto muestra una colonia obrera/jardín en construcción: calle sin pavimentar, postes recién colocados, zanjas, casas repetidas con techos altos y buhardillas, y chimeneas fabriles al fondo. Eso apunta a una Werkssiedlung alemana de la Primera Guerra Mundial o inmediata posguerra. La evidencia externa más fuerte fue hallar la Piesteritzer Werkssiedlung en Wittenberg: varias fuentes describen exactamente una colonia obrera construida entre 1915 y 1919 para el Stickstoffwerk Piesteritz, y las imágenes de referencia muestran tipologías de casas, cubiertas y composición urbana muy similares. El mapa satelital actual también revela la traza curva y el conjunto planificado característico de esa colonia. Por la propia fase de obra visible en la imagen, estimo que la toma corresponde al tramo final de construcción, aproximadamente 1918.",
+        "confidence": "media",
+        "visual_clues": [
+          "Calle/barro sin pavimentar en plena urbanización",
+          "Postes de servicios recién instalados",
+          "Viviendas homogéneas de colonia obrera/jardín",
+          "Cubiertas inclinadas con buhardillas y chimeneas altas",
+          "Nave industrial y humo de fábrica al fondo, indicando asentamiento ligado a industria",
+          "Ausencia de automóviles; aspecto de Europa central de principios del siglo XX"
+        ],
+        "external_evidence": [
+          "https://lutherstadt-wittenberg.de/sehen-entdecken/sehenswuerdigkeiten/piesteritzer-werkssiedlung — indica que la Werkssiedlung Piesteritz fue construida en 1916 para alojar trabajadores.",
+          "https://www.goethe.de/ins/be/de/kul/prj/nhk/21621526.html — explica que el Stickstoffwerk Piesteritz surgió en 1915 y que luego se construyó la Gartenstadt/Werkssiedlung para retener a los obreros y sus familias.",
+          "https://stadtbaukunst.bda-bayern.de/Die_Werkssiedlung_Piesteritz_in_Lutherstadt_Wittenberg-300dpi.pdf — resume la cronología 1915-1919 y atribuye el proyecto a Otto Rudolf Salvisberg.",
+          "https://www.pflug-ev.de/piesteritz.htm — menciona que la historia de la colonia está bien documentada 'vom Entwurf bis zum Bau', reforzando que existen fotografías históricas de su construcción."
+        ],
+        "rejected_alternatives": [
+          "Otras Arbeitersiedlungen/Werkssiedlungen alemanas del Ruhr o Berlín: plausibles por tipología, pero la combinación de colonia jardín vinculada a gran planta química y cronología 1915-1919 encaja mejor con Piesteritz.",
+          "Siemensstadt/Berlín moderno de los años 1920: descartado por arquitectura demasiado moderna para la foto; aquí las casas son más tradicionalistas/gartenstadt."
+        ],
+        "verification_checks": [
+          "Geocodifiqué 'Piesteritzer Werkssiedlung' y obtuve un lugar existente en Piesteritz, Wittenberg.",
+          "Consulté OpenHistoricalMap en el área y el entorno corresponde a Wittenberg/Piesteritz en la época correcta.",
+          "Comparé imágenes web actuales/históricas de Piesteritz con la foto: las cubiertas, gables y el carácter de colonia obrera coinciden de forma razonable.",
+          "Verifiqué en mapa satelital que el asentamiento aún conserva una planta planificada propia de la Werkssiedlung."
+        ],
+        "uncertainty_reason": "No pude encontrar la fotografía exacta ni un punto de cámara identificable dentro de la colonia, así que las coordenadas corresponden al centro de la Piesteritzer Werkssiedlung y no al lugar exacto del disparo. El año es una estimación basada en la fase de construcción y en la cronología documentada de la colonia."
+      },
+      "distance_km": 579.7168499151462,
+      "year_error": 10.5,
+      "steps_used": 9,
+      "web_search_count": 8,
+      "fetch_url_count": 2,
+      "image_search_count": 2,
+      "geocode_count": 1,
+      "historical_query_count": 1,
+      "crop_count": 4,
+      "static_map_count": 2,
+      "street_view_count": 1,
+      "target_match_count": 0,
+      "submit_called": true,
+      "error": null,
+      "trace": [
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "w": 2231,
+            "h": 2916
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 2231,
+            "y": 0,
+            "w": 2231,
+            "h": 2916
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 1487,
+            "y": 972,
+            "w": 1487,
+            "h": 972
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 2976,
+            "y": 0,
+            "w": 1487,
+            "h": 972
+          }
+        },
+        {
+          "step": 2,
+          "type": "image_search",
+          "query": "historic German housing estate under construction muddy road 1920s workers settlement chimneys dormer houses",
+          "n_images": 3,
+          "target_match": 0
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "historic photo housing estate under construction muddy road Germany 1920s workers settlement",
+          "result_count": 5,
+          "blocked": 3
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "Siedlung im Bau schlammige Straße Foto 1920er Werkssiedlung Deutschland",
+          "result_count": 5,
+          "blocked": 3
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "site:de Werkssiedlung im Bau Foto schlammige Straße Häuser mit Gauben Schornsteine",
+          "result_count": 10,
+          "blocked": 7
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"Siedlung\" im Bau Foto Straße Schlamm Arbeiterwohnhäuser Fabrikschornstein",
+          "result_count": 10,
+          "blocked": 3
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"Werkssiedlung\" historische Fotos im Bau Deutschland",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"Häuser im Bau\" Siedlung Foto \"Werkssiedlung\" \"1920\"",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 5,
+          "type": "web_search",
+          "query": "\"Piesteritz\" historische Fotos Straße im Bau",
+          "result_count": 5,
+          "blocked": 0
+        },
+        {
+          "step": 5,
+          "type": "web_search",
+          "query": "\"Werkssiedlung Piesteritz\" historische Foto Straße",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 5,
+          "type": "image_search",
+          "query": "Piesteritz Werkssiedlung historische Fotos Straße Häuser",
+          "n_images": 5,
+          "target_match": 0
+        },
+        {
+          "step": 6,
+          "type": "fetch_url_with_images",
+          "url": "https://www.pflug-ev.de/piesteritz.htm",
+          "n_images": 1,
+          "target_match": 0
+        },
+        {
+          "step": 7,
+          "type": "geocode",
+          "args": {
+            "query": "Piesteritzer Werkssiedlung, Lutherstadt Wittenberg, Germany",
+            "language": "de",
+            "max_results": 3
+          },
+          "n_results": 1
+        },
+        {
+          "step": 7,
+          "type": "fetch_url",
+          "url": "https://stadtbaukunst.bda-bayern.de/Die_Werkssiedlung_Piesteritz_in_Lutherstadt_Wittenberg-300dpi.pdf",
+          "text_len": 12000,
+          "error": null
+        },
+        {
+          "step": 7,
+          "type": "historical_query",
+          "args": {
+            "south": 51.84,
+            "west": 12.59,
+            "north": 51.87,
+            "east": 12.66,
+            "preset": "all_named",
+            "year": 1919,
+            "max_features": 20
+          },
+          "n_features": 20
+        },
+        {
+          "step": 8,
+          "type": "static_map",
+          "args": {
+            "lat": 51.8697955,
+            "lon": 12.594299,
+            "zoom": 17,
+            "map_type": "roadmap"
+          }
+        },
+        {
+          "step": 8,
+          "type": "static_map",
+          "args": {
+            "lat": 51.8697955,
+            "lon": 12.594299,
+            "zoom": 17,
+            "map_type": "satellite"
+          }
+        },
+        {
+          "step": 8,
+          "type": "street_view",
+          "args": {
+            "lat": 51.8697955,
+            "lon": 12.594299,
+            "contact_sheet": true
+          },
+          "n_images": 4
+        },
+        {
+          "step": 9,
+          "type": "submit",
+          "answer": {
+            "location": "Piesteritzer Werkssiedlung (colonia obrera de las Reichsstickstoffwerke), Piesteritz, Lutherstadt Wittenberg, Sajonia-Anhalt, Alemania",
+            "lat": 51.8697955,
+            "lon": 12.594299,
+            "year": "1916-1919",
+            "reasoning": "La foto muestra una colonia obrera/jardín en construcción: calle sin pavimentar, postes recién colocados, zanjas, casas repetidas con techos altos y buhardillas, y chimeneas fabriles al fondo. Eso apunta a una Werkssiedlung alemana de la Primera Guerra Mundial o inmediata posguerra. La evidencia externa más fuerte fue hallar la Piesteritzer Werkssiedlung en Wittenberg: varias fuentes describen exactamente una colonia obrera construida entre 1915 y 1919 para el Stickstoffwerk Piesteritz, y las imágenes de referencia muestran tipologías de casas, cubiertas y composición urbana muy similares. El mapa satelital actual también revela la traza curva y el conjunto planificado característico de esa colonia. Por la propia fase de obra visible en la imagen, estimo que la toma corresponde al tramo final de construcción, aproximadamente 1918.",
+            "confidence": "media",
+            "visual_clues": [
+              "Calle/barro sin pavimentar en plena urbanización",
+              "Postes de servicios recién instalados",
+              "Viviendas homogéneas de colonia obrera/jardín",
+              "Cubiertas inclinadas con buhardillas y chimeneas altas",
+              "Nave industrial y humo de fábrica al fondo, indicando asentamiento ligado a industria",
+              "Ausencia de automóviles; aspecto de Europa central de principios del siglo XX"
+            ],
+            "external_evidence": [
+              "https://lutherstadt-wittenberg.de/sehen-entdecken/sehenswuerdigkeiten/piesteritzer-werkssiedlung — indica que la Werkssiedlung Piesteritz fue construida en 1916 para alojar trabajadores.",
+              "https://www.goethe.de/ins/be/de/kul/prj/nhk/21621526.html — explica que el Stickstoffwerk Piesteritz surgió en 1915 y que luego se construyó la Gartenstadt/Werkssiedlung para retener a los obreros y sus familias.",
+              "https://stadtbaukunst.bda-bayern.de/Die_Werkssiedlung_Piesteritz_in_Lutherstadt_Wittenberg-300dpi.pdf — resume la cronología 1915-1919 y atribuye el proyecto a Otto Rudolf Salvisberg.",
+              "https://www.pflug-ev.de/piesteritz.htm — menciona que la historia de la colonia está bien documentada 'vom Entwurf bis zum Bau', reforzando que existen fotografías históricas de su construcción."
+            ],
+            "rejected_alternatives": [
+              "Otras Arbeitersiedlungen/Werkssiedlungen alemanas del Ruhr o Berlín: plausibles por tipología, pero la combinación de colonia jardín vinculada a gran planta química y cronología 1915-1919 encaja mejor con Piesteritz.",
+              "Siemensstadt/Berlín moderno de los años 1920: descartado por arquitectura demasiado moderna para la foto; aquí las casas son más tradicionalistas/gartenstadt."
+            ],
+            "verification_checks": [
+              "Geocodifiqué 'Piesteritzer Werkssiedlung' y obtuve un lugar existente en Piesteritz, Wittenberg.",
+              "Consulté OpenHistoricalMap en el área y el entorno corresponde a Wittenberg/Piesteritz en la época correcta.",
+              "Comparé imágenes web actuales/históricas de Piesteritz con la foto: las cubiertas, gables y el carácter de colonia obrera coinciden de forma razonable.",
+              "Verifiqué en mapa satelital que el asentamiento aún conserva una planta planificada propia de la Werkssiedlung."
+            ],
+            "uncertainty_reason": "No pude encontrar la fotografía exacta ni un punto de cámara identificable dentro de la colonia, así que las coordenadas corresponden al centro de la Piesteritzer Werkssiedlung y no al lugar exacto del disparo. El año es una estimación basada en la fase de construcción y en la cronología documentada de la colonia."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "cid": 1267028,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/1267028",
+    "file_url": "https://pastvu.com/_p/a/y/t/n/ytnnt9pkk3rr92nl3f.jpg",
+    "title": "Станция Молодечно",
+    "year": 1916,
+    "year2": 1916,
+    "country": "Belarus",
+    "bucket_pais": "Ex-URSS",
+    "bucket_decada": "1910s",
+    "geo": [
+      54.316563,
+      26.838287
+    ],
+    "geohash5": "u9ej4",
+    "type": 1,
+    "h": 1061,
+    "w": 1572,
+    "waterh": 25,
+    "dir": null,
+    "runs": [
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Rusia\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"1910s\",\n  \"reasoning\": \"La fotografía muestra un grupo de soldados con uniformes de aspecto antiguo, alineados junto a un vagón de tren. Los caracteres en el vagón son cirílicos, lo que indica que puede haber sido tomada en una región donde se usa este alfabeto, como Rusia. Además, el estilo de los uniformes y la calidad de la foto sugieren una época alrededor de la Primera Guerra Mundial o la Revolución Rusa, por lo que es probable que sea de los años 1910s.\",\n  \"confidence\": \"media\",\n  \"missing_info\": \"Ubicación exacta y contexto histórico específico serían necesarios para una identificación más precisa.\"\n}\n```",
+        "parsed": {
+          "location": "Rusia",
+          "lat": null,
+          "lon": null,
+          "year": "1910s",
+          "reasoning": "La fotografía muestra un grupo de soldados con uniformes de aspecto antiguo, alineados junto a un vagón de tren. Los caracteres en el vagón son cirílicos, lo que indica que puede haber sido tomada en una región donde se usa este alfabeto, como Rusia. Además, el estilo de los uniformes y la calidad de la foto sugieren una época alrededor de la Primera Guerra Mundial o la Revolución Rusa, por lo que es probable que sea de los años 1910s.",
+          "confidence": "media",
+          "missing_info": "Ubicación exacta y contexto histórico específico serían necesarios para una identificación más precisa."
+        },
+        "distance_km": null,
+        "confidence": "media"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Rusia\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"aproximadamente 1910-1920\",\n  \"reasoning\": \"Los uniformes militares y el estilo del tren sugieren inicios del siglo XX, posiblemente alrededor de la Primera Guerra Mundial. El texto en cirílico puede indicar Rusia o alguna nación de Europa del Este. El estilo de vestidos y cabezas cubiertas es consistente con los de militares rusos de ese período.\",\n  \"confidence\": \"media\",\n  \"missing_info\": \"Información sobre eventos específicos o lugares relacionados con estos uniformes militares o trenes podría aumentar la precisión.\"\n}\n```",
+        "parsed": {
+          "location": "Rusia",
+          "lat": null,
+          "lon": null,
+          "year": "aproximadamente 1910-1920",
+          "reasoning": "Los uniformes militares y el estilo del tren sugieren inicios del siglo XX, posiblemente alrededor de la Primera Guerra Mundial. El texto en cirílico puede indicar Rusia o alguna nación de Europa del Este. El estilo de vestidos y cabezas cubiertas es consistente con los de militares rusos de ese período.",
+          "confidence": "media",
+          "missing_info": "Información sobre eventos específicos o lugares relacionados con estos uniformes militares o trenes podría aumentar la precisión."
+        },
+        "distance_km": null,
+        "confidence": "media"
+      },
+      {
+        "raw_response": "```json\n{\n    \"location\": \"Rusia\",\n    \"lat\": null,\n    \"lon\": null,\n    \"year\": \"1910-1920\",\n    \"reasoning\": \"La vestimenta de los soldados sugiere un uniforme militar de principios del siglo XX. Hay texto en cirílico en el vagón de tren. Estos elementos indican Rusia durante la Primera Guerra Mundial o la Revolución Rusa.\",\n    \"confidence\": \"media\",\n    \"missing_info\": \"No hay información concreta sobre el lugar específico ni coordenadas. Saber más sobre las insignias o detalles específicos de los uniformes podría ayudar.\"\n}\n```",
+        "parsed": {
+          "location": "Rusia",
+          "lat": null,
+          "lon": null,
+          "year": "1910-1920",
+          "reasoning": "La vestimenta de los soldados sugiere un uniforme militar de principios del siglo XX. Hay texto en cirílico en el vagón de tren. Estos elementos indican Rusia durante la Primera Guerra Mundial o la Revolución Rusa.",
+          "confidence": "media",
+          "missing_info": "No hay información concreta sobre el lugar específico ni coordenadas. Saber más sobre las insignias o detalles específicos de los uniformes podría ayudar."
+        },
+        "distance_km": null,
+        "confidence": "media"
+      }
+    ],
+    "stats": {
+      "dist_min": null,
+      "dist_median": null,
+      "dist_max": null,
+      "n_with_coords": 0,
+      "confidences": [
+        "media",
+        "media",
+        "media"
+      ]
+    },
+    "decision": "keep",
+    "reject_reason": null,
+    "attacker_model": "gpt-4o",
+    "attacker_prompt_version": "v1",
+    "triggering_runs": [],
+    "react": {
+      "model": "gpt-5.4",
+      "max_steps": 12,
+      "prompt_version": "v2_descriptive",
+      "elapsed_seconds": 132.4,
+      "final_answer": {
+        "location": "Estación de la línea Nikolaevskaya (hoy línea Moscú–San Petersburgo), probablemente en el corredor San Petersburgo–Moscú, Imperio ruso; la hipótesis más plausible es un andén importante de la Nikolaevskaya Railway, posiblemente Bologoye",
+        "lat": 57.8847,
+        "lon": 34.0488,
+        "year": "1917",
+        "reasoning": "La foto muestra militares del Ejército Imperial ruso junto a un coche ferroviario de época zarista. En el vagón se distinguen marcas en cirílico/estilo prerrevolucionario y una fecha parcial que parece '9 ... 17', muy compatible con 1917. La uniformología también encaja con la Primera Guerra Mundial/final del Imperio ruso. La pista textual más útil es el prefijo del vagón, que parece corresponder a la Nikolaevskaya Railway (línea histórica entre San Petersburgo y Moscú). Sin embargo, la imagen no muestra edificio de estación ni topografía única, así que no se puede fijar con alta precisión una estación concreta. Elijo Bologoye por ser un nudo principal de esa línea y porque apareció repetidamente en material histórico del museo ferroviario asociado a la Nikolaevskaya.",
+        "confidence": "baja",
+        "visual_clues": [
+          "Uniformes del Ejército Imperial ruso con gorras y botas altas, típicos de ca. 1914-1917",
+          "Coche de pasajeros de madera con ventiladores/respiraderos de techo de diseño decimonónico",
+          "Inscripciones del vagón en alfabeto cirílico prerrevolucionario",
+          "Marcaje visible que parece incluir una fecha '... 17', compatible con 1917",
+          "Entorno de andén ferroviario sin rasgos urbanos distintivos"
+        ],
+        "external_evidence": [
+          "https://archive.rzd-museum.ru/collection/4 — confirma la existencia y documentación visual de material rodante y estaciones de la Nikolaevskaya Railway en la época imperial",
+          "https://archive.rzd-museum.ru/collection/4 — muestra múltiples referencias a Bologoye como estación importante de la Nikolaevskaya Railway",
+          "https://dic.academic.ru/pictures/wiki/files/67/Coaches_of_Nikolaev_Railway._39.jpg — imagen de referencia de coches de la Nikolaevskaya Railway, consistente con el tipo de material rodante visto en la foto"
+        ],
+        "rejected_alternatives": [
+          "No parece ferrocarril soviético posterior: los uniformes y el estilo del coche son claramente pre-1920",
+          "No hay evidencia suficiente para ubicarlo con seguridad en San Petersburgo o Moscú específicamente; la foto carece de arquitectura identificable",
+          "Otras líneas imperiales rusas son posibles, pero el marcaje del vagón sugiere mejor la Nikolaevskaya Railway"
+        ],
+        "verification_checks": [
+          "Comparé el tipo de coche con imágenes de referencia de la Nikolaevskaya Railway y el diseño general coincide",
+          "Contrasté la cronología sugerida por uniformes y posible fecha pintada en el vagón con 1917"
+        ],
+        "uncertainty_reason": "La inscripción del vagón es borrosa y no permite leer con certeza la compañía ferroviaria completa. La foto no incluye estación, cartel ni edificio identificable; por eso la ubicación exacta dentro de la línea es especulativa."
+      },
+      "distance_km": 598.7501827323088,
+      "year_error": 1.0,
+      "steps_used": 7,
+      "web_search_count": 7,
+      "fetch_url_count": 1,
+      "image_search_count": 2,
+      "geocode_count": 0,
+      "historical_query_count": 0,
+      "crop_count": 4,
+      "static_map_count": 0,
+      "street_view_count": 0,
+      "target_match_count": 0,
+      "submit_called": true,
+      "error": null,
+      "trace": [
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 1048,
+            "y": 0,
+            "w": 524,
+            "h": 353
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 524,
+            "y": 353,
+            "w": 524,
+            "h": 353
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "w": 786,
+            "h": 1060
+          }
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "\"M-H.H\" 50016 C. railroad wagon Russian",
+          "result_count": 5,
+          "blocked": 1
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "\"9 5ЕТ 17\" wagon marking Russian photo",
+          "result_count": 5,
+          "blocked": 0
+        },
+        {
+          "step": 2,
+          "type": "crop_image",
+          "region": {
+            "x": 1290,
+            "y": 90,
+            "w": 260,
+            "h": 320
+          }
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"M-H.H.\" wagon marking Cyrillic \"С.\" railway",
+          "result_count": 10,
+          "blocked": 3
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"9 ЛЕТ 17\" railroad car marking Cyrillic",
+          "result_count": 10,
+          "blocked": 5
+        },
+        {
+          "step": 3,
+          "type": "image_search",
+          "query": "Russian Imperial army soldiers train station photograph 1917 railway carriage",
+          "n_images": 3,
+          "target_match": 0
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"Н-Н\" вагон 50016 \"9 лет 17\"",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"М-Н.Ж.Д.\" вагон \"С.\" фото",
+          "result_count": 10,
+          "blocked": 3
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"Николаевская железная дорога\" вагон markings photo",
+          "result_count": 10,
+          "blocked": 6
+        },
+        {
+          "step": 5,
+          "type": "fetch_url",
+          "url": "https://archive.rzd-museum.ru/collection/4",
+          "text_len": 4868,
+          "error": null
+        },
+        {
+          "step": 6,
+          "type": "image_search",
+          "query": "site:archive.rzd-museum.ru \"Пассажирский вагон II класса серии Сб Николаевской железной дороги\"",
+          "n_images": 3,
+          "target_match": 0
+        },
+        {
+          "step": 7,
+          "type": "submit",
+          "answer": {
+            "location": "Estación de la línea Nikolaevskaya (hoy línea Moscú–San Petersburgo), probablemente en el corredor San Petersburgo–Moscú, Imperio ruso; la hipótesis más plausible es un andén importante de la Nikolaevskaya Railway, posiblemente Bologoye",
+            "lat": 57.8847,
+            "lon": 34.0488,
+            "year": "1917",
+            "reasoning": "La foto muestra militares del Ejército Imperial ruso junto a un coche ferroviario de época zarista. En el vagón se distinguen marcas en cirílico/estilo prerrevolucionario y una fecha parcial que parece '9 ... 17', muy compatible con 1917. La uniformología también encaja con la Primera Guerra Mundial/final del Imperio ruso. La pista textual más útil es el prefijo del vagón, que parece corresponder a la Nikolaevskaya Railway (línea histórica entre San Petersburgo y Moscú). Sin embargo, la imagen no muestra edificio de estación ni topografía única, así que no se puede fijar con alta precisión una estación concreta. Elijo Bologoye por ser un nudo principal de esa línea y porque apareció repetidamente en material histórico del museo ferroviario asociado a la Nikolaevskaya.",
+            "confidence": "baja",
+            "visual_clues": [
+              "Uniformes del Ejército Imperial ruso con gorras y botas altas, típicos de ca. 1914-1917",
+              "Coche de pasajeros de madera con ventiladores/respiraderos de techo de diseño decimonónico",
+              "Inscripciones del vagón en alfabeto cirílico prerrevolucionario",
+              "Marcaje visible que parece incluir una fecha '... 17', compatible con 1917",
+              "Entorno de andén ferroviario sin rasgos urbanos distintivos"
+            ],
+            "external_evidence": [
+              "https://archive.rzd-museum.ru/collection/4 — confirma la existencia y documentación visual de material rodante y estaciones de la Nikolaevskaya Railway en la época imperial",
+              "https://archive.rzd-museum.ru/collection/4 — muestra múltiples referencias a Bologoye como estación importante de la Nikolaevskaya Railway",
+              "https://dic.academic.ru/pictures/wiki/files/67/Coaches_of_Nikolaev_Railway._39.jpg — imagen de referencia de coches de la Nikolaevskaya Railway, consistente con el tipo de material rodante visto en la foto"
+            ],
+            "rejected_alternatives": [
+              "No parece ferrocarril soviético posterior: los uniformes y el estilo del coche son claramente pre-1920",
+              "No hay evidencia suficiente para ubicarlo con seguridad en San Petersburgo o Moscú específicamente; la foto carece de arquitectura identificable",
+              "Otras líneas imperiales rusas son posibles, pero el marcaje del vagón sugiere mejor la Nikolaevskaya Railway"
+            ],
+            "verification_checks": [
+              "Comparé el tipo de coche con imágenes de referencia de la Nikolaevskaya Railway y el diseño general coincide",
+              "Contrasté la cronología sugerida por uniformes y posible fecha pintada en el vagón con 1917"
+            ],
+            "uncertainty_reason": "La inscripción del vagón es borrosa y no permite leer con certeza la compañía ferroviaria completa. La foto no incluye estación, cartel ni edificio identificable; por eso la ubicación exacta dentro de la línea es especulativa."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "cid": 2328833,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/2328833",
+    "file_url": "https://pastvu.com/_p/a/e/k/n/eknkuqppcr7rotyhiw.jpg",
+    "title": "Dealey Plaza",
+    "year": 1936,
+    "year2": 1936,
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "bucket_decada": "1930s",
+    "geo": [
+      32.779201,
+      -96.807779
+    ],
+    "geohash5": "9vg4m",
+    "type": 1,
+    "h": 787,
+    "w": 1400,
+    "waterh": 18,
+    "dir": "sw",
+    "runs": [
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Desconocido\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"Aproximadamente los años 1920-1940\",\n  \"reasoning\": \"La fotografía muestra una infraestructura vial con características de diseño que eran comunes en Estados Unidos durante las primeras décadas del siglo XX, como el estilo de los vehículos y la arquitectura. La referencia al 'U.S. Bureau of Public Roads' sugiere que la imagen fue tomada en Estados Unidos. Sin nombres de calles o detalles reconocibles, no es posible determinar la ciudad o el lugar exacto.\",\n  \"confidence\": \"baja\",\n  \"missing_info\": \"Necesitaría información más específica como nombres de calles, edificios reconocibles, o cualquier otro texto o símbolo que ayudara a identificar la ubicación precisa.\"\n}\n```",
+        "parsed": {
+          "location": "Desconocido",
+          "lat": null,
+          "lon": null,
+          "year": "Aproximadamente los años 1920-1940",
+          "reasoning": "La fotografía muestra una infraestructura vial con características de diseño que eran comunes en Estados Unidos durante las primeras décadas del siglo XX, como el estilo de los vehículos y la arquitectura. La referencia al 'U.S. Bureau of Public Roads' sugiere que la imagen fue tomada en Estados Unidos. Sin nombres de calles o detalles reconocibles, no es posible determinar la ciudad o el lugar exacto.",
+          "confidence": "baja",
+          "missing_info": "Necesitaría información más específica como nombres de calles, edificios reconocibles, o cualquier otro texto o símbolo que ayudara a identificar la ubicación precisa."
+        },
+        "distance_km": null,
+        "confidence": "baja"
+      },
+      {
+        "raw_response": "```json\n{\n    \"location\": \"Estados Unidos\",\n    \"lat\": null,\n    \"lon\": null,\n    \"year\": \"década de 1920 o 1930\",\n    \"reasoning\": \"La imagen parece mostrar una infraestructura vial de estilo estadounidense, con un diseño de puentes y carreteras característicos de principios del siglo XX. La referencia al 'U.S. Bureau of Public Roads' sugiere que la foto fue tomada en Estados Unidos. Los automóviles de época también indican una fecha aproximada entre 1920 y 1930.\",\n    \"confidence\": \"media\",\n    \"missing_info\": \"El nombre específico de la ciudad, el estado y las coordenadas exactas.\"\n}\n```",
+        "parsed": {
+          "location": "Estados Unidos",
+          "lat": null,
+          "lon": null,
+          "year": "década de 1920 o 1930",
+          "reasoning": "La imagen parece mostrar una infraestructura vial de estilo estadounidense, con un diseño de puentes y carreteras característicos de principios del siglo XX. La referencia al 'U.S. Bureau of Public Roads' sugiere que la foto fue tomada en Estados Unidos. Los automóviles de época también indican una fecha aproximada entre 1920 y 1930.",
+          "confidence": "media",
+          "missing_info": "El nombre específico de la ciudad, el estado y las coordenadas exactas."
+        },
+        "distance_km": null,
+        "confidence": "media"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Estados Unidos\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": 1930,\n  \"reasoning\": \"La imagen muestra una carretera con autos antiguos, lo que sugiere que fue tomada alrededor de la década de 1930. La mención de 'U.S. Bureau of Public Roads' sugiere que la foto podría estar ubicada en Estados Unidos. Los elementos arquitectónicos indican una construcción típica de infraestructura pública de esa época.\",\n  \"confidence\": \"media\",\n  \"missing_info\": \"Para mayor precisión, necesitaría referencias geográficas más específicas como nombres de calles, estructuras reconocibles o información contextual adicional.\"\n}\n```",
+        "parsed": {
+          "location": "Estados Unidos",
+          "lat": null,
+          "lon": null,
+          "year": 1930,
+          "reasoning": "La imagen muestra una carretera con autos antiguos, lo que sugiere que fue tomada alrededor de la década de 1930. La mención de 'U.S. Bureau of Public Roads' sugiere que la foto podría estar ubicada en Estados Unidos. Los elementos arquitectónicos indican una construcción típica de infraestructura pública de esa época.",
+          "confidence": "media",
+          "missing_info": "Para mayor precisión, necesitaría referencias geográficas más específicas como nombres de calles, estructuras reconocibles o información contextual adicional."
+        },
+        "distance_km": null,
+        "confidence": "media"
+      }
+    ],
+    "stats": {
+      "dist_min": null,
+      "dist_median": null,
+      "dist_max": null,
+      "n_with_coords": 0,
+      "confidences": [
+        "baja",
+        "media",
+        "media"
+      ]
+    },
+    "decision": "keep",
+    "reject_reason": null,
+    "attacker_model": "gpt-4o",
+    "attacker_prompt_version": "v1",
+    "triggering_runs": [],
+    "react": {
+      "model": "gpt-5.4",
+      "max_steps": 12,
+      "prompt_version": "v2_descriptive",
+      "elapsed_seconds": 171.0,
+      "final_answer": {
+        "location": "Airport Boulevard railway underpass (then Bayshore Highway) near San Mateo Ave, South San Francisco, California, USA",
+        "lat": 37.651334,
+        "lon": -122.409038,
+        "year": "1936",
+        "reasoning": "La foto muestra un underpass vial bajo varias vías ferroviarias, con diseño art déco/estandarizado de los años 1930 y crédito visible 'Photo By Courtesy of U.S. Bureau of Public Roads'. En la búsqueda de imágenes apareció una coincidencia perceptual del target, y la evidencia externa más consistente fue el sitio de Living New Deal sobre el Airport Boulevard Railway Underpass en South San Francisco, financiado por PWA/Bureau of Public Roads y completado en 1936. Las fotos históricas embebidas del sitio muestran un underpass de estética y configuración muy semejantes y el artículo da coordenadas exactas. No pude ver la imagen coincidente oculta, por lo que la identificación no es absolutamente cerrada, pero es la mejor hipótesis respaldada.",
+        "confidence": "media",
+        "visual_clues": [
+          "Paso bajo nivel carretero bajo varias vías de tren",
+          "Barandas/parapetos de hormigón ornamentales de estilo años 1930",
+          "Crédito impreso: 'Photo By Courtesy of U.S. Bureau of Public Roads'",
+          "Paisaje abierto/periférico con pocos edificios e industria ligera al fondo",
+          "Automóviles de época, compatible con mediados de los años 1930"
+        ],
+        "external_evidence": [
+          "https://livingnewdeal.org/sites/airport-boulevard-railroad-underpass-south-san-francisco-ca/ — identifica un underpass ferroviario financiado por PWA/Bureau of Public Roads, completado en 1936, y da coordenadas 37.651334, -122.409038.",
+          "Imágenes embebidas en esa página muestran un underpass histórico muy parecido y su estado actual en el mismo lugar.",
+          "image_search de '\"Courtesy of U.S. Bureau of Public Roads\" underpass railroad sepia photo' devolvió 1 imagen oculta por hash_match_target, lo que sugiere que la foto objetivo circula en la web asociada a esa línea de búsqueda."
+        ],
+        "rejected_alternatives": [
+          "Fort Worth / East Rosedale underpasses: aparecen en búsquedas textuales por Bureau of Public Roads, pero la evidencia recuperada fue documental y no visual; además el entorno urbano/industrial no encaja tan bien.",
+          "Grand Avenue underpass en Ames: apareció una imagen de referencia, pero la estructura y disposición de accesos no coinciden tan bien con la foto target.",
+          "Dalhart, Texas: proyecto de 1939 mencionado en Living New Deal, pero el paisaje y la configuración de múltiples carriles/entorno no se ajustan tan bien."
+        ],
+        "verification_checks": [
+          "Comparé la arquitectura del underpass con las fotos históricas de referencia del sitio de South San Francisco: parapetos, pilastras y tipología coinciden razonablemente.",
+          "Verifiqué que la fuente externa proporciona ubicación exacta y fecha de finalización (1936)."
+        ],
+        "uncertainty_reason": "No pude inspeccionar directamente la imagen oculta que coincidía con la foto target, así que la asociación final depende de evidencia indirecta y similitud visual, no de una confirmación textual explícita de esa foto exacta."
+      },
+      "distance_km": 2384.730454033739,
+      "year_error": 0.0,
+      "steps_used": 6,
+      "web_search_count": 11,
+      "fetch_url_count": 1,
+      "image_search_count": 3,
+      "geocode_count": 1,
+      "historical_query_count": 0,
+      "crop_count": 4,
+      "static_map_count": 0,
+      "street_view_count": 0,
+      "target_match_count": 1,
+      "submit_called": true,
+      "error": null,
+      "trace": [
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 934,
+            "y": 524,
+            "w": 466,
+            "h": 262
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 466,
+            "y": 0,
+            "w": 466,
+            "h": 262
+          }
+        },
+        {
+          "step": 1,
+          "type": "image_search",
+          "query": "\"Courtesy of U.S. Bureau of Public Roads\" underpass railroad sepia photo",
+          "n_images": 2,
+          "target_match": 1
+        },
+        {
+          "step": 1,
+          "type": "web_search",
+          "query": "\"Courtesy of U.S. Bureau of Public Roads\" railroad underpass photo",
+          "result_count": 5,
+          "blocked": 0
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "site:loc.gov \"U.S. Bureau of Public Roads\" underpass railroad \"Photo By\"",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "site:loc.gov sepia underpass railroad \"Bureau of Public Roads\" billboard",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 2,
+          "type": "image_search",
+          "query": "sepia railroad underpass boulevard billboard industrial plant Bureau of Public Roads",
+          "n_images": 2,
+          "target_match": 0
+        },
+        {
+          "step": 2,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 466,
+            "y": 262,
+            "w": 466,
+            "h": 262
+          }
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"grade separation\" boulevard underpass railroad industrial plant billboard 1930s",
+          "result_count": 10,
+          "blocked": 2
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"Photo by Courtesy of U.S. Bureau of Public Roads\" boulevard underpass railroad factory",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 3,
+          "type": "image_search",
+          "query": "1930s boulevard railroad underpass ornamental concrete parapet industrial district",
+          "n_images": 4,
+          "target_match": 0
+        },
+        {
+          "step": 3,
+          "type": "crop_image",
+          "region": {
+            "x": 850,
+            "y": 120,
+            "w": 420,
+            "h": 200
+          }
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"Grand Avenue\" railroad underpass 1938 billboard industrial plant",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"East Rosedale\" underpass historic photo billboard factory",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"airport boulevard railroad underpass\" historic photo bureau public roads",
+          "result_count": 10,
+          "blocked": 2
+        },
+        {
+          "step": 4,
+          "type": "fetch_url_with_images",
+          "url": "https://livingnewdeal.org/sites/airport-boulevard-railroad-underpass-south-san-francisco-ca/",
+          "n_images": 4,
+          "target_match": 0
+        },
+        {
+          "step": 5,
+          "type": "web_search",
+          "query": "\"National Archives\" \"grade crossing eliminations\" sepia road underpass billboard industrial plant",
+          "result_count": 10,
+          "blocked": 3
+        },
+        {
+          "step": 5,
+          "type": "web_search",
+          "query": "\"Bureau of Public Roads\" \"grade crossing eliminations\" factory underpass historic photo",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 5,
+          "type": "web_search",
+          "query": "\"railroad underpass\" \"Courtesy of U.S. Bureau of Public Roads\" \"National Archives\"",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 5,
+          "type": "geocode",
+          "args": {
+            "query": "Airport Blvd near San Mateo Ave South San Francisco, CA",
+            "language": "en",
+            "max_results": 1
+          },
+          "n_results": 0
+        },
+        {
+          "step": 6,
+          "type": "submit",
+          "answer": {
+            "location": "Airport Boulevard railway underpass (then Bayshore Highway) near San Mateo Ave, South San Francisco, California, USA",
+            "lat": 37.651334,
+            "lon": -122.409038,
+            "year": "1936",
+            "reasoning": "La foto muestra un underpass vial bajo varias vías ferroviarias, con diseño art déco/estandarizado de los años 1930 y crédito visible 'Photo By Courtesy of U.S. Bureau of Public Roads'. En la búsqueda de imágenes apareció una coincidencia perceptual del target, y la evidencia externa más consistente fue el sitio de Living New Deal sobre el Airport Boulevard Railway Underpass en South San Francisco, financiado por PWA/Bureau of Public Roads y completado en 1936. Las fotos históricas embebidas del sitio muestran un underpass de estética y configuración muy semejantes y el artículo da coordenadas exactas. No pude ver la imagen coincidente oculta, por lo que la identificación no es absolutamente cerrada, pero es la mejor hipótesis respaldada.",
+            "confidence": "media",
+            "visual_clues": [
+              "Paso bajo nivel carretero bajo varias vías de tren",
+              "Barandas/parapetos de hormigón ornamentales de estilo años 1930",
+              "Crédito impreso: 'Photo By Courtesy of U.S. Bureau of Public Roads'",
+              "Paisaje abierto/periférico con pocos edificios e industria ligera al fondo",
+              "Automóviles de época, compatible con mediados de los años 1930"
+            ],
+            "external_evidence": [
+              "https://livingnewdeal.org/sites/airport-boulevard-railroad-underpass-south-san-francisco-ca/ — identifica un underpass ferroviario financiado por PWA/Bureau of Public Roads, completado en 1936, y da coordenadas 37.651334, -122.409038.",
+              "Imágenes embebidas en esa página muestran un underpass histórico muy parecido y su estado actual en el mismo lugar.",
+              "image_search de '\"Courtesy of U.S. Bureau of Public Roads\" underpass railroad sepia photo' devolvió 1 imagen oculta por hash_match_target, lo que sugiere que la foto objetivo circula en la web asociada a esa línea de búsqueda."
+            ],
+            "rejected_alternatives": [
+              "Fort Worth / East Rosedale underpasses: aparecen en búsquedas textuales por Bureau of Public Roads, pero la evidencia recuperada fue documental y no visual; además el entorno urbano/industrial no encaja tan bien.",
+              "Grand Avenue underpass en Ames: apareció una imagen de referencia, pero la estructura y disposición de accesos no coinciden tan bien con la foto target.",
+              "Dalhart, Texas: proyecto de 1939 mencionado en Living New Deal, pero el paisaje y la configuración de múltiples carriles/entorno no se ajustan tan bien."
+            ],
+            "verification_checks": [
+              "Comparé la arquitectura del underpass con las fotos históricas de referencia del sitio de South San Francisco: parapetos, pilastras y tipología coinciden razonablemente.",
+              "Verifiqué que la fuente externa proporciona ubicación exacta y fecha de finalización (1936)."
+            ],
+            "uncertainty_reason": "No pude inspeccionar directamente la imagen oculta que coincidía con la foto target, así que la asociación final depende de evidencia indirecta y similitud visual, no de una confirmación textual explícita de esa foto exacta."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "cid": 1587935,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/1587935",
+    "file_url": "https://pastvu.com/_p/a/n/1/4/n14phi6ror6e9cn92g.jpg",
+    "title": "中山路 Улица Сунь Ятсена в Мукдене (Шэньяне)",
+    "year": 1946,
+    "year2": 1946,
+    "country": "China",
+    "bucket_pais": "Resto",
+    "bucket_decada": "1940s",
+    "geo": [
+      41.794224,
+      123.403055
+    ],
+    "geohash5": "wxrvb",
+    "type": 1,
+    "h": 2100,
+    "w": 2100,
+    "waterh": 49,
+    "dir": "ne",
+    "runs": [
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Beijing, China\",\n  \"lat\": 39.9042,\n  \"lon\": 116.4074,\n  \"year\": \"1940s\",\n  \"reasoning\": \"La arquitectura del edificio parece influenciada por el estilo occidental, lo cual era común en ciudades chinas durante la primera mitad del siglo XX. La bandera visible sugiere la presencia de una embajada o consulado. Las vestimentas de las personas y el carro son típicos de China durante la década de 1940. Además, la forma de los árboles y la disposición de la calle son características que se pueden encontrar en Beijing.\",\n  \"confidence\": \"media\",\n  \"missing_info\": \"Información más específica sobre la bandera o detalles arquitectónicos que puedan confirmar el edificio exacto o el año.\"\n}\n```",
+        "parsed": {
+          "location": "Beijing, China",
+          "lat": 39.9042,
+          "lon": 116.4074,
+          "year": "1940s",
+          "reasoning": "La arquitectura del edificio parece influenciada por el estilo occidental, lo cual era común en ciudades chinas durante la primera mitad del siglo XX. La bandera visible sugiere la presencia de una embajada o consulado. Las vestimentas de las personas y el carro son típicos de China durante la década de 1940. Además, la forma de los árboles y la disposición de la calle son características que se pueden encontrar en Beijing.",
+          "confidence": "media",
+          "missing_info": "Información más específica sobre la bandera o detalles arquitectónicos que puedan confirmar el edificio exacto o el año."
+        },
+        "distance_km": 625.9165446666583,
+        "confidence": "media"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Desconocido\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"Desconocido\",\n  \"reasoning\": \"La imagen muestra un edificio de estilo occidental, con elementos arquitectónicos que podrían indicar una ubicación urbana en una ciudad importante. La vestimenta de las personas y el carro sugiere un contexto histórico, posiblemente antes de la modernidad. Sin embargo, no hay señales claras, como un idioma en letreros o logotipos visibles, para identificar el lugar exacto.\",\n  \"confidence\": \"baja\",\n  \"missing_info\": \"Necesitaría más información contextual, como letreros con texto o referencias más específicas que indiquen una ubicación geográfica o temporal. Una mejor resolución de detalles arquitectónicos o culturales también ayudaría.\"\n}\n```",
+        "parsed": {
+          "location": "Desconocido",
+          "lat": null,
+          "lon": null,
+          "year": "Desconocido",
+          "reasoning": "La imagen muestra un edificio de estilo occidental, con elementos arquitectónicos que podrían indicar una ubicación urbana en una ciudad importante. La vestimenta de las personas y el carro sugiere un contexto histórico, posiblemente antes de la modernidad. Sin embargo, no hay señales claras, como un idioma en letreros o logotipos visibles, para identificar el lugar exacto.",
+          "confidence": "baja",
+          "missing_info": "Necesitaría más información contextual, como letreros con texto o referencias más específicas que indiquen una ubicación geográfica o temporal. Una mejor resolución de detalles arquitectónicos o culturales también ayudaría."
+        },
+        "distance_km": null,
+        "confidence": "baja"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Beijing, China\",\n  \"lat\": 39.9042,\n  \"lon\": 116.4074,\n  \"year\": \"1940s\",\n  \"reasoning\": \"La arquitectura del edificio sugiere un lugar en China, posiblemente Beijing, debido al estilo tradicional chino combinado con influencias occidentales. Las personas parecen estar vestidas de manera acorde a mediados del siglo XX, y están usando mascarillas, lo que podría estar relacionado con eventos como epidemias de la época.\",\n  \"confidence\": \"media\",\n  \"missing_info\": \"Información adicional sobre el contexto histórico específico de la epidemia o indicios más claros del entorno, como letreros en chino o detalles culturales distintivos.\"\n}\n```",
+        "parsed": {
+          "location": "Beijing, China",
+          "lat": 39.9042,
+          "lon": 116.4074,
+          "year": "1940s",
+          "reasoning": "La arquitectura del edificio sugiere un lugar en China, posiblemente Beijing, debido al estilo tradicional chino combinado con influencias occidentales. Las personas parecen estar vestidas de manera acorde a mediados del siglo XX, y están usando mascarillas, lo que podría estar relacionado con eventos como epidemias de la época.",
+          "confidence": "media",
+          "missing_info": "Información adicional sobre el contexto histórico específico de la epidemia o indicios más claros del entorno, como letreros en chino o detalles culturales distintivos."
+        },
+        "distance_km": 625.9165446666583,
+        "confidence": "media"
+      }
+    ],
+    "stats": {
+      "dist_min": 625.9165446666583,
+      "dist_median": 625.9165446666583,
+      "dist_max": 625.9165446666583,
+      "n_with_coords": 2,
+      "confidences": [
+        "media",
+        "baja",
+        "media"
+      ]
+    },
+    "decision": "keep",
+    "reject_reason": null,
+    "attacker_model": "gpt-4o",
+    "attacker_prompt_version": "v1",
+    "triggering_runs": [],
+    "react": {
+      "model": "gpt-5.4",
+      "max_steps": 12,
+      "prompt_version": "v2_descriptive",
+      "elapsed_seconds": 168.0,
+      "final_answer": {
+        "location": "Antigua Legación Japonesa, Dongjiaominxiang / Zhengyi Lu, Barrio de las Legaciones, Beijing, China",
+        "lat": 39.903056,
+        "lon": 116.401667,
+        "year": "c. 1937-1940",
+        "reasoning": "La arquitectura es claramente del Barrio de las Legaciones de Beijing: edificio occidental de ladrillo con detalles neoclásicos, muros altos de compuesto diplomático y un asta con bandera que parece japonesa. La vestimenta y el carro de mano encajan con China del norte en fines de los años 30/inicios de los 40. Fuentes web sobre Dongjiaominxiang indican que la antigua Legación Japonesa pasó a ser sede del gobierno municipal de Beijing y sitúan el sitio en 21/23 Dongjiaominxiang o No. 2 Zhengyi Road, con coordenadas aproximadas 39°54′11″N 116°24′06″E. La coincidencia entre la tipología edilicia de la foto y las descripciones del antiguo recinto diplomático japonés hace de este sitio la mejor hipótesis.",
+        "confidence": "media",
+        "visual_clues": [
+          "Edificio occidental de ladrillo visto con pilastras y cornisas, típico del Barrio de las Legaciones de Beijing",
+          "Muro perimetral alto de compuesto oficial/diplomático",
+          "Bandera en la azotea con apariencia compatible con bandera japonesa",
+          "Peatones con ropa acolchada, pantalones anchos y calzado propios del norte de China de época republicana/guerra",
+          "Carro de mano de dos ruedas y calle amplia sin tráfico moderno"
+        ],
+        "external_evidence": [
+          "https://dreamofacity.com/2014/12/10/the-legation-quarter-peking/ — identifica que la antigua Legación Japonesa del Barrio de las Legaciones de Beijing hoy corresponde al gobierno municipal de Beijing",
+          "https://www.globaltimes.cn/content/485535.shtml — afirma que la antigua embajada/legación japonesa es hoy el edificio del Beijing Municipal People's Government",
+          "https://baike.baidu.com/en/item/Dongjiaomin%20Lane/926330 — ubica la Former Japanese Legation en No. 2 Zhengyi Road dentro de Dongjiaominxiang",
+          "https://grokipedia.com/page/former_site_of_the_japanese_legation — da coordenadas aproximadas del sitio: 39°54′11″N 116°24′06″E"
+        ],
+        "rejected_alternatives": [
+          "Otras legaciones del mismo barrio (británica, italiana, belga): posibles por el estilo arquitectónico, pero la bandera y las referencias modernas al edificio japonés como sede gubernamental encajan mejor",
+          "Tianjin concesiones extranjeras: también tienen arquitectura similar, pero la evidencia textual apunta específicamente al Barrio de las Legaciones de Beijing"
+        ],
+        "verification_checks": [
+          "Comparé la arquitectura de la foto con descripciones e imágenes contemporáneas del Barrio de las Legaciones de Beijing",
+          "Verifiqué en múltiples fuentes textuales que la antigua Legación Japonesa estaba en Dongjiaominxiang/Zhengyi Lu y sobrevivió reutilizada",
+          "Convertí las coordenadas textuales 39°54′11″N 116°24′06″E a decimal para el envío"
+        ],
+        "uncertainty_reason": "No pude hacer una coincidencia fotográfica exacta fachada-a-fachada con una imagen histórica/actual del mismo ángulo, y la lectura de la bandera no es totalmente nítida. El año es aproximado por indumentaria y contexto de ocupación japonesa, no por una fecha explícita visible."
+      },
+      "distance_km": 626.4188503064347,
+      "year_error": 7.5,
+      "steps_used": 9,
+      "web_search_count": 10,
+      "fetch_url_count": 1,
+      "image_search_count": 1,
+      "geocode_count": 3,
+      "historical_query_count": 0,
+      "crop_count": 5,
+      "static_map_count": 0,
+      "street_view_count": 0,
+      "target_match_count": 0,
+      "submit_called": true,
+      "error": null,
+      "trace": [
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 1400,
+            "y": 0,
+            "w": 700,
+            "h": 699
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 700,
+            "y": 699,
+            "w": 700,
+            "h": 699
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "w": 1050,
+            "h": 2098
+          }
+        },
+        {
+          "step": 2,
+          "type": "image_search",
+          "query": "Republic of China embassy legation Beijing 1930s brick building shutters flag",
+          "n_images": 1,
+          "target_match": 0
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "1930s Beijing embassy district brick building shutters rooftop tower flag photo",
+          "result_count": 5,
+          "blocked": 4
+        },
+        {
+          "step": 2,
+          "type": "crop_image",
+          "region": {
+            "x": 820,
+            "y": 1160,
+            "w": 180,
+            "h": 180
+          }
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "site:hpcbristol.net Beijing legation quarter embassy brick shutters flag",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"Historical Photographs of China\" Beijing embassy shutters brick building",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 3,
+          "type": "crop_image",
+          "region": {
+            "x": 980,
+            "y": 820,
+            "w": 160,
+            "h": 140
+          }
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "site:hpcbristol.net Beijing \"Japanese flag\" legation building",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "Beijing Japanese embassy legation building 1937 photo shutters brick",
+          "result_count": 10,
+          "blocked": 6
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "Peking Japanese embassy 1930s building brick shutters",
+          "result_count": 10,
+          "blocked": 3
+        },
+        {
+          "step": 5,
+          "type": "fetch_url_with_images",
+          "url": "https://dreamofacity.com/2014/12/10/the-legation-quarter-peking/",
+          "n_images": 5,
+          "target_match": 0
+        },
+        {
+          "step": 6,
+          "type": "web_search",
+          "query": "\"Japanese Legation\" Beijing municipal government building address Dongjiaominxiang",
+          "result_count": 5,
+          "blocked": 1
+        },
+        {
+          "step": 6,
+          "type": "geocode",
+          "args": {
+            "query": "Beijing Municipal Government former Japanese Legation Dongjiaominxiang",
+            "language": "en",
+            "max_results": 5
+          },
+          "n_results": 0
+        },
+        {
+          "step": 6,
+          "type": "web_search",
+          "query": "former Japanese Legation Beijing today Beijing municipal government address",
+          "result_count": 10,
+          "blocked": 3
+        },
+        {
+          "step": 7,
+          "type": "geocode",
+          "args": {
+            "query": "21 Dongjiaominxiang, Dongcheng District, Beijing, China",
+            "language": "en",
+            "max_results": 5
+          },
+          "n_results": 0
+        },
+        {
+          "step": 8,
+          "type": "geocode",
+          "args": {
+            "query": "Japan Legation Former Site Beijing",
+            "language": "en",
+            "max_results": 5
+          },
+          "n_results": 0
+        },
+        {
+          "step": 8,
+          "type": "web_search",
+          "query": "\"21 Dongjiaominxiang\" Beijing Japanese Legation",
+          "result_count": 10,
+          "blocked": 3
+        },
+        {
+          "step": 8,
+          "type": "web_search",
+          "query": "\"23 Dongjiaominxiang\" Beijing Japanese Legation",
+          "result_count": 10,
+          "blocked": 2
+        },
+        {
+          "step": 9,
+          "type": "submit",
+          "answer": {
+            "location": "Antigua Legación Japonesa, Dongjiaominxiang / Zhengyi Lu, Barrio de las Legaciones, Beijing, China",
+            "lat": 39.903056,
+            "lon": 116.401667,
+            "year": "c. 1937-1940",
+            "reasoning": "La arquitectura es claramente del Barrio de las Legaciones de Beijing: edificio occidental de ladrillo con detalles neoclásicos, muros altos de compuesto diplomático y un asta con bandera que parece japonesa. La vestimenta y el carro de mano encajan con China del norte en fines de los años 30/inicios de los 40. Fuentes web sobre Dongjiaominxiang indican que la antigua Legación Japonesa pasó a ser sede del gobierno municipal de Beijing y sitúan el sitio en 21/23 Dongjiaominxiang o No. 2 Zhengyi Road, con coordenadas aproximadas 39°54′11″N 116°24′06″E. La coincidencia entre la tipología edilicia de la foto y las descripciones del antiguo recinto diplomático japonés hace de este sitio la mejor hipótesis.",
+            "confidence": "media",
+            "visual_clues": [
+              "Edificio occidental de ladrillo visto con pilastras y cornisas, típico del Barrio de las Legaciones de Beijing",
+              "Muro perimetral alto de compuesto oficial/diplomático",
+              "Bandera en la azotea con apariencia compatible con bandera japonesa",
+              "Peatones con ropa acolchada, pantalones anchos y calzado propios del norte de China de época republicana/guerra",
+              "Carro de mano de dos ruedas y calle amplia sin tráfico moderno"
+            ],
+            "external_evidence": [
+              "https://dreamofacity.com/2014/12/10/the-legation-quarter-peking/ — identifica que la antigua Legación Japonesa del Barrio de las Legaciones de Beijing hoy corresponde al gobierno municipal de Beijing",
+              "https://www.globaltimes.cn/content/485535.shtml — afirma que la antigua embajada/legación japonesa es hoy el edificio del Beijing Municipal People's Government",
+              "https://baike.baidu.com/en/item/Dongjiaomin%20Lane/926330 — ubica la Former Japanese Legation en No. 2 Zhengyi Road dentro de Dongjiaominxiang",
+              "https://grokipedia.com/page/former_site_of_the_japanese_legation — da coordenadas aproximadas del sitio: 39°54′11″N 116°24′06″E"
+            ],
+            "rejected_alternatives": [
+              "Otras legaciones del mismo barrio (británica, italiana, belga): posibles por el estilo arquitectónico, pero la bandera y las referencias modernas al edificio japonés como sede gubernamental encajan mejor",
+              "Tianjin concesiones extranjeras: también tienen arquitectura similar, pero la evidencia textual apunta específicamente al Barrio de las Legaciones de Beijing"
+            ],
+            "verification_checks": [
+              "Comparé la arquitectura de la foto con descripciones e imágenes contemporáneas del Barrio de las Legaciones de Beijing",
+              "Verifiqué en múltiples fuentes textuales que la antigua Legación Japonesa estaba en Dongjiaominxiang/Zhengyi Lu y sobrevivió reutilizada",
+              "Convertí las coordenadas textuales 39°54′11″N 116°24′06″E a decimal para el envío"
+            ],
+            "uncertainty_reason": "No pude hacer una coincidencia fotográfica exacta fachada-a-fachada con una imagen histórica/actual del mismo ángulo, y la lectura de la bandera no es totalmente nítida. El año es aproximado por indumentaria y contexto de ocupación japonesa, no por una fecha explícita visible."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "cid": 2126812,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/2126812",
+    "file_url": "https://pastvu.com/_p/a/3/x/3/3x39c4uh3ggpyjxjc6.jpg",
+    "title": "Вид с Троицкого собора",
+    "year": 1898,
+    "year2": 1898,
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "bucket_decada": "1890s",
+    "geo": [
+      56.473863,
+      84.95197
+    ],
+    "geohash5": "vfh3m",
+    "type": 1,
+    "h": 1281,
+    "w": 2560,
+    "waterh": 30,
+    "dir": "s",
+    "runs": [
+      {
+        "raw_response": "```json\n{\n    \"location\": \"Desconocido\",\n    \"lat\": null,\n    \"lon\": null,\n    \"year\": \"Principios del siglo XX\",\n    \"reasoning\": \"La fotografía parece ser antigua, posiblemente de principios del siglo XX, por la calidad del blanco y negro y el estilo arquitectónico. Hay edificios religiosos que podrían ser iglesias ortodoxas y calles sin pavimentar, comunes en ciudades pequeñas de Europa del Este o Rusia. El entorno parece semi-rural.\",\n    \"confidence\": \"baja\",\n    \"missing_info\": \"Información sobre el estilo arquitectónico específico, el idioma en carteles o cualquier otro detalle que pueda identificar la región precisa.\"\n}\n```",
+        "parsed": {
+          "location": "Desconocido",
+          "lat": null,
+          "lon": null,
+          "year": "Principios del siglo XX",
+          "reasoning": "La fotografía parece ser antigua, posiblemente de principios del siglo XX, por la calidad del blanco y negro y el estilo arquitectónico. Hay edificios religiosos que podrían ser iglesias ortodoxas y calles sin pavimentar, comunes en ciudades pequeñas de Europa del Este o Rusia. El entorno parece semi-rural.",
+          "confidence": "baja",
+          "missing_info": "Información sobre el estilo arquitectónico específico, el idioma en carteles o cualquier otro detalle que pueda identificar la región precisa."
+        },
+        "distance_km": null,
+        "confidence": "baja"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"No identificado\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"Aproximadamente alrededor de principios del siglo XX\",\n  \"reasoning\": \"La fotografía muestra una vista panorámica de una ciudad con características arquitectónicas antiguas, como edificios de mampostería y techos de tejas. La presencia de una iglesia sugiere una ubicación que podría ser europea. Las calles parecen sin pavimentar, lo cual es típico de lugares en desarrollo o áreas rurales en épocas anteriores. No hay elementos claros que indiquen el país o ciudad específica.\",\n  \"confidence\": \"baja\",\n  \"missing_info\": \"Detalles arquitectónicos específicos, nombres de lugares, identificación de monumentos o símbolos visibles, cualquier texto presente en la imagen que pueda ayudar a vincularla a una ubicación específica.\"\n}\n```",
+        "parsed": {
+          "location": "No identificado",
+          "lat": null,
+          "lon": null,
+          "year": "Aproximadamente alrededor de principios del siglo XX",
+          "reasoning": "La fotografía muestra una vista panorámica de una ciudad con características arquitectónicas antiguas, como edificios de mampostería y techos de tejas. La presencia de una iglesia sugiere una ubicación que podría ser europea. Las calles parecen sin pavimentar, lo cual es típico de lugares en desarrollo o áreas rurales en épocas anteriores. No hay elementos claros que indiquen el país o ciudad específica.",
+          "confidence": "baja",
+          "missing_info": "Detalles arquitectónicos específicos, nombres de lugares, identificación de monumentos o símbolos visibles, cualquier texto presente en la imagen que pueda ayudar a vincularla a una ubicación específica."
+        },
+        "distance_km": null,
+        "confidence": "baja"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Desconocido\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"Finales del siglo XIX o principios del siglo XX\",\n  \"reasoning\": \"La imagen muestra un área urbana con varios edificios de estilo europeo, incluyendo una iglesia con una arquitectura típica del siglo XIX. Las calles parecen ser de tierra y hay un uso limitado de vehículos o infraestructura moderna, sugiriendo que la imagen es antigua. Sin señales evidentes de identificación, como carteles, lenguaje u otros símbolos específicos, es difícil determinar la ubicación exacta. La fotografía parece representar un pueblo o ciudad pequeña/rural.\",\n  \"confidence\": \"baja\",\n  \"missing_info\": \"Detalles arquitectónicos específicos que pudieran identificar el lugar; cualquier tipo de señalización o escritura visible; pistas sobre el clima o la vegetación que denoten una región particular.\"\n}\n```",
+        "parsed": {
+          "location": "Desconocido",
+          "lat": null,
+          "lon": null,
+          "year": "Finales del siglo XIX o principios del siglo XX",
+          "reasoning": "La imagen muestra un área urbana con varios edificios de estilo europeo, incluyendo una iglesia con una arquitectura típica del siglo XIX. Las calles parecen ser de tierra y hay un uso limitado de vehículos o infraestructura moderna, sugiriendo que la imagen es antigua. Sin señales evidentes de identificación, como carteles, lenguaje u otros símbolos específicos, es difícil determinar la ubicación exacta. La fotografía parece representar un pueblo o ciudad pequeña/rural.",
+          "confidence": "baja",
+          "missing_info": "Detalles arquitectónicos específicos que pudieran identificar el lugar; cualquier tipo de señalización o escritura visible; pistas sobre el clima o la vegetación que denoten una región particular."
+        },
+        "distance_km": null,
+        "confidence": "baja"
+      }
+    ],
+    "stats": {
+      "dist_min": null,
+      "dist_median": null,
+      "dist_max": null,
+      "n_with_coords": 0,
+      "confidences": [
+        "baja",
+        "baja",
+        "baja"
+      ]
+    },
+    "decision": "keep",
+    "reject_reason": null,
+    "attacker_model": "gpt-4o",
+    "attacker_prompt_version": "v1",
+    "triggering_runs": [],
+    "react": {
+      "model": "gpt-5.4",
+      "max_steps": 12,
+      "prompt_version": "v2_descriptive",
+      "elapsed_seconds": 187.0,
+      "final_answer": {
+        "location": "Vitebsk, Belarus — vista desde la torre/campanario de la Catedral de la Asunción hacia la parte oriental del casco urbano",
+        "lat": 55.1896,
+        "lon": 30.2049,
+        "year": "1912",
+        "reasoning": "La foto muestra una ciudad pequeña del antiguo Imperio ruso con calles de tierra, casas bajas de madera y un gran templo blanco barroco de dos torres muy similar al barroco vilniano. La evidencia externa decisiva apareció en una página sobre fotografías en color de Prokudin-Gorski de 1912: allí se describe explícitamente una imagen de 'Витебск, общий вид восточной части города' y añade que fue tomada 'с колокольни Кафедрального собора' (desde la campanario de la catedral). Eso encaja con la perspectiva elevada y con la presencia del gran templo blanco de dos torres en la foto. La fecha probable, por tanto, es 1912, y el punto de toma corresponde a la zona de la Catedral de la Asunción en Vitebsk.",
+        "confidence": "media",
+        "visual_clues": [
+          "Panorámica elevada tomada desde una torre o campanario",
+          "Calles muy anchas sin pavimentar, típicas de foto de principios del siglo XX",
+          "Casas bajas y abundante edificación de madera",
+          "Gran templo blanco barroco de dos torres, compatible con arquitectura de Bielorrusia/Lituania histórica",
+          "Horizonte llano y urbano, sin relieve fuerte"
+        ],
+        "external_evidence": [
+          "https://toxaby.livejournal.com/622266.html — recopila fotos bielorrusas de 1912 de Prokudin-Gorski y menciona textualmente: 'Витебск, общий вид восточной части города. Фотография сделана ... с колокольни Кафедрального собора'.",
+          "La misma página también identifica otras vistas de Vitebsk y menciona la Catedral de la Asunción como ejemplo de barroco vilniano, consistente con el gran templo blanco de dos torres visible en la imagen."
+        ],
+        "rejected_alternatives": [
+          "Minsk: también tiene iglesias barrocas blancas de dos torres, pero el texto encontrado da una coincidencia mucho más específica para una 'vista de la parte oriental' tomada desde un campanario catedralicio.",
+          "Nesvizh/Grodno/Pinsk: considerados por la presencia de templos católicos o barrocos de dos torres, pero no apareció una referencia textual tan precisa que coincidiera con una panorámica urbana desde campanario."
+        ],
+        "verification_checks": [
+          "Comparé la morfología del templo blanco de dos torres y el carácter de ciudad provincial bielorrusa con las descripciones de Vitebsk.",
+          "La descripción externa aporta tanto lugar (Vitebsk) como tipo de vista (parte oriental del ciudad) y punto de toma (campanario de la catedral), un triple encaje independiente."
+        ],
+        "uncertainty_reason": "No pude ver la imagen archivística de referencia original directamente ni hacer una comparación visual lado a lado con Street View histórico; por eso las coordenadas son del entorno de la Catedral de la Asunción y no del punto exacto del fotógrafo sobre la torre."
+      },
+      "distance_km": 3341.978493722397,
+      "year_error": 14.0,
+      "steps_used": 8,
+      "web_search_count": 12,
+      "fetch_url_count": 1,
+      "image_search_count": 2,
+      "geocode_count": 0,
+      "historical_query_count": 0,
+      "crop_count": 3,
+      "static_map_count": 0,
+      "street_view_count": 0,
+      "target_match_count": 0,
+      "submit_called": true,
+      "error": null,
+      "trace": [
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 1280
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 853,
+            "y": 426,
+            "w": 853,
+            "h": 426
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 1280,
+            "y": 0,
+            "w": 1280,
+            "h": 1280
+          }
+        },
+        {
+          "step": 2,
+          "type": "image_search",
+          "query": "historic town skyline white baroque church two towers central/eastern europe russia old photo",
+          "n_images": 2,
+          "target_match": 0
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "small russian town white church two towers old panoramic photo cathedral center",
+          "result_count": 5,
+          "blocked": 2
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"white church\" two towers russian town catholic church panorama old photo",
+          "result_count": 10,
+          "blocked": 8
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "Россия город панорама костел две башни белый храм старое фото",
+          "result_count": 8,
+          "blocked": 2
+        },
+        {
+          "step": 3,
+          "type": "image_search",
+          "query": "Россия старое фото города костел две башни белый храм панорама",
+          "n_images": 5,
+          "target_match": 0
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "site:etoretro.ru панорама города костел две башни белый храм",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"старое фото\" город панорама костел две башни белый храм губерния",
+          "result_count": 10,
+          "blocked": 2
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"панорама города\" \"костел\" \"две башни\"",
+          "result_count": 10,
+          "blocked": 11
+        },
+        {
+          "step": 5,
+          "type": "web_search",
+          "query": "\"панорама города\" \"костёл\" \"ЕтоРетро\"",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 5,
+          "type": "web_search",
+          "query": "\"панорама города\" \"собор\" \"две башни\" \"Беларусь\" старое фото",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 5,
+          "type": "web_search",
+          "query": "\"панорама города\" \"белый храм\" \"две башни\" \"Беларусь\"",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 6,
+          "type": "web_search",
+          "query": "\"Панорама города\" \"Вид с колокольни\" собор епархия старое фото Беларусь",
+          "result_count": 10,
+          "blocked": 3
+        },
+        {
+          "step": 6,
+          "type": "web_search",
+          "query": "\"старое фото\" \"панорама города\" \"белый собор\" \"две башни\" \"Могилев\" OR \"Витебск\" OR \"Минск\" OR \"Пинск\" OR \"Несвиж\"",
+          "result_count": 10,
+          "blocked": 4
+        },
+        {
+          "step": 6,
+          "type": "web_search",
+          "query": "\"старое фото\" \"панорама города\" \"костел\" \"белый\" \"две башни\" \"Беларусь\" \"деревянные дома\"",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 7,
+          "type": "fetch_url",
+          "url": "https://toxaby.livejournal.com/622266.html",
+          "text_len": 4249,
+          "error": null
+        },
+        {
+          "step": 8,
+          "type": "submit",
+          "answer": {
+            "location": "Vitebsk, Belarus — vista desde la torre/campanario de la Catedral de la Asunción hacia la parte oriental del casco urbano",
+            "lat": 55.1896,
+            "lon": 30.2049,
+            "year": "1912",
+            "reasoning": "La foto muestra una ciudad pequeña del antiguo Imperio ruso con calles de tierra, casas bajas de madera y un gran templo blanco barroco de dos torres muy similar al barroco vilniano. La evidencia externa decisiva apareció en una página sobre fotografías en color de Prokudin-Gorski de 1912: allí se describe explícitamente una imagen de 'Витебск, общий вид восточной части города' y añade que fue tomada 'с колокольни Кафедрального собора' (desde la campanario de la catedral). Eso encaja con la perspectiva elevada y con la presencia del gran templo blanco de dos torres en la foto. La fecha probable, por tanto, es 1912, y el punto de toma corresponde a la zona de la Catedral de la Asunción en Vitebsk.",
+            "confidence": "media",
+            "visual_clues": [
+              "Panorámica elevada tomada desde una torre o campanario",
+              "Calles muy anchas sin pavimentar, típicas de foto de principios del siglo XX",
+              "Casas bajas y abundante edificación de madera",
+              "Gran templo blanco barroco de dos torres, compatible con arquitectura de Bielorrusia/Lituania histórica",
+              "Horizonte llano y urbano, sin relieve fuerte"
+            ],
+            "external_evidence": [
+              "https://toxaby.livejournal.com/622266.html — recopila fotos bielorrusas de 1912 de Prokudin-Gorski y menciona textualmente: 'Витебск, общий вид восточной части города. Фотография сделана ... с колокольни Кафедрального собора'.",
+              "La misma página también identifica otras vistas de Vitebsk y menciona la Catedral de la Asunción como ejemplo de barroco vilniano, consistente con el gran templo blanco de dos torres visible en la imagen."
+            ],
+            "rejected_alternatives": [
+              "Minsk: también tiene iglesias barrocas blancas de dos torres, pero el texto encontrado da una coincidencia mucho más específica para una 'vista de la parte oriental' tomada desde un campanario catedralicio.",
+              "Nesvizh/Grodno/Pinsk: considerados por la presencia de templos católicos o barrocos de dos torres, pero no apareció una referencia textual tan precisa que coincidiera con una panorámica urbana desde campanario."
+            ],
+            "verification_checks": [
+              "Comparé la morfología del templo blanco de dos torres y el carácter de ciudad provincial bielorrusa con las descripciones de Vitebsk.",
+              "La descripción externa aporta tanto lugar (Vitebsk) como tipo de vista (parte oriental del ciudad) y punto de toma (campanario de la catedral), un triple encaje independiente."
+            ],
+            "uncertainty_reason": "No pude ver la imagen archivística de referencia original directamente ni hacer una comparación visual lado a lado con Street View histórico; por eso las coordenadas son del entorno de la Catedral de la Asunción y no del punto exacto del fotógrafo sobre la torre."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "cid": 509954,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/509954",
+    "file_url": "https://pastvu.com/_p/a/s/i/m/simu04io8aiv9lw8ve.jpg",
+    "title": "Техническое училище",
+    "year": 1925,
+    "year2": 1928,
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "bucket_decada": "1920s",
+    "geo": [
+      55.382454,
+      39.021475
+    ],
+    "geohash5": "ucgep",
+    "type": 1,
+    "h": 915,
+    "w": 1207,
+    "waterh": 21,
+    "dir": "w",
+    "runs": [
+      {
+        "raw_response": "```json\n{\n  \"location\": \"Desconocida\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"Principios del siglo XX\",\n  \"reasoning\": \"La arquitectura del edificio, con sus torres y estilo detallado, sugiere un diseño europeo típico de finales del siglo XIX o principios del XX. Esto se evidencia por el tipo de ladrillos, el diseño de los ventanales y los ornamentos en el techo. Además, el estado y diseño de la calle, junto con el carruaje visible, indican una fecha anterior a las amplias reformas urbanas del siglo XX.\",\n  \"confidence\": \"baja\",\n  \"missing_info\": \"Información más detallada sobre el lenguaje visible en el edificio, otros puntos de referencia culturales, o características únicas que identifiquen la arquitectura específica podrían ayudar a una identificación más precisa.\"\n}\n```",
+        "parsed": {
+          "location": "Desconocida",
+          "lat": null,
+          "lon": null,
+          "year": "Principios del siglo XX",
+          "reasoning": "La arquitectura del edificio, con sus torres y estilo detallado, sugiere un diseño europeo típico de finales del siglo XIX o principios del XX. Esto se evidencia por el tipo de ladrillos, el diseño de los ventanales y los ornamentos en el techo. Además, el estado y diseño de la calle, junto con el carruaje visible, indican una fecha anterior a las amplias reformas urbanas del siglo XX.",
+          "confidence": "baja",
+          "missing_info": "Información más detallada sobre el lenguaje visible en el edificio, otros puntos de referencia culturales, o características únicas que identifiquen la arquitectura específica podrían ayudar a una identificación más precisa."
+        },
+        "distance_km": null,
+        "confidence": "baja"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"No disponible\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"Aproximado década de 1920\",\n  \"reasoning\": \"La arquitectura del edificio sugiere un estilo europeo histórico, posiblemente neogótico. La vestimenta de las personas y el carro indican que la foto fue tomada hace muchas décadas. La inscripción 'Hôtel' en el edificio sugiere que está en una ciudad donde se habla francés, pero el nombre del hotel no es claramente visible. La calidad y color sepia de la imagen sugieren que es de la primera mitad del siglo XX.\",\n  \"confidence\": \"baja\",\n  \"missing_info\": \"Nombre del hotel visible, detalles arquitectónicos específicos que permitan identificar el edificio, cualquier texto adicional que sea legible.\"\n}\n```",
+        "parsed": {
+          "location": "No disponible",
+          "lat": null,
+          "lon": null,
+          "year": "Aproximado década de 1920",
+          "reasoning": "La arquitectura del edificio sugiere un estilo europeo histórico, posiblemente neogótico. La vestimenta de las personas y el carro indican que la foto fue tomada hace muchas décadas. La inscripción 'Hôtel' en el edificio sugiere que está en una ciudad donde se habla francés, pero el nombre del hotel no es claramente visible. La calidad y color sepia de la imagen sugieren que es de la primera mitad del siglo XX.",
+          "confidence": "baja",
+          "missing_info": "Nombre del hotel visible, detalles arquitectónicos específicos que permitan identificar el edificio, cualquier texto adicional que sea legible."
+        },
+        "distance_km": null,
+        "confidence": "baja"
+      },
+      {
+        "raw_response": "```json\n{\n  \"location\": \"No identificable\",\n  \"lat\": null,\n  \"lon\": null,\n  \"year\": \"Aproximadamente principios del siglo XX\",\n  \"reasoning\": \"La arquitectura del edificio tiene un estilo europeo clásico, posiblemente de la época victoriana o eduardiana. El tipo de carruaje y la vestimenta de las personas indican que la foto podría ser de principios del siglo XX. El letrero en la fachada muestra la palabra 'Hotel', pero no hay detalles adicionales sobre la ubicación.\",\n  \"confidence\": \"baja\",\n  \"missing_info\": \"Necesitaría más detalles sobre el entorno, como nombres de calles o edificios reconocibles, para una identificación precisa de la ubicación.\"\n}\n```",
+        "parsed": {
+          "location": "No identificable",
+          "lat": null,
+          "lon": null,
+          "year": "Aproximadamente principios del siglo XX",
+          "reasoning": "La arquitectura del edificio tiene un estilo europeo clásico, posiblemente de la época victoriana o eduardiana. El tipo de carruaje y la vestimenta de las personas indican que la foto podría ser de principios del siglo XX. El letrero en la fachada muestra la palabra 'Hotel', pero no hay detalles adicionales sobre la ubicación.",
+          "confidence": "baja",
+          "missing_info": "Necesitaría más detalles sobre el entorno, como nombres de calles o edificios reconocibles, para una identificación precisa de la ubicación."
+        },
+        "distance_km": null,
+        "confidence": "baja"
+      }
+    ],
+    "stats": {
+      "dist_min": null,
+      "dist_median": null,
+      "dist_max": null,
+      "n_with_coords": 0,
+      "confidences": [
+        "baja",
+        "baja",
+        "baja"
+      ]
+    },
+    "decision": "keep",
+    "reject_reason": null,
+    "attacker_model": "gpt-4o",
+    "attacker_prompt_version": "v1",
+    "triggering_runs": [],
+    "react": {
+      "model": "gpt-5.4",
+      "max_steps": 12,
+      "prompt_version": "v2_descriptive",
+      "elapsed_seconds": 181.2,
+      "final_answer": null,
+      "distance_km": null,
+      "year_error": null,
+      "steps_used": 12,
+      "web_search_count": 17,
+      "fetch_url_count": 0,
+      "image_search_count": 3,
+      "geocode_count": 0,
+      "historical_query_count": 0,
+      "crop_count": 3,
+      "static_map_count": 0,
+      "street_view_count": 0,
+      "target_match_count": 0,
+      "submit_called": false,
+      "error": null,
+      "trace": [
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 0,
+            "y": 0,
+            "w": 603,
+            "h": 914
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 402,
+            "y": 304,
+            "w": 402,
+            "h": 304
+          }
+        },
+        {
+          "step": 1,
+          "type": "crop_image_relative",
+          "region": {
+            "x": 603,
+            "y": 0,
+            "w": 603,
+            "h": 914
+          }
+        },
+        {
+          "step": 1,
+          "type": "image_search",
+          "query": "historic school building synagogue style turret Eastern Europe ornate facade",
+          "n_images": 3,
+          "target_match": 0
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "site:org OR site:edu Jewish school building turret gable tower Eastern Europe historic photo",
+          "result_count": 5,
+          "blocked": 2
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "\"Moorish Revival\" school building turret Eastern Europe",
+          "result_count": 5,
+          "blocked": 3
+        },
+        {
+          "step": 2,
+          "type": "web_search",
+          "query": "historic jewish school building tower gate cobblestone street photo",
+          "result_count": 5,
+          "blocked": 1
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"Alliance Israélite Universelle\" school building turret Eastern Europe",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"Jewish gymnasium\" building turret Eastern Europe historic",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 3,
+          "type": "web_search",
+          "query": "\"Moorish Revival\" synagogue school round tower Eastern Europe",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 4,
+          "type": "web_search",
+          "query": "\"Hebrew Gymnasium\" turret building photo round tower",
+          "result_count": 10,
+          "blocked": 4
+        },
+        {
+          "step": 5,
+          "type": "image_search",
+          "query": "Herzliya Hebrew Gymnasium historic building exterior Tel Aviv",
+          "n_images": 1,
+          "target_match": 0
+        },
+        {
+          "step": 6,
+          "type": "web_search",
+          "query": "\"historic photo\" building with round tower Jewish school Eastern Europe site:org",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 6,
+          "type": "web_search",
+          "query": "\"Gymnasium\" \"round tower\" school building Jewish historic",
+          "result_count": 10,
+          "blocked": 2
+        },
+        {
+          "step": 6,
+          "type": "web_search",
+          "query": "\"Liceul Israelit\" tower building historic photo",
+          "result_count": 10,
+          "blocked": 4
+        },
+        {
+          "step": 7,
+          "type": "web_search",
+          "query": "\"round tower\" synagogue school historic photo jewish romania hungary",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 8,
+          "type": "web_search",
+          "query": "\"Jewish school\" \"Moorish Revival\" Romania building",
+          "result_count": 10,
+          "blocked": 1
+        },
+        {
+          "step": 9,
+          "type": "image_search",
+          "query": "historic synagogue school building with corner round tower eastern europe",
+          "n_images": 1,
+          "target_match": 0
+        },
+        {
+          "step": 10,
+          "type": "web_search",
+          "query": "\"historic school\" synagogue next door tower old photo eastern europe",
+          "result_count": 10,
+          "blocked": 4
+        },
+        {
+          "step": 10,
+          "type": "web_search",
+          "query": "\"jewish school\" synagogue tower street facade historic photo",
+          "result_count": 10,
+          "blocked": 6
+        },
+        {
+          "step": 10,
+          "type": "web_search",
+          "query": "\"temple\" school building gate trees cobblestone historic jewish",
+          "result_count": 10,
+          "blocked": 5
+        },
+        {
+          "step": 11,
+          "type": "web_search",
+          "query": "site:cja.huji.ac.il synagogue school building round tower turret historical photos",
+          "result_count": 10,
+          "blocked": 0
+        },
+        {
+          "step": 12,
+          "type": "web_search",
+          "query": "site:cja.huji.ac.il \"school\" \"synagogue\" \"historical photos\" jewish building",
+          "result_count": 10,
+          "blocked": 0
+        }
+      ]
+    }
+  }
+]

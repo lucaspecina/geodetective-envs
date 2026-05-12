@@ -41,7 +41,9 @@ INPUT = Path("experiments/E004_attacker_filter/results.json")
 PHOTOS_DIR = Path("experiments/E004_attacker_filter/photos")
 OUT_DIR = Path("experiments/E005_react_pilot")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
-OUT_JSON = OUT_DIR / "results.json"
+
+PROMPT_VERSION = os.environ.get("PROMPT_VERSION", "")  # tag identificador, ej "v2_descriptive"
+OUT_JSON = OUT_DIR / (f"results_{PROMPT_VERSION}.json" if PROMPT_VERSION else "results.json")
 
 MODEL = os.environ.get("REACT_MODEL", "gpt-5.4")
 MAX_STEPS = int(os.environ.get("MAX_STEPS", "12"))
@@ -163,6 +165,7 @@ def main():
             "react": {
                 "model": MODEL,
                 "max_steps": MAX_STEPS,
+                "prompt_version": PROMPT_VERSION,
                 "elapsed_seconds": round(elapsed, 1),
                 "final_answer": res.final_answer,
                 "distance_km": dist_km,

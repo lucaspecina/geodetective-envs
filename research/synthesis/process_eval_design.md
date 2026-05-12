@@ -139,19 +139,11 @@ CORRAL usó **Claude 4.5 Sonnet** con 95.7% agreement vs humanos. Para nosotros:
 - **Anti-pattern**: usar el mismo modelo que ejecutó el agente como judge — riesgo de blind spots compartidos.
 - **Razonable**: GPT-5 o gpt-5.4 si Anthropic queda fuera. Reportar siempre en el paper qué modelo se usó.
 
-### 5.2 Input format y problema de asimetría v1/v2 vs v3
+### 5.2 Input format
 
-**Problema crítico identificado** (post Codex review): las trazas v1_mechanical y v2_descriptive no capturan eventos `thinking` del modelo, solo tool calls + outputs. v3_thinking_visible sí los captura. **Si anotamos con la misma vara, v3 va a "ganar" en motifs por simple observabilidad, no por mejor proceso**. Esto invalida la comparación cross-prompt del annotator sin caveats.
+**Versión canónica del prompt: `v3_thinking_visible`**. v1_mechanical y v2_descriptive fueron versiones exploratorias del pilot E005 que se descartaron: v1 no verbaliza razonamiento, v2 verbaliza muy poco. Solo v3 captura los eventos `thinking` necesarios para que el annotator construya nodos H/J/U desde texto explícito del agente. **Cualquier corrida futura del benchmark usa v3.** Las trazas de v1/v2 quedan como artefactos históricos en `experiments/E005_react_pilot/results_v1_*.json` / `results_v2_*.json` para reproducibilidad, no para análisis comparativo de proceso.
 
-Tres opciones de resolución, en orden de preferencia:
-
-1. **Patch de `react.py`** (preferido): capturar `msg.content` de la respuesta del modelo SIEMPRE como evento `thinking` independiente del prompt version. Re-correr v1 y v2 con logging unificado. Después de ese fix, el grafo es comparable. Es la deuda menos cara — está al alcance del cambio. **Costo**: 1 corrida nueva de v1 y v2 sobre las 6 fotos (~15-20 min cada una).
-2. **Análisis separado por prompt-class**: anotar v1/v2 con un grafo "tool-only" (sin nodos H/J/U inferidos de thinking) y v3 con grafo full. Reportar dos tablas. **Costo**: complicación analítica + tabla doble en el paper, conclusiones más débiles.
-3. **Restringir cross-prompt analysis a v3**: solo comparar entre modelos sobre v3. Drop v1/v2 de la comparación process. **Costo**: perdemos la ablación de prompt en process metrics.
-
-**Decisión recomendada: opción 1**. Aplicar el patch antes de la primera corrida del annotator. Queda como task derivada.
-
-**Formato de input al annotator** (ya con thinking unificado):
+**Formato de input al annotator** (sobre trazas v3 con thinking capturado):
 
 ```json
 {
@@ -180,8 +172,8 @@ Tres opciones de resolución, en orden de preferencia:
 
 - Tool outputs textuales: incluir completos (web results, OSM features, geocoder).
 - Tool outputs visuales (image_search, fetch_url_with_images, static_map, street_view, crop): incluir **path al archivo** + descripción textual + URLs/coords + flag `is_likely_target` redactado. El judge multimodal carga las imágenes; el text-only ve la descripción.
-- `thinking` events: incluir SIEMPRE (post patch). Marcador `[thinking]`.
-- System prompts: incluir (CORRAL los excluye, pero acá el prompt es objeto de ablación y necesita ser parte de la trace).
+- `thinking` events de v3: incluir todos. Marcador `[thinking]`.
+- System prompts: incluir como metadata (`prompt_version`) — informativo para el judge, no como mensaje regular del trace.
 
 ### 5.3 Pipeline multi-stage
 
@@ -251,7 +243,7 @@ Tres opciones de resolución, en orden de preferencia:
 
 Plan de validación **revisado post-Codex** — el original (5 traces / 1 anotador / PABAK ≥85%) era subpowered.
 
-1. **Stratified sample de 15-20 traces** del E005 (cuando v1/v2 estén re-corridas con thinking unificado). Estratificación por (prompt_version, outcome_class: acierto / off-medio / off-grande / max_steps).
+1. **Stratified sample de 15-20 traces** del corpus (E005 trazas v3 + corridas cross-model cuando estén). Estratificación por (modelo, outcome_class: acierto / off-medio / off-grande / max_steps). Como hoy solo tenemos 6 trazas v3, el sample inicial es esas 6 + lo que sume el cross-model run.
 2. **2 anotadores humanos** (vos + otra persona, o vos + sesión separada propia con día de pausa para reducir bias). Anotan independientemente.
 3. **Agreement granular por dimensión**:
    - Inter-human por **nodo** (Cohen κ o PABAK; target ≥0.80).
@@ -297,24 +289,21 @@ Lo que sí podemos hacer (eval-only) es **cruzar process metrics con outcome met
 
 ## 7. Roadmap operativo
 
-1. **Aprobación del mapping** (este doc, post Codex fixes): user revisa, valida ejemplos.
-2. **Patch `react.py` — thinking unificado** (deuda derivada §5.2): capturar `msg.content` siempre, regardless de prompt version. Re-correr v1 y v2 sobre las 6 fotos del pilot para igualar logging con v3.
-3. **Implementación del annotator stub** (task #6): código en `src/geodetective/judge/` o similar. Tests sintéticos sobre traces fabricadas antes de correr sobre E005. Implementa Stage 1+2+3a primero (sin LLM en Stage 3a). Stage 3b queda para iteración 2 (necesita multimodal judge + .env).
-4. **Validación humana** (task derivada, §5.5 revisado): 15-20 traces estratificadas + 2 anotadores + agreement granular (nodo, edge, pattern). NO solo PABAK global.
-5. **Primera corrida real Stage 1-3a**: annotator sobre 18 traces re-loggeadas de E005. Output: 18 grafos + patterns estructurales detectados (sin semantic todavía). Plot exploratorio (con N anotado) del cruce structural-patterns × distance.
-6. **Stage 3b** (multimodal, cuando .env vuelva): semantic patterns + visual judge. Reportar separado.
-7. **Cross-model + corpus escalado** (task #7): el annotator se aplica igual. Permite reportar process metrics por modelo.
+1. **Aprobación del mapping** (este doc): user revisa, valida ejemplos.
+2. **Implementación del annotator stub** (task #6): código en `src/geodetective/judge/` o similar. Tests sintéticos sobre traces fabricadas antes de correr sobre las 6 trazas v3 del E005. Implementa Stage 1+2+3a primero (Stage 3a es Python determinista, no requiere LLM). Stage 3b queda para iteración 2 (necesita multimodal judge + `.env`).
+3. **Validación humana** (task derivada, §5.5): 15-20 traces estratificadas + 2 anotadores + agreement granular (nodo, edge, pattern). NO solo PABAK global.
+4. **Primera corrida real Stage 1-3a**: annotator sobre las 6 trazas v3 del pilot. Output: 6 grafos + patterns estructurales detectados (sin semantic todavía). Plot exploratorio (con N anotado).
+5. **Stage 3b** (multimodal, cuando `.env` vuelva): semantic patterns + visual judge. Reportar separado.
+6. **Cross-model + corpus escalado** (task #7): el annotator se aplica igual. Todas las corridas en v3. Permite reportar process metrics por modelo.
 
 ---
 
 ## 8. Open questions
 
-- **Update detection en v3 thinking**: en v3 los updates aparecen verbalizados; en v1/v2 (pre-patch) no. Post-patch §5.2 opción 1, igualados. Pendiente: ¿detectamos updates implícitos (cambio sutil de target en queries sucesivas sin verbalización) o solo los verbalizados? Por simplicidad v1 solo verbalizados.
-- **Threshold de pesos del process_score**: postpuesto hasta tener n suficiente. En v1 sin score agregado.
+- **Updates implícitos vs verbalizados**: v3 capta updates verbalizados. ¿Detectamos también cambios sutiles de target en queries sucesivas (H reemplazada silenciosamente)? Por simplicidad en v1 del annotator, solo verbalizados. Si vemos que el agente sí cambia de hipótesis sin decirlo, agregar detector heurístico en iteración 2.
+- **Threshold de pesos del process_score**: postpuesto hasta tener n suficiente (≥50 traces estratificadas). En v1 del annotator, reporte crudo de patterns sin score agregado.
 - **Posición filosófica vs CORRAL**: CORRAL mide razonamiento sobre tarea bien definida (te dicen qué investigar). Nosotros sumamos brief abierto. Esa diferencia se desarrolla en `related_work.md`.
-- **¿Hay updates "estructurales" sin nodo U explícito?** Cuando una H se reemplaza silenciosamente por otra en queries sucesivas sin que el agente verbalice el "yo descarto X". Si los detectamos, son una clase de pattern intermedio entre `fixed_belief_trace` (no hay update) y `refutation_driven_belief_revision` (update explícito y testeado).
-- **Validación cruzada inter-judge**: ¿el grafo es robusto si lo anotamos con Claude vs GPT-5? Si agreement alto, defendemos robustez. Si bajo, una elección de judge influye el resultado y hay que reportar sensitivity.
-- **Logging del system prompt como input al judge**: CORRAL lo excluye. Acá el prompt es objeto de ablación. Decisión: incluir con metadata `prompt_version`, no como mensaje regular del trace.
+- **Validación cruzada inter-judge**: ¿el grafo es robusto si lo anotamos con Claude vs GPT-5? Si agreement alto, defendemos robustez. Si bajo, la elección de judge influye el resultado y hay que reportar sensitivity.
 
 ---
 

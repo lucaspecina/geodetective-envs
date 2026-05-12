@@ -94,12 +94,12 @@ Smoke test sobre 10 fotos: `MAX_PHOTOS=10 python scripts/run_attacker_filter.py`
 
 ### 4. Correr el agente ReAct sobre el corpus filtrado (#26)
 
-Lee los `decision=='keep'` del paso 3, samplea N por bucket país, y corre el ReAct loop completo (12 tools, max_steps=12).
+Lee los `decision=='keep'` del paso 3, samplea N por bucket país, y corre el ReAct loop completo (12 tools, max_steps=12) con el SYSTEM_PROMPT canónico **v3 (thinking_visible)**.
 
 ```bash
-python scripts/run_react_pilot.py
+PROMPT_VERSION=v3_thinking_visible python scripts/run_react_pilot.py
 # Default: SEED=42, N_PER_BUCKET=1, REACT_MODEL=gpt-5.4 → 6 fotos
-# Output:  experiments/E005_react_pilot/results.json
+# Output:  experiments/E005_react_pilot/results_v3_thinking_visible.json
 # Tiempo:  ~15 min
 ```
 
@@ -107,55 +107,40 @@ Variantes útiles:
 
 ```bash
 # Más fotos por bucket
-N_PER_BUCKET=3 python scripts/run_react_pilot.py
+N_PER_BUCKET=3 PROMPT_VERSION=v3_thinking_visible python scripts/run_react_pilot.py
 
 # Fotos específicas por cid
-python scripts/run_react_pilot.py 2126812 1748874
+PROMPT_VERSION=v3_thinking_visible python scripts/run_react_pilot.py 2126812 1748874
 
-# Cambiar modelo
-REACT_MODEL=gpt-4o python scripts/run_react_pilot.py
+# Cambiar modelo (cross-model run)
+PROMPT_VERSION=v3_thinking_visible REACT_MODEL=gpt-4o python scripts/run_react_pilot.py
 ```
 
-### 5. Ablación de prompt (opcional)
-
-Mismas fotos, distintas versiones del SYSTEM_PROMPT, output separado por versión.
-
-```bash
-PROMPT_VERSION=v1_mechanical    python scripts/run_react_pilot.py
-PROMPT_VERSION=v2_descriptive   python scripts/run_react_pilot.py
-PROMPT_VERSION=v3_thinking_visible python scripts/run_react_pilot.py
-# Output: results_v1_mechanical.json, results_v2_descriptive.json, etc.
-```
-
-### 6. Generar reports HTML interactivos
+### 5. Generar report HTML interactivo
 
 Frontend con mapa Leaflet + trayectoria step-by-step + crops inline + imágenes/mapas embebidos.
 
 ```bash
-# Report por versión (selector de foto, panel de tools, trayectoria)
-python scripts/build_pilot_report.py v1_mechanical
-python scripts/build_pilot_report.py v2_descriptive
+# Report del prompt canónico (v3, con thinking events)
 python scripts/build_pilot_report.py v3_thinking_visible
 
-# Comparación cruzada (mapa central + 3 columnas v1/v2/v3)
-python scripts/build_compare_report.py
-
-# Stdout viewer para inspección rápida
-python scripts/analyze_pilot_trajectories.py v1_mechanical
-python scripts/compare_pilots.py
+# Stdout viewer rápido
+python scripts/analyze_pilot_trajectories.py v3_thinking_visible
 ```
 
-Reports en `experiments/E005_react_pilot/report_*.html`. Abrir con el browser:
+Report en `experiments/E005_react_pilot/report_v3_thinking_visible.html`. Abrir con el browser:
 
 ```powershell
 # Windows / PowerShell — abre con el browser default
-start experiments\E005_react_pilot\report_compare.html
+start experiments\E005_react_pilot\report_v3_thinking_visible.html
 
 # O el folder en explorer
 explorer experiments\E005_react_pilot
 ```
 
 Tip: en Cursor / VS Code, `Ctrl+Shift+V` sobre un `.html` abre preview embebido.
+
+> **Nota histórica**: las variantes `v1_mechanical` y `v2_descriptive` se exploraron en la ablación inicial del pilot (mayo 2026) y quedaron **deprecadas** por no capturar eventos `thinking` necesarios para el process eval CORRAL (ver `research/synthesis/process_eval_design.md`). Los artefactos `results_v1_*.json`, `results_v2_*.json`, `report_v1_*.html`, `report_v2_*.html`, `report_compare.html`, junto con scripts `build_compare_report.py` y `compare_pilots.py`, quedan en el repo como referencia histórica. **No correr nuevas variantes**: solo v3 es canónico.
 
 ---
 

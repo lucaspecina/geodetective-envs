@@ -162,15 +162,15 @@ results = json.load(open("experiments/E002_react_websearch/results.json"))
 
 **Piloto del pipeline validado (K=5, ver `research/notes/E004_attacker_filter.md`)**: el pipeline completo (sample → atacker → filtro) corrió end-to-end sobre 180 fotos (K_PER_CELL=5 en sample_diverso.py). 101 sobrevivieron al atacante GPT-4o (56%). Output en `experiments/E004_attacker_filter/results.json` (gitignored). **No es el corpus de producción** — para eso hay que escalar K_PER_CELL (issue #25).
 
-**Pilot E005 — ReAct end-to-end sobre 6 fotos** (`research/notes/E005_react_pilot.md`): 1 acierto preciso (Tomsk 1.8 km), 3 respuestas off, 2 hit max_steps sin submit en v1. **Hallazgo crítico v1**: el agente nunca usa `historical_query`, `static_map`, `street_view` — actúa como web-search bot.
+**Pilot E005 — ReAct end-to-end sobre 6 fotos** (`research/notes/E005_react_pilot.md`): exploración inicial con 3 variantes de SYSTEM_PROMPT (v1 mechanical, v2 descriptive, v3 thinking_visible). **v3 quedó como versión canónica** del prompt; v1 y v2 deprecadas (no capturan thinking events necesarios para process eval). Resultados en v3: 1 acierto preciso (Dealey Plaza 0 km), Tomsk perdido (3743 km vs 2 km que había logrado en v1), uso mínimo de tools visuales (1 `static_map` en Basel, 0 `street_view`, 0 `historical_query`). **Hallazgo principal**: incluso con prompt verbalizado, web_search sigue dominante. Reports HTML interactivos en `experiments/E005_react_pilot/report_v3_thinking_visible.html` (canónico) + `report_v1_mechanical.html` / `report_v2_descriptive.html` / `report_compare.html` (históricos exploratorios).
 
-**Ablación de prompt v1/v2/v3** (CHANGELOG 2026-05-11): 3 corridas del pilot con variantes de SYSTEM_PROMPT. v2 (descriptive: agrega "Aporta" por tool) + v3 (v2 + verbalización ReAct) activan tools diferenciales solo en Basel; en las otras 5 fotos siguen en 0. v3 nailed Dealey Plaza (0km) pero perdió el acierto de Tomsk. Reports HTML interactivos en `experiments/E005_react_pilot/report_{v1,v2,v3,compare}.html` (gitignored excepto E005 — share entre máquinas habilitado).
+**Diseño de process eval CORRAL adaptado** (`research/synthesis/process_eval_design.md`, mayo 2026): framework para anotar grafo epistemológico H/T/E/J/U/C de las trazas + 7 motifs / 10+1 breakdowns adaptados + diseño del annotator multi-stage (Stage 1+2 LLM judge, Stage 3a Python determinista, Stage 3b LLM judge multimodal para patterns visuales). Process eval es **offline only** (no entra al reward). Implementación pendiente (task #6).
 
-**Próximos pasos posibles**:
-- Mini-ablation de prompt para diagnosticar por qué no se usan tools visuales (issue a crear).
+**Próximos pasos**:
+- Implementar annotator stub (task #6) sobre las 6 trazas v3 del E005.
+- Cross-model run cuando vuelva `.env` (task #7): mismas 6 fotos v3, modelos distintos (gpt-4o, gpt-5, gpt-5.4, claude-opus si Anthropic API).
 - Escalar K_PER_CELL para corpus de producción (#25, abierta).
-- Eval suite formal con baselines + ablations (Fase 6 del plan de validación).
-- Rúbrica investigativa formal (Fase 4).
+- Threat model completo (#10, abierta) para sección anti-shortcut del paper.
 
 ---
 

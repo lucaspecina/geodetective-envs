@@ -10,14 +10,18 @@
 
 ## 1. La conclusión que vale (mayo 2026)
 
-> **El pipeline funciona end-to-end y produjo un patrón empírico inesperado: sobre 6 fotos pilot, el agente nunca usó `static_map`, `street_view`, ni `historical_query`. La hipótesis de por qué (modelo vs scaffold vs affordance) sigue abierta y es testeable.**
+> **El pipeline corre end-to-end. Sobre 6 fotos del pilot E005 v3 (versión canónica del prompt), el agente sigue dominado por `web_search` con uso mínimo de tools visuales/históricas (1 `static_map` en Basel sobre las 6 trazas, resto en 0). La hipótesis de por qué (modelo vs scaffold vs affordance) sigue abierta y es testeable cross-model.**
 
-Detalle de lo observado (no de la interpretación):
-- Corpus piloto filtrado adversarialmente: **180 fotos sampleadas → 101 sobreviven al atacante GPT-4o (56%)**. El filtro corre y produce ratios consistentes (60/79 rejects dispararon las 3 corridas).
-- Sobre 6 fotos del piloto, agente ReAct con 12 tools, gpt-5.4: **1 acierto preciso** (1.8 km, Tomsk), 3 off (301/707/1352 km), 2 hit max_steps sin submit. **0 usos** de `static_map`, `street_view`, `historical_query` en las 6 trazas.
-- Ablación de prompt v1/v2/v3 (mechanical, descriptive, thinking-visible): activa tools visuales **solo en 1 de 6 fotos** (Basel). v3 nailed Dealey Plaza (0 km) pero perdió Tomsk (2 → 3743 km).
+Detalle de lo observado:
+- **Corpus**: 180 fotos sampleadas → 101 sobreviven al atacante GPT-4o (56%). El filtro corre y produce ratios consistentes (60/79 rejects dispararon las 3 corridas).
+- **Pilot E005**, 6 fotos, gpt-5.4, prompt v3, max_steps=12:
+  - 1 acierto preciso (Dealey Plaza, 0 km).
+  - Tomsk a 3743 km (en v1 había acertado a 2 km — caso conocido donde v3 perdió la convergencia).
+  - Resto de las 6 fotos: respuestas off o hit max_steps.
+  - Uso de tools visuales/históricas: 1 `static_map` (Basel), 0 `street_view`, 0 `historical_query`. Web_search saturado.
+- **Ablación inicial del SYSTEM_PROMPT** (3 variantes exploratorias mayo 2026): v3 (con verbalización ReAct + tool descriptions) quedó como **versión canónica**. v1 (mechanical) y v2 (descriptive sin ReAct) **deprecadas**: no capturan thinking events necesarios para el annotator CORRAL. Cualquier corrida futura usa v3.
 
-**Lo que TODAVÍA NO sabemos** (movido a hipótesis abiertas §3.3): si el comportamiento "web-search bot" es propiedad del base model (réplica del finding CORRAL "base 41.4% varianza vs scaffold 1.5%"), o limitación del prompt actual, o artifact de affordance, o n=6 demasiado chico para conclusión. Requiere cross-model run + n mayor para responder.
+**Lo que TODAVÍA NO sabemos** (movido a hipótesis abiertas §3.3): si el dominio de `web_search` y la sub-utilización de tools visuales/históricas es propiedad del base model (réplica del finding CORRAL "base 41.4% varianza vs scaffold 1.5%"), limitación del prompt v3 actual, artifact de affordance, o n=6 demasiado chico para conclusión. Requiere cross-model run + n mayor.
 
 ---
 
@@ -49,12 +53,12 @@ Detalle de lo observado (no de la interpretación):
 
 | Finding | Evidencia | Implicación |
 |---|---|---|
-| Sobre 6/6 fotos del pilot E005 v1: 0 usos de `street_view`, `static_map`, `historical_query` | E005 v1 trace counters | Patrón consistente en pilot (n=6); falta saber si es propiedad del modelo (gpt-5.4) o del scaffold/prompt. Hipótesis abierta §3.3. |
+| Sobre 6 fotos del pilot E005 v3 (canónica): 1 uso de `static_map` (Basel), 0 `street_view`, 0 `historical_query`. Web_search dominante (7-15 calls/foto). | E005 v3 trace counters | Patrón consistente en pilot (n=6); falta saber si es propiedad del modelo (gpt-5.4) o del scaffold/prompt. Hipótesis abierta §3.3. |
 | Variancia run-to-run alta (factor 7x) | E001-E003 | N=3 corridas mínimo para conclusiones robustas. Solo 1 corrida en E005 → no robusto. |
 | El modelo decide cuándo parar | E001-E005 | Cap 12 steps; típicamente usa 3-8 cuando submitea. 33% hit max_steps en E005. |
 | Forzar uso de tools en prompt sesga el benchmark | E003 decisión + Codex review | Confirmado: el prompt es descriptivo, no prescriptivo. |
-| Prompt descriptivo (v2) vs mechanical (v1) activa tools visuales **solo en 1 de 6 fotos** | E005 ablación | Affordance ayuda marginalmente. La hipótesis "el modelo no las conoce" queda parcialmente falseada. |
-| Verbalización ReAct (v3) genera updates visibles pero **pierde aciertos** | E005 v3 vs v1 Tomsk | Trade-off. La verbalización no es siempre ganancia. |
+| Variantes v1/v2 deprecadas: no verbalizan razonamiento, no usables para process eval. v3 (verbalización ReAct + tool descriptions) es la única canónica | Ablación inicial mayo 2026 | El benchmark usa v3 de acá en adelante. v1/v2 quedan como artefactos históricos en E005. |
+| Caso histórico: en Tomsk, v3 (canónico) perdió un acierto que v1 (deprecado) había logrado a 2 km | E005 ablación inicial | Sugiere que pedir verbalización ReAct puede sacar al agente de un razonamiento que ya estaba convergiendo. Pendiente verificar con corridas adicionales en v3 si es robusto. |
 | Atacante GPT-4o sin tools "no aventura" (conf baja sin coords) en fotos cotidianas | E004 60/79 rejects con 3/3 triggering | El filtro adversarial no es ruido: tiene firma consistente. |
 | Hay **al menos un caso** (Tomsk, n=1) donde tools producen una mejora dramática vs atacante sin tools (atacante no aventuró → agente 1.8 km) | E005 #2126812 | Existe el efecto "tools ayudan dramaticamente"; magnitud y frecuencia requieren más muestras. |
 | Hay **al menos un caso** (Mukden, n=1) donde el agente con tools no submite mientras el atacante había aventurado a 626 km | E005 #1587935 | Existe el efecto inverso "tools no garantizan respuesta"; magnitud y frecuencia requieren más muestras. |
@@ -76,7 +80,7 @@ Detalle de lo observado (no de la interpretación):
 | Variancia inter-run alta (E001: factor 7x en distancia para misma foto/modelo/prompt) | E001 | Conclusiones sobre 1 corrida no son robustas. |
 | Seeds deterministicos en sampling (`SEED=42`) | E007, E005 | Misma corrida reproducible. |
 | Foundry rate limits no documentados explícitamente | Op experience | Riesgo cuando escalemos cross-model run. |
-| Output formatting estable (`results.json` schema versionable por `PROMPT_VERSION`) | E005 ablación | Pipeline de análisis post-hoc no fragmenta el output. |
+| Output formatting estable (`results.json` schema) | E005 | Pipeline de análisis post-hoc no fragmenta el output. |
 
 ---
 
@@ -96,7 +100,7 @@ Detalle de lo observado (no de la interpretación):
 
 | Hipótesis original | Evidencia que la contradice | Estado |
 |---|---|---|
-| "El modelo no usa tools visuales porque no las conoce" | Ablación v2/v3 movió 1/6 fotos; el modelo SÍ las conoce cuando se le pide | Parcialmente falseada. La razón sigue abierta (entrenamiento? incentivo? overconfidence en web_search?). |
+| "El modelo no usa tools visuales porque no las conoce" | v2/v3 mostraron uso esporádico (1 `static_map` en Basel); test técnico E003 con invocación forzada confirma que las invoca | Parcialmente falseada. La razón sigue abierta (entrenamiento? incentivo? overconfidence en web_search?). |
 | "Subir max_steps va a mejorar la investigación" | Hipótesis previa Codex review — NO escalada todavía | Pendiente test. Codex review afirmó "compraría más web_search". |
 | Sesgo Rusia 70-95% (claim genesis) | Audit empírico: 62% Rusia, 74% ex-URSS | Falseada. Updated. |
 | 47 shards de imágenes PastVu (claim pastvu_deep_dive) | Audit empírico: 2094 shards | Falseada. Updated. |
@@ -106,8 +110,8 @@ Detalle de lo observado (no de la interpretación):
 | Hipótesis | Cómo testearla | Costo |
 |---|---|---|
 | El comportamiento "web-search bot" es propiedad del base model, no del scaffold (réplica CORRAL en geo-loc) | Cross-model run: gpt-4o, gpt-5, gpt-5.4 (mínimo). Idealmente claude-opus, gemini. Mismas 6 fotos, mismo prompt. | Bajo — está bloqueado por .env (task #7). |
-| Process score discrimina entre modelos donde distance no lo hace | Annotator CORRAL-style sobre traces E005 v1/v2/v3 + cross-model | Medio — annotator + judge LLM. Task #6 sobre task #3 design. |
-| Subir max_steps de 12 a 30 sí mejora si combinado con prompt que activa tools visuales | A/B sobre 6 fotos: (12 steps, prompt v1) vs (30 steps, prompt v1) vs (30 steps, prompt v3) | Bajo — bloqueado por .env. |
+| Process score discrimina entre modelos donde distance no lo hace | Annotator CORRAL-style sobre 6 trazas v3 del E005 + cross-model | Medio — annotator + judge LLM. Task #6 sobre task #3 design. |
+| Subir `max_steps` de 12 a 30 mejora outcome o solo agrega web_search loop | A/B sobre 6 fotos en v3: (max_steps=12) vs (max_steps=30) | Bajo — bloqueado por .env. |
 | Multi-modal judge (Claude con vision) anota mejor que text-only judge | Comparar 2 anotaciones del annotator sobre las mismas trazas | Bajo si tenemos Anthropic API. |
 | El `process_score` × `distance_km` produce 4 cuadrantes interpretables (process_eval_design §6) | Plot de E005 traces anotadas + N corridas más | Medio — requiere annotator corriendo. |
 

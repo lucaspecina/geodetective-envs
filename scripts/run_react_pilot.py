@@ -46,7 +46,7 @@ PROMPT_VERSION = os.environ.get("PROMPT_VERSION", "")  # tag identificador, ej "
 OUT_JSON = OUT_DIR / (f"results_{PROMPT_VERSION}.json" if PROMPT_VERSION else "results.json")
 
 MODEL = os.environ.get("REACT_MODEL", "gpt-5.4")
-MAX_STEPS = int(os.environ.get("MAX_STEPS", "12"))
+MAX_STEPS = int(os.environ.get("MAX_STEPS", "50"))
 N_PER_BUCKET = int(os.environ.get("N_PER_BUCKET", "1"))
 SEED = int(os.environ.get("SEED", "42"))
 
@@ -181,6 +181,9 @@ def main():
                 "street_view_count": res.street_view_count,
                 "target_match_count": res.target_match_count,
                 "submit_called": res.submit_called,
+                "terminal_state": res.terminal_state,
+                "submit_retry_count": res.submit_retry_count,
+                "text_only_attempts": res.text_only_attempts,
                 "error": res.error,
                 "trace": res.trace,
             },

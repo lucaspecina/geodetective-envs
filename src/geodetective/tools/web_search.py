@@ -116,7 +116,7 @@ TOOL_SCHEMA = {
             "properties": {
                 "query": {
                     "type": "string",
-                    "description": "Texto de búsqueda. Ej: 'edificios soviéticos paneles prefabricados Серебристый бульвар San Petersburgo'"
+                    "description": "Texto de búsqueda. Sé específico y descriptivo (en cualquier idioma)."
                 },
                 "max_results": {
                     "type": "integer",

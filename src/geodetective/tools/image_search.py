@@ -143,13 +143,12 @@ TOOL_SCHEMA = {
         "name": "image_search",
         "description": (
             "Buscar imágenes en la web (similar a Google Images). Útil para comparar visualmente la "
-            "foto target con imágenes de referencia (ej: 'edificios paneles soviéticos años 70', "
-            "'iglesia bizantina cúpulas Cáucaso'). Vas a recibir las imágenes en el siguiente turno. "
-            "Cada imagen viene con un flag is_likely_target=true si su hash perceptual coincide casi "
-            "exacto con la foto objetivo — eso significa que encontraste la foto en sí (o una versión "
-            "casi igual). Usá ese flag para SABER que esa imagen no debería contar como evidencia "
-            "investigativa, y para refinar tu búsqueda. Es más caro en tokens — usalo cuando realmente "
-            "te ayuda comparar visualmente."
+            "foto target con imágenes de referencia de un tipo de estructura, paisaje o vestimenta. "
+            "Vas a recibir las imágenes en el siguiente turno. Cada imagen viene con un flag "
+            "is_likely_target=true si su hash perceptual coincide casi exacto con la foto objetivo "
+            "— eso significa que encontraste la foto en sí (o una versión casi igual). Usá ese flag "
+            "para SABER que esa imagen no debería contar como evidencia investigativa, y para refinar "
+            "tu búsqueda. Es más caro en tokens — usalo cuando realmente te ayuda comparar visualmente."
         ),
         "parameters": {
             "type": "object",

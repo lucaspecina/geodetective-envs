@@ -51,7 +51,7 @@ def geocode(query: str, max_results: int = 3, language: str = "en") -> list[Geoc
     """Buscar coords desde nombre/dirección.
 
     Args:
-        query: texto de búsqueda. Ej: "Plaza Mayor, Madrid" o "Серебристый бульвар, Saint Petersburg".
+        query: texto de búsqueda libre en cualquier idioma.
         max_results: cuántos candidatos devolver.
         language: hint de idioma para nominatim (en, es, ru, etc.). NO restringe.
 
@@ -139,7 +139,7 @@ TOOL_SCHEMA_GEOCODE = {
         "description": (
             "Convertir un nombre/dirección a coordenadas (lat, lon). Usa Nominatim (OSM). "
             "Útil cuando identificás un nombre de calle, plaza, barrio, ciudad y querés sus coords. "
-            "Ejemplo: geocode('Серебристый бульвар, Saint Petersburg') → coords del barrio."
+            "Funciona con queries en cualquier idioma (inglés, español, idiomas locales)."
         ),
         "parameters": {
             "type": "object",

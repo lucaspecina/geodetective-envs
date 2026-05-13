@@ -39,9 +39,9 @@ SUBMIT_TOOL_SCHEMA = {
             "type": "object",
             "properties": {
                 "location": {"type": "string", "description": "Descripción humana del lugar."},
-                "lat": {"type": "number"},
-                "lon": {"type": "number"},
-                "year": {"type": "string", "description": "Año o rango (ej '1965', '1960-1970')."},
+                "lat": {"type": "number", "minimum": -90, "maximum": 90, "description": "Latitud decimal en grados, rango [-90, 90]."},
+                "lon": {"type": "number", "minimum": -180, "maximum": 180, "description": "Longitud decimal en grados, rango [-180, 180]."},
+                "year": {"type": "string", "description": "Año o rango (ej '1965', '1960-1970'). Si realmente no podés inferir el año, usá 'unknown' y explicá en uncertainty_reason."},
                 "reasoning": {"type": "string", "description": "Resumen breve del razonamiento general."},
                 "confidence": {"type": "string", "enum": ["alta", "media", "baja"]},
                 "visual_clues": {
@@ -69,10 +69,35 @@ SUBMIT_TOOL_SCHEMA = {
                     "description": "Si confidence != alta, explicá qué información falta o por qué dudás.",
                 },
             },
-            "required": ["location", "lat", "lon", "reasoning", "confidence"],
+            "required": ["location", "lat", "lon", "year", "reasoning", "confidence"],
         },
     },
 }
+
+
+def _validate_submit(args: dict) -> tuple[bool, Optional[str]]:
+    """Valida que el submit_answer sea aceptable. Devuelve (ok, error_msg).
+
+    Si error_msg, se le devuelve al modelo y se le pide retry.
+    """
+    required = ["location", "lat", "lon", "year", "reasoning", "confidence"]
+    missing = [k for k in required if k not in args or args[k] in (None, "")]
+    if missing:
+        return False, f"Faltan campos requeridos en submit_answer: {missing}. Por favor llamá submit_answer de nuevo con TODOS los campos."
+    # Type/range check
+    try:
+        lat = float(args["lat"])
+        lon = float(args["lon"])
+    except (ValueError, TypeError):
+        return False, f"lat/lon deben ser numéricos. Recibidos lat={args.get('lat')!r} lon={args.get('lon')!r}. Re-submit con números válidos."
+    if not (-90.0 <= lat <= 90.0):
+        return False, f"lat={lat} fuera de rango [-90, 90]. Re-submit con coords válidas."
+    if not (-180.0 <= lon <= 180.0):
+        return False, f"lon={lon} fuera de rango [-180, 180]. Re-submit con coords válidas."
+    conf = str(args.get("confidence", "")).strip().lower()
+    if conf not in {"alta", "media", "baja"}:
+        return False, f"confidence='{conf}' inválida. Tiene que ser exactamente 'alta', 'media' o 'baja'. Re-submit."
+    return True, None
 
 
 SYSTEM_PROMPT = """Recibís una fotografía. Tu tarea es descubrir DÓNDE fue tomada (coords lat/lon) y CUÁNDO (año aproximado), y devolver la respuesta vía `submit_answer`.
@@ -163,12 +188,22 @@ class ReActResult:
     submit_called: bool = False
     steps_used: int = 0
     error: Optional[str] = None
+    # Estado terminal explícito (C14). Valores:
+    #   "submitted"            - el agente llamó submit_answer válido.
+    #   "max_steps_no_submit"  - terminó max_steps sin submit.
+    #   "no_submit_early_text" - emitió texto sin tool_calls (2 veces seguidas).
+    #   "empty_response"       - msg.content y msg.tool_calls ambos None.
+    #   "api_error"            - excepción en client.chat.completions.create.
+    #   "invalid_submit"       - submit_answer rechazado por validación 3 veces.
+    terminal_state: Optional[str] = None
+    submit_retry_count: int = 0  # cuántas veces submit_answer fue rechazado por validación
+    text_only_attempts: int = 0  # cuántas veces el modelo emitió content sin tool_calls
 
 
 def run_react_agent(
     image_path: Path,
     model: str = "gpt-5.4",
-    max_steps: int = 12,
+    max_steps: int = 50,
     verbose: bool = True,
     user_prompt: str = "Investigá esta foto y devolvé las coordenadas (lat, lon) y año con submit_answer.",
     provider: Optional[str] = None,
@@ -185,6 +220,8 @@ def run_react_agent(
     client = OpenAI(
         base_url=os.environ["AZURE_FOUNDRY_BASE_URL"],
         api_key=os.environ["AZURE_INFERENCE_CREDENTIAL"],
+        timeout=180.0,   # C2: per-call default timeout (3 min). Configurable per-call abajo.
+        max_retries=2,   # C2: retry transient 5xx/network errors.
     )
     excluded_domains = compute_excluded_domains(provider=provider, source=provenance_source)
     if verbose and excluded_domains:
@@ -200,12 +237,18 @@ def run_react_agent(
     except Exception:
         img_w, img_h = 0, 0
 
+    budget_info = (
+        f"\n\nBudget: tenés {max_steps} turns disponibles para investigar. "
+        f"Usá los que necesites para razonar bien, pero asegurate de invocar "
+        f"`submit_answer` con tu mejor hipótesis ANTES de quedarte sin budget. "
+        f"Cuando te queden pocos turns te vamos a recordar."
+    )
     messages: list[dict] = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {
             "role": "user",
             "content": [
-                {"type": "text", "text": user_prompt + f"\n\nFoto target: {img_w}x{img_h} pixels (ancho x alto). Crop coordinates deben estar dentro de ese rango.\n\n[Foto target abajo]"},
+                {"type": "text", "text": user_prompt + f"\n\nFoto target: {img_w}x{img_h} pixels (ancho x alto). Crop coordinates deben estar dentro de ese rango." + budget_info + "\n\n[Foto target abajo]"},
                 {"type": "image_url", "image_url": {"url": data_url}},
             ],
         },
@@ -229,8 +272,24 @@ def run_react_agent(
 
     for step in range(max_steps):
         result.steps_used = step + 1
+        remaining = max_steps - step
         if verbose:
             print(f"\n--- Step {step + 1}/{max_steps} ---")
+        # Soft budget reminders (no son sesgo de tools, solo budget)
+        if remaining == 1 and not result.submit_called:
+            messages.append({
+                "role": "user",
+                "content": (
+                    "Este es tu ÚLTIMO turn. Llamá `submit_answer` AHORA con tu mejor hipótesis "
+                    "(incluso si la confidence es baja). Si realmente no podés geolocalizar la foto, "
+                    "submit con confidence='baja' y explicá el motivo en uncertainty_reason."
+                ),
+            })
+        elif remaining in (5, 10) and not result.submit_called:
+            messages.append({
+                "role": "user",
+                "content": f"[Recordatorio: te quedan {remaining} turns. Considerá ir cerrando con `submit_answer`.]",
+            })
         try:
             response = client.chat.completions.create(
                 model=model,
@@ -238,9 +297,11 @@ def run_react_agent(
                 tools=tools,
                 tool_choice="auto",
                 max_completion_tokens=3000,
+                timeout=120.0,  # C2: per-request timeout
             )
         except Exception as e:
             result.error = f"API call failed at step {step + 1}: {e}"
+            result.terminal_state = "api_error"
             if verbose:
                 print(f"[ERROR] {e}")
             break
@@ -263,14 +324,39 @@ def run_react_agent(
             ]
         if msg.content is None and msg.tool_calls is None:
             result.error = "Empty response."
+            result.terminal_state = "empty_response"
             break
         messages.append(assistant_turn)
 
+        # Bug #3 (Kimi-style): modelo emite intención como TEXTO en vez de tool_call.
+        # En lugar de cortar al primer hit, le pedimos explícitamente que invoque la tool.
+        # Si lo hace 2 veces seguidas → terminamos.
         if not msg.tool_calls:
-            result.trace.append({"step": step + 1, "type": "final_text_no_submit", "content": msg.content})
+            result.text_only_attempts += 1
+            result.trace.append({
+                "step": step + 1, "type": "no_tool_call_in_response",
+                "content": msg.content, "attempt": result.text_only_attempts,
+            })
+            if result.text_only_attempts >= 2:
+                result.terminal_state = "no_submit_early_text"
+                if verbose:
+                    print("[break] modelo emitió texto sin tool_call 2 veces seguidas")
+                break
+            # Primera vez: pedirle que llame la tool explícitamente.
+            messages.append({
+                "role": "user",
+                "content": (
+                    "Tu respuesta anterior describió una acción en TEXTO, pero NO invocaste "
+                    "ninguna tool (function call). Por favor invocá la tool ahora usando function "
+                    "calling. Si querés terminar la investigación, invocá `submit_answer` con tu "
+                    "mejor hipótesis."
+                ),
+            })
             if verbose:
-                print("[no tool call] modelo terminó sin submit_answer")
-            break
+                print("[corrective] modelo no invocó tool, le pido retry")
+            continue
+        # Si llegamos acá, hubo tool_calls — reset contador.
+        result.text_only_attempts = 0
 
         # Pending images to inject as user message after tool results
         pending_image_injections: list[tuple[str, list[dict]]] = []  # (label, content_parts)
@@ -618,12 +704,35 @@ def run_react_agent(
                     result.trace.append({"step": step + 1, "type": "street_view_error", "error": str(e)})
 
             elif fname == "submit_answer":
-                result.final_answer = args
-                result.submit_called = True
-                if verbose:
-                    print(f"     → SUBMIT: {args.get('location', '?')[:60]} ({args.get('lat')}, {args.get('lon')})")
-                messages.append({"role": "tool", "tool_call_id": tc.id, "content": "answer_submitted"})
-                result.trace.append({"step": step + 1, "type": "submit", "answer": args})
+                # C4: validar submit_answer antes de aceptarlo.
+                ok, err_msg = _validate_submit(args)
+                if not ok:
+                    result.submit_retry_count += 1
+                    if verbose:
+                        print(f"     ⚠ SUBMIT inválido (retry {result.submit_retry_count}): {err_msg}")
+                    messages.append({
+                        "role": "tool", "tool_call_id": tc.id,
+                        "content": f"submit_answer rechazado: {err_msg}",
+                    })
+                    result.trace.append({
+                        "step": step + 1, "type": "submit_rejected",
+                        "answer": args, "error": err_msg,
+                        "retry_count": result.submit_retry_count,
+                    })
+                    if result.submit_retry_count >= 3:
+                        result.terminal_state = "invalid_submit"
+                        result.error = f"submit_answer rechazado 3 veces. Último error: {err_msg}"
+                        if verbose:
+                            print(f"     [break] submit rechazado 3 veces, abandono")
+                        break
+                else:
+                    result.final_answer = args
+                    result.submit_called = True
+                    result.terminal_state = "submitted"
+                    if verbose:
+                        print(f"     → SUBMIT: {args.get('location', '?')[:60]} ({args.get('lat')}, {args.get('lon')})")
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": "answer_submitted"})
+                    result.trace.append({"step": step + 1, "type": "submit", "answer": args})
 
             else:
                 messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"Unknown tool: {fname}"})
@@ -634,5 +743,12 @@ def run_react_agent(
 
         if result.submit_called:
             break
+
+    # Si salimos del loop sin terminal_state seteado, fue por max_steps.
+    if result.terminal_state is None:
+        if result.submit_called:
+            result.terminal_state = "submitted"
+        else:
+            result.terminal_state = "max_steps_no_submit"
 
     return result

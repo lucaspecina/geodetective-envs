@@ -411,7 +411,7 @@ def run_react_agent(
                         "result_count": len(sr.results),
                         "blocked": sr.blocked_count,
                         "top_results": top_results,
-                        "payload_to_model": payload[:3000],  # exact tool message content que el modelo ve
+                        "payload_to_model": payload,  # FULL: exactamente lo que el modelo recibe  # exact tool message content que el modelo ve
                         "payload_full_len": len(payload),
                     })
                 except Exception as e:
@@ -433,7 +433,7 @@ def run_react_agent(
                         "step": step + 1, "type": "fetch_url",
                         "url": url, "text_len": len(fp.text), "error": fp.error,
                         "title": fp.title, "text_snippet": (fp.text or "")[:500],
-                        "payload_to_model": payload[:3000],
+                        "payload_to_model": payload,  # FULL: exactamente lo que el modelo recibe
                         "payload_full_len": len(payload),
                     })
                 except Exception as e:
@@ -477,7 +477,7 @@ def run_react_agent(
                         "url": url, "n_images": n_imgs, "target_match": n_target,
                         "title": fp.title, "text_snippet": (fp.text or "")[:500],
                         "visible_images": visible_imgs,
-                        "payload_to_model": payload[:3000],
+                        "payload_to_model": payload,  # FULL: exactamente lo que el modelo recibe
                         "payload_full_len": len(payload),
                     })
 
@@ -537,7 +537,7 @@ def run_react_agent(
                         "n_images": len(isr.images),
                         "target_match": isr.target_match_count,
                         "visible_images": visible_imgs,
-                        "payload_to_model": payload[:3000],
+                        "payload_to_model": payload,  # FULL: exactamente lo que el modelo recibe
                         "payload_full_len": len(payload),
                     })
 
@@ -593,7 +593,7 @@ def run_react_agent(
                         "args": args,
                         "n_results": len(out) if isinstance(out, list) else (1 if out else 0),
                         "top_results": top_results,
-                        "payload_to_model": payload[:3000],
+                        "payload_to_model": payload,  # FULL: exactamente lo que el modelo recibe
                         "payload_full_len": len(payload),
                     })
                 except Exception as e:
@@ -619,7 +619,7 @@ def run_react_agent(
                     result.trace.append({
                         "step": step + 1, "type": "historical_query",
                         "args": args, "n_features": hq.n_features,
-                        "payload_to_model": payload[:3000],
+                        "payload_to_model": payload,  # FULL: exactamente lo que el modelo recibe
                         "payload_full_len": len(payload),
                     })
                 except Exception as e:

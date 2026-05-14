@@ -1,0 +1,146 @@
+{
+  "gpt-5.4": {
+    "model": "gpt-5.4",
+    "provider": "openai",
+    "vision_content_snippet": "red",
+    "vision_ok": true,
+    "tool_content_snippet": "",
+    "tool_calls": [
+      {
+        "id": "call_tEirQeuxgbIx69S6EJaaaP32",
+        "name": "get_weather"
+      }
+    ],
+    "tool_ok": true,
+    "cont_content_snippet": "The weather in Buenos Aires is 22°C and sunny.",
+    "continuation_ok": true
+  },
+  "claude-opus-4-6": {
+    "model": "claude-opus-4-6",
+    "provider": "anthropic",
+    "vision_content_snippet": "red",
+    "vision_ok": true,
+    "tool_content_snippet": "",
+    "tool_calls": [
+      {
+        "id": "toolu_0169c5b3uB2ZJbb9hz2Q9W1M",
+        "name": "get_weather"
+      }
+    ],
+    "tool_ok": true,
+    "cont_content_snippet": "The current weather in Buenos Aires is **22°C** with **sunny** conditions. A lovely day! ☀️",
+    "continuation_ok": true
+  },
+  "grok-4.3": {
+    "model": "grok-4.3",
+    "provider": "openai",
+    "vision_content_snippet": "red",
+    "vision_ok": true,
+    "tool_content_snippet": "",
+    "tool_calls": [
+      {
+        "id": "call-53c786ca-0e6b-4486-aac3-f2a6ba85e9d3-0",
+        "name": "get_weather"
+      }
+    ],
+    "tool_ok": true,
+    "cont_content_snippet": "The current weather in Buenos Aires is 22°C and sunny.",
+    "continuation_ok": true
+  },
+  "Kimi-K2.6": {
+    "model": "Kimi-K2.6",
+    "provider": "openai",
+    "vision_content_snippet": "red",
+    "vision_ok": true,
+    "tool_content_snippet": "",
+    "tool_calls": [
+      {
+        "id": "functions.get_weather:0",
+        "name": "get_weather"
+      }
+    ],
+    "tool_ok": true,
+    "cont_content_snippet": "The current weather in **Buenos Aires** is:\n\n- **Temperature:** 22°C  \n- **Conditions:** Sunny ☀️",
+    "continuation_ok": true
+  },
+  "gpt-5.4-mini": {
+    "model": "gpt-5.4-mini",
+    "provider": "openai",
+    "vision_content_snippet": "red",
+    "vision_ok": true,
+    "tool_content_snippet": "",
+    "tool_calls": [
+      {
+        "id": "call_RH9mfNwJUqHE0yEQwmLnw9Xt",
+        "name": "get_weather"
+      }
+    ],
+    "tool_ok": true,
+    "cont_content_snippet": "The weather in Buenos Aires is currently **22°C** and **sunny**.",
+    "continuation_ok": true
+  },
+  "claude-sonnet-4-6": {
+    "model": "claude-sonnet-4-6",
+    "provider": "anthropic",
+    "vision_content_snippet": "**red**",
+    "vision_ok": true,
+    "tool_content_snippet": "Sure! Let me fetch the weather for Buenos Aires right away!",
+    "tool_calls": [
+      {
+        "id": "toolu_01Ua7KV6cnt1ACCksu3ap6p6",
+        "name": "get_weather"
+      }
+    ],
+    "tool_ok": true,
+    "cont_content_snippet": "Here are the current weather details for **Buenos Aires**:\n\n- 🌡️ **Temperature:** 22°C\n- ☀️ **Conditions:** Sunny\n\nIt lo",
+    "continuation_ok": true
+  },
+  "grok-4-1-fast-reasoning": {
+    "model": "grok-4-1-fast-reasoning",
+    "provider": "openai",
+    "vision_content_snippet": "red",
+    "vision_ok": true,
+    "tool_content_snippet": "",
+    "tool_calls": [
+      {
+        "id": "call_59299405",
+        "name": "get_weather"
+      }
+    ],
+    "tool_ok": true,
+    "cont_content_snippet": "The current weather in Buenos Aires is 22°C and sunny.",
+    "continuation_ok": true
+  },
+  "Kimi-K2.5": {
+    "model": "Kimi-K2.5",
+    "provider": "openai",
+    "vision_content_snippet": "red",
+    "vision_ok": true,
+    "tool_content_snippet": "",
+    "tool_calls": [
+      {
+        "id": "functions.get_weather:0",
+        "name": "get_weather"
+      }
+    ],
+    "tool_ok": true,
+    "cont_content_snippet": "The current weather in Buenos Aires is **22°C** and **sunny**. ☀️",
+    "continuation_ok": true
+  },
+  "gpt-4o": {
+    "model": "gpt-4o",
+    "provider": "openai",
+    "vision_content_snippet": "red",
+    "vision_ok": true,
+    "tool_content_snippet": "",
+    "tool_calls": [
+      {
+        "id": "call_KvnHITnpJJA7AbThwnN8ZIyb",
+        "name": "get_weather"
+      }
+    ],
+    "tool_ok": true,
+    "cont_content_snippet": "The current weather in Buenos Aires is 22°C and sunny.",
+    "continuation_ok": true
+  }
+}

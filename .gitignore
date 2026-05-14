@@ -230,6 +230,19 @@ experiments/E005_react_pilot/*
 experiments/E008_multimodel/*
 !experiments/E008_multimodel/results_*.json
 !experiments/E008_multimodel/report_*.html
+# E009 cross-model post-adapter (Claude + agentic_probe + 9 modelos).
+# Exclui *_full.html — pesa 75+MB, se regenera con build_multimodel_full_report.py.
+!experiments/E009_multimodel/
+experiments/E009_multimodel/*
+!experiments/E009_multimodel/results_*.json
+!experiments/E009_multimodel/report_multimodel.html
+!experiments/E009_multimodel/agentic_probe.json
+# E010 iteration pilot single-model (payload_to_model completo).
+!experiments/E010_iteration_pilot/
+experiments/E010_iteration_pilot/*
+!experiments/E010_iteration_pilot/results_*.json
+!experiments/E010_iteration_pilot/viewer_*.html
+!experiments/E010_iteration_pilot/picked_photos.json
 results/
 .claude/settings.local.json
 .claude/worktrees/

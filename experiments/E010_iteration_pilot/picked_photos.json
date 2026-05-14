@@ -1,0 +1,102 @@
+[
+  {
+    "cid": 1248470,
+    "zone": "Cáucaso rural",
+    "year": 1960,
+    "geo": [
+      42.472373,
+      44.9292
+    ],
+    "title": "Экскурсия в Барисахо",
+    "file_url": "https://pastvu.com/_p/a/i/3/1/i31ey9oovd5oy8iw5v.jpg",
+    "page_url": "https://pastvu.com/p/1248470",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "h": 800,
+    "w": 1210,
+    "waterh": 19,
+    "country": "Cáucaso rural",
+    "bucket_pais": "sampled-api",
+    "bucket_decada": "1960s"
+  },
+  {
+    "cid": 2165013,
+    "zone": "Lisboa",
+    "year": 1947,
+    "geo": [
+      38.716012,
+      -9.137003
+    ],
+    "title": "Martim Moniz",
+    "file_url": "https://pastvu.com/_p/a/o/y/y/oyykdt7qjqaa85m2gf.jpg",
+    "page_url": "https://pastvu.com/p/2165013",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "h": 720,
+    "w": 720,
+    "waterh": 17,
+    "country": "Lisboa",
+    "bucket_pais": "sampled-api",
+    "bucket_decada": "1940s"
+  },
+  {
+    "cid": 1560610,
+    "zone": "Volga rural",
+    "year": 1915,
+    "geo": [
+      55.472641,
+      39.648297
+    ],
+    "title": "Никольский храм села Вышелес",
+    "file_url": "https://pastvu.com/_p/a/6/p/0/6p05ahsmtev7wt7cft.jpg",
+    "page_url": "https://pastvu.com/p/1560610",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "h": 1600,
+    "w": 1233,
+    "waterh": 37,
+    "country": "Volga rural",
+    "bucket_pais": "sampled-api",
+    "bucket_decada": "1910s"
+  },
+  {
+    "cid": 2086652,
+    "zone": "Cracovia",
+    "year": 1943,
+    "geo": [
+      50.044952,
+      19.95738
+    ],
+    "title": "Шествие еврейского населения из ликвидированного гетто по улице Львовская. Краков",
+    "file_url": "https://pastvu.com/_p/a/s/k/y/sky5hxgcg6nkhl677r.jpg",
+    "page_url": "https://pastvu.com/p/2086652",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "h": 1173,
+    "w": 1800,
+    "waterh": 27,
+    "country": "Cracovia",
+    "bucket_pais": "sampled-api",
+    "bucket_decada": "1940s"
+  },
+  {
+    "cid": 2000504,
+    "zone": "Bogotá",
+    "year": 1930,
+    "geo": [
+      4.596723,
+      -74.078686
+    ],
+    "title": "View of Bogota",
+    "file_url": "https://pastvu.com/_p/a/z/r/3/zr34ryy9s1za7o4jo8.jpg",
+    "page_url": "https://pastvu.com/p/2000504",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "h": 977,
+    "w": 1539,
+    "waterh": 23,
+    "country": "Bogotá",
+    "bucket_pais": "sampled-api",
+    "bucket_decada": "1930s"
+  }
+]

@@ -20,12 +20,18 @@ import colorsys
 import html
 import io
 import json
+import os
+import sys
 from collections import defaultdict
 from pathlib import Path
 
 from PIL import Image
 
-EXP = Path("experiments/E008_multimodel")
+# Path del experimento puede pasarse por CLI arg o env var.
+if len(sys.argv) > 1:
+    EXP = Path(sys.argv[1])
+else:
+    EXP = Path(os.environ.get("EXP_DIR", "experiments/E008_multimodel"))
 PHOTOS_DIR = Path("experiments/E004_attacker_filter/photos")
 
 MODEL_COLORS = {
@@ -585,7 +591,7 @@ def main():
     for p in files:
         key = p.stem.replace("results_", "")
         try:
-            data_by_model[key] = json.loads(p.read_text())
+            data_by_model[key] = json.loads(p.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             print(f"  ⚠️  skip {p}: bad JSON")
             continue
@@ -617,9 +623,9 @@ def main():
         model_selector=model_selector,
         photo_selector=photo_selector,
         panels=panels_html,
-    ))
+    ), encoding="utf-8")
     size_mb = out.stat().st_size / (1024 * 1024)
-    print(f"✓ wrote {out} ({size_mb:.1f} MB)")
+    print(f"wrote {out} ({size_mb:.1f} MB)")
 
 
 if __name__ == "__main__":

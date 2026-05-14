@@ -17,9 +17,15 @@ import base64
 import colorsys
 import html
 import json
+import os
+import sys
 from pathlib import Path
 
-EXP = Path("experiments/E008_multimodel")
+# Path del experimento puede pasarse por arg o env var. Default E008 (legacy).
+if len(sys.argv) > 1:
+    EXP = Path(sys.argv[1])
+else:
+    EXP = Path(os.environ.get("EXP_DIR", "experiments/E008_multimodel"))
 PHOTOS_DIR = Path("experiments/E004_attacker_filter/photos")
 
 # Colores fijos por lab/modelo (HSL → hex) para identidad visual consistente.
@@ -68,7 +74,7 @@ def load_versions() -> dict[str, list[dict]]:
     for p in sorted(EXP.glob("results_*.json")):
         key = p.stem.replace("results_", "")
         try:
-            data = json.loads(p.read_text())
+            data = json.loads(p.read_text(encoding="utf-8"))
             out[key] = data
         except json.JSONDecodeError:
             continue
@@ -350,7 +356,7 @@ def main():
         panels=panels_html,
         selector=selector_html,
         models_chips=models_chips,
-    ))
+    ), encoding="utf-8")
     size_kb = out.stat().st_size / 1024
     print(f"✓ wrote {out} ({size_kb:.0f} KB)")
 

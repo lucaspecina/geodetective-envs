@@ -17,9 +17,9 @@ import base64
 from pathlib import Path
 from typing import Any, Optional
 from dataclasses import dataclass, field
-from openai import OpenAI
 
 from ..corpus.blacklist import compute_excluded_domains
+from ..llm_adapter import complete as llm_complete, get_provider
 from ..tools.web_search import web_search, TOOL_SCHEMA as WEB_SEARCH_SCHEMA
 from ..tools.fetch_url import fetch_url, TOOL_SCHEMA_TEXT as FETCH_URL_SCHEMA, TOOL_SCHEMA_WITH_IMAGES as FETCH_URL_IMG_SCHEMA
 from ..tools.image_search import image_search, TOOL_SCHEMA as IMAGE_SEARCH_SCHEMA
@@ -217,12 +217,11 @@ def run_react_agent(
     - `provenance_source`: campo `source` del candidate (free-text con URLs originales).
       Se extraen hosts y se agregan al excluido.
     """
-    client = OpenAI(
-        base_url=os.environ["AZURE_FOUNDRY_BASE_URL"],
-        api_key=os.environ["AZURE_INFERENCE_CREDENTIAL"],
-        timeout=180.0,   # C2: per-call default timeout (3 min). Configurable per-call abajo.
-        max_retries=2,   # C2: retry transient 5xx/network errors.
-    )
+    # LLM provider determinado por modelo (vía llm_adapter.MODEL_SPECS).
+    # OpenAI-compatible → passthrough cliente openai; Anthropic → /anthropic/v1/messages.
+    llm_provider = get_provider(model)
+    if verbose:
+        print(f"[run_react_agent] model={model} provider={llm_provider}")
     excluded_domains = compute_excluded_domains(provider=provider, source=provenance_source)
     if verbose and excluded_domains:
         print(f"[run_react_agent] excluded_domains per-photo: {excluded_domains}")
@@ -291,13 +290,13 @@ def run_react_agent(
                 "content": f"[Recordatorio: te quedan {remaining} turns. Considerá ir cerrando con `submit_answer`.]",
             })
         try:
-            response = client.chat.completions.create(
+            response = llm_complete(
                 model=model,
                 messages=messages,
                 tools=tools,
                 tool_choice="auto",
                 max_completion_tokens=3000,
-                timeout=120.0,  # C2: per-request timeout
+                timeout=120.0,
             )
         except Exception as e:
             result.error = f"API call failed at step {step + 1}: {e}"
@@ -307,6 +306,14 @@ def run_react_agent(
             break
 
         msg = response.choices[0].message
+        # Anthropic puede emitir bloques 'thinking' separados del content de texto.
+        # Los recogemos como evento aparte en el trace para que el annotator los vea.
+        anth_thinking = getattr(msg, "thinking_blocks", None) or []
+        for tk in anth_thinking:
+            if tk:
+                result.trace.append({"step": step + 1, "type": "thinking_block", "content": tk})
+                if verbose:
+                    print(f"[thinking] {tk[:300]}")
         assistant_turn: dict[str, Any] = {"role": "assistant"}
         if msg.content:
             assistant_turn["content"] = msg.content

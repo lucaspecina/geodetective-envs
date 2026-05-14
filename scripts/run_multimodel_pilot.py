@@ -28,8 +28,9 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from typing import Any
+
 from geopy.distance import geodesic
-from openai import OpenAI
 
 # Cargar .env
 for line in Path(".env").read_text().splitlines():
@@ -40,21 +41,34 @@ for line in Path(".env").read_text().splitlines():
 sys.path.insert(0, str(Path("src").resolve()))
 from geodetective.agents.react import run_react_agent
 from geodetective.corpus import CLEAN_VERSION
+from geodetective.llm_adapter import complete as llm_complete, get_provider
+
+import base64
+import io
+from PIL import Image as _PILImage
 
 # === Config ===
 INPUT_CORPUS = Path("experiments/E004_attacker_filter/results.json")
 PHOTOS_DIR = Path("experiments/E004_attacker_filter/photos")
-OUT_DIR = Path("experiments/E008_multimodel")
+# E008 fue el primer cross-model (Tavily-era, sin agentic probe, DeepSeek-V3.2 con
+# vision rota). E009 es el segundo cross-model post-adapter Claude + agentic_probe.
+OUT_DIR = Path(os.environ.get("OUT_DIR", "experiments/E009_multimodel"))
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
+# Set tiered post-Codex review + adapter Claude. Solo modelos con vision + tools confirmados.
 DEFAULT_MODELS = [
+    # Top tier
     "gpt-5.4",
-    "gpt-4o",
-    "DeepSeek-V3.2",
-    "Kimi-K2.5",
+    "claude-opus-4-6",
+    "grok-4.3",
+    "Kimi-K2.6",
+    # Mid tier
+    "gpt-5.4-mini",
+    "claude-sonnet-4-6",
     "grok-4-1-fast-reasoning",
-    # Claude pendiente: requiere adapter (Anthropic Messages API, no OpenAI Chat).
-    # Ver task #6.
+    "Kimi-K2.5",
+    # Reference de generación previa OpenAI
+    "gpt-4o",
 ]
 DEFAULT_CIDS = [2126812, 2328833, 2034885]  # Tomsk, Dealey Plaza, Basel
 
@@ -65,32 +79,143 @@ SKIP_HEALTH = os.environ.get("SKIP_HEALTH", "0") == "1"
 PROMPT_VERSION = "v3_thinking_visible"
 
 
-def make_client() -> OpenAI:
-    return OpenAI(
-        base_url=os.environ["AZURE_FOUNDRY_BASE_URL"],
-        api_key=os.environ["AZURE_INFERENCE_CREDENTIAL"],
-    )
-
-
 def model_to_filename(model: str) -> str:
     """Normalizar nombre de modelo a un nombre de archivo válido."""
     return model.replace(".", "_").replace("/", "_").replace(":", "_")
 
 
-def health_check(model: str) -> tuple[bool, str]:
-    """Verifica que el modelo responda a una llamada minimal sin tools."""
+def _make_red_square_data_url(size: int = 64) -> str:
+    img = _PILImage.new("RGB", (size, size), (220, 30, 30))
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    b64 = base64.b64encode(buf.getvalue()).decode()
+    return f"data:image/png;base64,{b64}"
+
+
+def agentic_probe(model: str) -> tuple[bool, str, dict]:
+    """Verifica que el modelo soporte el flujo completo del agente.
+
+    3 capabilities en turnos separados (evita que el modelo priorice una sobre otra):
+    (A) Vision: cuadrado rojo, pide "what color?" → debe decir "red".
+    (B) Tool calling: pide "use get_weather Buenos Aires" → debe llamar la tool.
+    (C) Continuación post tool_result: simulamos tool_result tras (B) → debe responder.
+
+    Si CUALQUIER capability falla, el modelo se skipea. Esto previene el bug
+    DeepSeek-V3.2 (text-only que silenciosamente dropea image_url y alucina).
+
+    Returns: (ok, summary_msg, details_dict)
+    """
+    details: dict[str, Any] = {"model": model, "provider": get_provider(model)}
+    weather_tool = [{
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get the current weather in a city.",
+            "parameters": {
+                "type": "object",
+                "properties": {"city": {"type": "string"}},
+                "required": ["city"],
+            },
+        },
+    }]
+
+    # === A. Vision-only ===
+    img_url = _make_red_square_data_url()
     try:
-        client = make_client()
-        resp = client.chat.completions.create(
+        resp_v = llm_complete(
             model=model,
-            messages=[{"role": "user", "content": "Reply 'ok' in one word."}],
-            max_completion_tokens=20,
-            timeout=20.0,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "What color is the square in the image? Reply with one word: red, blue, or green.",
+                        },
+                        {"type": "image_url", "image_url": {"url": img_url}},
+                    ],
+                }
+            ],
+            max_completion_tokens=500,
+            timeout=60.0,
         )
-        msg = (resp.choices[0].message.content or "")[:60]
-        return True, msg
+        v_content = (resp_v.choices[0].message.content or "").lower()
+        details["vision_content_snippet"] = v_content[:120]
+        vision_ok = "red" in v_content
+        details["vision_ok"] = vision_ok
     except Exception as e:
-        return False, f"{type(e).__name__}: {str(e)[:200]}"
+        details["vision_error"] = f"{type(e).__name__}: {str(e)[:200]}"
+        return False, f"vision failed: {details['vision_error']}", details
+
+    if not vision_ok:
+        return False, f"vision broken (saw '{v_content[:40]}', expected 'red')", details
+
+    # === B. Tool calling ===
+    try:
+        resp_t = llm_complete(
+            model=model,
+            messages=[
+                {"role": "user", "content": "Use the get_weather tool to fetch the weather in Buenos Aires."}
+            ],
+            tools=weather_tool,
+            tool_choice="auto",
+            max_completion_tokens=500,
+            timeout=60.0,
+        )
+    except Exception as e:
+        details["tool_error"] = f"{type(e).__name__}: {str(e)[:200]}"
+        return False, f"tool call failed: {details['tool_error']}", details
+
+    msg_t = resp_t.choices[0].message
+    tool_calls = msg_t.tool_calls or []
+    details["tool_content_snippet"] = (msg_t.content or "")[:120]
+    details["tool_calls"] = [{"id": tc.id, "name": tc.function.name} for tc in tool_calls]
+    tool_ok = any(tc.function.name == "get_weather" for tc in tool_calls)
+    details["tool_ok"] = tool_ok
+    if not tool_ok:
+        return False, f"no tool call (content='{(msg_t.content or '')[:60]}')", details
+
+    # === C. Continuación post tool_result ===
+    weather_tc = next(tc for tc in tool_calls if tc.function.name == "get_weather")
+    try:
+        resp_c = llm_complete(
+            model=model,
+            messages=[
+                {"role": "user", "content": "Use the get_weather tool to fetch the weather in Buenos Aires."},
+                {
+                    "role": "assistant",
+                    "content": msg_t.content or "",
+                    "tool_calls": [
+                        {
+                            "id": weather_tc.id,
+                            "type": "function",
+                            "function": {"name": "get_weather", "arguments": weather_tc.function.arguments},
+                        }
+                    ],
+                },
+                {
+                    "role": "tool",
+                    "tool_call_id": weather_tc.id,
+                    "content": '{"temperature": 22, "conditions": "sunny"}',
+                },
+            ],
+            tools=weather_tool,
+            tool_choice="auto",
+            max_completion_tokens=500,
+            timeout=60.0,
+        )
+    except Exception as e:
+        details["cont_error"] = f"{type(e).__name__}: {str(e)[:200]}"
+        return False, f"continuation failed: {details['cont_error']}", details
+
+    msg_c = resp_c.choices[0].message
+    details["cont_content_snippet"] = (msg_c.content or "")[:120]
+    cont_ok = bool(msg_c.content) or bool(msg_c.tool_calls)
+    details["continuation_ok"] = cont_ok
+    if not cont_ok:
+        return False, "continuation broken (empty response post tool_result)", details
+
+    return True, "vision=OK tool=OK cont=OK", details
 
 
 def process_one(cid: int, candidate: dict, model: str) -> dict:
@@ -182,7 +307,7 @@ def run_for_model(model: str, candidates: list[dict]) -> dict:
             r = fut.result()
             results.append(r)
             # Save after each (resume support)
-            out_path.write_text(json.dumps(results, indent=2, ensure_ascii=False))
+            out_path.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
             rr = r.get("react", {})
             d = rr.get("distance_km")
             d_s = f"{d:.0f}km" if d is not None else "N/A"
@@ -222,16 +347,27 @@ def main() -> None:
     print("=" * 70)
     print()
 
-    # === Health check phase ===
+    # === Agentic probe phase ===
+    # Reemplaza al health_check minimal anterior. Valida text + vision + tool calling +
+    # continuación post-tool_result. Skipea modelos broken antes de gastar el agente.
     healthy = []
     unhealthy = []
+    probe_details: dict[str, dict] = {}
     if not SKIP_HEALTH:
-        print("[Phase 1] Health check por modelo...")
+        print("[Phase 1] Agentic probe por modelo (text + vision + tools + continuación)...")
         for model in models:
-            ok, msg = health_check(model)
+            ok, msg, details = agentic_probe(model)
+            probe_details[model] = details
             mark = "✓" if ok else "✗"
-            print(f"  {mark} {model:<30}  {msg[:120]}")
+            print(f"  {mark} {model:<30}  {msg[:140]}")
             (healthy if ok else unhealthy).append((model, msg))
+        # Persist probe details para diagnóstico posterior
+        try:
+            (OUT_DIR / "agentic_probe.json").write_text(
+                json.dumps(probe_details, indent=2, ensure_ascii=False), encoding="utf-8"
+            )
+        except Exception:
+            pass
         print()
         if unhealthy:
             print(f"⚠️  {len(unhealthy)} modelos fallaron health, skipping:")

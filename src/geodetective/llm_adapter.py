@@ -464,12 +464,14 @@ def complete(
     if provider == "anthropic":
         # Anthropic no soporta tool_choice="auto" explícito (es default).
         # Si necesitamos forzar, pasamos tool_choice como dict {"type": "auto"|"tool"|"any"}.
+        # extra (temperature, top_p, etc) van en extra_body.
         return _anthropic_complete(
             model=model,
             messages=messages,
             tools=tools,
             max_tokens=max_completion_tokens,
             timeout=timeout,
+            extra_body=extra or None,
         )
 
     raise ValueError(f"unknown provider '{provider}' for model '{model}'")

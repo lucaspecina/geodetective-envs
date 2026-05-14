@@ -75,6 +75,7 @@ def _call_judge(
     max_tokens: int = 16000,
     timeout: float = 180.0,
 ) -> str:
+    # temperature=0 para que la anotación sea reproducible (post-Codex review).
     resp = llm_complete(
         model=judge_model,
         messages=[
@@ -83,6 +84,7 @@ def _call_judge(
         ],
         max_completion_tokens=max_tokens,
         timeout=timeout,
+        temperature=0,
     )
     msg = resp.choices[0].message
     return (msg.content or "").strip()

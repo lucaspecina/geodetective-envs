@@ -16,27 +16,41 @@ src/geodetective/
 │   ├── clean_image.py           # Paso 0 del filtrado: strip EXIF + crop watermark + RGBA→RGB
 │   └── blacklist.py             # GLOBAL minimal + PROVIDER_DOMAINS + per-photo runtime
 ├── tools/
-│   ├── web_search.py            # Tavily backend con search_depth=advanced + filtros
+│   ├── web_search.py            # Azure Responses API + Bing Grounding (post-Tavily)
 │   ├── fetch_url.py             # Bajar páginas (texto y/o imágenes con hash)
-│   ├── image_search.py          # Buscar imágenes con hash perceptual flagging
+│   ├── image_search.py          # DuckDuckGo (ddgs) + hash perceptual flagging (post-Tavily)
 │   ├── geocode.py               # Nominatim OSM (free)
 │   ├── historical_query.py      # OpenHistoricalMap Overpass temporal (free)
 │   ├── crop_image.py            # Zoom local en regiones de la foto target
 │   ├── static_map.py            # Google Maps Static (roadmap/satellite/terrain/hybrid)
 │   └── street_view.py           # Google Street View Static
+├── llm_adapter.py               # ⭐ Routea OpenAI vs Anthropic via MODEL_SPECS registry
+├── judge/                       # ⭐ Process eval annotator (CORRAL adapted)
+│   ├── serialize_trace.py       # trace ReAct → texto [MSG N] consumible por judge
+│   ├── prompts.py               # STAGE1 (nodes) + STAGE2 (edges) prompts
+│   ├── annotator.py             # Orquesta Stage 1+2 LLM + Stage 3a structural
+│   └── pattern_matcher.py       # 9 productive motifs + 8 breakdowns determinist
 └── agents/
-    └── react.py                 # Loop ReAct multi-paso con OpenAI tool calling
+    └── react.py                 # Loop ReAct multi-paso via llm_adapter.complete()
 
 scripts/
 ├── sample_pastvu.py             # Muestrear fotos de PastVu por bbox geográficas
 ├── test3_no_tools.py            # Test 3 (VLM sin tools) con N runs
-├── test_clean_image.py          # Tests sintéticos del módulo corpus.clean_image (13 escenarios)
-├── test_blacklist.py            # Tests sintéticos del módulo corpus.blacklist (14 grupos, 65 checks)
-└── run_react_websearch.py       # Run agente ReAct con todo el stack
+├── test_clean_image.py          # Tests sintéticos del módulo corpus.clean_image
+├── test_blacklist.py            # Tests sintéticos del módulo corpus.blacklist
+├── test_models_smoke.py         # Smoke test text+vision+tools por modelo (pre-pilot)
+├── test_adapter_smoke.py        # Smoke test adapter sobre 1 foto (OpenAI + Anthropic)
+├── run_react_websearch.py       # Run agente ReAct con todo el stack (legacy E001)
+├── run_react_pilot.py           # Run agente sobre corpus piloto v3
+├── run_multimodel_pilot.py      # ⭐ Cross-model run con agentic_probe
+└── run_annotator.py             # ⭐ CLI annotator process eval
 
 experiments/
 ├── E001_test3_pastvu/           # 19 fotos sin tools, results.json
-└── E002_react_websearch/        # ReAct con tools, results.json
+├── E002_react_websearch/        # ReAct con tools, results.json
+├── E005_react_pilot/            # 6 fotos × prompt v3 (canónico) + annotated_*.json
+├── E008_multimodel/             # 5 modelos × 3 fotos (pre-adapter, DeepSeek vision broken)
+└── E009_multimodel/             # 9 modelos × 3 fotos × v3 + agentic_probe.json
 ```
 
 ### Stack y credenciales

@@ -6,7 +6,7 @@
 2. **PROJECT.md** — Estrella polar: visión, LA PREGUNTA, invariantes.
 3. **CURRENT_STATE.md** — Qué corre HOY (honesto sobre gaps).
 4. **CHANGELOG.md** — Historial.
-5. **ARCHITECTURE.md** — Cuando exista (defer hasta tener 3+ módulos con contratos).
+5. **ARCHITECTURE.md** — Contratos entre módulos + storage-as-canon principle + schemas.
 
 Para roadmap y trabajo pendiente: [Project v2 "GeoDetective Envs Roadmap"](https://github.com/users/lucaspecina/projects/6).
 

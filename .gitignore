@@ -225,6 +225,11 @@ experiments/*/
 experiments/E005_react_pilot/*
 !experiments/E005_react_pilot/results_*.json
 !experiments/E005_react_pilot/report_*.html
+# Exceptions: E008 smoke cross-modelo (mismo patron que E005).
+!experiments/E008_multimodel/
+experiments/E008_multimodel/*
+!experiments/E008_multimodel/results_*.json
+!experiments/E008_multimodel/report_*.html
 results/
 .claude/settings.local.json
 .claude/worktrees/

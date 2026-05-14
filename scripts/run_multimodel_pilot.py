@@ -28,6 +28,14 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+# Forzar UTF-8 stdout/stderr en Windows cp1252 (✓ ❌ usados en prints)
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 from typing import Any
 
 from geopy.distance import geodesic
@@ -287,7 +295,7 @@ def run_for_model(model: str, candidates: list[dict]) -> dict:
     existing = []
     if out_path.exists():
         try:
-            existing = json.loads(out_path.read_text())
+            existing = json.loads(out_path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             existing = []
     done_cids = {r["cid"] for r in existing if r.get("react", {}).get("final_answer") or r.get("react", {}).get("error")}
@@ -327,7 +335,7 @@ def main() -> None:
     if not INPUT_CORPUS.exists():
         raise SystemExit(f"missing input: {INPUT_CORPUS}")
 
-    corpus = {r["cid"]: r for r in json.loads(INPUT_CORPUS.read_text()) if r.get("decision") == "keep"}
+    corpus = {r["cid"]: r for r in json.loads(INPUT_CORPUS.read_text(encoding="utf-8")) if r.get("decision") == "keep"}
     candidates = []
     for cid in cids:
         if cid not in corpus:

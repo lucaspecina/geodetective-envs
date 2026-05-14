@@ -290,13 +290,16 @@ def run_react_agent(
                 "content": f"[Recordatorio: te quedan {remaining} turns. Considerá ir cerrando con `submit_answer`.]",
             })
         try:
+            # max_completion_tokens=8000: Claude con thinking mode puede gastar ~2-3K
+            # tokens en thinking antes de emitir tool_use/text. Con 3000 algunos
+            # turnos quedaban en empty_response (claude-sonnet-4-6 E009 Basel + Tomsk).
             response = llm_complete(
                 model=model,
                 messages=messages,
                 tools=tools,
                 tool_choice="auto",
-                max_completion_tokens=3000,
-                timeout=120.0,
+                max_completion_tokens=8000,
+                timeout=180.0,
             )
         except Exception as e:
             result.error = f"API call failed at step {step + 1}: {e}"
@@ -330,8 +333,16 @@ def run_react_agent(
                 for tc in msg.tool_calls
             ]
         if msg.content is None and msg.tool_calls is None:
-            result.error = "Empty response."
+            # Capturar stop_reason / finish_reason para diagnosticar (max_tokens?
+            # refusal? end_turn vacío? cf claude-sonnet-4-6 Basel/Tomsk E009).
+            finish = getattr(msg, "finish_reason", None) or getattr(response.choices[0], "finish_reason", None)
+            n_thinking = len(getattr(msg, "thinking_blocks", []) or [])
+            result.error = f"Empty response. finish_reason={finish!r} thinking_blocks={n_thinking}"
             result.terminal_state = "empty_response"
+            result.trace.append({
+                "step": step + 1, "type": "empty_response_diagnosis",
+                "finish_reason": finish, "thinking_blocks_count": n_thinking,
+            })
             break
         messages.append(assistant_turn)
 
@@ -388,8 +399,8 @@ def run_react_agent(
                     )
                     if verbose:
                         print(f"     → {len(sr.results)} results (filtered {sr.blocked_count}/{sr.total_raw})")
-                    messages.append({"role": "tool", "tool_call_id": tc.id,
-                                     "content": json.dumps(sr.to_dict(), ensure_ascii=False)[:8000]})
+                    payload = json.dumps(sr.to_dict(), ensure_ascii=False)[:8000]
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
                     top_results = [
                         {"title": r.title, "url": r.url, "snippet": (r.content or "")[:400]}
                         for r in sr.results[:3]
@@ -400,6 +411,8 @@ def run_react_agent(
                         "result_count": len(sr.results),
                         "blocked": sr.blocked_count,
                         "top_results": top_results,
+                        "payload_to_model": payload[:3000],  # exact tool message content que el modelo ve
+                        "payload_full_len": len(payload),
                     })
                 except Exception as e:
                     err = f"web_search error: {e}"
@@ -414,12 +427,14 @@ def run_react_agent(
                     if verbose:
                         size = len(fp.text)
                         print(f"     → status={fp.status_code} text={size}c err={fp.error}")
-                    messages.append({"role": "tool", "tool_call_id": tc.id,
-                                     "content": json.dumps(fp.to_dict(include_images_b64=False), ensure_ascii=False)[:10000]})
+                    payload = json.dumps(fp.to_dict(include_images_b64=False), ensure_ascii=False)[:10000]
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
                     result.trace.append({
                         "step": step + 1, "type": "fetch_url",
                         "url": url, "text_len": len(fp.text), "error": fp.error,
                         "title": fp.title, "text_snippet": (fp.text or "")[:500],
+                        "payload_to_model": payload[:3000],
+                        "payload_full_len": len(payload),
                     })
                 except Exception as e:
                     err = f"fetch_url error: {e}"
@@ -451,8 +466,8 @@ def run_react_agent(
                              {"url": im_d.get("url"), "hamming_distance": im_d.get("hamming_distance")})
                             for im_d in summary["images"]
                         ]
-                    messages.append({"role": "tool", "tool_call_id": tc.id,
-                                     "content": json.dumps(summary, ensure_ascii=False)[:10000]})
+                    payload = json.dumps(summary, ensure_ascii=False)[:10000]
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
                     visible_imgs = [
                         {"url": im.url, "hamming_distance": im.hamming_distance, "base64_jpeg": im.base64_jpeg}
                         for im in fp.images if not im.is_likely_target
@@ -462,6 +477,8 @@ def run_react_agent(
                         "url": url, "n_images": n_imgs, "target_match": n_target,
                         "title": fp.title, "text_snippet": (fp.text or "")[:500],
                         "visible_images": visible_imgs,
+                        "payload_to_model": payload[:3000],
+                        "payload_full_len": len(payload),
                     })
 
                     # Build user message with images for next turn.
@@ -508,8 +525,8 @@ def run_react_agent(
                         "blocked_domain_count": isr.blocked_domain_count,
                         "images_metadata": [_redact(im) for im in isr.images],
                     }
-                    messages.append({"role": "tool", "tool_call_id": tc.id,
-                                     "content": json.dumps(meta, ensure_ascii=False)})
+                    payload = json.dumps(meta, ensure_ascii=False)
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
                     visible_imgs = [
                         {"url": im.url, "hamming_distance": im.hamming_distance, "base64_jpeg": im.base64_jpeg}
                         for im in isr.images if not im.is_likely_target
@@ -520,6 +537,8 @@ def run_react_agent(
                         "n_images": len(isr.images),
                         "target_match": isr.target_match_count,
                         "visible_images": visible_imgs,
+                        "payload_to_model": payload[:3000],
+                        "payload_full_len": len(payload),
                     })
 
                     # Inject images as user message in next turn.
@@ -567,12 +586,15 @@ def run_react_agent(
                             [{"lat": gr.lat, "lon": gr.lon, "display_name": gr.display_name}]
                             if gr else []
                         )
-                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps(out, ensure_ascii=False)[:4000]})
+                    payload = json.dumps(out, ensure_ascii=False)[:4000]
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
                     result.trace.append({
                         "step": step + 1, "type": fname,
                         "args": args,
                         "n_results": len(out) if isinstance(out, list) else (1 if out else 0),
                         "top_results": top_results,
+                        "payload_to_model": payload[:3000],
+                        "payload_full_len": len(payload),
                     })
                 except Exception as e:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"{fname} error: {e}"})
@@ -592,8 +614,14 @@ def run_react_agent(
                     )
                     if verbose:
                         print(f"     → {hq.n_features} features (truncated={hq.truncated}, err={hq.error})")
-                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps(hq.to_dict(), ensure_ascii=False)[:8000]})
-                    result.trace.append({"step": step + 1, "type": "historical_query", "args": args, "n_features": hq.n_features})
+                    payload = json.dumps(hq.to_dict(), ensure_ascii=False)[:8000]
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
+                    result.trace.append({
+                        "step": step + 1, "type": "historical_query",
+                        "args": args, "n_features": hq.n_features,
+                        "payload_to_model": payload[:3000],
+                        "payload_full_len": len(payload),
+                    })
                 except Exception as e:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"historical_query error: {e}"})
                     result.trace.append({"step": step + 1, "type": "historical_query_error", "error": str(e)})
@@ -614,14 +642,20 @@ def run_react_agent(
                     if verbose:
                         print(f"     → cropped {cr.width}x{cr.height} from region={cr.region}")
                     summary = {"width": cr.width, "height": cr.height, "region": cr.region, "note": cr.note}
-                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps(summary, ensure_ascii=False)})
+                    payload = json.dumps(summary, ensure_ascii=False)
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
                     # Inyectar imagen en next user message
                     parts = [
                         {"type": "text", "text": f"[Crop de la foto target. region={cr.region}, mostrado a {cr.width}x{cr.height}]"},
                         {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{cr.base64_jpeg}"}},
                     ]
                     pending_image_injections.append(("crop", parts))
-                    result.trace.append({"step": step + 1, "type": fname, "region": cr.region})
+                    result.trace.append({
+                        "step": step + 1, "type": fname,
+                        "region": cr.region,
+                        "payload_to_model": payload,
+                        "image_inject_kind": "crop",  # tool tambien inyecta imagen al user message next turn
+                    })
                 except Exception as e:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"{fname} error: {e}"})
                     result.trace.append({"step": step + 1, "type": f"{fname}_error", "error": str(e)})
@@ -644,7 +678,8 @@ def run_react_agent(
                         if verbose:
                             print(f"     → static_map ok type={sm.type}")
                         meta = {"lat": sm.lat, "lon": sm.lon, "zoom": sm.zoom, "type": sm.type, "size": list(sm.size), "note": sm.note}
-                        messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps(meta, ensure_ascii=False)})
+                        payload = json.dumps(meta, ensure_ascii=False)
+                        messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
                         parts = [
                             {"type": "text", "text": f"[Static map {sm.type} en ({sm.lat}, {sm.lon}) zoom {sm.zoom}]"},
                             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{sm.base64_jpeg}"}},
@@ -654,6 +689,8 @@ def run_react_agent(
                             "step": step + 1, "type": "static_map",
                             "args": args, "map_type": sm.type, "lat": sm.lat, "lon": sm.lon,
                             "zoom": sm.zoom, "base64_jpeg": sm.base64_jpeg,
+                            "payload_to_model": payload,
+                            "image_inject_kind": "static_map",
                         })
                 except Exception as e:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"static_map error: {e}"})
@@ -690,7 +727,8 @@ def run_react_agent(
                             "distance_to_pano_m": sv.distance_to_pano_m,
                             "note": sv.note,
                         }
-                        messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps(meta, ensure_ascii=False)})
+                        payload = json.dumps(meta, ensure_ascii=False)
+                        messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
                         parts = [{"type": "text", "text": f"[Street View en ({sv.lat}, {sv.lon}). {sv.note or ''}]"}]
                         for im in sv.images:
                             parts.append({"type": "text", "text": f"[heading={im.heading} pitch={im.pitch} fov={im.fov}]"})
@@ -705,6 +743,8 @@ def run_react_agent(
                             "actual_lon": sv.actual_lon,
                             "distance_to_pano_m": sv.distance_to_pano_m,
                             "images": [{"heading": im.heading, "pitch": im.pitch, "fov": im.fov, "base64_jpeg": im.base64_jpeg} for im in sv.images],
+                            "payload_to_model": payload,
+                            "image_inject_kind": "street_view",
                         })
                 except Exception as e:
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"street_view error: {e}"})

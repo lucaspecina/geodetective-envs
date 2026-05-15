@@ -171,7 +171,7 @@ def main() -> None:
                 "sampled": len(picked),
             }
 
-    OUT_CANDIDATES.write_text(json.dumps(sample, indent=2, ensure_ascii=False))
+    OUT_CANDIDATES.write_text(json.dumps(sample, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nwrote {OUT_CANDIDATES} ({len(sample)} fotos)")
 
     audit = {
@@ -185,7 +185,7 @@ def main() -> None:
         "decade_buckets": DECADES,
         "cell_distribution": cell_summary,
     }
-    OUT_AUDIT.write_text(json.dumps(audit, indent=2))
+    OUT_AUDIT.write_text(json.dumps(audit, indent=2), encoding="utf-8")
     print(f"wrote {OUT_AUDIT}")
 
     print("\n=== Distribución final por celda ===")

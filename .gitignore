@@ -243,6 +243,23 @@ experiments/E010_iteration_pilot/*
 !experiments/E010_iteration_pilot/results_*.json
 !experiments/E010_iteration_pilot/viewer_*.html
 !experiments/E010_iteration_pilot/picked_photos.json
+# E007 corpus sampleo balanceado (180 fotos, candidates JSON sin las fotos).
+!experiments/E007_sample_diverso/
+experiments/E007_sample_diverso/*
+!experiments/E007_sample_diverso/candidates.json
+!experiments/E007_sample_diverso/audit_summary.json
+# E011 text overlay detection — runs comparativos (solo JSON, viewers regenerables).
+!experiments/E011_text_overlay_detection/
+experiments/E011_text_overlay_detection/*
+!experiments/E011_text_overlay_detection/sample*/
+experiments/E011_text_overlay_detection/sample*/*
+!experiments/E011_text_overlay_detection/sample*/detections.json
 results/
 .claude/settings.local.json
 .claude/worktrees/
+
+# Corpus de fotos — NO va a git (binarios, pesa, copyrighted).
+# README explica cómo regenerar o sincronizar desde otra máquina.
+corpus/photos/
+!corpus/photos/README.md
+!corpus/README.md

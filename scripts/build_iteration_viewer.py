@@ -23,6 +23,15 @@ import os
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+try:
+    from geodetective.tools.crop_image import crop_image as _do_crop
+    from geodetective.corpus import CLEAN_VERSION as _CLEAN_VERSION
+    _CROP_AVAILABLE = True
+except Exception:
+    _CROP_AVAILABLE = False
+    _CLEAN_VERSION = 1
+
 
 def esc(s: str) -> str:
     return html.escape(str(s) if s is not None else "")
@@ -46,7 +55,27 @@ def render_image(b64: str | None, label: str = "") -> str:
     return f'<div class="img-block"><div class="img-label">{esc(label)}</div><img src="data:image/jpeg;base64,{b64}"/></div>'
 
 
-def render_event(ev: dict) -> str:
+def reconstruct_crop_b64(cid: int | str, region: dict, photos_dir: Path) -> str | None:
+    """Re-crop on the fly desde la foto original. Trace no almacena base64 (size)."""
+    if not _CROP_AVAILABLE or not region:
+        return None
+    img_path = photos_dir / f"{cid}_clean_v{_CLEAN_VERSION}.jpg"
+    if not img_path.exists():
+        return None
+    try:
+        cr = _do_crop(
+            image_path=img_path,
+            x=int(region.get("x", 0)),
+            y=int(region.get("y", 0)),
+            width=int(region.get("w", 0)),
+            height=int(region.get("h", 0)),
+        )
+        return cr.base64_jpeg
+    except Exception:
+        return None
+
+
+def render_event(ev: dict, cid: int | str | None = None, photos_dir: Path | None = None) -> str:
     """Render un evento del trace como una card."""
     t = ev.get("type", "?")
     step = ev.get("step", "?")
@@ -142,8 +171,15 @@ def render_event(ev: dict) -> str:
             for im in (ev.get("images") or [])[:4]:
                 images_html += render_image(im.get("base64_jpeg"), f"heading {im.get('heading')}")
         elif t in ("crop_image", "crop_image_relative"):
-            # crop no guarda el base64 en trace, solo el payload
-            images_html = '<span class="muted">[crop image — not stored in trace, only in messages]</span>'
+            # Trace no almacena base64 (size), re-cropeamos sobre la marcha
+            b64 = ev.get("base64_jpeg")
+            if not b64 and cid is not None and photos_dir is not None:
+                b64 = reconstruct_crop_b64(cid, ev.get("region") or {}, photos_dir)
+            if b64:
+                region = ev.get("region") or {}
+                images_html = render_image(b64, f"crop {region}")
+            else:
+                images_html = '<span class="muted">[crop image — could not reconstruct]</span>'
     elif t == "image_search":
         # image_search devuelve visible_images con base64
         for im in (ev.get("visible_images") or [])[:5]:
@@ -171,7 +207,7 @@ def render_event(ev: dict) -> str:
 """
 
 
-def render_trace(entry: dict) -> str:
+def render_trace(entry: dict, photos_dir: Path | None = None) -> str:
     """Render UNA trace (1 foto, 1 modelo) entera."""
     cid = entry.get("cid")
     zone = entry.get("zone", "?")
@@ -194,13 +230,29 @@ def render_trace(entry: dict) -> str:
                "crop", "static_map", "street_view")}
     counts_str = " ".join(f"{k}={v}" for k, v in counts.items() if v)
 
-    events_html = "".join(render_event(ev) for ev in trace)
+    events_html = "".join(render_event(ev, cid=cid, photos_dir=photos_dir) for ev in trace)
 
     dist_str = f"{dist:.0f} km" if dist is not None else "N/A"
     final_loc = (final.get("location", "") or "")[:120]
     final_lat = final.get("lat")
     final_lon = final.get("lon")
     final_year = final.get("year", "?")
+
+    # Foto target original (la misma que ve el modelo en el primer user message)
+    target_img_html = ""
+    if photos_dir is not None and cid is not None:
+        target_path = photos_dir / f"{cid}_clean_v{_CLEAN_VERSION}.jpg"
+        if target_path.exists():
+            try:
+                b64 = base64.b64encode(target_path.read_bytes()).decode()
+                target_img_html = (
+                    f'<div class="target-img">'
+                    f'<div class="img-label">Foto target (la que recibe el modelo en el primer user message)</div>'
+                    f'<img src="data:image/jpeg;base64,{b64}"/>'
+                    f'</div>'
+                )
+            except Exception:
+                pass
 
     return f"""
 <section class="trace" id="trace-{cid}">
@@ -213,6 +265,7 @@ def render_trace(entry: dict) -> str:
       <b>Final answer:</b> {esc(final_loc)} <br/>
       <b>Predicted:</b> lat={final_lat} lon={final_lon} year={esc(final_year)} | <b>distance: {dist_str}</b>
     </div>
+    {target_img_html}
   </header>
   <div class="events">
     {events_html}
@@ -236,6 +289,9 @@ HTML_TEMPLATE = """<!doctype html>
   section.trace {{ margin: 24px auto; max-width: 1200px; background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); padding: 24px; }}
   section.trace header h2 {{ margin: 0 0 8px; color: #1f2937; }}
   section.trace .meta {{ font-size: 13px; color: #4b5563; line-height: 1.7; background: #f9fafb; padding: 12px; border-radius: 6px; margin-bottom: 16px; }}
+  section.trace .target-img {{ margin: 0 0 20px; padding: 14px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 6px; }}
+  section.trace .target-img .img-label {{ font-size: 12px; color: #3730a3; font-weight: 600; margin-bottom: 8px; }}
+  section.trace .target-img img {{ max-width: 100%; max-height: 500px; border: 1px solid #a5b4fc; border-radius: 4px; display: block; }}
 
   .event {{ border-left: 4px solid #ddd; padding: 12px 16px; margin: 12px 0; border-radius: 4px; background: #fafafa; }}
   .event .ev-head {{ display: flex; gap: 12px; align-items: baseline; margin-bottom: 8px; }}
@@ -288,6 +344,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("input", type=Path, help="results_*.json del pilot")
     parser.add_argument("--output", type=Path, default=None)
+    parser.add_argument("--photos-dir", type=Path, default=None,
+                        help="dir con {cid}_clean_v{N}.jpg para reconstruir crops. "
+                             "Default: <input_parent>/photos/")
     args = parser.parse_args()
 
     if not args.input.exists():
@@ -304,7 +363,8 @@ def main() -> None:
         for r in data
     )
 
-    traces_html = "\n".join(render_trace(r) for r in data)
+    photos_dir = args.photos_dir or (args.input.parent / "photos")
+    traces_html = "\n".join(render_trace(r, photos_dir=photos_dir) for r in data)
 
     html_str = HTML_TEMPLATE.format(
         model_label=esc(model_label),

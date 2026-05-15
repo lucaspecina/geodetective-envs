@@ -653,6 +653,7 @@ def run_react_agent(
                     result.trace.append({
                         "step": step + 1, "type": fname,
                         "region": cr.region,
+                        "base64_jpeg": cr.base64_jpeg,
                         "payload_to_model": payload,
                         "image_inject_kind": "crop",  # tool tambien inyecta imagen al user message next turn
                     })

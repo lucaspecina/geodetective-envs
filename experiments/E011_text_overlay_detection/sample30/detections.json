@@ -1,0 +1,1248 @@
+[
+  {
+    "image_size": {
+      "width": 4223,
+      "height": 3206
+    },
+    "regions": [],
+    "overall_note": "Foto aérea histórica sin texto detectable en la escena ni sobreimpresiones de archivo visibles. No se observan rótulos, cartelas, marcas de agua ni inscripciones legibles.",
+    "cid": "725135",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\725135_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 549,
+      "height": 870
+    },
+    "regions": [],
+    "overall_note": "No se detectan regiones con texto legible ni claramente textuales en la escena o como sobreimpresión de archivo. La imagen muestra arquitectura y nieve, sin carteles, inscripciones o captions visibles.",
+    "cid": "1336113",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1336113_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 800,
+      "height": 1091
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 590,
+          "y": 30,
+          "w": 142,
+          "h": 118
+        },
+        "text_snippet": "Майданi... (ilegible)",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Marca de agua/logo en la esquina superior derecha, fronto-parallel, contraste uniforme y claramente superpuesta al escaneo; no pertenece a la escena fotografiada."
+      },
+      {
+        "bbox": {
+          "x": 352,
+          "y": 361,
+          "w": 67,
+          "h": 26
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Trazos tipo grafiti/escritura sobre el muro central superior; sigue la perspectiva y textura del paramento del edificio en ruinas."
+      },
+      {
+        "bbox": {
+          "x": 444,
+          "y": 399,
+          "w": 82,
+          "h": 60
+        },
+        "text_snippet": "МИАУ МИАУ",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Texto pintado/grafiti sobre el muro derecho del edificio; alineado con la superficie de la pared y con degradación consistente con la escena."
+      }
+    ],
+    "overall_note": "Se detectan pocas regiones con texto. La imagen es histórica y de bajo contraste; algunas inscripciones en los muros son muy tenues y parcialmente ilegibles.",
+    "cid": "1053879",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1053879_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 539,
+      "height": 799
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 186,
+          "y": 329,
+          "w": 59,
+          "h": 16
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Pequeño letrero de ruta/destino en el frente superior del trolebús; está integrado al vehículo y con perspectiva de escena, pero el contenido no se distingue."
+      },
+      {
+        "bbox": {
+          "x": 130,
+          "y": 329,
+          "w": 49,
+          "h": 15
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Segundo letrero frontal del trolebús, simétrico al anterior, claramente parte del vehículo fotografiado; texto demasiado borroso para leer."
+      },
+      {
+        "bbox": {
+          "x": 163,
+          "y": 432,
+          "w": 40,
+          "h": 32
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Región de la matrícula/placa del trolebús en el paragolpes delantero; texto/números presentes en el vehículo real, pero ilegibles por resolución y contraste."
+      },
+      {
+        "bbox": {
+          "x": 108,
+          "y": 420,
+          "w": 24,
+          "h": 51
+        },
+        "text_snippet": "3",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Número visible en el frente inferior izquierdo del trolebús; corresponde a marcación del vehículo dentro de la escena."
+      }
+    ],
+    "overall_note": "La foto tiene texto muy pequeño y con fuerte contraste/sombras; no se observan sobreimpresiones de archivo ni texto en márgenes.",
+    "cid": "184969",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\184969_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 4136,
+      "height": 3204
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 967,
+          "y": 3100,
+          "w": 161,
+          "h": 78
+        },
+        "text_snippet": "32",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Números manuscritos en el margen inferior blanco, fuera de la escena fotografiada; orientación frontal y apariencia de anotación posterior al revelado/escaneo."
+      },
+      {
+        "bbox": {
+          "x": 1508,
+          "y": 3092,
+          "w": 89,
+          "h": 81
+        },
+        "text_snippet": "3",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito aislado en el borde inferior, sobre el margen del soporte, sin relación perspectívica con la escena."
+      },
+      {
+        "bbox": {
+          "x": 1897,
+          "y": 3091,
+          "w": 172,
+          "h": 82
+        },
+        "text_snippet": "10",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito en el margen inferior del escaneo/foto impresa; claramente agregado después de la toma."
+      },
+      {
+        "bbox": {
+          "x": 2202,
+          "y": 3085,
+          "w": 82,
+          "h": 89
+        },
+        "text_snippet": "8",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito en la franja inferior blanca, fronto-parallel y propio de catalogación/anotación."
+      },
+      {
+        "bbox": {
+          "x": 2617,
+          "y": 3093,
+          "w": 87,
+          "h": 79
+        },
+        "text_snippet": "6",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito en margen inferior, no perteneciente a objetos de la escena urbana."
+      },
+      {
+        "bbox": {
+          "x": 3894,
+          "y": 3070,
+          "w": 121,
+          "h": 96
+        },
+        "text_snippet": "2",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito en la esquina inferior derecha del margen, típico de marca de archivo o numeración posterior."
+      },
+      {
+        "bbox": {
+          "x": 132,
+          "y": 2206,
+          "w": 557,
+          "h": 133
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Se percibe una inscripción pintada sobre la fachada del edificio de la izquierda; está integrada a la pared y sigue la perspectiva/iluminación de la escena, pero la lectura es muy borrosa."
+      }
+    ],
+    "overall_note": "La imagen está muy degradada y con bajo contraste; solo se distinguen con claridad números manuscritos en el margen inferior y una posible inscripción en fachada dentro de la escena, ilegible.",
+    "cid": "1703270",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1703270_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1600,
+      "height": 1199
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 748,
+          "y": 692,
+          "w": 127,
+          "h": 61
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Se ve un rótulo sobre la puerta del edificio, con perspectiva y ubicación coherentes con la fachada fotografiada. El texto está borroso pero parece parte del negocio/local en la escena."
+      },
+      {
+        "bbox": {
+          "x": 695,
+          "y": 776,
+          "w": 32,
+          "h": 83
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Pequeño cartel o aviso vertical adherido al muro junto a la entrada. Está integrado a la pared de la escena, pero el contenido no es legible."
+      },
+      {
+        "bbox": {
+          "x": 879,
+          "y": 753,
+          "w": 41,
+          "h": 97
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Otro posible aviso/cartel pegado en la pared a la derecha de la entrada. Por posición y perspectiva parece pertenecer al lugar fotografiado, aunque el texto no se distingue."
+      }
+    ],
+    "overall_note": "Foto histórica con contraste bajo, humo/polvo y fuerte borrosidad; sólo se detectan con cierta confianza un letrero principal sobre la puerta y dos avisos murales pequeños cercanos.",
+    "cid": "1637980",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1637980_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 3848,
+      "height": 5273
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 1450,
+          "y": 1580,
+          "w": 970,
+          "h": 180
+        },
+        "text_snippet": "J. M. KAUFMANN",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Letrero horizontal integrado en la fachada del edificio, con perspectiva y escala coherentes con la escena."
+      },
+      {
+        "bbox": {
+          "x": 1350,
+          "y": 2990,
+          "w": 1040,
+          "h": 130
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Franja de cartel sobre los locales de planta baja; claramente es rotulación comercial en la escena, pero el texto no se distingue con suficiente nitidez."
+      },
+      {
+        "bbox": {
+          "x": 2050,
+          "y": 2860,
+          "w": 520,
+          "h": 120
+        },
+        "text_snippet": "SATTNER",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Nombre comercial sobre el frente del local, alineado con la arquitectura y con perspectiva de escena."
+      },
+      {
+        "bbox": {
+          "x": 2890,
+          "y": 2560,
+          "w": 260,
+          "h": 520
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Dos carteles/afiches visibles en ventanas del edificio derecho; el texto está dentro de la escena y pegado a la fachada, pero no se puede leer."
+      },
+      {
+        "bbox": {
+          "x": 3120,
+          "y": 2140,
+          "w": 520,
+          "h": 170
+        },
+        "text_snippet": "M-CIE",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto parcial en marquesina/cartel del edificio derecho, con perspectiva oblicua acorde a la calle; sólo se ve fragmento."
+      },
+      {
+        "bbox": {
+          "x": 2360,
+          "y": 2310,
+          "w": 120,
+          "h": 360
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Posible rótulo vertical angosto fijado a la fachada; se perciben caracteres pero no son legibles."
+      },
+      {
+        "bbox": {
+          "x": 0,
+          "y": 1550,
+          "w": 220,
+          "h": 500
+        },
+        "text_snippet": "ND ...",
+        "classification": "uncertain",
+        "confidence": "low",
+        "reasoning": "Se ve un cartel recortado en el borde izquierdo con letras parciales; probablemente pertenece a la escena, pero está muy fragmentado y pegado al borde, así que no es seguro."
+      },
+      {
+        "bbox": {
+          "x": 930,
+          "y": 5030,
+          "w": 1750,
+          "h": 220
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Inscripción manuscrita blanca en el margen inferior del negativo/scan, superpuesta al área oscura clara sin perspectiva de escena; típico texto de archivo añadido al soporte fotográfico."
+      }
+    ],
+    "overall_note": "Foto histórica con neblina y bajo contraste; hay varios letreros de fachada parcialmente legibles y una anotación manuscrita en el borde inferior.",
+    "cid": "1407036",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1407036_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1015,
+      "height": 629
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 365,
+          "y": 247,
+          "w": 38,
+          "h": 96
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Placa vertical adherida al edificio, con perspectiva y sombreado consistentes con la escena; se perciben varias líneas o caracteres pero no son legibles."
+      },
+      {
+        "bbox": {
+          "x": 550,
+          "y": 286,
+          "w": 48,
+          "h": 38
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Pequeños carteles/papeles visibles detrás o sobre la ventana central, integrados en la arquitectura fotografiada; parecen números o letras pero no se distinguen con claridad."
+      }
+    ],
+    "overall_note": "Foto histórica en blanco y negro con resolución limitada; sólo se distinguen con cierta confianza una placa vertical y pequeños papeles/carteles en una ventana. No se observan textos claros en márgenes ni overlays de archivo.",
+    "cid": "1292606",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1292606_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1946,
+      "height": 1258
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 568,
+          "y": 519,
+          "w": 190,
+          "h": 64
+        },
+        "text_snippet": "ДИНАМО",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Large sign integrated into the pier entrance structure, with scene-consistent perspective and lighting; clearly part of the photographed location."
+      },
+      {
+        "bbox": {
+          "x": 788,
+          "y": 188,
+          "w": 115,
+          "h": 74
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Rectangular sign attached to the lamp post over the water, showing perspective and placement consistent with physical signage present in the scene, though text is too small to read reliably."
+      },
+      {
+        "bbox": {
+          "x": 1132,
+          "y": 466,
+          "w": 38,
+          "h": 16
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Small plaque/sign above the doorway of the pier building; appears attached to the structure within the scene, but text is too tiny to decipher."
+      }
+    ],
+    "overall_note": "Se detectan tres regiones con texto visible en la escena; no se observan captions, sellos ni overlays de archivo en los márgenes.",
+    "cid": "855349",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\855349_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1238,
+      "height": 1614
+    },
+    "regions": [],
+    "overall_note": "No se detecta texto legible ni regiones con caracteres discernibles en la escena o en los márgenes del escaneo. La cruz oscura en la pared izquierda parece un elemento arquitectónico/abertura, no texto.",
+    "cid": "405597",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\405597_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1210,
+      "height": 799
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 1010,
+          "y": 88,
+          "w": 142,
+          "h": 50
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "archive_overlay",
+        "confidence": "medium",
+        "reasoning": "Marca/estampado claro en la esquina superior derecha, sobre el papel de la foto, sin perspectiva de escena y con apariencia de sello o impresión añadida posteriormente."
+      }
+    ],
+    "overall_note": "Foto histórica grupal con un único texto detectable: un sello/inscripción tenue en la esquina superior derecha. No se observan otros letreros o textos legibles en la escena.",
+    "cid": "1248470",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1248470_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1348,
+      "height": 938
+    },
+    "regions": [],
+    "overall_note": "No se detectan regiones con texto visible o legible en la escena ni en los márgenes/soporte de la foto. Es una foto grupal histórica sin inscripciones, carteles ni overlays textuales aparentes.",
+    "cid": "589179",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\589179_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1584,
+      "height": 2408
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 0,
+          "y": 660,
+          "w": 1085,
+          "h": 255
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Franja de inscripción alrededor de la campana grande; el texto sigue la curvatura/perspectiva del objeto y está integrado en la superficie fotografiada, por lo que parece una inscripción real de la escena. Los caracteres son parcialmente legibles pero no transcribibles con confianza."
+      }
+    ],
+    "overall_note": "Solo se detecta una región con texto visible: una inscripción en relieve o pintada sobre la campana grande. No se observan captions, sellos ni otros overlays de archivo en los bordes.",
+    "cid": "2134340",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\2134340_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 873,
+      "height": 1373
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 326,
+          "y": 1346,
+          "w": 242,
+          "h": 20
+        },
+        "text_snippet": "MARTIN PLACE, SYDNEY. N.S.W",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Caption appears centered at the bottom margin, fronto-parallel to the scan rather than attached to any object in the street scene; consistent with printed archive caption added to the photograph paper/scan."
+      }
+    ],
+    "overall_note": "Only one clearly legible text region is visible: a bottom caption outside the photographed street scene. No other readable signage or vehicle text is discernible at this resolution.",
+    "cid": "1088306",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1088306_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1800,
+      "height": 2255
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 1540,
+          "y": 1900,
+          "w": 210,
+          "h": 95
+        },
+        "text_snippet": "SHORPY",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Marca de agua superpuesta en la esquina inferior derecha, fronto-parallel, brillo uniforme y sin integrarse con la perspectiva/iluminación de la escena."
+      }
+    ],
+    "overall_note": "Solo se detecta una marca de agua moderna en la esquina inferior derecha; no se observan otros textos legibles en edificios, calles o vehículos a esta resolución.",
+    "cid": "1056438",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1056438_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1572,
+      "height": 1060
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 1490,
+          "y": 79,
+          "w": 76,
+          "h": 257
+        },
+        "text_snippet": "M-НІА 50016 C. 9 БЕЛ 17",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Texto pintado sobre el vagón del tren, con perspectiva y ubicación coherentes con la escena fotografiada."
+      },
+      {
+        "bbox": {
+          "x": 979,
+          "y": 408,
+          "w": 72,
+          "h": 77
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Pequeña inscripción sobre el lateral del vagón, integrada en la superficie del coche y con perspectiva de escena; no se distingue con claridad."
+      }
+    ],
+    "overall_note": "Se detecta texto visible únicamente en inscripciones del vagón ferroviario; no se observan leyendas de archivo en márgenes.",
+    "cid": "1267028",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1267028_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1010,
+      "height": 711
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 875,
+          "y": 665,
+          "w": 108,
+          "h": 38
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "archive_overlay",
+        "confidence": "medium",
+        "reasoning": "Pequeño sello/inscripción en la esquina inferior derecha, superpuesto sobre el papel de la foto y no integrado con la perspectiva de la escena; parece marca impresa del fotógrafo/archivo."
+      }
+    ],
+    "overall_note": "Solo se detecta una pequeña marca textual/estampado en la esquina inferior derecha; no se observan otros textos legibles en la escena.",
+    "cid": "1626616",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1626616_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 3022,
+      "height": 1972
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 170,
+          "y": 1125,
+          "w": 325,
+          "h": 180
+        },
+        "text_snippet": "MO",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Large fuselage code painted on the aircraft body; clearly part of the photographed plane with matching perspective and lighting."
+      },
+      {
+        "bbox": {
+          "x": 129,
+          "y": 1132,
+          "w": 95,
+          "h": 90
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Small painted markings/insignia on the tail of the left aircraft; visible as text-like aircraft marking integrated into the plane surface, but not legible at this resolution."
+      },
+      {
+        "bbox": {
+          "x": 1292,
+          "y": 1005,
+          "w": 82,
+          "h": 86
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Possible aircraft code/number on the mid-ground plane fuselage; appears painted on the plane with scene perspective, but characters are too small to read confidently."
+      },
+      {
+        "bbox": {
+          "x": 1978,
+          "y": 1418,
+          "w": 124,
+          "h": 133
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "White aircraft fuselage marking near the RAF roundel on the foreground plane; clearly a painted aircraft code/insignia in the scene, though the exact character is unclear."
+      }
+    ],
+    "overall_note": "Se observan marcas y códigos pintados en varios aviones. No se detecta texto de archivo en bordes o márgenes; los demás círculos/roundels no se reportan como texto al no ser caracteres.",
+    "cid": "1683170",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1683170_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 661,
+      "height": 799
+    },
+    "regions": [],
+    "overall_note": "No se detectan regiones con texto legible o claramente presentes en la escena ni overlays de archivo en esta imagen; la foto muestra principalmente la fachada de un edificio sin carteles, placas o inscripciones distinguibles.",
+    "cid": "308540",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\308540_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1024,
+      "height": 672
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 198,
+          "y": 584,
+          "w": 221,
+          "h": 52
+        },
+        "text_snippet": "LIDA — Wilnaer Strasse / Лида — Виленская ул.",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Caption printed at the bottom margin of the postcard/scan, fronto-parallel to the image surface, not following scene perspective; typical post-production postcard/archive caption."
+      },
+      {
+        "bbox": {
+          "x": 553,
+          "y": 140,
+          "w": 62,
+          "h": 33
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Oval shop sign attached to the building facade, seen with scene perspective and integrated lighting; appears to be a real storefront sign present in the photographed street."
+      },
+      {
+        "bbox": {
+          "x": 557,
+          "y": 170,
+          "w": 70,
+          "h": 30
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Second horizontal storefront sign below the oval sign, aligned with the facade and perspective of the street scene; likely an in-scene business sign."
+      },
+      {
+        "bbox": {
+          "x": 673,
+          "y": 253,
+          "w": 31,
+          "h": 43
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Vertical hanging placard/banner by the shop entrance, attached to the facade and perspectivally consistent with the street scene, but text is too small to read."
+      },
+      {
+        "bbox": {
+          "x": 458,
+          "y": 168,
+          "w": 24,
+          "h": 28
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Small poster or notice affixed near the corner building entrance; appears on a wall within the photographed scene, though details are indistinct."
+      },
+      {
+        "bbox": {
+          "x": 669,
+          "y": 197,
+          "w": 21,
+          "h": 22
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Small rectangular sign/plate above the shopfront, positioned on the facade with scene-consistent perspective; text too tiny to decipher."
+      },
+      {
+        "bbox": {
+          "x": 257,
+          "y": 108,
+          "w": 25,
+          "h": 17
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Tiny storefront sign on the left-side row of buildings, embedded in the streetscape perspective; visible as text-bearing signage but unreadable at this resolution."
+      },
+      {
+        "bbox": {
+          "x": 228,
+          "y": 111,
+          "w": 20,
+          "h": 15
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Another small signboard along the left-side shops, aligned with building fronts and likely part of the original scene."
+      }
+    ],
+    "overall_note": "Historic street scene/postcard. One clear printed caption at the bottom margin plus several small storefront signs in the photographed scene; many are too small to transcribe reliably.",
+    "cid": "636474",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\636474_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 3764,
+      "height": 2526
+    },
+    "regions": [],
+    "overall_note": "No se detectan regiones con texto legible ni claramente presentes en la escena o como sobreimpresiones de archivo en esta foto histórica. La imagen muestra arquitectura, vehículos y monumentos, pero no se observan carteles, inscripciones o marcas textuales distinguibles con confianza.",
+    "cid": "960046",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\960046_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 2542,
+      "height": 1581
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 166,
+          "y": 0,
+          "w": 348,
+          "h": 124
+        },
+        "text_snippet": "JENSEN / SAGFØRER",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Shop/professional sign mounted on the corner facade, with clear perspective consistent with the building."
+      },
+      {
+        "bbox": {
+          "x": 0,
+          "y": 675,
+          "w": 828,
+          "h": 159
+        },
+        "text_snippet": "Lunau / Jern- ...",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Large storefront fascia text painted/applied on the shopfront awning/facade, aligned with the scene perspective and lighting."
+      },
+      {
+        "bbox": {
+          "x": 150,
+          "y": 1080,
+          "w": 183,
+          "h": 127
+        },
+        "text_snippet": "Lunau / 27",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Text visible on the recessed doorway in the photographed shop entrance; perspective and placement indicate it belongs to the scene."
+      },
+      {
+        "bbox": {
+          "x": 789,
+          "y": 775,
+          "w": 176,
+          "h": 112
+        },
+        "text_snippet": "27",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Street number sign attached to the corner building, naturally integrated into facade perspective."
+      },
+      {
+        "bbox": {
+          "x": 960,
+          "y": 802,
+          "w": 182,
+          "h": 77
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Small shop sign on the next storefront awning/fascia; appears to be real signage in the street scene but text is too degraded to read confidently."
+      },
+      {
+        "bbox": {
+          "x": 2243,
+          "y": 399,
+          "w": 163,
+          "h": 101
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Projected hanging sign on the right-side building, seen in perspective and physically attached to facade; text unreadable."
+      },
+      {
+        "bbox": {
+          "x": 2298,
+          "y": 1510,
+          "w": 242,
+          "h": 68
+        },
+        "text_snippet": "Odense Vestergade",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Caption-like text placed along the bottom-right border of the image, fronto-parallel and visually separate from scene objects, typical added archival/location caption."
+      }
+    ],
+    "overall_note": "Se detectan varios letreros comerciales en la escena y una leyenda agregada en el borde inferior derecho; algunos textos pequeños del lado derecho/centro son ilegibles por resolución y grano.",
+    "cid": "442403",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\442403_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1233,
+      "height": 1599
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 119,
+          "y": 1512,
+          "w": 201,
+          "h": 73
+        },
+        "text_snippet": "фото",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto manuscrito/impreso sobre el borde inferior fuera de la escena principal, sin perspectiva de objeto fotografiado; parece añadido al soporte/escaneo."
+      },
+      {
+        "bbox": {
+          "x": 421,
+          "y": 1494,
+          "w": 430,
+          "h": 85
+        },
+        "text_snippet": "Сидорова",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Apellido manuscrito en la franja inferior del papel, fronto-parallel y separado de la escena arquitectónica; corresponde a anotación posterior en la copia/escaneo."
+      }
+    ],
+    "overall_note": "La foto muestra una iglesia y paisaje sin letreros visibles en la escena. Solo se detecta texto añadido en el margen inferior; el resto presenta desgaste/ruido pero no caracteres legibles.",
+    "cid": "1560610",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1560610_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 800,
+      "height": 527
+    },
+    "regions": [],
+    "overall_note": "No se detectan regiones con texto legible ni claramente visibles en la escena o como sobreimpresiones de archivo; la imagen muestra un paisaje urbano distante y ruidoso sin inscripciones discernibles.",
+    "cid": "888377",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\888377_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1374,
+      "height": 878
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 455,
+          "y": 842,
+          "w": 456,
+          "h": 34
+        },
+        "text_snippet": "Collyer Quay Singapore.",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Caption centered along the bottom margin, fronto-parallel printed text on the scan/paper rather than part of the photographed street scene."
+      }
+    ],
+    "overall_note": "Solo se detecta un caption impreso en el margen inferior; no se observan letreros legibles dentro de la escena.",
+    "cid": "2131854",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\2131854_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 3674,
+      "height": 2427
+    },
+    "regions": [],
+    "overall_note": "No se detectan regiones con texto legible ni claramente textuales en la escena o en márgenes/overlay del archivo. La imagen muestra solo la fachada del edificio y personas; no hay cartelas, sellos, captions ni letreros discernibles.",
+    "cid": "1637544",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1637544_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 895,
+      "height": 550
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 274,
+          "y": 21,
+          "w": 503,
+          "h": 23
+        },
+        "text_snippet": "View from Notre Dame, looking down the St. Lawrence, Montreal",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Título impreso horizontal en el margen superior, sin perspectiva de la escena y con color/contraste uniforme típico de caption añadido al soporte."
+      },
+      {
+        "bbox": {
+          "x": 785,
+          "y": 526,
+          "w": 72,
+          "h": 18
+        },
+        "text_snippet": "106/120 (ilegible)",
+        "classification": "archive_overlay",
+        "confidence": "medium",
+        "reasoning": "Pequeño número/marca en la esquina inferior derecha sobre el borde de la imagen, aspecto de numeración o sello de archivo/postal añadido, no integrado en ningún objeto de la escena."
+      }
+    ],
+    "overall_note": "Solo se detecta texto añadido al soporte/scan: un caption superior y una pequeña numeración/marca en la esquina inferior derecha. No se observan con suficiente claridad letreros legibles dentro de la escena urbana.",
+    "cid": "2260467",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\2260467_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 2239,
+      "height": 1299
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 0,
+          "y": 646,
+          "w": 166,
+          "h": 152
+        },
+        "text_snippet": "(cirílico, ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Letrero comercial sobre la vidriera en el extremo izquierdo, integrado a la fachada y con perspectiva consistente con la escena."
+      },
+      {
+        "bbox": {
+          "x": 177,
+          "y": 520,
+          "w": 111,
+          "h": 111
+        },
+        "text_snippet": "БОИ",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto en panel oscuro del balcón/tienda, con perspectiva y ubicación propias del edificio fotografiado."
+      },
+      {
+        "bbox": {
+          "x": 161,
+          "y": 687,
+          "w": 392,
+          "h": 129
+        },
+        "text_snippet": "(cirílico, parcialmente ilegible)",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Gran marquesina de tienda sobre la planta baja; texto pintado directamente en el frente comercial y en perspectiva."
+      },
+      {
+        "bbox": {
+          "x": 524,
+          "y": 679,
+          "w": 279,
+          "h": 86
+        },
+        "text_snippet": "(cirílico, parcialmente ilegible)",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Letrero horizontal oscuro en el comercio central-izquierdo; forma parte de la fachada y sigue la perspectiva de la calle."
+      },
+      {
+        "bbox": {
+          "x": 487,
+          "y": 961,
+          "w": 149,
+          "h": 91
+        },
+        "text_snippet": "ДЕПО / ТКАНИ",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Cartel vertical/blanco en la entrada del local, claramente perteneciente al comercio de la escena."
+      },
+      {
+        "bbox": {
+          "x": 1035,
+          "y": 780,
+          "w": 399,
+          "h": 91
+        },
+        "text_snippet": "(cirílico, parcialmente ilegible)",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Marquesina comercial larga sobre locales en el centro de la imagen, con texto pintado alineado a la arquitectura."
+      },
+      {
+        "bbox": {
+          "x": 1377,
+          "y": 860,
+          "w": 154,
+          "h": 53
+        },
+        "text_snippet": "(cirílico, ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Pequeño letrero sobre un local en la zona central-derecha, visible en fachada con perspectiva consistente."
+      },
+      {
+        "bbox": {
+          "x": 1545,
+          "y": 861,
+          "w": 157,
+          "h": 54
+        },
+        "text_snippet": "(cirílico, ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Otro letrero de comercio sobre la fila de tiendas, integrado a la escena urbana."
+      },
+      {
+        "bbox": {
+          "x": 1830,
+          "y": 806,
+          "w": 92,
+          "h": 48
+        },
+        "text_snippet": "(cirílico, ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Pequeño cartel lejano en la parte derecha de la calle; parece letrero en fachada pero el detalle es muy reducido."
+      }
+    ],
+    "overall_note": "No se observan captions ni sellos de archivo; el texto detectable corresponde a cartelería comercial en la escena, mayormente en cirílico y en baja definición.",
+    "cid": "588185",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\588185_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1173,
+      "height": 806
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 282,
+          "y": 456,
+          "w": 78,
+          "h": 78
+        },
+        "text_snippet": "P 3831 / 6873",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto visible en la matrícula del auto delantero izquierdo; está integrado al vehículo y con perspectiva/iluminación coherentes con la escena."
+      },
+      {
+        "bbox": {
+          "x": 826,
+          "y": 345,
+          "w": 57,
+          "h": 121
+        },
+        "text_snippet": "N / NO DRIVE / ONE WAY",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Señal vertical en la calle con texto impreso presente en el momento de la captura; está en perspectiva dentro de la escena urbana."
+      },
+      {
+        "bbox": {
+          "x": 1064,
+          "y": 456,
+          "w": 90,
+          "h": 39
+        },
+        "text_snippet": "A-01776A",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Matrícula del auto de la derecha, adherida al vehículo y claramente parte de la realidad fotografiada."
+      },
+      {
+        "bbox": {
+          "x": 1040,
+          "y": 317,
+          "w": 43,
+          "h": 46
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "uncertain",
+        "confidence": "low",
+        "reasoning": "Pequeña placa o cartel rectangular en el edificio/fondo derecho; se perciben caracteres pero no son legibles y no es totalmente seguro su naturaleza exacta por el tamaño y desenfoque."
+      }
+    ],
+    "overall_note": "Foto histórica con poco texto visible; las regiones detectables corresponden principalmente a matrículas y una señal vial.",
+    "cid": "1852672",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1852672_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1143,
+      "height": 799
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 974,
+          "y": 27,
+          "w": 136,
+          "h": 79
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Marca de agua/logotipo en la esquina superior derecha, fronto-parallel y superpuesto al escaneo, no integrado con la perspectiva de la escena."
+      },
+      {
+        "bbox": {
+          "x": 244,
+          "y": 773,
+          "w": 678,
+          "h": 24
+        },
+        "text_snippet": "№ 8833 Тифлис. Георгиевская церковь и Александровский садъ. 215.",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Caption impresa al pie inferior sobre el borde de la copia/escaneo, alineada horizontalmente y separada de la geometría de la escena fotografiada."
+      },
+      {
+        "bbox": {
+          "x": 485,
+          "y": 666,
+          "w": 72,
+          "h": 17
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Franja de inscripción sobre la fachada/muro en la parte baja central; sigue la perspectiva del edificio y parece pintada o colocada en el objeto real fotografiado."
+      }
+    ],
+    "overall_note": "Se detectan un watermark superior derecho, una leyenda de archivo en el borde inferior y una pequeña inscripción en perspectiva sobre el muro/techo del conjunto arquitectónico.",
+    "cid": "1025790",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1025790_clean_v1.jpg"
+  }
+]

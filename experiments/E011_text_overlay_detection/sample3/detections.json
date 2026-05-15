@@ -1,0 +1,93 @@
+[
+  {
+    "image_size": {
+      "width": 814,
+      "height": 499
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 154,
+          "y": 123,
+          "w": 107,
+          "h": 106
+        },
+        "text_snippet": "Stander CIGARETTES / EMULSION SCOTT",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Gran cartel publicitario integrado a la torre/andamio dentro de la escena, con perspectiva y escala consistentes con la arquitectura fotografiada."
+      },
+      {
+        "bbox": {
+          "x": 165,
+          "y": 270,
+          "w": 17,
+          "h": 86
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Franja vertical con varios caracteres en un poste dentro de la plaza; está en perspectiva y forma parte de un objeto urbano de la escena, pero no se puede leer con claridad."
+      },
+      {
+        "bbox": {
+          "x": 402,
+          "y": 332,
+          "w": 38,
+          "h": 39
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Inscripción o emblema circular en el pedestal del monumento, físicamente adherido al monumento y coherente con la iluminación y perspectiva de la escena."
+      },
+      {
+        "bbox": {
+          "x": 295,
+          "y": 466,
+          "w": 438,
+          "h": 19
+        },
+        "text_snippet": "RIO DE JANEIRO (Brésil). - Place 15 Novembre, Statue de Osorio Povo.",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Caption impresa horizontal al pie de la foto, fuera de la escena principal, con tipografía uniforme y sin perspectiva; típico agregado editorial/archivo."
+      },
+      {
+        "bbox": {
+          "x": 728,
+          "y": 481,
+          "w": 67,
+          "h": 13
+        },
+        "text_snippet": "Cliché J. L.",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Crédito impreso pequeño en el margen inferior derecho, alineado al borde y claramente añadido al soporte/edición de la postal o escaneo."
+      }
+    ],
+    "overall_note": "La foto contiene un gran cartel publicitario en escena, al menos una pequeña zona de texto urbano/inscripción difícil de leer, y un pie de foto impreso en el margen inferior propio del soporte reproducido.",
+    "cid": "1996844",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1996844_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 996,
+      "height": 563
+    },
+    "regions": [],
+    "overall_note": "No se detectan regiones con texto legible ni claramente presentes en la escena o como sobreimpresiones de archivo en esta foto histórica.",
+    "cid": "1445489",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1445489_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 2692,
+      "height": 1939
+    },
+    "regions": [],
+    "overall_note": "Foto de interior de biblioteca/sala de lectura. No se detectan regiones con texto legible ni parcialmente legible en la escena o como sobreimpresión de archivo; los lomos de libros son demasiado pequeños/borrosos para distinguir caracteres individuales con confianza.",
+    "cid": "2094983",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\2094983_clean_v1.jpg"
+  }
+]

@@ -1,0 +1,209 @@
+{
+  "seed": 42,
+  "year_range": [
+    1890,
+    1949
+  ],
+  "k_per_cell": 5,
+  "geohash_precision": 5,
+  "total_eligibles": 596564,
+  "final_sample_size": 180,
+  "pais_buckets": [
+    "Russia-EU",
+    "Russia-Asia",
+    "Ex-URSS",
+    "Europa-no-URSS",
+    "Norteamerica",
+    "Resto"
+  ],
+  "decade_buckets": [
+    "1890s",
+    "1900s",
+    "1910s",
+    "1920s",
+    "1930s",
+    "1940s"
+  ],
+  "cell_distribution": {
+    "Russia-EU x 1890s": {
+      "available_raw": 19302,
+      "available_unique_gh5": 1674,
+      "sampled": 5
+    },
+    "Russia-EU x 1900s": {
+      "available_raw": 58084,
+      "available_unique_gh5": 3750,
+      "sampled": 5
+    },
+    "Russia-EU x 1910s": {
+      "available_raw": 42818,
+      "available_unique_gh5": 2981,
+      "sampled": 5
+    },
+    "Russia-EU x 1920s": {
+      "available_raw": 34335,
+      "available_unique_gh5": 2337,
+      "sampled": 5
+    },
+    "Russia-EU x 1930s": {
+      "available_raw": 56552,
+      "available_unique_gh5": 2877,
+      "sampled": 5
+    },
+    "Russia-EU x 1940s": {
+      "available_raw": 59435,
+      "available_unique_gh5": 3730,
+      "sampled": 5
+    },
+    "Russia-Asia x 1890s": {
+      "available_raw": 3032,
+      "available_unique_gh5": 395,
+      "sampled": 5
+    },
+    "Russia-Asia x 1900s": {
+      "available_raw": 7182,
+      "available_unique_gh5": 637,
+      "sampled": 5
+    },
+    "Russia-Asia x 1910s": {
+      "available_raw": 11795,
+      "available_unique_gh5": 701,
+      "sampled": 5
+    },
+    "Russia-Asia x 1920s": {
+      "available_raw": 6873,
+      "available_unique_gh5": 565,
+      "sampled": 5
+    },
+    "Russia-Asia x 1930s": {
+      "available_raw": 7878,
+      "available_unique_gh5": 736,
+      "sampled": 5
+    },
+    "Russia-Asia x 1940s": {
+      "available_raw": 3793,
+      "available_unique_gh5": 482,
+      "sampled": 5
+    },
+    "Ex-URSS x 1890s": {
+      "available_raw": 5301,
+      "available_unique_gh5": 754,
+      "sampled": 5
+    },
+    "Ex-URSS x 1900s": {
+      "available_raw": 11292,
+      "available_unique_gh5": 1331,
+      "sampled": 5
+    },
+    "Ex-URSS x 1910s": {
+      "available_raw": 11705,
+      "available_unique_gh5": 1420,
+      "sampled": 5
+    },
+    "Ex-URSS x 1920s": {
+      "available_raw": 10224,
+      "available_unique_gh5": 1023,
+      "sampled": 5
+    },
+    "Ex-URSS x 1930s": {
+      "available_raw": 15118,
+      "available_unique_gh5": 1242,
+      "sampled": 5
+    },
+    "Ex-URSS x 1940s": {
+      "available_raw": 14152,
+      "available_unique_gh5": 1235,
+      "sampled": 5
+    },
+    "Europa-no-URSS x 1890s": {
+      "available_raw": 18615,
+      "available_unique_gh5": 2139,
+      "sampled": 5
+    },
+    "Europa-no-URSS x 1900s": {
+      "available_raw": 36965,
+      "available_unique_gh5": 2861,
+      "sampled": 5
+    },
+    "Europa-no-URSS x 1910s": {
+      "available_raw": 21976,
+      "available_unique_gh5": 2396,
+      "sampled": 5
+    },
+    "Europa-no-URSS x 1920s": {
+      "available_raw": 19987,
+      "available_unique_gh5": 2345,
+      "sampled": 5
+    },
+    "Europa-no-URSS x 1930s": {
+      "available_raw": 29941,
+      "available_unique_gh5": 3137,
+      "sampled": 5
+    },
+    "Europa-no-URSS x 1940s": {
+      "available_raw": 22922,
+      "available_unique_gh5": 2966,
+      "sampled": 5
+    },
+    "Norteamerica x 1890s": {
+      "available_raw": 2324,
+      "available_unique_gh5": 247,
+      "sampled": 5
+    },
+    "Norteamerica x 1900s": {
+      "available_raw": 7214,
+      "available_unique_gh5": 463,
+      "sampled": 5
+    },
+    "Norteamerica x 1910s": {
+      "available_raw": 7050,
+      "available_unique_gh5": 394,
+      "sampled": 5
+    },
+    "Norteamerica x 1920s": {
+      "available_raw": 13998,
+      "available_unique_gh5": 388,
+      "sampled": 5
+    },
+    "Norteamerica x 1930s": {
+      "available_raw": 12846,
+      "available_unique_gh5": 548,
+      "sampled": 5
+    },
+    "Norteamerica x 1940s": {
+      "available_raw": 6592,
+      "available_unique_gh5": 646,
+      "sampled": 5
+    },
+    "Resto x 1890s": {
+      "available_raw": 1101,
+      "available_unique_gh5": 262,
+      "sampled": 5
+    },
+    "Resto x 1900s": {
+      "available_raw": 2589,
+      "available_unique_gh5": 420,
+      "sampled": 5
+    },
+    "Resto x 1910s": {
+      "available_raw": 2199,
+      "available_unique_gh5": 334,
+      "sampled": 5
+    },
+    "Resto x 1920s": {
+      "available_raw": 2632,
+      "available_unique_gh5": 368,
+      "sampled": 5
+    },
+    "Resto x 1930s": {
+      "available_raw": 5046,
+      "available_unique_gh5": 443,
+      "sampled": 5
+    },
+    "Resto x 1940s": {
+      "available_raw": 3696,
+      "available_unique_gh5": 496,
+      "sampled": 5
+    }
+  }
+}

@@ -1,0 +1,1671 @@
+[
+  {
+    "image_size": {
+      "width": 4223,
+      "height": 3206
+    },
+    "regions": [],
+    "overall_note": "Fotografía aérea histórica en blanco y negro tomada a gran altitud, mostrando un río, un puente/carretera, muelles y zonas urbanas/industriales. No se detecta texto legible en ninguna parte de la imagen: ni en la escena (la altitud impide leer carteles o señalización en tierra), ni en los márgenes o bordes (no hay captions, sellos de archivo, números de catálogo ni watermarks visibles).",
+    "cid": "725135",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\725135_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 549,
+      "height": 870
+    },
+    "regions": [],
+    "overall_note": "Foto histórica de invierno mostrando una escalinata monumental con columnas y arquitectura clásica al fondo, todo cubierto de nieve. No se detecta texto legible en ninguna parte de la imagen: ni en la escena (los edificios del fondo están demasiado distantes y/o nevados para distinguir carteles), ni en los márgenes del papel/scan (no hay captions, sellos de archivo, números de catálogo ni marcas de agua visibles).",
+    "cid": "1336113",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1336113_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 800,
+      "height": 1091
+    },
+    "overall_note": "Fotografía histórica en blanco y negro de un edificio en ruinas, probablemente en Georgia. Presenta un watermark de archivo digital en la esquina superior derecha y texto pintado/escrito sobre los muros del edificio en ruinas.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 570,
+          "y": 50,
+          "w": 200,
+          "h": 80
+        },
+        "text_snippet": "ეროვნული ბიბლიოთეკა",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Watermark digital en escritura georgiana (ეროვნული ბიბლიოთეკა = Biblioteca Nacional). Posición en esquina superior derecha, semitransparente, sin perspectiva, tipografía uniforme. Claramente agregado digitalmente por el archivo."
+      },
+      {
+        "bbox": {
+          "x": 290,
+          "y": 430,
+          "w": 170,
+          "h": 50
+        },
+        "text_snippet": "NИTS... (parcial, ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto pintado sobre la pared del edificio en ruinas, visible en la superficie del muro. Sigue la perspectiva y la iluminación de la escena. Parece ser texto en cirílico pintado directamente sobre el muro, posiblemente un letrero o graffiti de época."
+      },
+      {
+        "bbox": {
+          "x": 440,
+          "y": 450,
+          "w": 130,
+          "h": 70
+        },
+        "text_snippet": "МНА... МНА... / МКАЦ",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto en cirílico pintado con pintura blanca/clara sobre la pared del edificio en ruinas. Tiene la perspectiva acorde a la superficie del muro y la misma iluminación que el resto de la escena. Parece ser inscripción o señalización pintada en la pared."
+      },
+      {
+        "bbox": {
+          "x": 300,
+          "y": 400,
+          "w": 90,
+          "h": 35
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Se perciben trazos de texto o inscripción sobre la pared del edificio, a la izquierda de los otros textos pintados, pero están muy deteriorados y apenas visibles. Están en la misma superficie del muro, con la misma perspectiva."
+      }
+    ],
+    "cid": "1053879",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1053879_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 539,
+      "height": 799
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 95,
+          "y": 330,
+          "w": 120,
+          "h": 22
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Cartel de destino/ruta en la parte superior frontal del trolebús. Tiene perspectiva coherente con el vehículo. El texto es demasiado pequeño y borroso para leer con claridad, pero se distingue una franja con texto."
+      },
+      {
+        "bbox": {
+          "x": 108,
+          "y": 315,
+          "w": 30,
+          "h": 18
+        },
+        "text_snippet": "4",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Número de ruta del trolebús visible en el indicador frontal superior. Está integrado en la escena con perspectiva consistente con el vehículo."
+      },
+      {
+        "bbox": {
+          "x": 88,
+          "y": 530,
+          "w": 18,
+          "h": 20
+        },
+        "text_snippet": "3",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Número claramente visible en la parte inferior frontal/lateral del trolebús. Tiene perspectiva acorde al vehículo y está pintado sobre la carrocería."
+      },
+      {
+        "bbox": {
+          "x": 62,
+          "y": 548,
+          "w": 80,
+          "h": 16
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Matrícula o placa en la parte frontal baja del trolebús. Se ve una placa con caracteres pero están demasiado pequeños y oscuros para transcribir con certeza."
+      }
+    ],
+    "overall_note": "Foto histórica en blanco y negro de una escena urbana con un trolebús frente a un edificio monumental (posiblemente un teatro u ópera). El texto visible se concentra en el trolebús (número de ruta, destino, matrícula). No se detectan overlays de archivo ni texto en márgenes. La calidad y resolución limitan la legibilidad de varios textos pequeños.",
+    "cid": "184969",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\184969_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 4136,
+      "height": 3204
+    },
+    "overall_note": "Fotografía histórica en blanco y negro de una ciudad centroeuropea (probablemente suiza o alemana) con un río y puente. La imagen tiene manchas y marcas propias de un negativo/scan antiguo. Hay texto en escena sobre fachadas de edificios y números manuscritos en el margen inferior, típicos de catalogación de archivo.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 280,
+          "y": 1700,
+          "w": 420,
+          "h": 80
+        },
+        "text_snippet": "Städtisches Lebensmittel...",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto pintado sobre la fachada de un edificio a orillas del río. Tiene perspectiva coherente con el plano del muro y lighting consistente con la escena. Parece ser un cartel comercial o institucional (posiblemente 'Städtisches Lebensmittelamt' o similar)."
+      },
+      {
+        "bbox": {
+          "x": 100,
+          "y": 1780,
+          "w": 200,
+          "h": 60
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto adicional en la parte inferior de la misma fachada del edificio de la izquierda, debajo del letrero principal. Apenas legible por la distancia y el contraste pobre, pero se perciben caracteres sobre el muro."
+      },
+      {
+        "bbox": {
+          "x": 830,
+          "y": 1680,
+          "w": 380,
+          "h": 70
+        },
+        "text_snippet": "...Geschäfts-Nachric... / ...Gratis...",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto pintado o en cartel sobre la fachada de otro edificio a la izquierda del puente. Tiene perspectiva acorde al muro del edificio. Parece ser publicidad de un periódico o negocio (Geschäfts-Nachrichten)."
+      },
+      {
+        "bbox": {
+          "x": 1180,
+          "y": 1680,
+          "w": 280,
+          "h": 60
+        },
+        "text_snippet": "...Photographi...",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Texto parcialmente visible sobre otra fachada cercana al puente. Parece indicar un estudio fotográfico u otro negocio. Perspectiva coherente con el edificio."
+      },
+      {
+        "bbox": {
+          "x": 580,
+          "y": 3050,
+          "w": 130,
+          "h": 90
+        },
+        "text_snippet": "32",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito en el margen inferior blanco de la foto, fuera del área de la imagen. Fronto-parallel, sin perspectiva. Claramente una anotación de archivo/catálogo."
+      },
+      {
+        "bbox": {
+          "x": 1050,
+          "y": 3050,
+          "w": 70,
+          "h": 90
+        },
+        "text_snippet": "3",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito en el margen inferior, misma línea que los demás números de catalogación. Fronto-parallel, fuera del área de la escena."
+      },
+      {
+        "bbox": {
+          "x": 1450,
+          "y": 3050,
+          "w": 100,
+          "h": 90
+        },
+        "text_snippet": "10",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito en el margen inferior blanco. Anotación de archivo, fronto-parallel."
+      },
+      {
+        "bbox": {
+          "x": 1750,
+          "y": 3050,
+          "w": 70,
+          "h": 90
+        },
+        "text_snippet": "8",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito en el margen inferior blanco. Parte de la serie de números de catalogación de archivo."
+      },
+      {
+        "bbox": {
+          "x": 2100,
+          "y": 3050,
+          "w": 70,
+          "h": 90
+        },
+        "text_snippet": "6",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito en el margen inferior blanco, fronto-parallel, consistente con anotaciones de archivo."
+      },
+      {
+        "bbox": {
+          "x": 3200,
+          "y": 3050,
+          "w": 70,
+          "h": 90
+        },
+        "text_snippet": "2",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número manuscrito aislado en el margen inferior derecho. Mismo estilo de escritura que los demás números, claramente anotación de archivo."
+      }
+    ],
+    "cid": "1703270",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1703270_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1600,
+      "height": 1199
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 690,
+          "y": 555,
+          "w": 370,
+          "h": 35
+        },
+        "text_snippet": "(ilegible) ...МАГАЗИНЪ... (parcial)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Letrero horizontal sobre la fachada de un comercio, con perspectiva acorde al edificio. Parece texto en cirílico, posiblemente un nombre de tienda. La iluminación y perspectiva son consistentes con la escena. Parcialmente oscurecido por polvo/humo y baja resolución."
+      },
+      {
+        "bbox": {
+          "x": 830,
+          "y": 690,
+          "w": 50,
+          "h": 75
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Pequeño cartel o aviso pegado en la pared junto a la puerta de la tienda. Tiene la perspectiva del edificio, parcialmente oculto por el polvo/humo de la calle. No se puede leer el contenido."
+      },
+      {
+        "bbox": {
+          "x": 960,
+          "y": 680,
+          "w": 45,
+          "h": 70
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Otro aviso o cartel pegado en la pared del edificio entre las puertas/ventanas del local. Perspectiva consistente con la fachada. Muy difuso por el polvo y la calidad de la imagen."
+      },
+      {
+        "bbox": {
+          "x": 1300,
+          "y": 665,
+          "w": 55,
+          "h": 50
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "uncertain",
+        "confidence": "low",
+        "reasoning": "Zona rectangular clara en la fachada del edificio a la derecha, podría ser un pequeño cartel o placa. No se distingue si es texto o simplemente un parche/mancha en la pared. Parcialmente cortado por el borde."
+      }
+    ],
+    "overall_note": "Foto histórica en blanco y negro, probablemente de Europa del Este (arquitectura y posible texto cirílico). La escena tiene mucho polvo/humo que oscurece la parte inferior. El texto principal visible es un letrero comercial sobre la fachada del edificio central, pero la resolución y el polvo dificultan la lectura. No se detecta texto de tipo archive_overlay (sin captions, sellos ni marcas de agua en márgenes).",
+    "cid": "1637980",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1637980_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 3848,
+      "height": 5273
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 0,
+          "y": 530,
+          "w": 230,
+          "h": 450
+        },
+        "text_snippet": "ND ...elC",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto parcial en un cartel de tienda en el borde izquierdo del edificio, cortado por el encuadre. Tiene perspectiva consistente con la escena y está montado sobre la fachada."
+      },
+      {
+        "bbox": {
+          "x": 920,
+          "y": 1080,
+          "w": 900,
+          "h": 120
+        },
+        "text_snippet": "J. M. KAUFMANN",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Letrero comercial sobre la fachada del edificio central, con perspectiva acorde a la arquitectura. Tipografía de época, iluminación consistente con la escena."
+      },
+      {
+        "bbox": {
+          "x": 820,
+          "y": 2070,
+          "w": 680,
+          "h": 90
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Cartel de tienda en la planta baja del edificio central, parcialmente oscurecido. Está integrado en la fachada con perspectiva correcta."
+      },
+      {
+        "bbox": {
+          "x": 2280,
+          "y": 2000,
+          "w": 520,
+          "h": 100
+        },
+        "text_snippet": "LEITNER",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Letrero comercial sobre la vidriera de una tienda en planta baja del edificio de la derecha. Perspectiva y escala coherentes con la escena."
+      },
+      {
+        "bbox": {
+          "x": 3150,
+          "y": 1180,
+          "w": 500,
+          "h": 100
+        },
+        "text_snippet": "D M. CIE...",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Cartel parcial en el edificio del extremo derecho, cortado por el borde de la imagen. Perspectiva consistente con la fachada."
+      },
+      {
+        "bbox": {
+          "x": 2680,
+          "y": 1800,
+          "w": 180,
+          "h": 350
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Pequeño cartel o afiche vertical cerca del farol, en la zona de las tiendas. Difícil de leer por la distancia y el contraste."
+      },
+      {
+        "bbox": {
+          "x": 2900,
+          "y": 2020,
+          "w": 750,
+          "h": 280
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Textos en las vidrieras de las tiendas de la derecha, múltiples líneas parcialmente visibles. Integrados en la escena pero ilegibles por resolución y contraste."
+      },
+      {
+        "bbox": {
+          "x": 480,
+          "y": 4850,
+          "w": 2400,
+          "h": 400
+        },
+        "text_snippet": "Fleischmarkt",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto manuscrito en cursiva en el borde inferior de la foto, sin perspectiva (fronto-parallel). Es una anotación posterior indicando el nombre del lugar (Fleischmarkt, una calle de Viena). Típico caption de archivo escrito sobre el margen de la fotografía."
+      }
+    ],
+    "overall_note": "Fotografía histórica de una calle de Viena (probablemente Fleischmarkt), circa finales del siglo XIX o principios del XX. Se observan varios letreros comerciales en las fachadas de los edificios y una anotación manuscrita al pie identificando la ubicación. La calidad general es aceptable pero algunos textos en tiendas son ilegibles por distancia, sombras y contraste.",
+    "cid": "1407036",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1407036_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1015,
+      "height": 629
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 448,
+          "y": 265,
+          "w": 40,
+          "h": 55
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Hay lo que parece ser un aviso o cartel pequeño pegado en la pared junto a la puerta de entrada del edificio principal. Está en perspectiva con la fachada y tiene iluminación coherente con la escena, lo que indica que estaba presente al momento de la foto. Sin embargo, el texto es demasiado pequeño y borroso para transcribir."
+      },
+      {
+        "bbox": {
+          "x": 480,
+          "y": 265,
+          "w": 35,
+          "h": 55
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Segundo aviso o documento pegado junto a la puerta del edificio, al lado del anterior. Comparte la misma perspectiva y condiciones de luz de la fachada. El contenido es ilegible por la resolución y distancia."
+      },
+      {
+        "bbox": {
+          "x": 168,
+          "y": 198,
+          "w": 55,
+          "h": 22
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Pequeña placa o cartel en la fachada de la casa más antigua a la izquierda, debajo de la ventana. Está integrada en la perspectiva del edificio y la iluminación es consistente con la escena. El texto no se puede leer debido al tamaño reducido y la calidad de la imagen."
+      }
+    ],
+    "overall_note": "Fotografía histórica en blanco y negro de una multitud de hombres congregados frente a un edificio público (posiblemente un ayuntamiento o similar) con banderas. La imagen tiene grano considerable y la resolución no permite leer los textos presentes en la escena. Se detectan al menos tres zonas con posible texto (avisos en la fachada y una placa en el edificio lateral), pero ninguna es legible. No se observan overlays de archivo, captions, sellos ni marcas de agua.",
+    "cid": "1292606",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1292606_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1946,
+      "height": 1258
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 270,
+          "y": 440,
+          "w": 370,
+          "h": 70
+        },
+        "text_snippet": "ДИНАМО",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Letras grandes tridimensionales montadas como cartel/señal en la zona del muelle. Tienen perspectiva coherente con la escena (ligeramente anguladas, consistentes con el punto de vista elevado). Es un letrero típico soviético de club deportivo 'Dinamo', integrado en el paisaje urbano."
+      },
+      {
+        "bbox": {
+          "x": 590,
+          "y": 390,
+          "w": 220,
+          "h": 130
+        },
+        "text_snippet": "ГОСТРУДСБЕРКАССА АБХАЗИИ ... (líneas inferiores ilegibles)",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Cartel blanco rectangular montado en un poste/estructura cerca de la entrada del muelle. Tiene perspectiva acorde a la escena. La primera línea parece leer 'ГОСТРУДСБЕРКАССА' (Caja de ahorro estatal) y la segunda 'АБХАЗИИ' (de Abjasia). Las líneas inferiores son demasiado pequeñas para leer. Es un letrero institucional soviético dentro de la escena fotografiada."
+      },
+      {
+        "bbox": {
+          "x": 925,
+          "y": 470,
+          "w": 55,
+          "h": 30
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Se aprecia lo que parece ser un pequeño cartel o texto sobre la caseta/kiosco en la entrada del muelle. Está en perspectiva con la escena pero es demasiado pequeño y borroso para transcribir."
+      }
+    ],
+    "overall_note": "Fotografía histórica en blanco y negro de un muelle/embarcadero en Abjasia (Georgia soviética), probablemente de los años 1930-1940. La escena muestra un muelle con barandillas decorativas, casetas, palmeras y personas. Se detectan dos regiones de texto claramente legibles en la escena (letrero 'ДИНАМО' y cartel de la Caja de Ahorro Estatal de Abjasia) y una región con texto ilegible. No se observan overlays de archivo, captions ni marcas de agua.",
+    "cid": "855349",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\855349_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1238,
+      "height": 1614
+    },
+    "regions": [],
+    "overall_note": "Foto histórica en blanco y negro de una iglesia de ladrillo con torre escalonada, probablemente escandinava. No se detecta texto legible en ninguna parte de la imagen: ni en la fachada del edificio, ni en los márgenes, ni como overlay de archivo. Hay un pequeño símbolo de cruz en la pared inferior izquierda (~x:155, y:1060) que es un elemento arquitectónico/religioso, no texto propiamente dicho.",
+    "cid": "405597",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\405597_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1210,
+      "height": 799
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 1020,
+          "y": 310,
+          "w": 170,
+          "h": 80
+        },
+        "text_snippet": "ქრონიკა / გიდკორპუს",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto en escritura georgiana (mkhedruli) ubicado en la esquina superior derecha de la imagen, semi-transparente, superpuesto sobre la escena (montaña y vegetación se ven detrás). Es un watermark digital de archivo/colección, fronto-parallel sin perspectiva de escena, con opacidad reducida típica de marcas de agua. Probablemente identifica la colección digital de donde proviene el escaneo (algo como 'Crónica' o nombre de archivo georgiano)."
+      }
+    ],
+    "overall_note": "Fotografía histórica en blanco y negro (probablemente años 1940-50s) de un grupo de personas en un pueblo montañoso, posiblemente en Georgia (Cáucaso). La foto tiene bordes festoneados típicos de impresiones vintage. El único texto detectable es un watermark digital en escritura georgiana en la esquina superior derecha, añadido por el archivo digital que digitalizó la imagen. No se detecta texto legible dentro de la escena fotografiada (no hay carteles, letreros ni inscripciones visibles en los edificios o vestimenta).",
+    "cid": "1248470",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1248470_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1348,
+      "height": 938
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 620,
+          "y": 270,
+          "w": 80,
+          "h": 130
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Hay un estandarte/bandera visible en el centro-fondo del grupo militar. Se perciben marcas o texto sobre la tela del estandarte, pero la resolución, distancia y envejecimiento de la foto impiden leerlo. Está en perspectiva acorde a la escena, sostenido por los soldados, por lo que es claramente parte de la realidad fotografiada."
+      }
+    ],
+    "overall_note": "Fotografía histórica grupal militar (probablemente era WWI o Guerra Civil Rusa). La imagen está envejecida y amarillenta. No se detectan textos de archivo (captions, sellos, números de catálogo) en márgenes ni superpuestos. El único elemento con posible texto es el estandarte/bandera militar en el centro del grupo, pero resulta ilegible por la distancia y el deterioro de la imagen.",
+    "cid": "589179",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\589179_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1584,
+      "height": 2408
+    },
+    "overall_note": "Fotografía histórica en blanco y negro de un campanario (probablemente ruso ortodoxo). Una gran campana con inscripción cirílica en relieve ocupa la parte superior de la imagen. Dos personas están de pie debajo. No se detectan overlays de archivo ni texto en márgenes.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 0,
+          "y": 595,
+          "w": 1350,
+          "h": 75
+        },
+        "text_snippet": "...А ПОВЕЛѢ СЛИТЬ СІЮМ... КАНКА МѢСЯЦА... ИЖ ПО ОСТАВЛ...",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Texto en cirílico antiguo fundido/grabado en relieve sobre la banda inferior de la campana. Sigue la curvatura y perspectiva de la campana, con iluminación consistente con la escena. Es una inscripción típica de campanas rusas ortodoxas que registra la fecha de fundición, el comitente y/o dedicatoria religiosa."
+      }
+    ],
+    "cid": "2134340",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\2134340_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 873,
+      "height": 1373
+    },
+    "overall_note": "Fotografía histórica de postal (postcard) de Martin Place, Sydney. Imagen en blanco y negro con escena urbana de principios del siglo XX. El texto más claro es el caption impreso al pie de la postal.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 330,
+          "y": 1320,
+          "w": 380,
+          "h": 28
+        },
+        "text_snippet": "MARTIN PLACE, SYDNEY, N.S.W.",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto impreso en el margen inferior de la postal, fuera de la escena fotografiada. Font uniforme, fronto-parallel, sin perspectiva. Es el caption descriptivo típico de una postal de archivo."
+      },
+      {
+        "bbox": {
+          "x": 700,
+          "y": 1030,
+          "w": 75,
+          "h": 22
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Cartel de destino en la parte superior del tranvía visible en el lado derecho de la calle. Tiene perspectiva consistente con la escena y está integrado en el vehículo, pero el texto es demasiado pequeño y borroso para transcribir."
+      },
+      {
+        "bbox": {
+          "x": 440,
+          "y": 665,
+          "w": 110,
+          "h": 20
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Posible letrero o cartel sobre la entrada del edificio ornamentado a la izquierda de la calle (posiblemente el GPO). Se perciben caracteres pero no se pueden leer con certeza a esta resolución y distancia."
+      },
+      {
+        "bbox": {
+          "x": 540,
+          "y": 590,
+          "w": 90,
+          "h": 18
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Posible señalización comercial en la fachada de uno de los edificios centrales de la calle. La perspectiva es coherente con la escena pero la resolución y el contraste impiden la lectura."
+      },
+      {
+        "bbox": {
+          "x": 680,
+          "y": 770,
+          "w": 85,
+          "h": 18
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Texto en lo que parece ser un cartel o señalización en un edificio del lado derecho de la calle, parcialmente visible. Perspectiva acorde a la escena."
+      }
+    ],
+    "cid": "1088306",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1088306_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1800,
+      "height": 2255
+    },
+    "overall_note": "Fotografía histórica en blanco y negro del Rockefeller Center (circa 1930s), vista aérea desde el sur. La mayoría del texto en la escena es muy pequeño y difícil de leer debido a la distancia y escala. Se detecta un watermark digital claro.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 1430,
+          "y": 2100,
+          "w": 330,
+          "h": 65
+        },
+        "text_snippet": "SHORPY",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Watermark digital semitransparente en la esquina inferior derecha, superpuesto sobre la imagen. Font sans-serif moderna, fronto-parallel, sin perspectiva de la escena. Típico watermark de Shorpy.com, un archivo de fotos históricas."
+      },
+      {
+        "bbox": {
+          "x": 310,
+          "y": 870,
+          "w": 120,
+          "h": 25
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Letrero en la fachada de un edificio bajo en el lado izquierdo de la composición, a nivel de calle. Tiene perspectiva consistente con la escena y está integrado en el edificio, pero la distancia y resolución impiden leerlo."
+      },
+      {
+        "bbox": {
+          "x": 750,
+          "y": 1150,
+          "w": 90,
+          "h": 20
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Posible señalización o cartel en nivel de calle/marquesina entre los edificios del complejo, en la zona de la plaza. La escala es muy pequeña y no se puede confirmar si es texto legible."
+      },
+      {
+        "bbox": {
+          "x": 830,
+          "y": 1680,
+          "w": 140,
+          "h": 30
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Zona de la entrada/plaza del Rockefeller Center donde parece haber texto inscrito o señalización en la fachada baja del edificio central. Perspectiva coherente con la escena pero demasiado lejano para transcribir."
+      },
+      {
+        "bbox": {
+          "x": 490,
+          "y": 1050,
+          "w": 70,
+          "h": 18
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Posible cartel o marquesina en uno de los edificios bajos del lado izquierdo, a nivel de calle. La perspectiva es consistente con la escena pero el texto no es legible por la distancia."
+      }
+    ],
+    "cid": "1056438",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1056438_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1572,
+      "height": 1060
+    },
+    "overall_note": "Fotografía histórica del Imperio Ruso (~1917) mostrando militares frente a un vagón de tren. Todo el texto visible está pintado sobre el vagón ferroviario, típico de marcaciones de ferrocarriles rusos de la época.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 1340,
+          "y": 165,
+          "w": 200,
+          "h": 45
+        },
+        "text_snippet": "М-К Н.",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto pintado en la parte superior derecha del vagón de tren. Tiene perspectiva consistente con la superficie del vagón, iluminación acorde. Es una sigla de compañía ferroviaria rusa (probablemente Moscú-Kazán)."
+      },
+      {
+        "bbox": {
+          "x": 1355,
+          "y": 215,
+          "w": 195,
+          "h": 60
+        },
+        "text_snippet": "50016",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Número de identificación del vagón pintado en el costado del tren. Fuente industrial, perspectiva acorde a la superficie curva del vagón, iluminación consistente con la escena."
+      },
+      {
+        "bbox": {
+          "x": 1395,
+          "y": 285,
+          "w": 60,
+          "h": 50
+        },
+        "text_snippet": "С.",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Letra de clasificación del vagón pintada debajo del número. Alineada con las demás inscripciones del vagón, misma perspectiva y estilo tipográfico."
+      },
+      {
+        "bbox": {
+          "x": 1365,
+          "y": 340,
+          "w": 175,
+          "h": 40
+        },
+        "text_snippet": "9 СЕН 17",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Fecha pintada en el vagón (9 de septiembre de 1917), probablemente fecha de inspección o servicio. Está en la misma zona de marcaciones del vagón, con perspectiva y estilo consistentes."
+      },
+      {
+        "bbox": {
+          "x": 870,
+          "y": 390,
+          "w": 140,
+          "h": 45
+        },
+        "text_snippet": "III КЛАСЪ",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Inscripción de clase del vagón (III clase) pintada junto a la puerta central. Ortografía pre-reforma rusa con Ъ. Perspectiva acorde al plano del vagón."
+      },
+      {
+        "bbox": {
+          "x": 870,
+          "y": 435,
+          "w": 140,
+          "h": 30
+        },
+        "text_snippet": "20 МѢСТЪ",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Texto debajo de la indicación de clase, probablemente indicando capacidad de asientos (20 plazas). Parcialmente legible por la distancia y tono sepia, pero ubicación y estilo son consistentes con marcaciones ferroviarias."
+      },
+      {
+        "bbox": {
+          "x": 1070,
+          "y": 460,
+          "w": 50,
+          "h": 35
+        },
+        "text_snippet": "№",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Signo de número parcialmente visible en el costado del vagón, cerca de la puerta derecha. Difícil de leer por el contraste bajo y la presencia de personas delante."
+      }
+    ],
+    "cid": "1267028",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1267028_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1010,
+      "height": 711
+    },
+    "overall_note": "Fotografía histórica en sepia de una barcaza con grúa y trabajadores. El único texto visible es un sello/firma del fotógrafo en la esquina inferior derecha, con texto en cirílico parcialmente legible.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 770,
+          "y": 620,
+          "w": 180,
+          "h": 55
+        },
+        "text_snippet": "Каваклиевъ / ... фотографъ ... / ВАРНА",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Se trata de un sello o firma del fotógrafo impreso/estampado sobre la copia fotográfica. Está en la esquina inferior derecha, posición típica de marcas de autoría. El texto es fronto-parallel, no sigue ninguna superficie de la escena, y tiene un estilo tipográfico decorativo consistente con sellos de fotógrafos de fines del siglo XIX / principios del XX. Aparece la palabra ВАРНА (Varna, Bulgaria), indicando el estudio del fotógrafo. Esto fue agregado al papel fotográfico, no es parte de la escena real."
+      }
+    ],
+    "cid": "1626616",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1626616_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 3022,
+      "height": 1972
+    },
+    "overall_note": "Foto histórica en blanco y negro de un aeródromo militar (probablemente WWII, RAF) con varios cazas Spitfire estacionados. El texto visible corresponde a marcas de identificación de escuadrón/individual pintadas en los fuselajes de los aviones. No se detectan overlays de archivo ni captions.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 1950,
+          "y": 1250,
+          "w": 120,
+          "h": 80
+        },
+        "text_snippet": "X",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Letra de identificación individual 'X' pintada en el fuselaje del Spitfire en primer plano derecho. Tiene perspectiva coherente con el avión y la escena, iluminación consistente."
+      },
+      {
+        "bbox": {
+          "x": 350,
+          "y": 920,
+          "w": 110,
+          "h": 75
+        },
+        "text_snippet": "M",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Letra de identificación 'M' pintada en el fuselaje del Spitfire en el centro-izquierda de la imagen. Perspectiva acorde al avión, forma parte de las marcas de escuadrón RAF."
+      },
+      {
+        "bbox": {
+          "x": 280,
+          "y": 920,
+          "w": 60,
+          "h": 75
+        },
+        "text_snippet": "I",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Posible letra 'I' o barra vertical pintada delante de la 'M' en el fuselaje del Spitfire izquierdo, como parte del código de escuadrón. Perspectiva coherente con la superficie del avión."
+      },
+      {
+        "bbox": {
+          "x": 1880,
+          "y": 1250,
+          "w": 60,
+          "h": 80
+        },
+        "text_snippet": "I",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Posible letra 'I' o barra vertical pintada delante de la 'X' en el fuselaje del Spitfire en primer plano. Forma parte del código de identificación del escuadrón RAF."
+      }
+    ],
+    "cid": "1683170",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1683170_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 661,
+      "height": 799
+    },
+    "regions": [],
+    "overall_note": "Foto histórica en blanco y negro de un edificio monumental de estilo Beaux-Arts/Neoclásico, tomada desde la esquina de la calle. No se detecta texto legible en ninguna parte de la imagen: no hay carteles visibles, inscripciones legibles en la fachada, señales de calle discernibles, ni texto de archivo/overlay en los márgenes. Los postes de alumbrado y la fachada del edificio podrían contener texto pero no es legible a esta resolución y contraste.",
+    "cid": "308540",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\308540_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1024,
+      "height": 672
+    },
+    "overall_note": "Postal histórica de la Primera Guerra Mundial mostrando tropas marchando por la calle Vilenskaya (Wilnaer Strasse) en Lida. La imagen tiene borde típico de postal antigua con captions impresas al pie.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 168,
+          "y": 575,
+          "w": 420,
+          "h": 28
+        },
+        "text_snippet": "LIDA — Wilnaer Strasse",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto impreso en el margen inferior de la postal, fronto-parallel, fuente tipográfica uniforme, sin perspectiva de escena. Es el título/caption de la postal impreso en la tarjeta."
+      },
+      {
+        "bbox": {
+          "x": 168,
+          "y": 603,
+          "w": 420,
+          "h": 30
+        },
+        "text_snippet": "ЛИДА — Виленская ул.",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto impreso en cirílico debajo del título en alemán, mismo estilo tipográfico, fronto-parallel en el margen inferior de la postal. Es la traducción rusa del nombre del lugar."
+      },
+      {
+        "bbox": {
+          "x": 330,
+          "y": 310,
+          "w": 180,
+          "h": 22
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Cartel comercial sobre la fachada de una tienda en la calle. Se percibe texto oscuro sobre fondo claro, con perspectiva acorde a la fachada del edificio, pero la resolución y distancia impiden leerlo claramente."
+      },
+      {
+        "bbox": {
+          "x": 555,
+          "y": 290,
+          "w": 110,
+          "h": 50
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Letrero o rótulo sobre el ingreso de un comercio en la hilera de edificios del lado derecho. Tiene perspectiva coherente con la fachada; el texto es demasiado pequeño y borroso para transcribir."
+      },
+      {
+        "bbox": {
+          "x": 620,
+          "y": 340,
+          "w": 30,
+          "h": 55
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Posible póster o aviso pegado en la pared/puerta del comercio, se ven marcas que podrían ser texto pero la resolución es insuficiente para confirmar."
+      },
+      {
+        "bbox": {
+          "x": 138,
+          "y": 508,
+          "w": 30,
+          "h": 18
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "uncertain",
+        "confidence": "low",
+        "reasoning": "Pequeña marca o número parcialmente visible en la zona inferior izquierda, cerca del borde de la imagen. Podría ser un número de catálogo/serie de la postal o una marca en la escena; no se puede determinar con certeza."
+      }
+    ],
+    "cid": "636474",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\636474_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 3764,
+      "height": 2526
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 440,
+          "y": 680,
+          "w": 280,
+          "h": 100
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Zona del pedestal de la estatua ecuestre (probablemente monumento a Vittorio Emanuele II). Se intuye una inscripción grabada en la piedra, pero la distancia, el ángulo y la resolución impiden leer el texto. Está integrado en la escena con perspectiva consistente."
+      }
+    ],
+    "overall_note": "Fotografía histórica en blanco y negro de Piazza Venezia, Roma (probablemente años 1930-1950). La toma es amplia y a distancia media-larga. No se detecta texto legible ni en la escena ni como overlay de archivo. El único posible texto es una inscripción en el pedestal de la estatua ecuestre a la izquierda, pero resulta ilegible por distancia y ángulo. No hay captions, sellos de archivo, watermarks ni números de catálogo visibles en los márgenes.",
+    "cid": "960046",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\960046_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 2542,
+      "height": 1581
+    },
+    "overall_note": "Fotografía histórica tipo postal de una calle comercial en Odense, Dinamarca (Vestergade). Múltiples carteles de tiendas visibles en la escena, y un caption de postal en el margen inferior derecho.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 1700,
+          "y": 1480,
+          "w": 820,
+          "h": 90
+        },
+        "text_snippet": "Odense Vestergade",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto impreso en el margen inferior derecho de la postal, fuente decorativa fronto-parallel, sin perspectiva de la escena. Es el título/caption típico de una postal fotográfica, agregado en la impresión."
+      },
+      {
+        "bbox": {
+          "x": 95,
+          "y": 100,
+          "w": 310,
+          "h": 55
+        },
+        "text_snippet": "C. JENSEN",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Letrero pintado sobre la fachada del edificio en la esquina superior izquierda. Tiene perspectiva coherente con el plano del edificio y iluminación consistente con la escena."
+      },
+      {
+        "bbox": {
+          "x": 115,
+          "y": 155,
+          "w": 280,
+          "h": 45
+        },
+        "text_snippet": "SAGFØRER",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Segundo renglón del cartel profesional (abogado) debajo de 'C. JENSEN', misma fachada, misma perspectiva."
+      },
+      {
+        "bbox": {
+          "x": 130,
+          "y": 430,
+          "w": 340,
+          "h": 75
+        },
+        "text_snippet": "Lunau",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Cartel principal de la tienda sobre el toldo, letras grandes decorativas con perspectiva acorde a la fachada del local comercial."
+      },
+      {
+        "bbox": {
+          "x": 460,
+          "y": 430,
+          "w": 380,
+          "h": 65
+        },
+        "text_snippet": "Herre-Ekviperind",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Texto complementario del cartel de la tienda Lunau (tienda de ropa masculina), misma línea del letrero, perspectiva coherente con la fachada."
+      },
+      {
+        "bbox": {
+          "x": 22,
+          "y": 430,
+          "w": 120,
+          "h": 65
+        },
+        "text_snippet": "...ng",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Fragmento de texto en el extremo izquierdo del cartel de la tienda, cortado por el borde de la foto. Misma línea que 'Lunau'."
+      },
+      {
+        "bbox": {
+          "x": 835,
+          "y": 415,
+          "w": 65,
+          "h": 80
+        },
+        "text_snippet": "27",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Número de calle/edificio visible en la fachada entre el cartel de la tienda y la siguiente sección, perspectiva coherente con el edificio."
+      },
+      {
+        "bbox": {
+          "x": 895,
+          "y": 430,
+          "w": 120,
+          "h": 65
+        },
+        "text_snippet": "Lunau",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Segunda instancia del nombre 'Lunau' más pequeña, sobre la puerta o marquesina lateral de la misma tienda, con perspectiva de la escena."
+      },
+      {
+        "bbox": {
+          "x": 50,
+          "y": 770,
+          "w": 120,
+          "h": 55
+        },
+        "text_snippet": "Lunau 27",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto pequeño visible en la parte inferior de la vidriera o puerta de la tienda, a nivel de calle. Perspectiva acorde al plano del escaparate."
+      },
+      {
+        "bbox": {
+          "x": 55,
+          "y": 610,
+          "w": 75,
+          "h": 40
+        },
+        "text_snippet": "Luna",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Texto pequeño visible en la vidriera/escaparate de la tienda, parcialmente legible por el tamaño reducido y la resolución."
+      },
+      {
+        "bbox": {
+          "x": 170,
+          "y": 610,
+          "w": 75,
+          "h": 40
+        },
+        "text_snippet": "Luna",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Otro texto pequeño en el escaparate, probablemente etiquetas o carteles dentro de la vitrina."
+      },
+      {
+        "bbox": {
+          "x": 1050,
+          "y": 370,
+          "w": 200,
+          "h": 60
+        },
+        "text_snippet": "CIGAR",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Letrero que sobresale perpendicular a la fachada más adelante en la calle, parece decir CIGAR o similar. Tiene perspectiva coherente con la profundidad de la calle."
+      },
+      {
+        "bbox": {
+          "x": 2350,
+          "y": 540,
+          "w": 170,
+          "h": 50
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Cartel o letrero en el lado derecho de la calle, sobre una tienda. Demasiado oscuro y pequeño para transcribir, pero se distingue forma de texto."
+      },
+      {
+        "bbox": {
+          "x": 2380,
+          "y": 350,
+          "w": 140,
+          "h": 45
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Posible letrero de tienda en la parte superior derecha de la imagen, en el lado derecho de la calle. Zona muy oscura, texto no legible."
+      }
+    ],
+    "cid": "442403",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\442403_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1233,
+      "height": 1599
+    },
+    "overall_note": "Fotografía histórica en blanco y negro de una iglesia ortodoxa rusa en invierno. Texto visible solo en la parte inferior, aparenta ser crédito del fotógrafo escrito/estampado sobre la copia impresa.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 115,
+          "y": 1480,
+          "w": 370,
+          "h": 100
+        },
+        "text_snippet": "фото",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto en la parte inferior de la foto, escrito/estampado directamente sobre la copia impresa. Está en posición fronto-paralela sin perspectiva de escena, y corresponde a un crédito de fotógrafo ('фото' = 'foto'). La tipografía parece ser de sello o escritura manual con tinta sobre el papel fotográfico."
+      },
+      {
+        "bbox": {
+          "x": 520,
+          "y": 1470,
+          "w": 600,
+          "h": 120
+        },
+        "text_snippet": "Сидорова",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Continuación del crédito del fotógrafo: 'Сидорова' (Sidorova, apellido en genitivo). Mismo estilo tipográfico que 'фото', posición fronto-paralela en el borde inferior de la imagen, sin relación con la escena fotografiada. Es un sello o inscripción manuscrita del fotógrafo sobre la copia impresa."
+      }
+    ],
+    "cid": "1560610",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1560610_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 800,
+      "height": 527
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 205,
+          "y": 340,
+          "w": 30,
+          "h": 25
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Parece haber un cartel o letrero en la fachada de un edificio comercial a lo largo de la calle principal, pero la distancia de la toma aérea y la neblina hacen imposible leer el texto. Está en perspectiva acorde a la escena."
+      },
+      {
+        "bbox": {
+          "x": 170,
+          "y": 310,
+          "w": 45,
+          "h": 20
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Posible señalización en la parte superior de un edificio blanco/claro visible en la calle. El texto está integrado en la escena con perspectiva coherente, pero la resolución y distancia no permiten leerlo."
+      },
+      {
+        "bbox": {
+          "x": 235,
+          "y": 295,
+          "w": 20,
+          "h": 35
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Posible cartel vertical (estilo asiático) en fachada de edificio a lo largo de la avenida principal. La orientación vertical y ubicación en fachada sugieren señalización comercial, pero es ilegible por la distancia."
+      }
+    ],
+    "overall_note": "Foto histórica a color tomada desde un punto elevado mostrando un paisaje urbano (posiblemente una ciudad asiática, por la arquitectura y disposición). La imagen presenta neblina/haze significativo, rayaduras propias de un negativo envejecido, y la gran distancia a los edificios hace que cualquier texto en carteles o señalización sea prácticamente ilegible. Se detectan algunas regiones donde parece haber señalización comercial en fachadas, pero ninguna es legible con certeza. No se observa texto de archivo (caption, sello, watermark) en los márgenes.",
+    "cid": "888377",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\888377_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1374,
+      "height": 878
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 620,
+          "y": 810,
+          "w": 390,
+          "h": 35
+        },
+        "text_snippet": "Collyer Quay Singapore.",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto impreso como título de postal, fronto-parallel, sin perspectiva de la escena, tipografía uniforme de imprenta, ubicado en el borde inferior de la imagen sobre la zona de calle. Es un caption agregado al momento de producir la postal, no un cartel presente en la realidad fotografiada."
+      },
+      {
+        "bbox": {
+          "x": 8,
+          "y": 808,
+          "w": 45,
+          "h": 30
+        },
+        "text_snippet": "24)",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número de serie/catálogo de la postal, ubicado en la esquina inferior izquierda, fronto-parallel, misma tipografía que el título. Forma parte de la numeración editorial de la serie de postales."
+      }
+    ],
+    "overall_note": "Fotografía histórica en formato postal coloreada a mano de Collyer Quay, Singapur. El texto detectado corresponde exclusivamente a overlays editoriales de la postal (título y número de serie). No se detectan textos legibles dentro de la escena fotografiada (carteles, letreros en edificios, etc.), posiblemente por la distancia y resolución de la imagen.",
+    "cid": "2131854",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\2131854_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 3674,
+      "height": 2427
+    },
+    "regions": [],
+    "overall_note": "Fotografía histórica en blanco y negro de un edificio neoclásico con columnas y frontón, reproducida aparentemente de una publicación impresa (se nota trama de halftone). No se detecta texto legible ni en la escena (no hay inscripciones visibles en el frontón, carteles ni placas legibles) ni como overlay de archivo (sin captions, sellos, marcas de agua ni texto en márgenes). Las zonas oscuras cerca de la entrada podrían contener placas o letreros, pero son completamente ilegibles a esta resolución/calidad.",
+    "cid": "1637544",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1637544_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 895,
+      "height": 550
+    },
+    "overall_note": "Postal histórica coloreada de Montreal. Texto principal es el título impreso de la postal y un número de catálogo/serie. Los edificios están a distancia y no muestran texto legible.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 250,
+          "y": 8,
+          "w": 545,
+          "h": 30
+        },
+        "text_snippet": "View from Notre Dame, looking down the St. Lawrence, Montreal",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto impreso en tinta roja/oscura sobre la zona del cielo de la postal. Es fronto-parallel, sin perspectiva, con tipografía uniforme de imprenta. Es el título descriptivo típico de una postal de época, superpuesto sobre la imagen. No es un cartel en la escena real."
+      },
+      {
+        "bbox": {
+          "x": 780,
+          "y": 518,
+          "w": 95,
+          "h": 22
+        },
+        "text_snippet": "106,120",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Número impreso en la esquina inferior derecha, fuera del contenido visual principal de la escena. Es un número de serie/catálogo de la postal, fronto-parallel, tipografía pequeña y uniforme. Característico de numeración editorial de postales."
+      }
+    ],
+    "cid": "2260467",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\2260467_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 2239,
+      "height": 1299
+    },
+    "overall_note": "Fotografía histórica en blanco y negro de una calle comercial rusa (pre-revolucionaria o principios del siglo XX). Múltiples carteles de tiendas en cirílico sobre las fachadas. La imagen tiene grano considerable, lo que dificulta la lectura de algunos textos más distantes.",
+    "regions": [
+      {
+        "bbox": {
+          "x": 0,
+          "y": 530,
+          "w": 105,
+          "h": 80
+        },
+        "text_snippet": "...ЕРЗИНЫ",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto parcial en un cartel de tienda en el borde izquierdo de la imagen, cortado por el encuadre. Tiene perspectiva acorde a la fachada del edificio. Probablemente parte de un apellido comercial."
+      },
+      {
+        "bbox": {
+          "x": 140,
+          "y": 425,
+          "w": 120,
+          "h": 50
+        },
+        "text_snippet": "...БОИ",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto parcial en la parte superior de la fachada del primer edificio, con perspectiva coherente con el plano arquitectónico."
+      },
+      {
+        "bbox": {
+          "x": 155,
+          "y": 560,
+          "w": 370,
+          "h": 45
+        },
+        "text_snippet": "ПОЛОТНЯНЫХЪ ТОВАРОВЪ",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Cartel comercial oscuro con letras claras sobre la fachada de la tienda. Texto en ruso pre-revolucionario (con ъ), legible, con perspectiva acorde al edificio. Significa 'de mercancías de lino'."
+      },
+      {
+        "bbox": {
+          "x": 155,
+          "y": 520,
+          "w": 370,
+          "h": 40
+        },
+        "text_snippet": "(ilegible) МАГАЗИНЪ",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Línea de texto encima del cartel principal, parcialmente legible. Forma parte de la señalización de la misma tienda."
+      },
+      {
+        "bbox": {
+          "x": 480,
+          "y": 530,
+          "w": 240,
+          "h": 55
+        },
+        "text_snippet": "...И МАГАЗИНЪ",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Cartel oscuro sobre la fachada de la segunda tienda, con perspectiva coherente. Texto parcialmente legible en cirílico pre-revolucionario."
+      },
+      {
+        "bbox": {
+          "x": 530,
+          "y": 430,
+          "w": 65,
+          "h": 45
+        },
+        "text_snippet": "ОИ",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Fragmento de texto visible en la parte superior del segundo edificio, parcialmente oculto. Coherente con la perspectiva de la fachada."
+      },
+      {
+        "bbox": {
+          "x": 730,
+          "y": 490,
+          "w": 160,
+          "h": 55
+        },
+        "text_snippet": "БАНКЪ",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Cartel prominente en la fachada del edificio que dice 'BANCO' en ruso pre-revolucionario. Perspectiva coherente con el plano del edificio, iluminación consistente."
+      },
+      {
+        "bbox": {
+          "x": 790,
+          "y": 600,
+          "w": 280,
+          "h": 40
+        },
+        "text_snippet": "ЧАЙНАЯ ФАБРИКА ШАПИРО",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Cartel comercial debajo del nivel del balcón. Texto en cirílico que parece leer 'Fábrica de té Shapiro'. Perspectiva acorde a la fachada."
+      },
+      {
+        "bbox": {
+          "x": 750,
+          "y": 640,
+          "w": 140,
+          "h": 50
+        },
+        "text_snippet": "...АХОВЪ",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto parcial en un cartel más bajo, probablemente apellido de comerciante. Perspectiva coherente con la escena."
+      },
+      {
+        "bbox": {
+          "x": 900,
+          "y": 650,
+          "w": 280,
+          "h": 55
+        },
+        "text_snippet": "(ilegible)...ОСКАРИ",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Carteles comerciales más alejados en la calle, difíciles de leer por la distancia y el grano de la imagen. Perspectiva coherente con la línea de edificios."
+      },
+      {
+        "bbox": {
+          "x": 330,
+          "y": 770,
+          "w": 100,
+          "h": 55
+        },
+        "text_snippet": "ОБОИ",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Pequeño cartel a nivel de la calle en la base de una tienda. 'ОБОИ' significa 'papeles pintados/empapelados'. Perspectiva y posición consistente con la escena."
+      },
+      {
+        "bbox": {
+          "x": 1300,
+          "y": 530,
+          "w": 180,
+          "h": 50
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Cartel oscuro sobre fachada de edificio más alejado en la calle. Se distingue que hay texto pero no es legible por la distancia y el grano."
+      },
+      {
+        "bbox": {
+          "x": 1700,
+          "y": 560,
+          "w": 200,
+          "h": 50
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Carteles comerciales en edificios al fondo de la calle, demasiado distantes para leer. Coherentes con la línea de tiendas."
+      }
+    ],
+    "cid": "588185",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\588185_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1173,
+      "height": 806
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 230,
+          "y": 470,
+          "w": 120,
+          "h": 70
+        },
+        "text_snippet": "E431\n6873",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Matrícula/patente del auto clásico de la izquierda. Tiene perspectiva coherente con el vehículo, iluminación consistente con la escena. Números visibles en placa frontal del auto."
+      },
+      {
+        "bbox": {
+          "x": 940,
+          "y": 490,
+          "w": 130,
+          "h": 40
+        },
+        "text_snippet": "AC 7764",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Matrícula/patente del auto estacionado a la derecha. Texto en la placa frontal del vehículo, con perspectiva y lighting acordes a la escena."
+      },
+      {
+        "bbox": {
+          "x": 755,
+          "y": 275,
+          "w": 50,
+          "h": 45
+        },
+        "text_snippet": "IN",
+        "classification": "in_scene",
+        "confidence": "high",
+        "reasoning": "Parte superior de un cartel/señal vial en un poste, visible en la escena. Se lee 'IN' claramente. Perspectiva y escala consistentes con un letrero en la vía pública."
+      },
+      {
+        "bbox": {
+          "x": 735,
+          "y": 320,
+          "w": 75,
+          "h": 30
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Texto adicional debajo del 'IN' en el mismo cartel de señalización vial. Se perciben letras pero no son legibles con claridad a esta resolución/distancia."
+      },
+      {
+        "bbox": {
+          "x": 750,
+          "y": 400,
+          "w": 85,
+          "h": 70
+        },
+        "text_snippet": "ONLY OFFICER\nCARD ONLY",
+        "classification": "in_scene",
+        "confidence": "low",
+        "reasoning": "Segundo cartel más pequeño en un poste, parece contener texto regulatorio de estacionamiento. Parcialmente legible, palabras como 'OFFICER' y 'ONLY' parecen distinguirse. Ubicado en la escena con perspectiva coherente."
+      }
+    ],
+    "overall_note": "Foto histórica en blanco y negro, aparentemente de los años 1930. Escena callejera con autos de época, un policía montado a caballo y varios vehículos estacionados. El texto detectado se limita a matrículas de vehículos y señalización vial dentro de la escena. No se observan overlays de archivo, captions, sellos ni marcas de agua en los márgenes. La resolución y el desenfoque limitan la legibilidad de algunos textos a distancia.",
+    "cid": "1852672",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1852672_clean_v1.jpg"
+  },
+  {
+    "image_size": {
+      "width": 1143,
+      "height": 799
+    },
+    "regions": [
+      {
+        "bbox": {
+          "x": 100,
+          "y": 750,
+          "w": 980,
+          "h": 40
+        },
+        "text_snippet": "№ 8833 Тифлисъ. Георгіевская церковь и Александровскій садъ. 215.",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Texto impreso en el margen inferior de la fotografía, fronto-parallel, fuente uniforme tipo imprenta, sin perspectiva. Es una caption de catálogo de archivo con número de serie (8833) y número de página/lámina (215), describiendo la ubicación: Tiflis, Iglesia de San Jorge y Jardín de Alejandro. Claramente agregado al papel fotográfico después de la toma."
+      },
+      {
+        "bbox": {
+          "x": 900,
+          "y": 55,
+          "w": 210,
+          "h": 65
+        },
+        "text_snippet": "ეროვნული ბიბლიოთეკა",
+        "classification": "archive_overlay",
+        "confidence": "high",
+        "reasoning": "Watermark/marca de agua en la esquina superior derecha con texto en escritura georgiana (mkhedruli). Aparece superpuesto sobre la imagen sin perspectiva, con un ícono decorativo encima. Es un sello digital de la Biblioteca Nacional de Georgia (ეროვნული ბიბლიოთეკა), agregado en la digitalización del archivo."
+      },
+      {
+        "bbox": {
+          "x": 335,
+          "y": 530,
+          "w": 175,
+          "h": 18
+        },
+        "text_snippet": "(ilegible)",
+        "classification": "in_scene",
+        "confidence": "medium",
+        "reasoning": "Hay un letrero/cartel sobre la fachada del edificio adyacente a la iglesia, visible en la pared a nivel de calle. Tiene perspectiva consistente con la escena y está iluminado de manera coherente con el entorno. Parece ser un cartel comercial o institucional, pero la resolución y distancia no permiten leer el texto con claridad."
+      }
+    ],
+    "overall_note": "Fotografía histórica de Tiflis (Tbilisi, Georgia), probablemente de finales del siglo XIX o principios del XX, mostrando la Iglesia de San Jorge y el Jardín de Alejandro. La imagen tiene una caption de catálogo en ruso en el margen inferior y un watermark digital de la Biblioteca Nacional de Georgia en la esquina superior derecha. Hay un cartel en escena sobre un edificio pero es ilegible por la distancia.",
+    "cid": "1025790",
+    "photo": "C:\\Users\\YT40432\\Desktop\\lp\\research\\lucaspecina\\geodetective-envs\\corpus\\photos\\1025790_clean_v1.jpg"
+  }
+]

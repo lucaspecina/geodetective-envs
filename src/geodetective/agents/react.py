@@ -75,6 +75,74 @@ SUBMIT_TOOL_SCHEMA = {
 }
 
 
+def _count_images_in_messages(messages: list[dict]) -> int:
+    """Cuenta cuántas partes type='image_url' hay en messages (Azure 50 hard limit)."""
+    count = 0
+    for msg in messages:
+        content = msg.get("content")
+        if isinstance(content, list):
+            for part in content:
+                if isinstance(part, dict) and part.get("type") == "image_url":
+                    count += 1
+    return count
+
+
+def _prune_old_images(messages: list[dict], target_count: int = 40, step: Optional[int] = None) -> int:
+    """Elimina imágenes viejas del historial hasta llegar a `target_count`.
+
+    Estrategia:
+    - La PRIMERA imagen del historial (foto target, en messages[1].content) NUNCA se elimina.
+    - Recorre en orden cronológico (FIFO) y reemplaza partes type='image_url' por
+      un marker textual con metadatos para que el modelo sepa qué había.
+    - El text descriptor que cada tool injecta ANTES de la imagen queda intacto
+      (ej "[Crop region={...}]"), así el modelo retiene contexto semántico.
+
+    Returns: número de imágenes eliminadas.
+    """
+    current = _count_images_in_messages(messages)
+    if current <= target_count:
+        return 0
+
+    need_to_remove = current - target_count
+    removed = 0
+    seen_first_image = False  # foto target inmune
+
+    for msg in messages:
+        if removed >= need_to_remove:
+            break
+        content = msg.get("content")
+        if not isinstance(content, list):
+            continue
+        new_parts: list[dict] = []
+        for part in content:
+            if not isinstance(part, dict):
+                new_parts.append(part)
+                continue
+            if part.get("type") != "image_url":
+                new_parts.append(part)
+                continue
+            # Es una imagen.
+            if not seen_first_image:
+                # Foto target — preservar y marcar como vista
+                seen_first_image = True
+                new_parts.append(part)
+                continue
+            if removed >= need_to_remove:
+                new_parts.append(part)
+                continue
+            # Eliminar y reemplazar con marker text
+            marker = (
+                f"[imagen eliminada del contexto"
+                + (f" en step {step}" if step is not None else "")
+                + ". Para re-acceder, invocá la tool original con sus parámetros guardados.]"
+            )
+            new_parts.append({"type": "text", "text": marker})
+            removed += 1
+        msg["content"] = new_parts
+
+    return removed
+
+
 def _validate_submit(args: dict) -> tuple[bool, Optional[str]]:
     """Valida que el submit_answer sea aceptable. Devuelve (ok, error_msg).
 
@@ -271,6 +339,22 @@ def run_react_agent(
     target_path_str = str(image_path)  # para hash perceptual
 
     for step in range(max_steps):
+        # Sliding-window cleanup de imágenes acumuladas. Azure tiene un límite hard
+        # de 50 imágenes por request (no por tokens). Cuando se acerca, eliminamos
+        # las más viejas EXCEPTO la foto target (primera image_url del historial).
+        # El text descriptor que cada tool injecta antes de la imagen queda — el
+        # modelo sabe que "vio una imagen de tal tipo" sin tener los pixels.
+        n_imgs = _count_images_in_messages(messages)
+        if n_imgs >= 45:
+            removed = _prune_old_images(messages, target_count=40, step=step + 1)
+            result.trace.append({
+                "step": step + 1, "type": "image_context_cleanup",
+                "images_before": n_imgs, "images_removed": removed,
+                "images_after": n_imgs - removed,
+            })
+            if verbose:
+                print(f"[cleanup] removed {removed} old images (was {n_imgs}, now {n_imgs - removed})")
+
         result.steps_used = step + 1
         remaining = max_steps - step
         if verbose:
@@ -318,24 +402,27 @@ def run_react_agent(
                 result.trace.append({"step": step + 1, "type": "thinking_block", "content": tk})
                 if verbose:
                     print(f"[thinking] {tk[:300]}")
-        assistant_turn: dict[str, Any] = {"role": "assistant"}
-        if msg.content:
-            assistant_turn["content"] = msg.content
+        # Normalizar content a string (nunca None) — el SDK puede devolver None o
+        # "". Azure rechaza con "content: expected a string, got null" si en algún
+        # mensaje del historial content es None.
+        content_str = msg.content if msg.content is not None else ""
+        assistant_turn: dict[str, Any] = {"role": "assistant", "content": content_str}
+        if content_str.strip():
             # Guardamos el texto que el modelo emite junto con sus tool_calls
-            # (cuando lo hay) para inspección de trayectorias. Algunos modelos
-            # (tipo gpt-5.4) rara vez generan texto explícito en pasos intermedios,
-            # otros sí — esto nos deja ver eso cuando ocurre.
-            result.trace.append({"step": step + 1, "type": "thinking", "content": msg.content})
+            # (cuando lo hay) para inspección de trayectorias.
+            result.trace.append({"step": step + 1, "type": "thinking", "content": content_str})
             if verbose:
-                print(f"[assistant] {msg.content[:300]}")
+                print(f"[assistant] {content_str[:300]}")
         if msg.tool_calls:
             assistant_turn["tool_calls"] = [
                 {"id": tc.id, "type": "function", "function": {"name": tc.function.name, "arguments": tc.function.arguments}}
                 for tc in msg.tool_calls
             ]
-        if msg.content is None and msg.tool_calls is None:
-            # Capturar stop_reason / finish_reason para diagnosticar (max_tokens?
-            # refusal? end_turn vacío? cf claude-sonnet-4-6 Basel/Tomsk E009).
+        # Empty response: ni texto ni tool_calls. Cubrir TANTO None como "" — los
+        # SDKs (especialmente Anthropic adapter) pueden devolver string vacío en
+        # vez de None. Antes solo capturábamos None → con content="" y tool_calls
+        # None caíamos en un assistant_turn sin content keys, que rompe Azure.
+        if not content_str.strip() and not msg.tool_calls:
             finish = getattr(msg, "finish_reason", None) or getattr(response.choices[0], "finish_reason", None)
             n_thinking = len(getattr(msg, "thinking_blocks", []) or [])
             result.error = f"Empty response. finish_reason={finish!r} thinking_blocks={n_thinking}"

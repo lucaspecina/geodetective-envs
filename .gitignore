@@ -254,6 +254,12 @@ experiments/E011_text_overlay_detection/*
 !experiments/E011_text_overlay_detection/sample*/
 experiments/E011_text_overlay_detection/sample*/*
 !experiments/E011_text_overlay_detection/sample*/detections.json
+# E012 min_steps ablation — single-model × 10 fotos × {0,15,30}.
+!experiments/E012_min_steps/
+experiments/E012_min_steps/*
+!experiments/E012_min_steps/results_*.json
+!experiments/E012_min_steps/picked_photos.json
+!experiments/E012_min_steps/viewer_*.html
 results/
 .claude/settings.local.json
 .claude/worktrees/

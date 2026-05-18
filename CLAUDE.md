@@ -69,11 +69,11 @@ AZURE_INFERENCE_CREDENTIAL=...
 AZURE_FOUNDRY_BASE_URL=https://amalia-resource.openai.azure.com/openai/v1
 AZURE_MODEL=gpt-5.4
 
-# Tavily (web search + image search)
-TAVILY_API_KEY=...
-
 # Google Maps Platform (Static Maps + Street View Static)
 GOOGLE_MAPS_API_KEY=...
+
+# Tavily (LEGACY — ya no se usa; web_search→Azure Bing Grounding, image_search→DuckDuckGo)
+# TAVILY_API_KEY=...
 
 # Otros (legacy de arcagi3 .env compartido)
 ARC_API_KEY=...
@@ -86,20 +86,25 @@ Modelos confirmados disponibles en Foundry: `gpt-4o`, `gpt-4.1`, `gpt-5`, `gpt-5
 ## Tech stack (implementado)
 
 - **Python 3.11** + **conda** (env: `geodetective`).
-- **OpenAI SDK** (`openai`) — cliente para Foundry, OpenAI tool calling format nativo.
-- **httpx** — clientes HTTP (Tavily, Nominatim, Overpass, Google Maps, etc.).
+- **OpenAI SDK** (`openai`) — cliente para Foundry. Adapter propio rutea a Azure OpenAI vs Anthropic Foundry endpoint.
+- **httpx** — clientes HTTP (Nominatim, Overpass, Google Maps, etc.).
 - **Pillow + imagehash** — manipulación de imágenes y hash perceptual `phash` para anti-shortcut.
 - **BeautifulSoup4 + lxml** — parsing HTML para `fetch_url`.
 - **geopy** — distancia geodésica.
-- **python-dotenv** (no usado, parseo manual de `.env`).
+- **ddgs** — DuckDuckGo search SDK (backend de `image_search`).
+- **zstandard** — descompresión del dump PastVu.
+- **huggingface_hub** — descarga del dump PastVu.
+- **pygeohash** — buckets espaciales del sampler.
 - **pydantic** — schemas (instalado, uso minimal por ahora).
-- **tavily-python** — Tavily SDK.
+- **`.env`**: parseo manual (no usamos `python-dotenv`).
 
 Pendiente / planeado:
 - **LangGraph** — NO se usa por ahora (decisión: plain Python suficiente para v1, evaluar Verifiers/LangGraph en Fase 6).
 - **pytest + ruff** — sin tests todavía.
-- **Hugging Face datasets** — para bajar PastVu en bulk (cuando se haga issue #3).
 - **`pyproject.toml`** — pendiente, todas las deps en pip por ahora.
+
+Removed:
+- **tavily-python** — migrado: `web_search`→Azure Bing Grounding, `image_search`→DuckDuckGo (commits `444ebe9`, `7570aa3`).
 
 ---
 
@@ -109,10 +114,10 @@ Ver `src/geodetective/tools/` y `src/geodetective/agents/react.py`.
 
 | # | Tool | Backend |
 |---|---|---|
-| 1 | `web_search` (advanced) | Tavily |
+| 1 | `web_search` | **Azure OpenAI Responses API + Bing Grounding** (helper gpt-4.1-mini) |
 | 2 | `fetch_url` | httpx + bs4 |
 | 3 | `fetch_url_with_images` | httpx + bs4 + imagehash |
-| 4 | `image_search` (con hash flag) | Tavily images |
+| 4 | `image_search` (con hash flag) | **DuckDuckGo via `ddgs`** (gratis, sin API key) |
 | 5 | `geocode` / `reverse_geocode` | Nominatim OSM |
 | 6 | `historical_query` ⭐ | OpenHistoricalMap Overpass (CC0) |
 | 7 | `crop_image` / `crop_image_relative` | PIL local |
@@ -126,34 +131,49 @@ Ver `src/geodetective/tools/` y `src/geodetective/agents/react.py`.
 
 ```
 .
-├── README.md, PROJECT.md, CLAUDE.md, CURRENT_STATE.md, CHANGELOG.md, AUTORESEARCH.md
-├── .env                            # gitignored: AZURE/TAVILY/GOOGLE_MAPS keys
+├── README.md, PROJECT.md, CLAUDE.md, CURRENT_STATE.md, CHANGELOG.md, ARCHITECTURE.md, AUTORESEARCH.md
+├── .env                            # gitignored: AZURE_*, GOOGLE_MAPS_API_KEY
+├── corpus/                         # ⭐ canónico: fotos del benchmark (gitignored)
+│   ├── photos/                     # {cid}_raw.jpg + {cid}_clean_v{N}.jpg (185 fotos hoy)
+│   └── README.md                   # cómo poblar, sincronizar, regenerar
 ├── src/geodetective/
-│   ├── corpus/                     # módulos del pipeline de filtrado (#21)
+│   ├── corpus/                     # pipeline de filtrado (#21)
 │   │   ├── clean_image.py          # Paso 0: strip EXIF + crop watermark + RGBA→RGB (#22)
 │   │   └── blacklist.py            # blacklist runtime per-photo (#23)
-│   ├── tools/                      # 12 tools del agente (web, fetch, image, geocode, OHM, crop, maps, sv)
+│   ├── llm_adapter.py              # rutea OpenAI-compatible vs Anthropic Foundry endpoint
+│   ├── judge/                      # annotator CORRAL-adapted (process eval)
+│   ├── tools/                      # 12 tools del agente
 │   └── agents/
-│       └── react.py                # ReAct loop multi-paso con tool calling (12 tools)
+│       └── react.py                # ReAct loop multi-paso (max_steps + min_steps + thinking)
 ├── scripts/
-│   ├── sample_pastvu.py            # legacy: muestrear PastVu por bbox manual (corpus E001)
-│   ├── audit_pastvu_metadata.py    # audit del dump 2M records (#3)
-│   ├── sample_diverso.py           # sampler balanceado país×década desde dump (#17)
-│   ├── run_attacker_filter.py     # atacante GPT-4o sin tools (#24)
-│   ├── test3_no_tools.py           # baseline VLM sin tools (N runs)
-│   ├── test_clean_image.py         # tests sintéticos clean_image
-│   ├── test_blacklist.py           # tests sintéticos blacklist
-│   └── run_react_websearch.py      # ReAct con stack completo (lee corpus E001)
-├── experiments/                    # gitignored excepto candidates.json + results.json
-│   ├── E001_test3_pastvu/          # baseline + ReAct piloto manual
-│   ├── E002_react_websearch/
-│   ├── E004_attacker_filter/       # output del atacante (#24) — 180→101 sobrevivientes
+│   ├── download_pastvu_dump.py     # baja jsonl.zst 282MB de HF
+│   ├── download_corpus_photos.py   # bajada paralela + clean → corpus/photos/
+│   ├── sample_diverso.py           # sampler balanceado país×década (#17)
+│   ├── audit_pastvu_metadata.py    # audit del dump (#3)
+│   ├── run_attacker_filter.py      # atacante GPT-4o sin tools (#24)
+│   ├── run_multimodel_pilot.py     # E008/E009 cross-model con paralelismo entre modelos
+│   ├── run_e010_iteration.py       # single-model debug con payload_to_model + min_steps
+│   ├── run_e012_min_steps.py       # ablation min_steps
+│   ├── detect_text_overlays.py     # VLM detector + blur archive_overlay (E011)
+│   ├── build_iteration_viewer.py   # HTML viewer step-by-step de trazas
+│   ├── build_overlay_comparison.py # comparativo N modelos detector
+│   ├── build_corpus_viewer.py      # grid HTML del corpus
+│   ├── build_multimodel_report.py  # report cross-model (E008/E009)
+│   └── ...
+├── experiments/                    # gitignored excepto JSONs canónicos (ver .gitignore)
+│   ├── E004_attacker_filter/       # atacante GPT-4o (#24) — 180→101 sobrevivientes
+│   ├── E005_react_pilot/           # piloto ReAct end-to-end + annotated v3
 │   ├── E006_pastvu_audit/          # dump 282MB + results.json del audit (#3)
-│   └── E007_sample_diverso/        # 180 fotos balanceadas (#17)
+│   ├── E007_sample_diverso/        # 180 fotos balanceadas (#17) candidates.json
+│   ├── E008_multimodel/            # primer smoke cross-model
+│   ├── E009_multimodel/            # cross-model post-adapter (9 modelos × 3 fotos)
+│   ├── E010_iteration_pilot/       # single-model debug (gpt-5.4-mini × 5 fotos) + ablation blur
+│   ├── E011_text_overlay_detection # detector overlays (gpt-5.4/gpt-4o/claude-sonnet/opus + 185 con Sonnet)
+│   └── E012_min_steps/             # ablation min_steps {0, 15, 30}
 ├── research/
-│   ├── notes/                      # working docs, deep dives, audits, resultados E001-E004
-│   ├── synthesis/                  # conclusiones canon (related_work, viability, validation_plan)
-│   ├── examples/                   # ejemplos canónicos worked-out (vacío)
+│   ├── notes/                      # working docs, deep dives, audits, resultados por experimento
+│   ├── synthesis/                  # conclusiones canon (related_work, viability, findings_so_far)
+│   ├── examples/                   # ejemplos canónicos worked-out
 │   └── archive/                    # superseded
 └── .claude/
     └── skills/

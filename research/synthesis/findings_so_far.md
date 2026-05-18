@@ -1,8 +1,8 @@
-# Findings so far — Síntesis transversal de E001-E009
+# Findings so far — Síntesis transversal de E001-E012
 
-> **Status**: living doc, última actualización 2026-05-14 (post pilot E009 cross-model + annotator CORRAL stub validado).
+> **Status**: living doc, última actualización 2026-05-18 (post E010 iteration pilot + E011 text overlay detection + E012 min_steps ablation + corpus canónico 185 fotos).
 >
-> Per-experimento: `research/notes/E001_*` ... `E005_*`. Síntesis sobre proceso: `process_eval_design.md`. Síntesis sobre dónde nos ubicamos: `related_work.md`.
+> Per-experimento: `research/notes/E001_*` ... `E012_*`. Síntesis sobre proceso: `process_eval_design.md`. Síntesis sobre dónde nos ubicamos: `related_work.md`. Síntesis sobre ejes experimentales: `experiment_design.md`.
 >
 > **Regla de actualización**: cada vez que cierre un experimento, sumar 1-3 bullets al campo correspondiente. Si una conclusión se invalida, mover a "hipótesis falseadas" con fecha. No reescribir historia.
 
@@ -41,6 +41,51 @@ Detalle de lo observado:
 - **Mid-tier beats Top-tier** en algunos casos: gpt-5.4-mini (792 km avg) > gpt-5.4 (1848 km avg). grok-4-1-fast (1165 km) > grok-4.3 (2060 km). **Tier comercial no predice outcome** — sorpresa publicable.
 - **Tools no correlaciona con accuracy**: Kimi-K2.5 usó 154 tool calls totales y promedió 4025 km. claude-opus usó 91 tool calls y promedió 645 km. **Razonamiento > volumen de búsqueda**.
 
+### Hallazgos post-E009 (E010 + E011 + E012, mayo 2026)
+
+**E010 — iteration pilot single-model** (gpt-5.4-mini × 5 fotos, payload_to_model completo capturado):
+
+5 patrones cualitativos del comportamiento del modelo, observados consistentemente:
+1. **First-hypothesis lock-in** en 3/5 fotos (Lisboa→Porto, Bogotá→México, Cracovia→Varsovia). El modelo nunca abandona seriamente su primera hipótesis del step 1.
+2. **Queries demasiado descriptivas** ("Porto plaza tram construction black and white photo 'A Cidade'") generan match alucinatorio en Bing.
+3. **Tools visuales infrautilizadas**: 0 `street_view` en Cáucaso, 0 `street_view` Lisboa pre-submit, 1 `street_view` Bogotá que solo confirmó hipótesis incorrecta.
+4. **Submit prematuro con confidence inflada**: Cracovia confidence=alta a 255 km del lugar real. Solo Volga confidence=baja refleja honestamente la dificultad.
+5. **`verification_checks` ficticios**: el modelo lista "USHMM menciona Nowolipie" pero nunca verificó que la foto target específica matcheara.
+
+Ver `research/notes/E010_iteration_findings.md`.
+
+**E011 — text overlay detection sobre 185 fotos** (claude-sonnet-4-6):
+- **84/185 fotos (45%)** tienen al menos un `archive_overlay` (caption manuscrita, sello cirílico, watermark digital). Sin blur, 45% del corpus es resoluble via OCR + Google.
+- Ablation sobre 5 fotos del E010:
+  - **Cáucaso**: 232km → 28km (-204km) — blur funciona perfecto donde el shortcut es OCR puro
+  - **Lisboa**: 274 → 273km (sin cambio) — lock-in semántico no se arregla con blur
+  - **Volga**: 496 → 611km (+116km) — el texto era pista contextual REAL
+  - **Bogotá**: 3176 → 17321km (+14146km) — empeoró catastrófico, fue a Manila
+  - **Cracovia**: FAIL — content filter rechazó imagen blurreada
+- **Decisión**: blur agresivo es correcto para benchmark de razonamiento. Aceptar que fotos quedan "más difíciles" sin texto — eso es lo que medimos.
+
+Ver `research/notes/E011_text_overlay.md`.
+
+**E012 — ablation min_steps {0, 15, 30}** (gpt-5.4-mini × 10 fotos, en curso):
+- min_steps=0 libre → 10/10 submit, avg 5.5 steps, varianza enorme
+- min_steps=15 → 4/10 FAILs por **bugs del scaffold**:
+  - 2× content filter de Azure (más operaciones → más probabilidad de hit)
+  - 1× "Too many images in request: 51, max 50" — el agente acumula imágenes en contexto sin liberarlas
+  - 1× payload null
+- **Bloqueante**: el scaffold actual no tolera forzar >15 steps sin perder calls. Hay que implementar clear-context strategy.
+
+Ver `research/notes/E012_min_steps.md`.
+
+**Corpus canónico** (mayo 2026, commits `723eb6a` + `36fc6e8`):
+- `corpus/photos/` con 185 fotos limpias (180 nuevas E007 + 5 carry-over E010). Balanceado país × década.
+- Pipeline reproducible: `download_pastvu_dump.py` → `sample_diverso.py` → `download_corpus_photos.py`.
+- Gitignored (binarios + copyright). README documenta cómo regenerar.
+
+**Paralelismo entre modelos** (commit `7bdc490`):
+- Foundry rate-limits son por deployment, no agregados → seguro correr varios modelos en paralelo.
+- `N_WORKERS_MODELS=5` + `N_WORKERS_PER_MODEL=3` = hasta 15 calls simultáneas.
+- E009 reescalado 9 modelos × 30 fotos: ~5h estimado → ~1h con paralelismo.
+
 ### Annotated E005 v3 con judge Claude Opus 4.6 (post-Codex fixes)
 
 6 traces v3 anotadas con el annotator CORRAL adaptado (Stage 1+2 LLM + Stage 3a structural). Tiempo: ~190-240s por trace. Cada trace: 31-74 nodes, 30-80 edges.
@@ -77,7 +122,8 @@ Detalle de lo observado:
 | Stack de 12 tools implementado y corre end-to-end sin errores técnicos | E003, E005 | Backend de tools funciona; no es bug técnico. La utilización (sub-)óptima es comportamiento, no falla de plomería. |
 | Tools visuales (`static_map`, `street_view`) responden correctamente cuando se invocan en test técnico | Test técnico E003 (invocación forzada) | Confirmado en test sintético. La "no-utilización" en runs de geolocalización es comportamiento del modelo. No descarta que algún parámetro del prompt o de la signature de la tool incentive evitarla. |
 | `historical_query` (OHM Overpass) es pieza diferencial: temporal queries con `start_date`/`end_date` | Tool propio | Único tool dating-aware en el stack. **0 usos en E005**. |
-| Tavily web_search consume cuota rápido (7-15 calls por foto) | E005 | Riesgo operacional + signal de comportamiento sub-óptimo. |
+| ~~Tavily web_search consume cuota rápido (7-15 calls por foto)~~ → Migrado a Azure Bing Grounding (commit `444ebe9`, mayo 2026) | E005 + commits | El comportamiento "7-15 calls/foto" sigue siendo signal; el backend cambió pero el patrón persiste. |
+| Image_search migrado de Tavily → DuckDuckGo via `ddgs` (commit `7570aa3`) | Code | Backend gratuito sin API key, mantiene hash perceptual flagging. |
 | `image_search` con hash hard reject (#24 fix) bloquea el shortcut "buscar la foto en Google" | E005 Dealey Plaza (`target_match=1`) | El anti-shortcut está cerrado a nivel image search. |
 | Cuota Google Maps free $200/mes alcanza para escala benchmark | Estimación | Para training (1M+ calls) no aplica — ToS prohíbe igual. |
 

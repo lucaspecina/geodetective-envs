@@ -1,0 +1,162 @@
+[
+  {
+    "cid": 1562122,
+    "geo": [
+      31.223412,
+      121.469108
+    ],
+    "year": 1920,
+    "year2": 1930,
+    "country": "China",
+    "zone": "Residence of Joseph Julien Chollot, chief engineer",
+    "title": "Residence of Joseph Julien Chollot, chief engineer of the French Concession",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Resto",
+    "bucket_decada": "1920s"
+  },
+  {
+    "cid": 781325,
+    "geo": [
+      59.879022,
+      29.91245
+    ],
+    "year": 1941,
+    "year2": 1942,
+    "country": "Russia",
+    "zone": "Разрушенные петергофские дома",
+    "title": "Разрушенные петергофские дома",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Russia-EU",
+    "bucket_decada": "1940s"
+  },
+  {
+    "cid": 657448,
+    "geo": [
+      56.358882,
+      43.874223
+    ],
+    "year": 1905,
+    "year2": 1905,
+    "country": "Russia",
+    "zone": "Внешний вид электрической станции в г. Сормово",
+    "title": "Внешний вид электрической станции в г. Сормово",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Russia-EU",
+    "bucket_decada": "1900s"
+  },
+  {
+    "cid": 763041,
+    "geo": [
+      56.515099,
+      21.014885
+    ],
+    "year": 1910,
+    "year2": 1920,
+    "country": "Latvia",
+    "zone": "Вокзальная улица",
+    "title": "Вокзальная улица",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Ex-URSS",
+    "bucket_decada": "1910s"
+  },
+  {
+    "cid": 2337912,
+    "geo": [
+      40.39461,
+      71.755442
+    ],
+    "year": 1897,
+    "year2": 1898,
+    "country": "Uzbekistan",
+    "zone": "Вид на вокзал станции Новый Маргелан со стороны дв",
+    "title": "Вид на вокзал станции Новый Маргелан со стороны двора",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Ex-URSS",
+    "bucket_decada": "1890s"
+  },
+  {
+    "cid": 1492308,
+    "geo": [
+      56.839574,
+      60.598493
+    ],
+    "year": 1949,
+    "year2": 1949,
+    "country": "Russia",
+    "zone": "Свердловск. Второй дом Советов",
+    "title": "Свердловск. Второй дом Советов",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Russia-Asia",
+    "bucket_decada": "1940s"
+  },
+  {
+    "cid": 1897678,
+    "geo": [
+      51.791569,
+      104.285659
+    ],
+    "year": 1900,
+    "year2": 1900,
+    "country": "Russia",
+    "zone": "Засечка Черского на мысе Асламов (Асламовский) во ",
+    "title": "Засечка Черского на мысе Асламов (Асламовский) во время подготовки к строительству первого пути КБЖД",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Russia-Asia",
+    "bucket_decada": "1900s"
+  },
+  {
+    "cid": 1336113,
+    "geo": [
+      59.934567,
+      30.330021
+    ],
+    "year": 1941,
+    "year2": 1943,
+    "country": "Russia",
+    "zone": "Проспект 25-го Октября",
+    "title": "Проспект 25-го Октября",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Russia-EU",
+    "bucket_decada": "1940s"
+  },
+  {
+    "cid": 888377,
+    "geo": [
+      31.234353,
+      121.487607
+    ],
+    "year": 1949,
+    "year2": 1949,
+    "country": "China",
+    "zone": "View of the French Concession from a building on t",
+    "title": "View of the French Concession from a building on the Bund",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Resto",
+    "bucket_decada": "1940s"
+  },
+  {
+    "cid": 1056438,
+    "geo": [
+      40.757899,
+      -73.976528
+    ],
+    "year": 1939,
+    "year2": 1939,
+    "country": "USA",
+    "zone": "Radio City buildings (RCA Building and other Rocke",
+    "title": "Radio City buildings (RCA Building and other Rockefeller Center buildings)",
+    "provider": "pastvu",
+    "provenance_source": "",
+    "bucket_pais": "Norteamerica",
+    "bucket_decada": "1930s"
+  }
+]

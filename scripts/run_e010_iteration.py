@@ -45,12 +45,17 @@ from geodetective.corpus import CLEAN_VERSION
 
 # === Config ===
 EXP_DIR = Path("experiments/E010_iteration_pilot")
-PHOTOS_DIR = EXP_DIR / "photos"
+# PHOTOS_DIR es overridable via env var (ej: para ablation con fotos post-blur).
+# Las fotos deben llamarse {cid}_clean_v{CLEAN_VERSION}.jpg en ese dir.
+PHOTOS_DIR = Path(os.environ.get("PHOTOS_DIR", str(EXP_DIR / "photos")))
 PICKED = EXP_DIR / "picked_photos.json"
 
 MODEL = os.environ.get("MODEL", "gpt-5.4-mini")
 MAX_STEPS = int(os.environ.get("MAX_STEPS", "50"))
 N_WORKERS = int(os.environ.get("N_WORKERS", "3"))
+# Sufijo para el output file (útil para distinguir runs sobre fotos distintas).
+# Output: results_{model}{OUT_SUFFIX}.json
+OUT_SUFFIX = os.environ.get("OUT_SUFFIX", "")
 PROMPT_VERSION = "v3_thinking_visible"
 
 
@@ -123,7 +128,7 @@ def main() -> None:
         cids_filter = {int(c.strip()) for c in os.environ["CIDS"].split(",")}
         photos = [p for p in photos if p["cid"] in cids_filter]
 
-    out_path = EXP_DIR / f"results_{MODEL.replace('.','_').replace('/','_')}.json"
+    out_path = EXP_DIR / f"results_{MODEL.replace('.','_').replace('/','_')}{OUT_SUFFIX}.json"
     existing = []
     if out_path.exists():
         try:

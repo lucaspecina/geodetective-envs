@@ -46,35 +46,48 @@ scripts/
 └── run_annotator.py             # ⭐ CLI annotator process eval
 
 experiments/
-├── E001_test3_pastvu/           # 19 fotos sin tools, results.json
-├── E002_react_websearch/        # ReAct con tools, results.json
+├── E001_test3_pastvu/           # legacy: 19 fotos sin tools
+├── E002_react_websearch/        # legacy: ReAct con tools inicial
+├── E004_attacker_filter/        # atacante GPT-4o → 180→101 sobrevivientes
 ├── E005_react_pilot/            # 6 fotos × prompt v3 (canónico) + annotated_*.json
+├── E006_pastvu_audit/           # dump 282MB + audit metadata
+├── E007_sample_diverso/         # 180 fotos balanceadas país×década
 ├── E008_multimodel/             # 5 modelos × 3 fotos (pre-adapter, DeepSeek vision broken)
-└── E009_multimodel/             # 9 modelos × 3 fotos × v3 + agentic_probe.json
+├── E009_multimodel/             # 9 modelos × 3 fotos × v3 + agentic_probe.json (post-adapter)
+├── E010_iteration_pilot/        # gpt-5.4-mini × 5 fotos con payload_to_model completo + ablation blur
+├── E011_text_overlay_detection/ # VLM detector overlay (4 modelos × 30 + Sonnet × 185)
+└── E012_min_steps/              # ablation min_steps {0, 15, 30} gpt-5.4-mini × 10 fotos
+```
+
+```
+corpus/                          # ⭐ canónico (gitignored)
+├── photos/                      # {cid}_raw.jpg + {cid}_clean_v1.jpg (185 fotos hoy)
+└── README.md
 ```
 
 ### Stack y credenciales
 
 - **Python 3.11** + conda env `geodetective`.
-- **OpenAI SDK** (vía Azure Foundry): `gpt-4o`, `gpt-4.1`, `gpt-5`, `gpt-5.4` confirmados (todos visión OK).
-- **Tavily** para web search + image search (free tier 1000 calls/mes).
-- **Google Maps Platform**: Maps Static API + Street View Static API (free tier $200/mes, ~$0 esperado).
+- **LLM adapter propio** (`src/geodetective/llm_adapter.py`): rutea modelos OpenAI-compatible (gpt-4o, gpt-4.1, gpt-5, gpt-5.4, gpt-5.4-mini, grok-4.x, Kimi-K2.x, DeepSeek-V3.2) vs Anthropic (claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5) via Foundry.
+- **Azure OpenAI Responses API + Bing Grounding** para `web_search` (post-Tavily, helper gpt-4.1-mini, ~$0.03/call).
+- **DuckDuckGo via `ddgs`** para `image_search` (post-Tavily, gratis sin API key).
+- **Google Maps Platform**: Maps Static API + Street View Static API.
 - **Nominatim, OpenHistoricalMap**: free, sin API key.
-- **PIL, geopy, httpx, pydantic, imagehash, beautifulsoup4, lxml** para utilidades.
+- **PIL, geopy, httpx, pydantic, imagehash, beautifulsoup4, lxml, zstandard, huggingface_hub, pygeohash**.
 
 Credenciales en `.env` (gitignored):
 - `AZURE_INFERENCE_CREDENTIAL`, `AZURE_FOUNDRY_BASE_URL`, `AZURE_MODEL`
-- `TAVILY_API_KEY`
 - `GOOGLE_MAPS_API_KEY` (con cuota restrictiva: 500/día Static, 200/día Street View)
+- (`TAVILY_API_KEY` ya no se usa — migrado a Azure/DDG)
 
 ### 12 Tools del agente
 
 | # | Tool | Backend | Free? |
 |---|---|---|---|
-| 1 | `web_search` | Tavily (advanced) | API key (Tavily free tier) |
+| 1 | `web_search` | **Azure Responses API + Bing Grounding** (helper gpt-4.1-mini) | Paga (~$0.03/call) |
 | 2 | `fetch_url` | httpx + bs4 | ✅ |
 | 3 | `fetch_url_with_images` | httpx + bs4 + imagehash | ✅ |
-| 4 | `image_search` | Tavily images + imagehash | API key |
+| 4 | `image_search` | **DuckDuckGo via `ddgs`** + imagehash | ✅ |
 | 5 | `geocode` | Nominatim OSM | ✅ |
 | 6 | `reverse_geocode` | Nominatim OSM | ✅ |
 | 7 | `historical_query` ⭐ | OpenHistoricalMap Overpass | ✅ |
@@ -180,11 +193,24 @@ results = json.load(open("experiments/E002_react_websearch/results.json"))
 
 **Diseño de process eval CORRAL adaptado** (`research/synthesis/process_eval_design.md`, mayo 2026): framework para anotar grafo epistemológico H/T/E/J/U/C de las trazas + 7 motifs / 10+1 breakdowns adaptados + diseño del annotator multi-stage (Stage 1+2 LLM judge, Stage 3a Python determinista, Stage 3b LLM judge multimodal para patterns visuales). Process eval es **offline only** (no entra al reward). Implementación pendiente (task #6).
 
-**Próximos pasos**:
-- Implementar annotator stub (task #6) sobre las 6 trazas v3 del E005.
-- Cross-model run cuando vuelva `.env` (task #7): mismas 6 fotos v3, modelos distintos (gpt-4o, gpt-5, gpt-5.4, claude-opus si Anthropic API).
-- Escalar K_PER_CELL para corpus de producción (#25, abierta).
-- Threat model completo (#10, abierta) para sección anti-shortcut del paper.
+**Mayo 2026 — estado post-E010/E011/E012**:
+
+- **Corpus canónico** en `corpus/photos/`: 185 fotos limpias balanceadas país×década (1890s-1940s). Source-of-truth para evaluación. Gitignored, regenerable con `scripts/download_corpus_photos.py`.
+- **LLM adapter funcional** (commit `7e663ca`): OpenAI-compatible + Anthropic via Foundry. 9 modelos probados en E009.
+- **E010 — hallazgos cualitativos clave** (gpt-5.4-mini × 5 fotos): first-hypothesis lock-in en 3/5 (Lisboa→Porto, Bogotá→México, Cracovia→Varsovia); queries demasiado descriptivas; tools visuales (street_view, static_map) infrautilizadas; submit prematuro con confidence inflada; verification_checks ficticios.
+- **E011 — detector de overlays textuales**: Sonnet sobre 185 fotos → 84/185 (45%) tienen al menos un `archive_overlay` (caption, sello, watermark). Ablation sobre 5 fotos E010: blur mejora drásticamente (Cáucaso -204km), empeora donde el texto era pista real (Volga +116km, Bogotá +14146km), no afecta lock-in semántico (Lisboa). Conclusión: blur necesario pero no suficiente; lock-in semántico es otro problema.
+- **E012 — ablation min_steps {0, 15, 30}**: implementado bloqueo `submit_answer` antes de step N. Vimos que forzar más steps revela **bug del scaffold**: con `min_steps≥15` el modelo acumula >50 imágenes en contexto → Azure rechaza. Hay que limpiar contexto.
+- **Process eval annotator** (`src/geodetective/judge/`): construido y aplicado a E005 v3. Pendiente correr sobre E009/E010.
+- **Paralelismo entre modelos** en E009 (commit `7bdc490`): rate limits por deployment, no agregados → 5 modelos en paralelo × 3 fotos cada uno = hasta 15 calls simultáneas. Speedup ~3-5×.
+
+**Próximos pasos (priorizados)**:
+1. **Ejes experimentales documentados**: ver `research/synthesis/experiment_design.md`.
+2. **Bug scaffold: clear context >50 imágenes** (bloquea forzar más steps).
+3. **Métricas year + calibration**: ya las pedimos pero no las medimos.
+4. **Tool review v1**: auditar uso real (sub/sobre-utilización), decidir qué queda/sacar/agregar.
+5. **Prompt iteration**: variantes anti-lock-in + verificación obligatoria.
+6. **Estratificación por tier de dificultad** (vía atacante GPT-4o) sobre las 185.
+7. **Annotator CORRAL sobre E009/E010** (process metrics cross-model).
 
 ---
 
@@ -199,6 +225,10 @@ results = json.load(open("experiments/E002_react_websearch/results.json"))
 | Resultados E001 (sin tools) | `research/notes/E001_test3_no_tools_results.md` |
 | Resultados E002 (web_search inicial) | `research/notes/E002_react_websearch_first_run.md` |
 | Resultados E003 (stack completo 12 tools) | `research/notes/E003_react_full_tools.md` |
+| Hallazgos cualitativos E010 (gpt-5.4-mini × 5 fotos) | `research/notes/E010_iteration_findings.md` |
+| Detector text overlays + ablation blur (E011) | `research/notes/E011_text_overlay.md` |
+| Ablation min_steps (E012) | `research/notes/E012_min_steps.md` |
+| Ejes experimentales canónicos | `research/synthesis/experiment_design.md` |
 | Trabajo pendiente con prioridad | [Project v2](https://github.com/users/lucaspecina/projects/6) |
 | Operativa de Claude Code | `CLAUDE.md` |
 | Idea original (semilla histórica) | `research/notes/genesis-intro.md` |

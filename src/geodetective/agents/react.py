@@ -204,6 +204,7 @@ def run_react_agent(
     image_path: Path,
     model: str = "gpt-5.4",
     max_steps: int = 50,
+    min_steps: int = 0,
     verbose: bool = True,
     user_prompt: str = "Investigá esta foto y devolvé las coordenadas (lat, lon) y año con submit_answer.",
     provider: Optional[str] = None,
@@ -752,6 +753,26 @@ def run_react_agent(
                     result.trace.append({"step": step + 1, "type": "street_view_error", "error": str(e)})
 
             elif fname == "submit_answer":
+                # min_steps: bloqueo "hard" — si el modelo intenta terminar antes
+                # del piso mínimo, le pedimos que siga investigando. No cuenta como
+                # retry de validación porque no es un error del modelo, es política.
+                if (step + 1) < min_steps:
+                    if verbose:
+                        print(f"     ⚠ SUBMIT bloqueado: step {step+1} < min_steps {min_steps}")
+                    messages.append({
+                        "role": "tool", "tool_call_id": tc.id,
+                        "content": (
+                            f"submit_answer bloqueado: estás en el step {step+1} pero el piso mínimo "
+                            f"es {min_steps}. Seguí investigando con otras tools antes de submitir tu "
+                            f"respuesta final. Aprovechá los steps para verificar hipótesis con tools "
+                            f"visuales (street_view, static_map, crop_image) o búsquedas más profundas."
+                        ),
+                    })
+                    result.trace.append({
+                        "step": step + 1, "type": "submit_blocked_min_steps",
+                        "answer": args, "min_steps": min_steps,
+                    })
+                    continue
                 # C4: validar submit_answer antes de aceptarlo.
                 ok, err_msg = _validate_submit(args)
                 if not ok:

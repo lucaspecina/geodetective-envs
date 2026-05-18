@@ -320,6 +320,8 @@ def main() -> None:
     parser.add_argument("--blur-radius", type=int, default=20)
     parser.add_argument("--only-with-overlay", action="store_true",
                         help="solo guardar viz/blurred + viewer entry para fotos con >=1 archive_overlay")
+    parser.add_argument("--workers", type=int, default=8,
+                        help="N llamadas API en paralelo (Foundry rate-limits por deployment)")
     args = parser.parse_args()
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
@@ -333,30 +335,41 @@ def main() -> None:
     if not photos:
         raise SystemExit(f"no matching photos in {args.photos_dir} pattern={args.pattern}")
 
-    print(f"Detecting overlays on {len(photos)} photos with {args.model}")
+    print(f"Detecting overlays on {len(photos)} photos with {args.model} (workers={args.workers})")
     detections = []
     viz_dir = args.out_dir / "viz"
     blur_dir = args.out_dir / "blurred"
     t0 = time.time()
-    for i, p in enumerate(photos, 1):
+
+    def _process_one(p: Path) -> dict:
         cid = p.stem.split("_")[0]
-        print(f"  [{i}/{len(photos)}] cid={cid}", end=" ", flush=True)
         try:
             result = detect_overlays(p, args.model)
-            n = len(result.get("regions", []))
-            classes = [r.get("classification") for r in result.get("regions", [])]
-            print(f"-> {n} regions: in_scene={classes.count('in_scene')} overlay={classes.count('archive_overlay')} uncertain={classes.count('uncertain')}")
             result["cid"] = cid
             result["photo"] = str(p.resolve())
-            detections.append(result)
             has_overlay = any(r.get("classification") == "archive_overlay" for r in result.get("regions", []))
             if has_overlay or not args.only_with_overlay:
                 draw_viz(p, result.get("regions", []), viz_dir / f"{cid}.jpg")
                 blur_overlays(p, result.get("regions", []), blur_dir / f"{cid}.jpg",
                               blur_uncertain=args.blur_uncertain, radius=args.blur_radius)
+            return result
         except Exception as e:
-            print(f"ERROR: {e}")
-            detections.append({"cid": cid, "photo": str(p.resolve()), "error": str(e)})
+            return {"cid": cid, "photo": str(p.resolve()), "error": str(e)}
+
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        futures = {pool.submit(_process_one, p): p for p in photos}
+        for i, fut in enumerate(as_completed(futures), 1):
+            result = fut.result()
+            detections.append(result)
+            cid = result.get("cid", "?")
+            if result.get("error"):
+                print(f"  [{i}/{len(photos)}] cid={cid} ERROR: {result['error']}")
+            else:
+                classes = [r.get("classification") for r in result.get("regions", [])]
+                print(f"  [{i}/{len(photos)}] cid={cid} -> {len(classes)} regions: "
+                      f"in_scene={classes.count('in_scene')} overlay={classes.count('archive_overlay')} "
+                      f"uncertain={classes.count('uncertain')}")
 
     out_json = args.out_dir / "detections.json"
     out_json.write_text(json.dumps(detections, indent=2, ensure_ascii=False), encoding="utf-8")

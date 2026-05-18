@@ -83,6 +83,7 @@ DEFAULT_CIDS = [2126812, 2328833, 2034885]  # Tomsk, Dealey Plaza, Basel
 MAX_STEPS = int(os.environ.get("MAX_STEPS", "50"))
 SEED = int(os.environ.get("SEED", "42"))
 N_WORKERS_PER_MODEL = int(os.environ.get("N_WORKERS_PER_MODEL", "3"))
+N_WORKERS_MODELS = int(os.environ.get("N_WORKERS_MODELS", "5"))  # modelos en paralelo (Foundry rate-limits por deployment)
 SKIP_HEALTH = os.environ.get("SKIP_HEALTH", "0") == "1"
 PROMPT_VERSION = "v3_thinking_visible"
 
@@ -389,19 +390,27 @@ def main() -> None:
         raise SystemExit("no healthy models, aborting")
 
     # === Main loop ===
-    print(f"[Phase 2] Corriendo agente sobre {len(candidates)} fotos × {len(healthy)} modelos...")
+    print(f"[Phase 2] Corriendo agente sobre {len(candidates)} fotos × {len(healthy)} modelos "
+          f"(N_WORKERS_MODELS={N_WORKERS_MODELS}, N_WORKERS_PER_MODEL={N_WORKERS_PER_MODEL})...")
     print()
     summary = []
     t_all = time.time()
-    for model, _ in healthy:
-        print(f"[model] {model}")
+
+    def _run_one_model(model: str) -> dict:
+        prefix = f"[{model}]"
         try:
+            print(f"{prefix} start")
             res = run_for_model(model, candidates)
-            summary.append(res)
+            print(f"{prefix} done")
+            return res
         except Exception as e:
-            print(f"  💥 model {model} crashed mid-run: {e}")
-            summary.append({"model": model, "crashed": True, "error": str(e)})
-        print()
+            print(f"{prefix} 💥 crashed mid-run: {e}")
+            return {"model": model, "crashed": True, "error": str(e)}
+
+    with ThreadPoolExecutor(max_workers=N_WORKERS_MODELS) as model_pool:
+        futures = {model_pool.submit(_run_one_model, m): m for m, _ in healthy}
+        for fut in as_completed(futures):
+            summary.append(fut.result())
 
     print("=" * 70)
     print(f"DONE. Total {time.time()-t_all:.0f}s for {len(healthy)} modelos × {len(candidates)} fotos.")

@@ -192,13 +192,27 @@ Las imágenes que matchean visualmente con la foto target se ocultan automática
 
 ### Imágenes (estilo Google Images con grilla)
 
-**`image_search(query)` — flujo de 3 modos** (replica humano scrolleando Google Images):
+**`image_search(query)` — buscar IMÁGENES en internet (no texto).**
 
-1. **Nueva búsqueda** — `image_search(query)`: devuelve UNA grilla 4×4 con 16 candidatos numerados + un `search_id` + flag `has_next_page`. Escaneás visualmente la grilla.
-2. **Página adicional** — `image_search(query, page=2, search_id="abc")`: si los primeros 16 no tenían lo que buscabas, pedí la siguiente página. Las celdas se numeran globalmente (17-32 en página 2, 33-48 en página 3).
-3. **Zoom en celdas** — `image_search(query, pick=[3,7], search_id="abc")`: inspeccionás las celdas interesantes en alta resolución (512×512) + recibís la grilla original re-inyectada para referencia. Después podés llamar `fetch_url_with_images` con la URL de cualquier celda para ver la página fuente.
+**¿Cuándo usarlo? Diferencia con `web_search`:**
+- `web_search` devuelve **texto**: snippets, descripciones, info escrita.
+- `image_search` devuelve **imágenes**: las VES con tus ojos.
 
-Límites: max 3 picks por call, max 2 rondas de pick por búsqueda. Si necesitás más, hacé otra búsqueda con query distinta.
+Usá `image_search` cuando:
+- Necesitás **identificar visualmente** algo de la foto target (tipo de tranvía/auto/uniforme/arquitectura → buscar imágenes similares para datar y ubicar)
+- **No tenés palabras precisas** para buscar pero "lo reconocerías al verlo" (ej: "edificio art deco con fachada redondeada Sudamérica años 30")
+- Querés **comparar candidatos visuales** con tu foto target (ej: si crees que es Plaza Bolívar Bogotá vs Plaza Mayor Quito, buscás fotos antiguas de ambas y comparás)
+- Vas a **descartar hipótesis** visualmente (mirando 16 candidatos a la vez ves rápido si tu intuición era correcta)
+
+**Flujo de 3 modos** (replica humano scrolleando Google Images):
+
+1. **Nueva búsqueda** — `image_search(query)`: devuelve UNA grilla 4×4 con 16 candidatos numerados + un `search_id` + flag `has_next_page`. **Escaneás visualmente las 16** y descartás las irrelevantes (mismo proceso que un humano en Google Images).
+2. **Página adicional** — `image_search(query, page=2, search_id="abc")`: si los primeros 16 no tienen lo que buscás, pedí la siguiente página (cells 17-32, 33-48, etc.).
+3. **Zoom en celdas prometedoras** — `image_search(query, pick=[3,7], search_id="abc")`: inspeccionás las celdas que TE LLAMARON LA ATENCIÓN en alta resolución (512×512) + recibís la grilla original re-inyectada para referencia. Después podés llamar `fetch_url_with_images` con la URL de cualquier celda para ver la página fuente completa con contexto.
+
+**Workflow típico**: image_search → escaneás grilla → pick 1-3 interesantes → si la imagen confirma una hipótesis, fetch_url_with_images para ver contexto en la página fuente.
+
+Límites: max 3 picks por call, max 2 rondas de pick por búsqueda.
 Las imágenes que matchean visualmente con la foto target se descartan automáticamente (anti-shortcut).
 
 ### Recorte de la foto target

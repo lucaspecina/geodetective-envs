@@ -1,0 +1,83 @@
+[
+  {
+    "model": "gpt-5.4",
+    "text": true,
+    "vision": true,
+    "tools": true,
+    "text_msg": "ok",
+    "vision_msg": "red",
+    "tools_msg": "called get_weather({\"city\":\"Buenos Aires\"})"
+  },
+  {
+    "model": "claude-opus-4-6",
+    "text": true,
+    "vision": true,
+    "tools": true,
+    "text_msg": "ok",
+    "vision_msg": "red",
+    "tools_msg": "called get_weather({\"city\": \"Buenos Aires\"})"
+  },
+  {
+    "model": "grok-4.3",
+    "text": true,
+    "vision": true,
+    "tools": true,
+    "text_msg": "ok",
+    "vision_msg": "red",
+    "tools_msg": "called get_weather({\"city\":\"Buenos Aires\"})"
+  },
+  {
+    "model": "Kimi-K2.6",
+    "text": true,
+    "vision": true,
+    "tools": true,
+    "text_msg": "ok",
+    "vision_msg": "red",
+    "tools_msg": "called get_weather({\"city\": \"Buenos Aires\"})"
+  },
+  {
+    "model": "gpt-5.4-mini",
+    "text": true,
+    "vision": true,
+    "tools": true,
+    "text_msg": "ok",
+    "vision_msg": "red",
+    "tools_msg": "called get_weather({\"city\":\"Buenos Aires\"})"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "text": true,
+    "vision": true,
+    "tools": true,
+    "text_msg": "ok",
+    "vision_msg": "**red**",
+    "tools_msg": "called get_weather({\"city\": \"Buenos Aires\"})"
+  },
+  {
+    "model": "grok-4-1-fast-reasoning",
+    "text": true,
+    "vision": true,
+    "tools": true,
+    "text_msg": "ok",
+    "vision_msg": "red",
+    "tools_msg": "called get_weather({\"city\":\"Buenos Aires\"})"
+  },
+  {
+    "model": "Kimi-K2.5",
+    "text": true,
+    "vision": true,
+    "tools": true,
+    "text_msg": "ok",
+    "vision_msg": "red",
+    "tools_msg": "called get_weather({\"city\": \"Buenos Aires\"})"
+  },
+  {
+    "model": "gpt-4o",
+    "text": true,
+    "vision": true,
+    "tools": true,
+    "text_msg": "ok",
+    "vision_msg": "red",
+    "tools_msg": "called get_weather({\"city\":\"Buenos Aires\"})"
+  }
+]

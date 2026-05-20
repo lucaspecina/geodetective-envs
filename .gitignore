@@ -218,54 +218,90 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Project-specific
+#
+# Política de qué entra a git:
+#   - SÍ: JSONs canónicos (candidates, results, detections, smoke_results, etc.)
+#   - NO: HTMLs (regenerables con scripts build_*.py)
+#   - NO: results.json individuales >5MB (tienen base64 embed)
+#   - NO: imágenes generadas (grids, viz, blurred)
+#
+# Orden de gitignore: las reglas posteriores ganan, así que las exceptions
+# específicas (los archivos pesados que queremos excluir) van AL FINAL.
+
 experiments/*/
-# Exceptions: shareable artefacts del pilot E005 (results JSON + reports HTML).
-# Permite trabajar entre maquinas sin re-correr el pilot.
+
+# === Exceptions canónicas por experimento (UNIGNORE) ===
+
+# E004 atacante GPT-4o
+!experiments/E004_attacker_filter/
+experiments/E004_attacker_filter/*
+!experiments/E004_attacker_filter/results.json
+
+# E005 ReAct pilot v3 (annotated)
 !experiments/E005_react_pilot/
 experiments/E005_react_pilot/*
-!experiments/E005_react_pilot/results_*.json
-!experiments/E005_react_pilot/report_*.html
-# Exceptions: E008 smoke cross-modelo (mismo patron que E005).
-!experiments/E008_multimodel/
-experiments/E008_multimodel/*
-!experiments/E008_multimodel/results_*.json
-!experiments/E008_multimodel/report_*.html
-# E009 cross-model post-adapter (Claude + agentic_probe + 9 modelos).
-# Exclui *_full.html — pesa 75+MB, se regenera con build_multimodel_full_report.py.
-!experiments/E009_multimodel/
-experiments/E009_multimodel/*
-!experiments/E009_multimodel/results_*.json
-!experiments/E009_multimodel/report_multimodel.html
-!experiments/E009_multimodel/agentic_probe.json
-# E010 iteration pilot single-model (payload_to_model completo).
-!experiments/E010_iteration_pilot/
-experiments/E010_iteration_pilot/*
-!experiments/E010_iteration_pilot/results_*.json
-!experiments/E010_iteration_pilot/viewer_*.html
-!experiments/E010_iteration_pilot/picked_photos.json
-# E007 corpus sampleo balanceado (180 fotos, candidates JSON sin las fotos).
+!experiments/E005_react_pilot/annotated_v3_thinking_visible.json
+
+# E007 corpus sample
 !experiments/E007_sample_diverso/
 experiments/E007_sample_diverso/*
 !experiments/E007_sample_diverso/candidates.json
 !experiments/E007_sample_diverso/audit_summary.json
-# E011 text overlay detection — runs comparativos (solo JSON, viewers regenerables).
+
+# E008 smoke cross-model
+!experiments/E008_multimodel/
+experiments/E008_multimodel/*
+!experiments/E008_multimodel/results_*.json
+!experiments/E008_multimodel/smoke_test_results.json
+
+# E009 cross-model post-adapter
+!experiments/E009_multimodel/
+experiments/E009_multimodel/*
+!experiments/E009_multimodel/results_*.json
+!experiments/E009_multimodel/agentic_probe.json
+
+# E010 iteration pilot
+!experiments/E010_iteration_pilot/
+experiments/E010_iteration_pilot/*
+!experiments/E010_iteration_pilot/results_*.json
+!experiments/E010_iteration_pilot/picked_photos.json
+
+# E011 text overlay detection
 !experiments/E011_text_overlay_detection/
 experiments/E011_text_overlay_detection/*
 !experiments/E011_text_overlay_detection/sample*/
 experiments/E011_text_overlay_detection/sample*/*
 !experiments/E011_text_overlay_detection/sample*/detections.json
-# E012 min_steps ablation — single-model × 10 fotos × {0,15,30}.
+
+# E012 min_steps ablation
 !experiments/E012_min_steps/
 experiments/E012_min_steps/*
 !experiments/E012_min_steps/results_*.json
 !experiments/E012_min_steps/picked_photos.json
-!experiments/E012_min_steps/viewer_*.html
-# E013 grid reading smoke (validación pre-implementación image_search v2).
+
+# E013 grid reading smoke
 !experiments/E013_grid_smoke/
 experiments/E013_grid_smoke/*
 !experiments/E013_grid_smoke/smoke_results.json
 !experiments/E013_grid_smoke/grid_*x*_metadata.json
-!experiments/E013_grid_smoke/grid_*x*.jpg
+
+# Métricas agregadas
+!experiments/metrics_summary.json
+
+# === RE-IGNORE de archivos pesados (último match gana) ===
+
+# HTMLs siempre fuera (regenerables, >10MB cada uno)
+experiments/**/*.html
+
+# Results JSONs pesados específicos (>5MB, contienen base64 embedded — regenerables)
+experiments/E005_react_pilot/results_v3_thinking_visible.json
+experiments/E008_multimodel/results_gpt-5_4.json
+experiments/E009_multimodel/results_gpt-5_4.json
+experiments/E010_iteration_pilot/results_gpt-5_4-mini_blurred.json
+experiments/E010_iteration_pilot/results_gpt-5_4-mini_prompt_v2.json
+experiments/E012_min_steps/results_gpt-5_4-mini_min0.json
+experiments/E012_min_steps/results_gpt-5_4-mini_min15.json
+experiments/E012_min_steps/results_gpt-5_4-mini_min30.json
 results/
 .claude/settings.local.json
 .claude/worktrees/

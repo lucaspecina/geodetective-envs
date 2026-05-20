@@ -781,6 +781,7 @@ def run_react_agent(
                         lon=float(args["lon"]),
                         zoom=int(args.get("zoom", 14)),
                         map_type=args.get("map_type", "roadmap"),
+                        view=args.get("view", "single"),
                     )
                     if isinstance(sm, StaticMapError):
                         if verbose:
@@ -789,12 +790,26 @@ def run_react_agent(
                         result.trace.append({"step": step + 1, "type": "static_map_error", "error": sm.error})
                     else:
                         if verbose:
-                            print(f"     → static_map ok type={sm.type}")
-                        meta = {"lat": sm.lat, "lon": sm.lon, "zoom": sm.zoom, "type": sm.type, "size": list(sm.size), "note": sm.note}
+                            print(f"     → static_map ok type={sm.type} pois={len(sm.nearby_pois)} elev={sm.elevation.elevation_m if sm.elevation else 'NA'}")
+                        # v2 (#41): payload incluye POIs + elevation enriquecidos
+                        meta = {
+                            "lat": sm.lat, "lon": sm.lon, "zoom": sm.zoom, "type": sm.type,
+                            "size": list(sm.size), "note": sm.note,
+                            "nearby_pois": [p.to_dict() for p in sm.nearby_pois],
+                            "elevation": sm.elevation.to_dict() if sm.elevation else None,
+                            "composite_views": sm.composite_views,
+                        }
                         payload = json.dumps(meta, ensure_ascii=False)
                         messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
+                        # Label visible: incluye POIs + elevation prominentemente
+                        label_parts = [f"Static map {sm.type} en ({sm.lat}, {sm.lon}) zoom {sm.zoom}"]
+                        if sm.elevation:
+                            label_parts.append(f"Altitud {sm.elevation.elevation_m:.0f}m | Terreno: {sm.elevation.terrain_category}")
+                        if sm.nearby_pois:
+                            poi_strs = [f"{p.name}({p.distance_m:.0f}m)" for p in sm.nearby_pois[:3]]
+                            label_parts.append(f"POIs cercanos: {', '.join(poi_strs)}")
                         parts = [
-                            {"type": "text", "text": f"[Static map {sm.type} en ({sm.lat}, {sm.lon}) zoom {sm.zoom}]"},
+                            {"type": "text", "text": "[" + " | ".join(label_parts) + "]"},
                             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{sm.base64_jpeg}"}},
                         ]
                         pending_image_injections.append(("static_map", parts))
@@ -802,6 +817,9 @@ def run_react_agent(
                             "step": step + 1, "type": "static_map",
                             "args": args, "map_type": sm.type, "lat": sm.lat, "lon": sm.lon,
                             "zoom": sm.zoom, "base64_jpeg": sm.base64_jpeg,
+                            "nearby_pois": [p.to_dict() for p in sm.nearby_pois],
+                            "elevation": sm.elevation.to_dict() if sm.elevation else None,
+                            "composite_views": sm.composite_views,
                             "payload_to_model": payload,
                             "image_inject_kind": "static_map",
                         })

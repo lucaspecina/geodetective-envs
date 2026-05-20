@@ -1,0 +1,619 @@
+{
+  "results_v3_thinking_visible.json:gpt-5.4": {
+    "label": "gpt-5.4",
+    "n_runs": 6,
+    "n_submitted": 6,
+    "dist": {
+      "mean": 1147.0537770908495,
+      "median": 709.4650383954066,
+      "std": 1367.466591821195,
+      "hit_rates": {
+        "<1km": 0.16666666666666666,
+        "<5km": 0.16666666666666666,
+        "<25km": 0.16666666666666666,
+        "<100km": 0.16666666666666666,
+        "<500km": 0.3333333333333333,
+        "<1000km": 0.6666666666666666
+      }
+    },
+    "year": {
+      "mae": 8.333333333333334,
+      "hit_rates": {
+        "±5y": 0.3333333333333333,
+        "±10y": 0.6666666666666666,
+        "±20y": 1.0
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "baja": 4,
+        "media": 1,
+        "alta": 1
+      },
+      "avg_dist_by_confidence": {
+        "alta": 0.10943236301004983,
+        "media": 322.76446989359124,
+        "baja": 1639.862190072124
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 6.666666666666667
+  },
+  "results_Kimi-K2_5.json:Kimi-K2.5": {
+    "label": "Kimi-K2.5",
+    "n_runs": 3,
+    "n_submitted": 3,
+    "dist": {
+      "mean": 4025.2640474977256,
+      "median": 2624.0558971420614,
+      "std": 3072.568893217906,
+      "hit_rates": {
+        "<1km": 0.0,
+        "<5km": 0.0,
+        "<25km": 0.0,
+        "<100km": 0.0,
+        "<500km": 0.0,
+        "<1000km": 0.0
+      }
+    },
+    "year": {
+      "mae": 8.333333333333334,
+      "hit_rates": {
+        "±5y": 0.6666666666666666,
+        "±10y": 0.6666666666666666,
+        "±20y": 1.0
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "baja": 1,
+        "media": 2
+      },
+      "avg_dist_by_confidence": {
+        "media": 4725.868122675558,
+        "baja": 2624.0558971420614
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 28.0
+  },
+  "results_Kimi-K2_6.json:Kimi-K2.6": {
+    "label": "Kimi-K2.6",
+    "n_runs": 3,
+    "n_submitted": 2,
+    "dist": {
+      "mean": 1.6599962306981173,
+      "median": 3.2379398554934578,
+      "std": 2.231549274845733,
+      "hit_rates": {
+        "<1km": 0.5,
+        "<5km": 1.0,
+        "<25km": 1.0,
+        "<100km": 1.0,
+        "<500km": 1.0,
+        "<1000km": 1.0
+      }
+    },
+    "year": {
+      "mae": 1.0,
+      "hit_rates": {
+        "±5y": 1.0,
+        "±10y": 1.0,
+        "±20y": 1.0
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "alta": 2
+      },
+      "avg_dist_by_confidence": {
+        "alta": 1.6599962306981173
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 23.0
+  },
+  "results_claude-opus-4-6.json:claude-opus-4-6": {
+    "label": "claude-opus-4-6",
+    "n_runs": 3,
+    "n_submitted": 3,
+    "dist": {
+      "mean": 645.2086890526815,
+      "median": 5.768247676322818,
+      "std": 1112.3212191999608,
+      "hit_rates": {
+        "<1km": 0.3333333333333333,
+        "<5km": 0.3333333333333333,
+        "<25km": 0.6666666666666666,
+        "<100km": 0.6666666666666666,
+        "<500km": 0.6666666666666666,
+        "<1000km": 0.6666666666666666
+      }
+    },
+    "year": {
+      "mae": 4.0,
+      "hit_rates": {
+        "±5y": 0.6666666666666666,
+        "±10y": 1.0,
+        "±20y": 1.0
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "baja": 1,
+        "media": 1,
+        "alta": 1
+      },
+      "avg_dist_by_confidence": {
+        "alta": 0.25516378744621243,
+        "media": 1929.6026556942754,
+        "baja": 5.768247676322818
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 17.666666666666668
+  },
+  "results_claude-sonnet-4-6.json:claude-sonnet-4-6": {
+    "label": "claude-sonnet-4-6",
+    "n_runs": 3,
+    "n_submitted": 2,
+    "dist": {
+      "mean": 692.1898132758515,
+      "median": 1334.5946448879306,
+      "std": 908.4976253998067,
+      "hit_rates": {
+        "<1km": 0.0,
+        "<5km": 0.0,
+        "<25km": 0.0,
+        "<100km": 0.5,
+        "<500km": 0.5,
+        "<1000km": 0.5
+      }
+    },
+    "year": {
+      "mae": 3.0,
+      "hit_rates": {
+        "±5y": 1.0,
+        "±10y": 1.0,
+        "±20y": 1.0
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "media": 1,
+        "alta": 1
+      },
+      "avg_dist_by_confidence": {
+        "alta": 49.78498166377241,
+        "media": 1334.5946448879306
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 15.0
+  },
+  "results_gpt-4o.json:gpt-4o": {
+    "label": "gpt-4o",
+    "n_runs": 3,
+    "n_submitted": 3,
+    "dist": {
+      "mean": 1204.7618892958142,
+      "median": 443.61339030281914,
+      "std": 1540.3760673551458,
+      "hit_rates": {
+        "<1km": 0.0,
+        "<5km": 0.0,
+        "<25km": 0.0,
+        "<100km": 0.0,
+        "<500km": 0.6666666666666666,
+        "<1000km": 0.6666666666666666
+      }
+    },
+    "year": {
+      "mae": 14.0,
+      "hit_rates": {
+        "±5y": 0.3333333333333333,
+        "±10y": 0.3333333333333333,
+        "±20y": 0.6666666666666666
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.6666666666666666,
+      "confidence_dist": {
+        "media": 1,
+        "alta": 2
+      },
+      "avg_dist_by_confidence": {
+        "alta": 1585.3361387923117,
+        "media": 443.61339030281914
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 7.666666666666667
+  },
+  "results_gpt-5_4-mini.json:gpt-5.4-mini": {
+    "label": "gpt-5.4-mini",
+    "n_runs": 5,
+    "n_submitted": 5,
+    "dist": {
+      "mean": 886.3279022558105,
+      "median": 273.57407210072796,
+      "std": 1284.1784700377866,
+      "hit_rates": {
+        "<1km": 0.0,
+        "<5km": 0.0,
+        "<25km": 0.0,
+        "<100km": 0.0,
+        "<500km": 0.8,
+        "<1000km": 0.8
+      }
+    },
+    "year": {
+      "mae": 10.0,
+      "hit_rates": {
+        "±5y": 0.5,
+        "±10y": 0.5,
+        "±20y": 0.75
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.2,
+      "confidence_dist": {
+        "baja": 1,
+        "media": 3,
+        "alta": 1
+      },
+      "avg_dist_by_confidence": {
+        "alta": 254.5171053145505,
+        "media": 1227.1591881814556,
+        "baja": 495.6448414201345
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 5.2
+  },
+  "results_gpt-5_4.json:gpt-5.4": {
+    "label": "gpt-5.4",
+    "n_runs": 3,
+    "n_submitted": 3,
+    "dist": {
+      "mean": 1848.2159739428992,
+      "median": 1600.4007710881108,
+      "std": 1481.6937037753682,
+      "hit_rates": {
+        "<1km": 0.0,
+        "<5km": 0.0,
+        "<25km": 0.0,
+        "<100km": 0.0,
+        "<500km": 0.0,
+        "<1000km": 0.3333333333333333
+      }
+    },
+    "year": {
+      "mae": 7.0,
+      "hit_rates": {
+        "±5y": 0.3333333333333333,
+        "±10y": 1.0,
+        "±20y": 1.0
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "baja": 2,
+        "media": 1
+      },
+      "avg_dist_by_confidence": {
+        "media": 506.05503988735154,
+        "baja": 2519.2964409706733
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 12.666666666666666
+  },
+  "results_grok-4-1-fast-reasoning.json:grok-4-1-fast-reasoning": {
+    "label": "grok-4-1-fast-reasoning",
+    "n_runs": 3,
+    "n_submitted": 3,
+    "dist": {
+      "mean": 1164.7266205211706,
+      "median": 36.07678531766767,
+      "std": 1986.1574718683182,
+      "hit_rates": {
+        "<1km": 0.3333333333333333,
+        "<5km": 0.3333333333333333,
+        "<25km": 0.3333333333333333,
+        "<100km": 0.6666666666666666,
+        "<500km": 0.6666666666666666,
+        "<1000km": 0.6666666666666666
+      }
+    },
+    "year": {
+      "mae": 12.0,
+      "hit_rates": {
+        "±5y": 0.3333333333333333,
+        "±10y": 0.6666666666666666,
+        "±20y": 0.6666666666666666
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.3333333333333333,
+      "confidence_dist": {
+        "media": 1,
+        "alta": 2
+      },
+      "avg_dist_by_confidence": {
+        "alta": 1729.0515381229218,
+        "media": 36.07678531766767
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 5.666666666666667
+  },
+  "results_grok-4_3.json:grok-4.3": {
+    "label": "grok-4.3",
+    "n_runs": 3,
+    "n_submitted": 3,
+    "dist": {
+      "mean": 2060.437973077184,
+      "median": 2182.4203652064975,
+      "std": 1347.1718449754258,
+      "hit_rates": {
+        "<1km": 0.0,
+        "<5km": 0.0,
+        "<25km": 0.0,
+        "<100km": 0.0,
+        "<500km": 0.0,
+        "<1000km": 0.3333333333333333
+      }
+    },
+    "year": {
+      "mae": 6.333333333333333,
+      "hit_rates": {
+        "±5y": 0.6666666666666666,
+        "±10y": 0.6666666666666666,
+        "±20y": 1.0
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "baja": 1,
+        "media": 2
+      },
+      "avg_dist_by_confidence": {
+        "media": 1419.4218061525794,
+        "baja": 3342.470306926393
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 15.333333333333334
+  },
+  "results_gpt-5_4-mini_blurred.json:gpt-5.4-mini": {
+    "label": "gpt-5.4-mini",
+    "n_runs": 5,
+    "n_submitted": 4,
+    "dist": {
+      "mean": 4558.548272273119,
+      "median": 611.262455640898,
+      "std": 8511.840285427643,
+      "hit_rates": {
+        "<1km": 0.0,
+        "<5km": 0.0,
+        "<25km": 0.0,
+        "<100km": 0.25,
+        "<500km": 0.5,
+        "<1000km": 0.75
+      }
+    },
+    "year": {
+      "mae": 10.0,
+      "hit_rates": {
+        "±5y": 0.0,
+        "±10y": 1.0,
+        "±20y": 1.0
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "baja": 2,
+        "media": 2
+      },
+      "avg_dist_by_confidence": {
+        "media": 8797.380177924342,
+        "baja": 319.7163666218968
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 5.6
+  },
+  "results_gpt-5_4-mini_tools_v2_smoke.json:gpt-5.4-mini": {
+    "label": "gpt-5.4-mini",
+    "n_runs": 1,
+    "n_submitted": 1,
+    "dist": {
+      "mean": 273.2632270027899,
+      "median": 273.2632270027899,
+      "std": null,
+      "hit_rates": {
+        "<1km": 0.0,
+        "<5km": 0.0,
+        "<25km": 0.0,
+        "<100km": 0.0,
+        "<500km": 1.0,
+        "<1000km": 1.0
+      }
+    },
+    "year": {
+      "mae": null,
+      "hit_rates": {}
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "media": 1
+      },
+      "avg_dist_by_confidence": {
+        "media": 273.2632270027899
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 7.0
+  },
+  "results_gpt-5_4-mini_min0.json:gpt-5.4-mini": {
+    "label": "gpt-5.4-mini",
+    "n_runs": 10,
+    "n_submitted": 10,
+    "dist": {
+      "mean": 2638.989679485746,
+      "median": 2360.0760273384954,
+      "std": 3505.9522946061998,
+      "hit_rates": {
+        "<1km": 0.1,
+        "<5km": 0.1,
+        "<25km": 0.1,
+        "<100km": 0.2,
+        "<500km": 0.3,
+        "<1000km": 0.4
+      }
+    },
+    "year": {
+      "mae": 15.0,
+      "hit_rates": {
+        "±5y": 0.375,
+        "±10y": 0.5,
+        "±20y": 0.875
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.1,
+      "confidence_dist": {
+        "baja": 4,
+        "media": 4,
+        "alta": 2
+      },
+      "avg_dist_by_confidence": {
+        "alta": 1597.81819816305,
+        "media": 3244.062944924744,
+        "baja": 2554.502154708096
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 5.5
+  },
+  "results_gpt-5_4-mini_min15.json:gpt-5.4-mini": {
+    "label": "gpt-5.4-mini",
+    "n_runs": 10,
+    "n_submitted": 6,
+    "dist": {
+      "mean": 1387.4183330475491,
+      "median": 1766.4584432098438,
+      "std": 1134.3467841018744,
+      "hit_rates": {
+        "<1km": 0.16666666666666666,
+        "<5km": 0.16666666666666666,
+        "<25km": 0.16666666666666666,
+        "<100km": 0.16666666666666666,
+        "<500km": 0.3333333333333333,
+        "<1000km": 0.5
+      }
+    },
+    "year": {
+      "mae": 9.5,
+      "hit_rates": {
+        "±5y": 0.25,
+        "±10y": 0.5,
+        "±20y": 1.0
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.16666666666666666,
+      "confidence_dist": {
+        "baja": 1,
+        "media": 3,
+        "alta": 2
+      },
+      "avg_dist_by_confidence": {
+        "alta": 1175.2097039313405,
+        "media": 1029.334380827408,
+        "baja": 2886.087447940391
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 13.2
+  },
+  "results_gpt-5_4-mini_min30.json:gpt-5.4-mini": {
+    "label": "gpt-5.4-mini",
+    "n_runs": 10,
+    "n_submitted": 4,
+    "dist": {
+      "mean": 2856.1614502878483,
+      "median": 2393.8093995298022,
+      "std": 2546.161754601936,
+      "hit_rates": {
+        "<1km": 0.0,
+        "<5km": 0.0,
+        "<25km": 0.0,
+        "<100km": 0.0,
+        "<500km": 0.0,
+        "<1000km": 0.0
+      }
+    },
+    "year": {
+      "mae": 15.75,
+      "hit_rates": {
+        "±5y": 0.25,
+        "±10y": 0.5,
+        "±20y": 0.75
+      }
+    },
+    "calibration": {
+      "overconfidence_rate": 0.0,
+      "confidence_dist": {
+        "baja": 1,
+        "media": 3
+      },
+      "avg_dist_by_confidence": {
+        "media": 3010.2788005405305,
+        "baja": 2393.8093995298022
+      }
+    },
+    "verification": {
+      "visual_before_submit_rate": 1.0
+    },
+    "avg_steps": 20.4
+  }
+}

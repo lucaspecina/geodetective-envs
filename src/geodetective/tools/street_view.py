@@ -188,9 +188,13 @@ TOOL_SCHEMA = {
     "function": {
         "name": "street_view",
         "description": (
-            "Pedir Street View desde coords. 2 modos: single heading (1 imagen), o contact_sheet "
+            "Pedir Street View desde coords. 2 modos: single heading (1 imagen), o contact_sheet=True "
             "(4 imágenes auto: N/E/S/W = headings 0/90/180/270). La imagen incluye fecha del panorama "
-            "y distancia entre las coords pedidas y el panorama real. Sin cobertura → error 'no_coverage'."
+            "y distancia entre las coords pedidas y el panorama real. Sin cobertura → error 'no_coverage'. "
+            "**Recomendación**: cuando estás VERIFICANDO una hipótesis (creés haber encontrado el lugar), "
+            "usá `contact_sheet=True` — ver el lugar desde 4 ángulos te ayuda a no comprometerte a una "
+            "sola vista que puede no representar el lugar completo. Para exploración inicial rápida o "
+            "para mirar un detalle específico en cierta dirección, usá single heading."
         ),
         "parameters": {
             "type": "object",

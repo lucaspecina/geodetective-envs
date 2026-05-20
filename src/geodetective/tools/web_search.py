@@ -45,9 +45,22 @@ class SearchResult:
     url: str
     content: str  # snippet o resumen
     score: Optional[float] = None
+    # v2 (#40): metadata enriquecida
+    site_name: str = ""  # "Wikipedia", "fotopolska.eu", "archive.org"
+    date_published: str = ""  # YYYY-MM-DD si lo encuentra, sino ""
+    language: str = ""  # ISO 2-letter, ej "en", "ru", "pt"
+    source_type: str = ""  # "article", "wikipedia", "archive", "blog", "social", "forum", "other"
 
     def to_dict(self) -> dict:
-        return {"title": self.title, "url": self.url, "content": self.content, "score": self.score}
+        out = {"title": self.title, "url": self.url, "content": self.content}
+        if self.score is not None:
+            out["score"] = self.score
+        # Solo incluir metadata si no está vacía
+        for k in ("site_name", "date_published", "language", "source_type"):
+            v = getattr(self, k, "")
+            if v:
+                out[k] = v
+        return out
 
 
 @dataclass
@@ -96,15 +109,18 @@ def _get_client() -> OpenAI:
 
 
 def _extract_sources(resp) -> list[dict]:
-    """Parsear sources del response. Estrategia:
-    1. Parsear el message text en formato `N. [TITLE]\\n URL: ...\\n Extracto: ...`.
-    2. Fallback URLs sueltas (sin title/snippet) desde `web_search_call.action.sources`.
+    """Parsear sources del response. v2 Estrategia:
+    1. Parsear como JSON estructurado (formato v2).
+    2. Fallback al regex markdown viejo (back-compat).
+    3. Fallback URLs sueltas desde `web_search_call.action.sources`.
     """
+    import json as _json
     output = getattr(resp, "output", None) or []
 
-    # Path 1: parse markdown del message text
     sources: list[dict] = []
     seen_urls: set[str] = set()
+
+    # Path 1: parse JSON del message text (v2)
     for item in output:
         if getattr(item, "type", None) != "message":
             continue
@@ -112,16 +128,43 @@ def _extract_sources(resp) -> list[dict]:
             if getattr(c, "type", None) != "output_text":
                 continue
             text = getattr(c, "text", "") or ""
-            for m in _SOURCE_BLOCK_RE.finditer(text):
-                url = m.group("url").strip().rstrip(".,;:)")
-                if url in seen_urls:
-                    continue
-                seen_urls.add(url)
-                sources.append({
-                    "url": url,
-                    "title": m.group("title").strip(),
-                    "snippet": m.group("snippet").strip(),
-                })
+            # Tolerar code fences ```json ... ``` por si el helper los pone igual
+            text_clean = text.strip()
+            if text_clean.startswith("```"):
+                # Remover primera y última línea (code fence)
+                lines = text_clean.split("\n")
+                text_clean = "\n".join(lines[1:-1]) if len(lines) > 2 else text_clean
+            try:
+                data = _json.loads(text_clean)
+                results = data.get("results", []) if isinstance(data, dict) else []
+                for r in results:
+                    if not isinstance(r, dict):
+                        continue
+                    url = (r.get("url", "") or "").strip().rstrip(".,;:)")
+                    if not url or url in seen_urls:
+                        continue
+                    seen_urls.add(url)
+                    sources.append({
+                        "url": url,
+                        "title": (r.get("title", "") or "").strip(),
+                        "snippet": (r.get("snippet", "") or "").strip(),
+                        "site_name": (r.get("site_name", "") or "").strip(),
+                        "date_published": (r.get("date_published", "") or "").strip(),
+                        "language": (r.get("language", "") or "").strip(),
+                        "source_type": (r.get("source_type", "") or "").strip(),
+                    })
+            except (_json.JSONDecodeError, AttributeError, KeyError, TypeError):
+                # Fallback al regex viejo (back-compat con cache + casos donde el helper devuelve markdown)
+                for m in _SOURCE_BLOCK_RE.finditer(text):
+                    url = m.group("url").strip().rstrip(".,;:)")
+                    if url in seen_urls:
+                        continue
+                    seen_urls.add(url)
+                    sources.append({
+                        "url": url,
+                        "title": m.group("title").strip(),
+                        "snippet": m.group("snippet").strip(),
+                    })
 
     # Path 2 (fallback): URLs de web_search_call.action.sources (solo URL, sin title)
     fallback_urls = []
@@ -143,7 +186,6 @@ def _extract_sources(resp) -> list[dict]:
                 fallback_urls.append(url)
                 seen_urls.add(url)
 
-    # Mergeamos: primero las que tienen title/snippet, después fallback URLs.
     for url in fallback_urls:
         sources.append({"url": url, "title": "", "snippet": ""})
 
@@ -152,20 +194,27 @@ def _extract_sources(resp) -> list[dict]:
 
 def _call_websearch(query: str, n: int) -> list[dict]:
     """Llamada cruda a Azure Responses API + web_search tool. Devuelve lista de dicts
-    con keys url/title/snippet."""
+    con keys url/title/snippet + metadata enriquecida (v2 #40).
+
+    v2: pedimos JSON estructurado al helper, fallback a regex si JSON falla.
+    """
     client = _get_client()
     model = os.environ.get("AZURE_WEBSEARCH_MODEL", "gpt-4.1-mini")
     prompt = (
         f"Hacé una búsqueda web sobre: {query}\n\n"
-        f"Después de buscar, listá las top {n} fuentes encontradas EN ESTE FORMATO EXACTO "
-        f"(usá los labels en español tal cual, sin nada antes ni después de la lista):\n\n"
-        f"1. [TÍTULO DESCRIPTIVO DE LA PÁGINA]\n"
-        f"   URL: [url completa]\n"
-        f"   Extracto: [1-3 oraciones con info concreta del contenido]\n\n"
-        f"2. [TÍTULO]\n"
-        f"   URL: [url]\n"
-        f"   Extracto: [info]\n\n"
-        f"...etc. Cada fuente NUMERADA. NO comentes ni resumas — solo listá las fuentes."
+        f"Después de buscar, devolvé las top {n} fuentes en JSON ESTRICTO con este shape (sin "
+        f"texto antes ni después del JSON, ni markdown code fences):\n\n"
+        f'{{"results": [\n'
+        f'  {{"title": "título descriptivo", "url": "https://...", '
+        f'"snippet": "1500-2000 chars con la información concreta del contenido. '
+        f'Sé extenso — incluí fechas, nombres, ubicaciones, detalles relevantes.", '
+        f'"site_name": "Wikipedia|nombre del sitio", '
+        f'"date_published": "YYYY-MM-DD o vacío si no aparece", '
+        f'"language": "ISO 2-letter (en|es|ru|pt|...)", '
+        f'"source_type": "wikipedia|article|archive|blog|forum|social|other"}},\n'
+        f"  ...\n"
+        f"]}}\n\n"
+        f"NO uses markdown, NO uses ```json```, devolvé SOLO el objeto JSON."
     )
     resp = client.responses.create(
         model=model,
@@ -191,6 +240,11 @@ def _filter_sources(
             title=s.get("title", ""),
             url=url,
             content=s.get("snippet", ""),
+            # v2: metadata enriquecida (vacía si el helper no la devolvió)
+            site_name=s.get("site_name", ""),
+            date_published=s.get("date_published", ""),
+            language=s.get("language", ""),
+            source_type=s.get("source_type", ""),
         ))
         if len(filtered) >= max_results:
             break
@@ -212,7 +266,7 @@ def _dedupe_by_url(sources: list[dict]) -> list[dict]:
 # === Public API ===
 def web_search(
     query: str,
-    max_results: int = 5,
+    max_results: int = 10,  # v2: era 5
     excluded_domains: Optional[Iterable[str]] = None,
     # Param `search_depth` retenido por back-compat de signature; ignorado.
     search_depth: str = "advanced",
@@ -276,10 +330,13 @@ TOOL_SCHEMA = {
         "name": "web_search",
         "description": (
             "Buscar en la web información de contexto sobre un lugar, edificio, "
-            "evento histórico, idioma de un cartel, vehículo, etc. Algunos dominios "
-            "se filtran automáticamente como anti-shortcut según la foto que estás "
-            "investigando — no necesitás especificarlos. Usá queries específicas en "
-            "el idioma apropiado."
+            "evento histórico, idioma de un cartel, vehículo, etc. Devuelve resultados con "
+            "URL, título, snippet largo (1500-2000 chars con info concreta), y metadata: "
+            "site_name (Wikipedia, fotopolska.eu, etc.), date_published si aparece, "
+            "language, y source_type (wikipedia/article/archive/blog/forum/social). "
+            "Algunos dominios se filtran automáticamente como anti-shortcut según la foto "
+            "que estás investigando — no necesitás especificarlos. Usá queries específicas "
+            "en el idioma apropiado."
         ),
         "parameters": {
             "type": "object",
@@ -290,8 +347,8 @@ TOOL_SCHEMA = {
                 },
                 "max_results": {
                     "type": "integer",
-                    "description": "Máximo número de resultados (1-10).",
-                    "default": 5,
+                    "description": "Máximo número de resultados (1-15, default 10).",
+                    "default": 10,
                 },
             },
             "required": ["query"],

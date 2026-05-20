@@ -576,9 +576,33 @@ def run_react_agent(
                     if fp.images:
                         visible = [im for im in fp.images if not im.is_likely_target]
                         hidden = [im for im in fp.images if im.is_likely_target]
-                        parts: list[dict] = [{"type": "text", "text": f"[Imágenes encontradas en {url}. Mostradas en orden. {len(hidden)} imágenes ocultadas porque coinciden visualmente con la foto target (hash perceptual match — no son evidencia válida)]"}]
+                        parts: list[dict] = [{"type": "text", "text": f"[Imágenes encontradas en {url}. Mostradas en orden con su contexto extraído del HTML. {len(hidden)} imágenes ocultadas porque coinciden visualmente con la foto target (hash perceptual match — no son evidencia válida)]"}]
                         for im in visible:
-                            label = f"[img: hamming={im.hamming_distance}]"
+                            # v2 (#40): incluir contexto semántico de la imagen (caption, alt, párrafo cercano)
+                            label_parts = [f"img source: {im.url[:100]}", f"hamming={im.hamming_distance}"]
+                            if im.context:
+                                ctx = im.context
+                                if ctx.figcaption:
+                                    label_parts.append(f"caption: \"{ctx.figcaption}\"")
+                                if ctx.jsonld_caption:
+                                    label_parts.append(f"schema_caption: \"{ctx.jsonld_caption}\"")
+                                if ctx.og_alt:
+                                    label_parts.append(f"og_alt: \"{ctx.og_alt}\"")
+                                if ctx.alt:
+                                    label_parts.append(f"alt: \"{ctx.alt}\"")
+                                if ctx.title:
+                                    label_parts.append(f"title: \"{ctx.title}\"")
+                                if ctx.aria_label:
+                                    label_parts.append(f"aria: \"{ctx.aria_label}\"")
+                                if ctx.data_caption:
+                                    label_parts.append(f"data_caption: \"{ctx.data_caption}\"")
+                                if ctx.link_text:
+                                    label_parts.append(f"link_text: \"{ctx.link_text}\"")
+                                if ctx.nearby_text:
+                                    label_parts.append(f"nearby_text: \"{ctx.nearby_text}\"")
+                                if ctx.filename:
+                                    label_parts.append(f"filename: \"{ctx.filename}\"")
+                            label = "[" + " | ".join(label_parts) + "]"
                             parts.append({"type": "text", "text": label})
                             parts.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{im.base64_jpeg}"}})
                         if visible:

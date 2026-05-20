@@ -84,22 +84,35 @@ class _CellInternal:
 
 @dataclass
 class _CachedSearch:
-    """Estado completo cacheado por search_id (backend only)."""
+    """Estado completo cacheado por search_id (backend only).
+
+    v2.1 (#45): soporte paginación. all_cells contiene TODAS las celdas aceptadas
+    (hasta ~50), numeradas globalmente 1-N. Cada page muestra N_CELLS (16) celdas.
+    """
     search_id: str
     query: str
-    grid_image: Image.Image       # imagen compuesta 4×4
-    cells: list[_CellInternal]    # 16 celdas internas
-    extras: list[_CellInternal]   # 34 candidatos sobrantes (para paginación futura)
-    suspicious: list[dict]        # logueados, no mostrados
-    target_hash: Optional[imagehash.ImageHash]
-    excluded_domains: list[str]
+    all_cells: list[_CellInternal]  # TODAS aceptadas, numeradas globalmente 1-N
+    grid_images: dict[int, Image.Image] = field(default_factory=dict)  # page_num → composite
+    suspicious: list[dict] = field(default_factory=list)
+    target_hash: Optional[imagehash.ImageHash] = None
+    excluded_domains: list[str] = field(default_factory=list)
     blocked_count: int = 0
     download_failed_count: int = 0
     target_match_count: int = 0
     total_raw_urls: int = 0
     created_ts: float = field(default_factory=time.time)
-    pick_rounds: int = 0          # contador de cuántas rondas de pick lleva
-    picked_cells: set[int] = field(default_factory=set)  # celdas ya pickeadas
+    pick_rounds: int = 0
+    picked_cells: set[int] = field(default_factory=set)
+
+    @property
+    def n_pages(self) -> int:
+        """Cuántas páginas hay disponibles en total."""
+        return (len(self.all_cells) + N_CELLS - 1) // N_CELLS
+
+    def get_cells_for_page(self, page: int) -> list[_CellInternal]:
+        """Devolver las celdas de una página (1-indexed)."""
+        start = (page - 1) * N_CELLS
+        return self.all_cells[start:start + N_CELLS]
 
 
 @dataclass
@@ -110,6 +123,11 @@ class GridResult:
     grid_image_b64: str           # grilla composite
     cells_metadata: list[CellMetadata]  # metadata visible al modelo
     n_cells: int
+    # v2.1 (#45): paginación
+    page: int = 1                 # número de página actual
+    n_pages_total: int = 1        # cuántas páginas hay en total (calculado del cache)
+    has_next_page: bool = False
+    cells_range: tuple[int, int] = (1, 16)  # números de celdas en esta página
     blocked_domain_count: int = 0
     target_match_count: int = 0
     suspicious_count: int = 0
@@ -120,6 +138,10 @@ class GridResult:
             "search_id": self.search_id,
             "query": self.query,
             "n_cells": self.n_cells,
+            "page": self.page,
+            "n_pages_total": self.n_pages_total,
+            "has_next_page": self.has_next_page,
+            "cells_range": list(self.cells_range),
             "cells_metadata": [c.to_dict() for c in self.cells_metadata],
             "blocked_domain_count": self.blocked_domain_count,
             "target_match_count": self.target_match_count,
@@ -349,24 +371,18 @@ def _search_new(
     if not accepted:
         return ImageSearchError(error="all_filtered", detail="Todas las imágenes fueron descartadas por filtros.")
 
-    # Curación: tomar top N_CELLS de los aceptados (con cierta diversidad)
-    selected = _diversity_pick(accepted, N_CELLS)
-    extras = [c for c in accepted if c not in selected]
-
-    # Asignar números de celda (1-indexed)
-    for i, cell in enumerate(selected):
+    # v2.1 (#45): paginación. Aplicar diversidad a TODOS los aceptados (no solo 16),
+    # numerar globalmente 1-N. Las páginas se generan on-demand a partir de all_cells.
+    selected_all = _diversity_pick(accepted, len(accepted))  # reordena por diversidad pero mantiene todos
+    for i, cell in enumerate(selected_all):
         cell.cell = i + 1
-
-    grid_img = _build_grid(selected)
 
     search_id = uuid.uuid4().hex[:12]
     _gc_old_searches()
     cached = _CachedSearch(
         search_id=search_id,
         query=query,
-        grid_image=grid_img,
-        cells=selected,
-        extras=extras,
+        all_cells=selected_all,
         suspicious=suspicious,
         target_hash=target_hash,
         excluded_domains=excluded_domains,
@@ -375,6 +391,10 @@ def _search_new(
         target_match_count=target_match,
         total_raw_urls=len(raw_items),
     )
+    # Pre-generar grilla página 1 (se generan otras on-demand)
+    page1_cells = cached.get_cells_for_page(1)
+    if page1_cells:
+        cached.grid_images[1] = _build_grid(page1_cells)
     _searches[search_id] = cached
     return cached
 
@@ -449,63 +469,99 @@ def _do_pick(search_id: str, picks: list[int]) -> Union[PickResult, ImageSearchE
 
 # === API pública ===
 
+def _build_grid_result(cached: _CachedSearch, page: int) -> Union[GridResult, ImageSearchError]:
+    """Construir GridResult para una página específica (genera grilla on-demand si falta)."""
+    if page < 1 or page > cached.n_pages:
+        return ImageSearchError(
+            error="page_out_of_range",
+            detail=f"page={page} fuera de rango. Esta búsqueda tiene {cached.n_pages} página(s) (1-{cached.n_pages}).",
+        )
+
+    # Generar la grilla on-demand si no está cacheada
+    page_cells = cached.get_cells_for_page(page)
+    if page not in cached.grid_images:
+        cached.grid_images[page] = _build_grid(page_cells)
+
+    grid_img = cached.grid_images[page]
+    cells_range = (page_cells[0].cell, page_cells[-1].cell) if page_cells else (0, 0)
+    has_next = page < cached.n_pages
+
+    return GridResult(
+        search_id=cached.search_id,
+        query=cached.query,
+        grid_image_b64=_image_to_b64(grid_img),
+        cells_metadata=[
+            CellMetadata(cell=c.cell, width=c.image.size[0], height=c.image.size[1], alt_text=c.title)
+            for c in page_cells
+        ],
+        n_cells=len(page_cells),
+        page=page,
+        n_pages_total=cached.n_pages,
+        has_next_page=has_next,
+        cells_range=cells_range,
+        blocked_domain_count=cached.blocked_count,
+        target_match_count=cached.target_match_count,
+        suspicious_count=len(cached.suspicious),
+        note=(
+            f"Página {page}/{cached.n_pages}. Celdas {cells_range[0]}-{cells_range[1]}. "
+            + (f"Hay más páginas: image_search(query, page={page+1}, search_id='{cached.search_id}'). " if has_next else "")
+            + f"Para zoom en celdas: image_search(query, pick=[N,M], search_id='{cached.search_id}'). "
+            f"Max {MAX_PICKS_PER_SEARCH} picks/call, {MAX_PICK_ROUNDS} rondas total."
+        ),
+    )
+
+
 def image_search(
     query: str,
     pick: Optional[list[int]] = None,
+    page: Optional[int] = None,
     search_id: Optional[str] = None,
     target_image_path: Optional[str] = None,
     excluded_domains: Optional[Iterable[str]] = None,
-    # Back-compat: max_results se ignora en v2 (siempre 16)
-    max_results: Optional[int] = None,
+    max_results: Optional[int] = None,  # back-compat, ignorado
 ) -> Union[GridResult, PickResult, ImageSearchError]:
-    """v2 (#42): grilla 4×4 + zoom on-demand.
+    """v2.1 (#42, #45): grilla 4×4 + zoom on-demand + paginación.
 
     Modos:
-    1. Nueva búsqueda: image_search(query) → GridResult (16 candidatos en grilla)
-    2. Zoom: image_search(query, pick=[N,M], search_id="abc") → PickResult con celdas en hi-res
+    1. Nueva búsqueda: image_search(query) → GridResult página 1
+    2. Página adicional: image_search(query, page=2, search_id="abc") → GridResult página N
+    3. Zoom: image_search(query, pick=[N,M], search_id="abc") → PickResult con celdas hi-res
 
     Args:
         query: texto de búsqueda.
-        pick: lista de números de celda a expandir en alta res. Si no None, search_id requerido.
-        search_id: id devuelto por una image_search previa. Necesario con pick.
-        target_image_path: ruta a la foto target para pHash hard-reject (anti-shortcut).
+        pick: lista de números de celda a expandir en alta res. Requiere search_id.
+        page: número de página (1-indexed). Requiere search_id si page > 1.
+              Si page=None y no pick → nueva búsqueda (page=1 implícito).
+        search_id: id devuelto por una image_search previa. Necesario con pick o page>1.
+        target_image_path: ruta a la foto target para pHash hard-reject.
         excluded_domains: hosts a bloquear adicional al GLOBAL.
-        max_results: IGNORADO en v2. Siempre 16 en la grilla.
+        max_results: IGNORADO. La grilla siempre tiene 16 celdas.
 
     Returns:
         GridResult | PickResult | ImageSearchError
     """
     excluded = list(excluded_domains) if excluded_domains else []
 
-    # Modo 2: pick on existing search
+    # Modo 3: pick en search existente
     if pick is not None:
         if not search_id:
             return ImageSearchError(error="missing_search_id", detail="Pick requiere search_id de búsqueda previa.")
         return _do_pick(search_id, pick)
 
-    # Modo 1: nueva búsqueda
+    # Modo 2: página adicional de search existente
+    if page is not None and page > 1:
+        if not search_id:
+            return ImageSearchError(error="missing_search_id", detail="page>1 requiere search_id de búsqueda previa.")
+        cached = _searches.get(search_id)
+        if cached is None:
+            return ImageSearchError(error="invalid_search_id", detail=f"search_id '{search_id}' no encontrado o expirado.")
+        return _build_grid_result(cached, page)
+
+    # Modo 1: nueva búsqueda (siempre devuelve página 1)
     result = _search_new(query=query, target_image_path=target_image_path, excluded_domains=excluded)
     if isinstance(result, ImageSearchError):
         return result
-
-    return GridResult(
-        search_id=result.search_id,
-        query=result.query,
-        grid_image_b64=_image_to_b64(result.grid_image),
-        cells_metadata=[
-            CellMetadata(cell=c.cell, width=c.image.size[0], height=c.image.size[1], alt_text=c.title)
-            for c in result.cells
-        ],
-        n_cells=len(result.cells),
-        blocked_domain_count=result.blocked_count,
-        target_match_count=result.target_match_count,
-        suspicious_count=len(result.suspicious),
-        note=(
-            f"Grilla {GRID_ROWS}×{GRID_COLS} con {len(result.cells)} candidatos numerados. "
-            f"Para profundizar en celdas específicas, llamá image_search(query, pick=[N,M], search_id='{result.search_id}'). "
-            f"Hasta {MAX_PICKS_PER_SEARCH} celdas por pick, {MAX_PICK_ROUNDS} rondas total."
-        ),
-    )
+    return _build_grid_result(result, page=1)
 
 
 # OpenAI tool schema
@@ -514,12 +570,20 @@ TOOL_SCHEMA = {
     "function": {
         "name": "image_search",
         "description": (
-            "Buscar imágenes con flujo de DOS pasos (replica Google Images): "
-            "(1) Sin pick: devuelve UNA grilla 4×4 con 16 candidatos numerados — escaneá visualmente. "
-            "(2) Con pick=[N,M] + search_id de la grilla previa: devuelve esas celdas en alta resolución "
-            "para inspección detallada. Después podés invocar fetch_url_with_images con la URL de cualquier celda. "
-            "Imágenes que matchean visualmente con la foto target se descartan automáticamente (anti-shortcut). "
-            f"Max {MAX_PICKS_PER_SEARCH} picks por call, {MAX_PICK_ROUNDS} rondas total por búsqueda."
+            "Buscar imágenes (replica el flujo humano en Google Images: escanear → click → ver fuente). "
+            "Tiene TRES modos:\n\n"
+            "1. **Nueva búsqueda** — image_search(query): devuelve UNA grilla 4×4 con 16 candidatos numerados "
+            "(escanéa visualmente para descartar lo irrelevante). Recibís un `search_id` para usar en modos 2/3 "
+            "y un flag `has_next_page` indicando si hay más resultados.\n\n"
+            "2. **Página adicional** — image_search(query, page=2, search_id='abc'): si los primeros 16 no "
+            "tenían lo que buscabas, pedí la siguiente página. Las celdas se numeran globalmente (17-32 en "
+            "página 2, 33-48 en página 3, etc.). Recibís hasta 2-3 páginas según los resultados de DDG.\n\n"
+            "3. **Zoom en celdas** — image_search(query, pick=[3,7], search_id='abc'): inspeccioná en alta "
+            "resolución las celdas que te interesan. Devuelve esas celdas en 512×512 + la grilla original "
+            "re-inyectada. Después podés llamar fetch_url_with_images con la URL de cualquier celda para ver "
+            "la página fuente.\n\n"
+            f"Límites: max {MAX_PICKS_PER_SEARCH} picks por call, {MAX_PICK_ROUNDS} rondas de pick por búsqueda. "
+            "Las imágenes que matchean visualmente con la foto target se descartan automáticamente (anti-shortcut)."
         ),
         "parameters": {
             "type": "object",
@@ -528,15 +592,22 @@ TOOL_SCHEMA = {
                     "type": "string",
                     "description": "Texto de búsqueda. En cualquier idioma (relevante al contexto).",
                 },
+                "page": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Número de página (1-indexed). Si page>1 requiere search_id de búsqueda previa. "
+                                   "Default 1 = primera página (nueva búsqueda si no hay search_id).",
+                },
                 "pick": {
                     "type": "array",
-                    "items": {"type": "integer", "minimum": 1, "maximum": N_CELLS},
-                    "description": f"Lista de números de celda (1-{N_CELLS}) a expandir en alta resolución. "
-                                   "Solo si ya hiciste image_search previa para obtener la grilla. Requiere search_id.",
+                    "items": {"type": "integer", "minimum": 1},
+                    "description": "Lista de números de celda a expandir en alta resolución. "
+                                   "Solo si ya hiciste image_search previa. Requiere search_id. "
+                                   f"Max {MAX_PICKS_PER_SEARCH} celdas por call.",
                 },
                 "search_id": {
                     "type": "string",
-                    "description": "ID de la búsqueda previa (devuelto en GridResult). Requerido con pick.",
+                    "description": "ID de la búsqueda previa (devuelto en GridResult). Requerido con pick o page>1.",
                 },
             },
             "required": ["query"],

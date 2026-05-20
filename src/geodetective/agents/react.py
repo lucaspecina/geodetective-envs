@@ -620,6 +620,7 @@ def run_react_agent(
                     isr = image_search(
                         query=args.get("query", ""),
                         pick=args.get("pick"),
+                        page=args.get("page"),
                         search_id=args.get("search_id"),
                         target_image_path=target_path_str,
                         excluded_domains=excluded_domains,
@@ -635,12 +636,15 @@ def run_react_agent(
                     elif isinstance(isr, GridResult):
                         result.target_match_count += isr.target_match_count
                         if verbose:
-                            print(f"     → GRID search_id={isr.search_id} {isr.n_cells} cells target_match={isr.target_match_count} suspicious={isr.suspicious_count}")
+                            print(f"     → GRID search_id={isr.search_id} page={isr.page}/{isr.n_pages_total} {isr.n_cells} cells target_match={isr.target_match_count} suspicious={isr.suspicious_count}")
                         payload = json.dumps(isr.to_dict_no_b64(), ensure_ascii=False)
                         messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
-                        # Inyectar grilla como UNA imagen en next user message
+                        # Label con info de paginación
+                        next_page_hint = ""
+                        if isr.has_next_page:
+                            next_page_hint = f" Para siguiente página: image_search(query, page={isr.page+1}, search_id='{isr.search_id}')."
                         parts = [
-                            {"type": "text", "text": f"[image_search grilla 4×4 search_id={isr.search_id} query='{isr.query}'. {isr.n_cells} celdas numeradas. Para zoom: image_search(query, pick=[N,M], search_id='{isr.search_id}')]"},
+                            {"type": "text", "text": f"[image_search grilla 4×4 PÁGINA {isr.page}/{isr.n_pages_total}. search_id={isr.search_id}. query='{isr.query}'. Celdas {isr.cells_range[0]}-{isr.cells_range[1]} numeradas. Para zoom: image_search(query, pick=[N,M], search_id='{isr.search_id}').{next_page_hint}]"},
                             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{isr.grid_image_b64}"}},
                         ]
                         pending_image_injections.append(("image_search_grid", parts))
@@ -648,7 +652,11 @@ def run_react_agent(
                             "step": step + 1, "type": "image_search",
                             "query": args.get("query"),
                             "search_id": isr.search_id,
+                            "page": isr.page,
+                            "n_pages_total": isr.n_pages_total,
+                            "has_next_page": isr.has_next_page,
                             "n_cells": isr.n_cells,
+                            "cells_range": isr.cells_range,
                             "target_match_count": isr.target_match_count,
                             "suspicious_count": isr.suspicious_count,
                             "cells_metadata": [c.to_dict() for c in isr.cells_metadata],

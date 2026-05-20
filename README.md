@@ -1,200 +1,140 @@
 # GeoDetective Envs
 
-**Benchmark de evaluación de agentes geo-investigativos sobre fotografías históricas.** Se le pasa una foto antigua a un modelo, el modelo investiga con tools (Maps, Street View, web, archivos históricos OSM) en un loop ReAct, y se mide qué tan cerca llegó del lugar real y qué tan genuinamente investigó.
+**Benchmark para evaluar agentes investigativos sobre fotografías históricas.** El agente recibe una foto antigua y debe descubrir **dónde** y **cuándo** fue tomada, usando herramientas reales (búsqueda web, Google Maps, Street View, OpenHistoricalMap, etc.) en un loop ReAct multi-paso.
 
-> ⚠️ **Framing actual: BENCHMARK primario. El environment de RL queda como deuda futura.**
->
-> La idea original era exponer esto como **environment de RL** consumible por Verifiers / TRL / OpenEnv para training de policies. Pero la evaluación de viabilidad (mayo 2026) confirmó tres bloqueadores duros para esa versión:
->
-> - **Google Maps TOS** prohíbe usar Maps Content para training/validating ML.
-> - **Reverse image search web-scale** no tiene solución a costo razonable para filtrado adversarial sobre 1M+ fotos.
-> - **Costo de una corrida RL seria** con tools comerciales: $30K-$80K USD.
->
-> Ninguno bloquea la versión benchmark (1K-10K fotos, costo trivial, ToS de inference es zona aceptable). Por eso el proyecto construye primero el benchmark; el env de RL queda como objetivo posterior.
->
-> El nombre "GeoDetective **Envs**" refleja la idea original. Renombrar es deuda explícita.
+Mide qué tan bien razona el modelo investigando — no solo si acierta la respuesta, sino cómo llega a ella.
 
-## LA PREGUNTA
+## Qué se puede hacer hoy
 
-> **1. ¿Por qué este caso todavía no es una investigación geo-detectivesca real? ¿Qué le falta?**
->
-> **2. ¿Por qué un modelo entrenado con RL sobre este environment todavía no aprendería buen juicio investigativo geo-espacial?**
-
-Aplica al evaluar, diseñar, priorizar, revisar. Detalle + presiones evolutivas en `PROJECT.md`.
-
-## Estado
-
-- **v0 (mayo 2026, en curso)**: agente ReAct funcional con 12 tools, corpus PastVu auditado (2M records → 676K elegibles), sample diverso de 180 fotos (6×6 país×década), filtrado adversarial con GPT-4o (101 sobrevivientes), pilot E005 end-to-end. Concepto validado.
-- **v1**: corpus de producción + eval suite formal + rúbrica investigativa + comparación entre modelos.
-- **v2** (futuro): el env de RL real, sobre dataset alternativo si Google Maps queda fuera de scope.
-
-Detalle honesto de qué corre HOY: `CURRENT_STATE.md`. Historial: `CHANGELOG.md`. Roadmap: [Project v2](https://github.com/users/lucaspecina/projects/6).
-
----
+- Correr cualquier modelo (OpenAI, Anthropic, xAI, DeepSeek, Moonshot) sobre el corpus de 185 fotos balanceadas (6 países × 6 décadas, 1890-1949).
+- Comparar modelos cross-provider con métricas: distancia geodésica, year accuracy, calibración, uso de herramientas, verificación visual.
+- Analizar paso a paso qué hizo el agente: qué tools usó, qué información recibió, cómo razonó.
+- Inspeccionar trazas con viewer HTML interactivo (mapa + crops inline + step-by-step).
 
 ## Setup
 
 ```bash
+git clone https://github.com/lucaspecina/geodetective-envs.git
+cd geodetective-envs
 conda create -n geodetective python=3.11 -y && conda activate geodetective
-pip install openai httpx pillow imagehash beautifulsoup4 lxml geopy pydantic tavily-python
+pip install openai httpx pillow imagehash beautifulsoup4 lxml geopy pydantic ddgs zstandard huggingface_hub pygeohash
 ```
 
-`.env` en la raíz del repo (gitignored):
+Crear `.env` en la raíz (gitignored):
 
 ```
 AZURE_INFERENCE_CREDENTIAL=...
-AZURE_FOUNDRY_BASE_URL=https://amalia-resource.openai.azure.com/openai/v1
+AZURE_FOUNDRY_BASE_URL=https://your-resource.openai.azure.com/openai/v1
 AZURE_MODEL=gpt-5.4
-TAVILY_API_KEY=...
 GOOGLE_MAPS_API_KEY=...
 ```
 
----
+Modelos soportados (via Azure Foundry o compatibles): `gpt-4o`, `gpt-5.4`, `gpt-5.4-mini`, `claude-opus-4-6`, `claude-sonnet-4-6`, `grok-4.3`, `Kimi-K2.6`, otros.
 
-## Paso a paso — pipeline completo del benchmark
+## Quick start
 
-> Este es el orden canónico para construir el corpus filtrado y evaluar un modelo sobre él. Cada paso lee del output del anterior. Los pasos 1-3 **ya están corridos** sobre el sample piloto (180 fotos, K_PER_CELL=5). Re-ejecutalos si querés escalar K, regenerar con otra seed, o aplicar a otra fuente.
-
-### 1. Audit metadata PastVu (#3) — UNA VEZ
-
-Baja `pastvu.jsonl.zst` (282 MB) de HF y streamea para entender el dump completo.
+Investigar UNA foto del corpus:
 
 ```bash
-python scripts/audit_pastvu_metadata.py
-# Output: experiments/E006_pastvu_audit/results.json
-# Lee:    HF nyuuzyou/pastvu (descarga 1 vez, cachea)
-# Tiempo: ~35s
+# Bajar el corpus (~185 fotos, ~275 MB, una sola vez)
+python scripts/download_pastvu_dump.py
+python scripts/download_corpus_photos.py experiments/E007_sample_diverso/candidates.json
+
+# Correr el agente sobre 1 foto específica
+MODEL=gpt-5.4-mini CIDS=2165013 python scripts/run_e010_iteration.py
+# Output: experiments/E010_iteration_pilot/results_gpt-5_4-mini.json
+
+# Generar viewer step-by-step
+python scripts/build_iteration_viewer.py experiments/E010_iteration_pilot/results_gpt-5_4-mini.json
+# Abrir el HTML resultante en el browser
 ```
 
-### 2. Sample diverso (#17) — re-ejecutar si cambia K o seed
-
-Filtra eligibles (type=1 + geo + year + 1890-1949), arma celdas país×década (6×6), de-duplica por geohash5, y sortea K fotos por celda.
+Cross-model sobre múltiples fotos:
 
 ```bash
-python scripts/sample_diverso.py
-# Default: K_PER_CELL=5, SEED=42 → 180 candidatos
-# Output:  experiments/E007_sample_diverso/candidates.json + audit_summary.json
+MODELS="gpt-5.4,gpt-4o,claude-sonnet-4-6" python scripts/run_multimodel_pilot.py
 ```
 
-Para escalar el corpus (issue #25 abierta): `K_PER_CELL=20 python scripts/sample_diverso.py`.
-
-### 3. Filtro adversarial — atacante GPT-4o (#24)
-
-Para cada foto del sample, baja, limpia (strip EXIF + crop watermark + RGBA→RGB), corre N=3 llamadas a GPT-4o sin tools en paralelo, y descarta si en ALGUNA corrida cumple `dist<10km AND conf≥media`.
+Métricas post-hoc sobre resultados existentes:
 
 ```bash
-python scripts/run_attacker_filter.py
-# Default:  N_WORKERS=8
-# Output:   experiments/E004_attacker_filter/results.json
-#           experiments/E004_attacker_filter/photos/  (cache limpio)
-# Tiempo:   ~6 min sobre 180 fotos
+python scripts/compute_metrics.py experiments/E010_iteration_pilot/results_*.json
+# Devuelve: distance buckets, year accuracy, calibración, uso de tools
 ```
 
-Smoke test sobre 10 fotos: `MAX_PHOTOS=10 python scripts/run_attacker_filter.py`.
+## Herramientas del agente
 
-### 4. Correr el agente ReAct sobre el corpus filtrado (#26)
+El agente tiene acceso a 12 herramientas, cada una con un rol diferente:
 
-Lee los `decision=='keep'` del paso 3, samplea N por bucket país, y corre el ReAct loop completo (12 tools, max_steps=12) con el SYSTEM_PROMPT canónico **v3 (thinking_visible)**.
-
-```bash
-PROMPT_VERSION=v3_thinking_visible python scripts/run_react_pilot.py
-# Default: SEED=42, N_PER_BUCKET=1, REACT_MODEL=gpt-5.4 → 6 fotos
-# Output:  experiments/E005_react_pilot/results_v3_thinking_visible.json
-# Tiempo:  ~15 min
-```
-
-Variantes útiles:
-
-```bash
-# Más fotos por bucket
-N_PER_BUCKET=3 PROMPT_VERSION=v3_thinking_visible python scripts/run_react_pilot.py
-
-# Fotos específicas por cid
-PROMPT_VERSION=v3_thinking_visible python scripts/run_react_pilot.py 2126812 1748874
-
-# Cambiar modelo (cross-model run)
-PROMPT_VERSION=v3_thinking_visible REACT_MODEL=gpt-4o python scripts/run_react_pilot.py
-```
-
-### 5. Generar report HTML interactivo
-
-Frontend con mapa Leaflet + trayectoria step-by-step + crops inline + imágenes/mapas embebidos.
-
-```bash
-# Report del prompt canónico (v3, con thinking events)
-python scripts/build_pilot_report.py v3_thinking_visible
-
-# Stdout viewer rápido
-python scripts/analyze_pilot_trajectories.py v3_thinking_visible
-```
-
-Report en `experiments/E005_react_pilot/report_v3_thinking_visible.html`. Abrir con el browser:
-
-```powershell
-# Windows / PowerShell — abre con el browser default
-start experiments\E005_react_pilot\report_v3_thinking_visible.html
-
-# O el folder en explorer
-explorer experiments\E005_react_pilot
-```
-
-Tip: en Cursor / VS Code, `Ctrl+Shift+V` sobre un `.html` abre preview embebido.
-
-> **Nota histórica**: las variantes `v1_mechanical` y `v2_descriptive` se exploraron en la ablación inicial del pilot (mayo 2026) y quedaron **deprecadas** por no capturar eventos `thinking` necesarios para el process eval CORRAL (ver `research/synthesis/process_eval_design.md`). Los artefactos `results_v1_*.json`, `results_v2_*.json`, `report_v1_*.html`, `report_v2_*.html`, `report_compare.html`, junto con scripts `build_compare_report.py` y `compare_pilots.py`, quedan en el repo como referencia histórica. **No correr nuevas variantes**: solo v3 es canónico.
-
----
-
-## Pipelines alternativos / legacy
-
-### Baseline sin tools (Test 3, E001)
-
-VLM sin herramientas — sirve como floor del benchmark.
-
-```bash
-N_RUNS=3 python scripts/test3_no_tools.py
-# Lee:    experiments/E001_test3_pastvu/candidates.json
-# Output: experiments/E001_test3_pastvu/results.json
-```
-
-### ReAct sobre corpus E001 (legacy, sample manual por bbox)
-
-```bash
-python scripts/sample_pastvu.py                              # samplea por bbox manual
-N_RUNS=3 python scripts/run_react_websearch.py 1748874       # ReAct sobre cids
-```
-
-### Tests sintéticos de los módulos de corpus
-
-```bash
-python scripts/test_clean_image.py    # 13 escenarios
-python scripts/test_blacklist.py      # 14 grupos, 65 checks
-```
-
----
-
-## Navegación rápida
-
-| Si querés... | Andá a |
+| Tool | Qué hace |
 |---|---|
-| Visión, LA PREGUNTA, invariantes | `PROJECT.md` |
-| Qué corre HOY (estado honesto) | `CURRENT_STATE.md` |
-| Operativa de Claude Code en este repo | `CLAUDE.md` |
-| Trabajo pendiente / roadmap | [Project v2](https://github.com/users/lucaspecina/projects/6) · `gh issue list` |
-| Investigación, debates, related work | `research/README.md` |
-| Resultados experimentales (E001-E005) | `research/notes/` |
-| Conclusiones consolidadas | `research/synthesis/` |
-| Historial de cambios | `CHANGELOG.md` |
+| `web_search` | Búsqueda web (Azure + Bing) con metadata enriquecida: title, snippet largo, site_name, fecha, idioma, tipo (wikipedia/article/archive/etc.) |
+| `fetch_url` | Texto completo de una página web (12K chars max) |
+| `fetch_url_with_images` | Texto + imágenes embebidas con sus **captions/alt/figcaption/contexto narrativo** del HTML |
+| `image_search` | Búsqueda de imágenes en flujo 3-pasos: grilla 4×4 numerada → pick celdas en alta res → ver página fuente. Soporta paginación. |
+| `geocode` / `reverse_geocode` | Nombre ↔ coordenadas (Nominatim/OSM) |
+| `historical_query` / `historical_query_at` | OpenHistoricalMap: qué edificios/iglesias/estaciones existían en zona X en año Y |
+| `crop_image` / `crop_image_relative` | Zoom en regiones de la foto target |
+| `static_map` | Mapas Google con POIs cercanos categorizados + altitud + categoría de terreno. Soporta vista compuesta 4-en-1 (sat+terrain+roadmap+hybrid). |
+| `street_view` | Vistas actuales de Street View con opción de exploración de panoramas vecinos |
+| `submit_answer` | Respuesta final estructurada (location, lat, lon, year, confidence, reasoning, verification_checks) |
 
-## Estructura
+## Estructura del proyecto
 
 ```
 src/geodetective/
-├── corpus/          # clean_image (#22), blacklist runtime per-photo (#23)
-├── tools/           # 12 tools del agente
-└── agents/react.py  # ReAct loop con OpenAI tool calling
+├── tools/              # 12 herramientas del agente
+├── agents/react.py     # Loop ReAct multi-paso con OpenAI tool calling
+├── llm_adapter.py      # Rutea OpenAI-compatible vs Anthropic via Foundry
+├── corpus/             # Pipeline de preparación del corpus (clean, blacklist)
+├── judge/              # Annotator de procesos (CORRAL-adapted)
+└── eval/metrics.py     # Métricas post-hoc (distance buckets, year, calibration)
 
-scripts/             # pipeline + baselines + reports
-experiments/         # gitignored excepto candidates/results.json + E005 reports
-research/            # notes, synthesis, examples, archive
-.claude/skills/      # /test, /status
+scripts/                # CLI: pipeline, ejecución, análisis, reports
+experiments/            # Resultados de experimentos (JSONs canónicos commiteados)
+corpus/photos/          # 185 fotos canónicas (gitignored, regenerable)
+research/               # Notas de experimentos, síntesis, decisiones de diseño
 ```
+
+## Cómo armar un corpus desde cero
+
+Si querés samplear un corpus nuevo (más fotos, otro balance):
+
+```bash
+# 1. Bajar el dump completo de PastVu (~282 MB, una vez)
+python scripts/download_pastvu_dump.py
+
+# 2. Samplear N fotos balanceadas (default 180: 6 buckets país × 6 décadas × K=5)
+K_PER_CELL=10 python scripts/sample_diverso.py
+# Output: experiments/E007_sample_diverso/candidates.json
+
+# 3. Descargar las fotos sampleadas y limpiarlas (strip EXIF, crop watermark)
+python scripts/download_corpus_photos.py experiments/E007_sample_diverso/candidates.json
+# Output: corpus/photos/{cid}_raw.jpg + {cid}_clean_v1.jpg
+
+# 4. (Opcional) Filtrar con atacante GPT-4o sin tools — descarta las "demasiado fáciles"
+python scripts/run_attacker_filter.py
+```
+
+## Anti-shortcut
+
+El benchmark mide investigación REAL, no memorización ni búsqueda inversa. Por eso:
+
+- **Hash perceptual hard-reject**: imágenes que matchean visualmente con la foto target se descartan automáticamente.
+- **Blacklist por foto**: bloquea reverse image search, agregadores, hosting platforms, y la fuente original del archivo.
+- **Detección y blur de texto archivístico**: captions/sellos del archivo que revelan ubicación se borronean (para que el modelo no haga OCR shortcut).
+- **Foto cleaning**: strip EXIF + crop de watermarks del proveedor.
+
+## Documentación adicional
+
+| | |
+|---|---|
+| **Estado actual del sistema** | [CURRENT_STATE.md](CURRENT_STATE.md) |
+| **Historial de cambios** | [CHANGELOG.md](CHANGELOG.md) |
+| **Notas de experimentos** | [research/notes/](research/notes/) |
+| **Decisiones de diseño consolidadas** | [research/synthesis/](research/synthesis/) |
+| **Roadmap** | [Project v2](https://github.com/users/lucaspecina/projects/6) |
+
+## Licencia
+
+Por definir.

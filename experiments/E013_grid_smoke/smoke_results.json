@@ -1,0 +1,567 @@
+[
+  {
+    "model": "gpt-5.4-mini",
+    "grid": "4x4",
+    "n_cells": 16,
+    "result": {
+      "raw_text": "{\n  \"celdas\": [\n    {\n      \"cell\": 1,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"escena urbana con tranvías/calle, no coincide con grupo de personas en entorno rural/montañoso\"\n    },\n    {\n      \"cell\": 2,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"paisaje nevado urbano/vista panorámica, muy distinto al target\"\n    },\n    {\n      \"cell\": 3,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"edificio industrial en nieve, sin relación con la escena rural del target\"\n    },\n    {\n      \"cell\": 4,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"avenida urbana amplia con tráfico, no se parece al target\"\n    },\n    {\n      \"cell\": 5,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"edificio aislado, escena arquitectónica estática; no coincide con grupo de personas al aire libre\"\n    },\n    {\n      \"cell\": 6,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"edificio moderno en ciudad, época/escena muy distinta\"\n    },\n    {\n      \"cell\": 7,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"persona en roca/trepada, no corresponde a grupo social en paisaje rural\"\n    },\n    {\n      \"cell\": 8,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"escaleras y edificio urbano, sin similitud visual con el target\"\n    },\n    {\n      \"cell\": 9,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"vista aérea portuaria/urbana, totalmente diferente\"\n    },\n    {\n      \"cell\": 10,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"automóvil en avenida/parque urbano, no coincide con la foto target\"\n    },\n    {\n      \"cell\": 11,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"fachada de edificio religioso/antiguo, escena demasiado distinta\"\n    },\n    {\n      \"cell\": 12,\n      \"class\": \"maybe\",\n      \"reasoning\": \"calle antigua de época con arquitectura baja; aunque es urbana, comparte apariencia histórica en B/N y ambiente de inicio del siglo XX\"\n    },\n    {\n      \"cell\": 13,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"paisaje con muro y casas dispersas, pero sin grupo humano ni composición similar\"\n    },\n    {\n      \"cell\": 14,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"vista urbana elevada con avenida central, no corresponde al target\"\n    },\n    {\n      \"cell\": 15,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"iglesias y conjunto monumental, escena arquitectónica muy distinta\"\n    },\n    {\n      \"cell\": 16,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"fachada de gran edificio, sin similitud con el entorno rural y grupal del target\"\n    }\n  ],\n  \"personas_primer_plano\": [7, 10, 12],\n  \"solo_color\": [6],\n  \"urbanas_grandes\": [1, 4, 9, 10, 14]\n}",
+      "parsed": {
+        "celdas": [
+          {
+            "cell": 1,
+            "class": "not_plausible",
+            "reasoning": "escena urbana con tranvías/calle, no coincide con grupo de personas en entorno rural/montañoso"
+          },
+          {
+            "cell": 2,
+            "class": "not_plausible",
+            "reasoning": "paisaje nevado urbano/vista panorámica, muy distinto al target"
+          },
+          {
+            "cell": 3,
+            "class": "not_plausible",
+            "reasoning": "edificio industrial en nieve, sin relación con la escena rural del target"
+          },
+          {
+            "cell": 4,
+            "class": "not_plausible",
+            "reasoning": "avenida urbana amplia con tráfico, no se parece al target"
+          },
+          {
+            "cell": 5,
+            "class": "not_plausible",
+            "reasoning": "edificio aislado, escena arquitectónica estática; no coincide con grupo de personas al aire libre"
+          },
+          {
+            "cell": 6,
+            "class": "not_plausible",
+            "reasoning": "edificio moderno en ciudad, época/escena muy distinta"
+          },
+          {
+            "cell": 7,
+            "class": "not_plausible",
+            "reasoning": "persona en roca/trepada, no corresponde a grupo social en paisaje rural"
+          },
+          {
+            "cell": 8,
+            "class": "not_plausible",
+            "reasoning": "escaleras y edificio urbano, sin similitud visual con el target"
+          },
+          {
+            "cell": 9,
+            "class": "not_plausible",
+            "reasoning": "vista aérea portuaria/urbana, totalmente diferente"
+          },
+          {
+            "cell": 10,
+            "class": "not_plausible",
+            "reasoning": "automóvil en avenida/parque urbano, no coincide con la foto target"
+          },
+          {
+            "cell": 11,
+            "class": "not_plausible",
+            "reasoning": "fachada de edificio religioso/antiguo, escena demasiado distinta"
+          },
+          {
+            "cell": 12,
+            "class": "maybe",
+            "reasoning": "calle antigua de época con arquitectura baja; aunque es urbana, comparte apariencia histórica en B/N y ambiente de inicio del siglo XX"
+          },
+          {
+            "cell": 13,
+            "class": "not_plausible",
+            "reasoning": "paisaje con muro y casas dispersas, pero sin grupo humano ni composición similar"
+          },
+          {
+            "cell": 14,
+            "class": "not_plausible",
+            "reasoning": "vista urbana elevada con avenida central, no corresponde al target"
+          },
+          {
+            "cell": 15,
+            "class": "not_plausible",
+            "reasoning": "iglesias y conjunto monumental, escena arquitectónica muy distinta"
+          },
+          {
+            "cell": 16,
+            "class": "not_plausible",
+            "reasoning": "fachada de gran edificio, sin similitud con el entorno rural y grupal del target"
+          }
+        ],
+        "personas_primer_plano": [
+          7,
+          10,
+          12
+        ],
+        "solo_color": [
+          6
+        ],
+        "urbanas_grandes": [
+          1,
+          4,
+          9,
+          10,
+          14
+        ]
+      }
+    },
+    "evaluation": {
+      "json_ok": true,
+      "valid_cells": true,
+      "discrimination_ok": true,
+      "plausible_count": 0,
+      "total_classified": 16,
+      "personas_count": 3,
+      "solo_color_count": 1,
+      "urbanas_count": 5
+    }
+  },
+  {
+    "model": "gpt-4o",
+    "grid": "4x4",
+    "n_cells": 16,
+    "result": {
+      "raw_text": "{\n  \"celdas\": [\n    {\"cell\": 1, \"class\": \"not_plausible\", \"reasoning\": \"escena urbana, no se parece a la rural de la foto target\"},\n    {\"cell\": 2, \"class\": \"maybe\", \"reasoning\": \"paisaje abierto, algo similar a la foto target\"},\n    {\"cell\": 3, \"class\": \"not_plausible\", \"reasoning\": \"industrial y urbana, no coincide con el entorno natural de la foto target\"},\n    {\"cell\": 4, \"class\": \"not_plausible\", \"reasoning\": \"avenida urbana, diferente de la escena rural de la foto target\"},\n    {\"cell\": 5, \"class\": \"maybe\", \"reasoning\": \"edificio aislado en área abierta, parecido al paisaje de la foto target\"},\n    {\"cell\": 6, \"class\": \"not_plausible\", \"reasoning\": \"edificio moderno y urbano, no se asemeja a la foto target rural de la época\"},\n    {\"cell\": 7, \"class\": \"not_plausible\", \"reasoning\": \"persona en entorno rocoso, distinto del entorno rural de la foto target\"},\n    {\"cell\": 8, \"class\": \"not_plausible\", \"reasoning\": \"escaleras urbanas, no coincide con la escena natural de la foto target\"},\n    {\"cell\": 9, \"class\": \"not_plausible\", \"reasoning\": \"vista aérea urbana, diferente del paisaje rural\"},\n    {\"cell\": 10, \"class\": \"not_plausible\", \"reasoning\": \"coche de época en entorno urbano, no coincide con la foto target rural\"},\n    {\"cell\": 11, \"class\": \"not_plausible\", \"reasoning\": \"detalles arquitectónicos, no coincide con entorno natural\"},\n    {\"cell\": 12, \"class\": \"not_plausible\", \"reasoning\": \"escena urbana y animada, diferente de la foto target rural\"},\n    {\"cell\": 13, \"class\": \"maybe\", \"reasoning\": \"paisaje abierto con construcción simple, algo similar a la foto target\"},\n    {\"cell\": 14, \"class\": \"not_plausible\", \"reasoning\": \"vista aérea urbana, no coincide con la foto target rural\"},\n    {\"cell\": 15, \"class\": \"maybe\", \"reasoning\": \"vista de área amplia con edificios históricos, similar a la época y entorno\"},\n    {\"cell\": 16, \"class\": \"not_plausible\", \"reasoning\": \"edificios históricos en entorno urbano, no coincide con la foto target rural\"}\n  ],\n  \"personas_primer_plano\": [7],\n  \"solo_color\": [6],\n  \"urbanas_grandes\": [1, 4, 9, 10, 14]\n}",
+      "parsed": {
+        "celdas": [
+          {
+            "cell": 1,
+            "class": "not_plausible",
+            "reasoning": "escena urbana, no se parece a la rural de la foto target"
+          },
+          {
+            "cell": 2,
+            "class": "maybe",
+            "reasoning": "paisaje abierto, algo similar a la foto target"
+          },
+          {
+            "cell": 3,
+            "class": "not_plausible",
+            "reasoning": "industrial y urbana, no coincide con el entorno natural de la foto target"
+          },
+          {
+            "cell": 4,
+            "class": "not_plausible",
+            "reasoning": "avenida urbana, diferente de la escena rural de la foto target"
+          },
+          {
+            "cell": 5,
+            "class": "maybe",
+            "reasoning": "edificio aislado en área abierta, parecido al paisaje de la foto target"
+          },
+          {
+            "cell": 6,
+            "class": "not_plausible",
+            "reasoning": "edificio moderno y urbano, no se asemeja a la foto target rural de la época"
+          },
+          {
+            "cell": 7,
+            "class": "not_plausible",
+            "reasoning": "persona en entorno rocoso, distinto del entorno rural de la foto target"
+          },
+          {
+            "cell": 8,
+            "class": "not_plausible",
+            "reasoning": "escaleras urbanas, no coincide con la escena natural de la foto target"
+          },
+          {
+            "cell": 9,
+            "class": "not_plausible",
+            "reasoning": "vista aérea urbana, diferente del paisaje rural"
+          },
+          {
+            "cell": 10,
+            "class": "not_plausible",
+            "reasoning": "coche de época en entorno urbano, no coincide con la foto target rural"
+          },
+          {
+            "cell": 11,
+            "class": "not_plausible",
+            "reasoning": "detalles arquitectónicos, no coincide con entorno natural"
+          },
+          {
+            "cell": 12,
+            "class": "not_plausible",
+            "reasoning": "escena urbana y animada, diferente de la foto target rural"
+          },
+          {
+            "cell": 13,
+            "class": "maybe",
+            "reasoning": "paisaje abierto con construcción simple, algo similar a la foto target"
+          },
+          {
+            "cell": 14,
+            "class": "not_plausible",
+            "reasoning": "vista aérea urbana, no coincide con la foto target rural"
+          },
+          {
+            "cell": 15,
+            "class": "maybe",
+            "reasoning": "vista de área amplia con edificios históricos, similar a la época y entorno"
+          },
+          {
+            "cell": 16,
+            "class": "not_plausible",
+            "reasoning": "edificios históricos en entorno urbano, no coincide con la foto target rural"
+          }
+        ],
+        "personas_primer_plano": [
+          7
+        ],
+        "solo_color": [
+          6
+        ],
+        "urbanas_grandes": [
+          1,
+          4,
+          9,
+          10,
+          14
+        ]
+      }
+    },
+    "evaluation": {
+      "json_ok": true,
+      "valid_cells": true,
+      "discrimination_ok": true,
+      "plausible_count": 0,
+      "total_classified": 16,
+      "personas_count": 1,
+      "solo_color_count": 1,
+      "urbanas_count": 5
+    }
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "grid": "4x4",
+    "n_cells": 16,
+    "result": {
+      "raw_text": "{\n  \"celdas\": [\n    {\"cell\": 1, \"class\": \"not_plausible\", \"reasoning\": \"escena urbana asiática con edificios y postes eléctricos, sin grupo de personas en entorno rural/montañoso\"},\n    {\"cell\": 2, \"class\": \"not_plausible\", \"reasoning\": \"vista panorámica de asentamiento en terreno nevado/árido, sin grupo de personas en primer plano\"},\n    {\"cell\": 3, \"class\": \"not_plausible\", \"reasoning\": \"edificio industrial con nieve, sin personas ni montañas boscosas\"},\n    {\"cell\": 4, \"class\": \"not_plausible\", \"reasoning\": \"calle urbana europea con tranvía y árboles sin hojas, contexto totalmente diferente\"},\n    {\"cell\": 5, \"class\": \"not_plausible\", \"reasoning\": \"edificio gubernamental aislado, sin personas ni paisaje montañoso\"},\n    {\"cell\": 6, \"class\": \"not_plausible\", \"reasoning\": \"foto a color de edificio moderno, completamente diferente a la escena rural histórica\"},\n    {\"cell\": 7, \"class\": \"maybe\", \"reasoning\": \"persona sola en entorno rocoso/natural, blanco y negro, época similar, pero escena muy diferente al grupo numeroso\"},\n    {\"cell\": 8, \"class\": \"not_plausible\", \"reasoning\": \"edificio urbano con escalinatas, sin personas en grupo ni paisaje montañoso\"},\n    {\"cell\": 9, \"class\": \"not_plausible\", \"reasoning\": \"vista aérea de puerto fluvial, completamente diferente\"},\n    {\"cell\": 10, \"class\": \"not_plausible\", \"reasoning\": \"automóvil clásico en parque urbano, sin grupo de personas ni montañas\"},\n    {\"cell\": 11, \"class\": \"not_plausible\", \"reasoning\": \"detalle arquitectónico de puerta de iglesia, sin personas ni paisaje\"},\n    {\"cell\": 12, \"class\": \"not_plausible\", \"reasoning\": \"calle comercial asiática a color, completamente diferente\"},\n    {\"cell\": 13, \"class\": \"not_plausible\", \"reasoning\": \"vista de calle o canal con edificios, sin personas en grupo ni montañas\"},\n    {\"cell\": 14, \"class\": \"not_plausible\", \"reasoning\": \"vista panorámica urbana desde altura, sin personas en primer plano ni montañas\"},\n    {\"cell\": 15, \"class\": \"not_plausible\", \"reasoning\": \"iglesia ortodoxa con cúpulas, escena urbana/religiosa sin grupo de personas en entorno rural\"},\n    {\"cell\": 16, \"class\": \"not_plausible\", \"reasoning\": \"fachada de edificio institucional largo, sin personas ni paisaje montañoso\"}\n  ],\n  \"personas_primer_plano\": [7],\n  \"solo_color\": [6, 12],\n  \"urbanas_grandes\": [1, 4, 14]\n}",
+      "parsed": {
+        "celdas": [
+          {
+            "cell": 1,
+            "class": "not_plausible",
+            "reasoning": "escena urbana asiática con edificios y postes eléctricos, sin grupo de personas en entorno rural/montañoso"
+          },
+          {
+            "cell": 2,
+            "class": "not_plausible",
+            "reasoning": "vista panorámica de asentamiento en terreno nevado/árido, sin grupo de personas en primer plano"
+          },
+          {
+            "cell": 3,
+            "class": "not_plausible",
+            "reasoning": "edificio industrial con nieve, sin personas ni montañas boscosas"
+          },
+          {
+            "cell": 4,
+            "class": "not_plausible",
+            "reasoning": "calle urbana europea con tranvía y árboles sin hojas, contexto totalmente diferente"
+          },
+          {
+            "cell": 5,
+            "class": "not_plausible",
+            "reasoning": "edificio gubernamental aislado, sin personas ni paisaje montañoso"
+          },
+          {
+            "cell": 6,
+            "class": "not_plausible",
+            "reasoning": "foto a color de edificio moderno, completamente diferente a la escena rural histórica"
+          },
+          {
+            "cell": 7,
+            "class": "maybe",
+            "reasoning": "persona sola en entorno rocoso/natural, blanco y negro, época similar, pero escena muy diferente al grupo numeroso"
+          },
+          {
+            "cell": 8,
+            "class": "not_plausible",
+            "reasoning": "edificio urbano con escalinatas, sin personas en grupo ni paisaje montañoso"
+          },
+          {
+            "cell": 9,
+            "class": "not_plausible",
+            "reasoning": "vista aérea de puerto fluvial, completamente diferente"
+          },
+          {
+            "cell": 10,
+            "class": "not_plausible",
+            "reasoning": "automóvil clásico en parque urbano, sin grupo de personas ni montañas"
+          },
+          {
+            "cell": 11,
+            "class": "not_plausible",
+            "reasoning": "detalle arquitectónico de puerta de iglesia, sin personas ni paisaje"
+          },
+          {
+            "cell": 12,
+            "class": "not_plausible",
+            "reasoning": "calle comercial asiática a color, completamente diferente"
+          },
+          {
+            "cell": 13,
+            "class": "not_plausible",
+            "reasoning": "vista de calle o canal con edificios, sin personas en grupo ni montañas"
+          },
+          {
+            "cell": 14,
+            "class": "not_plausible",
+            "reasoning": "vista panorámica urbana desde altura, sin personas en primer plano ni montañas"
+          },
+          {
+            "cell": 15,
+            "class": "not_plausible",
+            "reasoning": "iglesia ortodoxa con cúpulas, escena urbana/religiosa sin grupo de personas en entorno rural"
+          },
+          {
+            "cell": 16,
+            "class": "not_plausible",
+            "reasoning": "fachada de edificio institucional largo, sin personas ni paisaje montañoso"
+          }
+        ],
+        "personas_primer_plano": [
+          7
+        ],
+        "solo_color": [
+          6,
+          12
+        ],
+        "urbanas_grandes": [
+          1,
+          4,
+          14
+        ]
+      }
+    },
+    "evaluation": {
+      "json_ok": true,
+      "valid_cells": true,
+      "discrimination_ok": true,
+      "plausible_count": 0,
+      "total_classified": 16,
+      "personas_count": 1,
+      "solo_color_count": 2,
+      "urbanas_count": 3
+    }
+  },
+  {
+    "model": "gpt-5.4-mini",
+    "grid": "2x4",
+    "n_cells": 8,
+    "result": {
+      "raw_text": "{\n  \"celdas\": [\n    {\n      \"cell\": 1,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"escena urbana con avenida y tranvía, no coincide con el entorno rural/montañoso del target\"\n    },\n    {\n      \"cell\": 2,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"panorama amplio de zona urbana/nevada, sin personas en primer plano ni similitud con la escena de grupo rural\"\n    },\n    {\n      \"cell\": 3,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"infraestructura industrial/urbana cercada, muy distinto del paisaje abierto y grupo de personas del target\"\n    },\n    {\n      \"cell\": 4,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"calle urbana amplia con tranvía y edificios, no se parece al contexto rural de la foto target\"\n    },\n    {\n      \"cell\": 5,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"edificio aislado y vacío, sin personas ni paisaje montañoso similar\"\n    },\n    {\n      \"cell\": 6,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"edificio moderno a color en entorno urbano, época y escena muy diferentes al target\"\n    },\n    {\n      \"cell\": 7,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"persona en rocas/montaña, pero la composición y contexto no coinciden con la foto target de grupo en camino rural\"\n    },\n    {\n      \"cell\": 8,\n      \"class\": \"not_plausible\",\n      \"reasoning\": \"escalinata y arquitectura urbana, diferente al paisaje rural montañoso del target\"\n    }\n  ],\n  \"personas_primer_plano\": [7],\n  \"solo_color\": [6],\n  \"urbanas_grandes\": [1, 2, 4, 8]\n}",
+      "parsed": {
+        "celdas": [
+          {
+            "cell": 1,
+            "class": "not_plausible",
+            "reasoning": "escena urbana con avenida y tranvía, no coincide con el entorno rural/montañoso del target"
+          },
+          {
+            "cell": 2,
+            "class": "not_plausible",
+            "reasoning": "panorama amplio de zona urbana/nevada, sin personas en primer plano ni similitud con la escena de grupo rural"
+          },
+          {
+            "cell": 3,
+            "class": "not_plausible",
+            "reasoning": "infraestructura industrial/urbana cercada, muy distinto del paisaje abierto y grupo de personas del target"
+          },
+          {
+            "cell": 4,
+            "class": "not_plausible",
+            "reasoning": "calle urbana amplia con tranvía y edificios, no se parece al contexto rural de la foto target"
+          },
+          {
+            "cell": 5,
+            "class": "not_plausible",
+            "reasoning": "edificio aislado y vacío, sin personas ni paisaje montañoso similar"
+          },
+          {
+            "cell": 6,
+            "class": "not_plausible",
+            "reasoning": "edificio moderno a color en entorno urbano, época y escena muy diferentes al target"
+          },
+          {
+            "cell": 7,
+            "class": "not_plausible",
+            "reasoning": "persona en rocas/montaña, pero la composición y contexto no coinciden con la foto target de grupo en camino rural"
+          },
+          {
+            "cell": 8,
+            "class": "not_plausible",
+            "reasoning": "escalinata y arquitectura urbana, diferente al paisaje rural montañoso del target"
+          }
+        ],
+        "personas_primer_plano": [
+          7
+        ],
+        "solo_color": [
+          6
+        ],
+        "urbanas_grandes": [
+          1,
+          2,
+          4,
+          8
+        ]
+      }
+    },
+    "evaluation": {
+      "json_ok": true,
+      "valid_cells": true,
+      "discrimination_ok": true,
+      "plausible_count": 0,
+      "total_classified": 8,
+      "personas_count": 1,
+      "solo_color_count": 1,
+      "urbanas_count": 4
+    }
+  },
+  {
+    "model": "gpt-4o",
+    "grid": "2x4",
+    "n_cells": 8,
+    "result": {
+      "raw_text": "{\n  \"celdas\": [\n    {\"cell\": 1, \"class\": \"not_plausible\", \"reasoning\": \"escena urbana, mientras que la foto target es rural y montañosa\"},\n    {\"cell\": 2, \"class\": \"maybe\", \"reasoning\": \"paisaje abierto y edificaciones, similar al tipo de escena de la foto target\"},\n    {\"cell\": 3, \"class\": \"not_plausible\", \"reasoning\": \"entorno industrial, no coincide con el ambiente rural de la foto target\"},\n    {\"cell\": 4, \"class\": \"not_plausible\", \"reasoning\": \"gran avenida urbana, diferente del ambiente rural en la foto target\"},\n    {\"cell\": 5, \"class\": \"maybe\", \"reasoning\": \"edificación sola y terreno abierto, posibilidad de entorno similar\"},\n    {\"cell\": 6, \"class\": \"not_plausible\", \"reasoning\": \"edificio moderno, no encaja con el ambiente rural histórico\"},\n    {\"cell\": 7, \"class\": \"plausible\", \"reasoning\": \"persona en entorno natural y montañosa, se asemeja a la escena y contexto de la foto target\"},\n    {\"cell\": 8, \"class\": \"not_plausible\", \"reasoning\": \"estructura urbana sin elementos naturales, no coincide con foto target\"}\n  ],\n  \"personas_primer_plano\": [7],\n  \"solo_color\": [6],\n  \"urbanas_grandes\": [1, 4]\n}",
+      "parsed": {
+        "celdas": [
+          {
+            "cell": 1,
+            "class": "not_plausible",
+            "reasoning": "escena urbana, mientras que la foto target es rural y montañosa"
+          },
+          {
+            "cell": 2,
+            "class": "maybe",
+            "reasoning": "paisaje abierto y edificaciones, similar al tipo de escena de la foto target"
+          },
+          {
+            "cell": 3,
+            "class": "not_plausible",
+            "reasoning": "entorno industrial, no coincide con el ambiente rural de la foto target"
+          },
+          {
+            "cell": 4,
+            "class": "not_plausible",
+            "reasoning": "gran avenida urbana, diferente del ambiente rural en la foto target"
+          },
+          {
+            "cell": 5,
+            "class": "maybe",
+            "reasoning": "edificación sola y terreno abierto, posibilidad de entorno similar"
+          },
+          {
+            "cell": 6,
+            "class": "not_plausible",
+            "reasoning": "edificio moderno, no encaja con el ambiente rural histórico"
+          },
+          {
+            "cell": 7,
+            "class": "plausible",
+            "reasoning": "persona en entorno natural y montañosa, se asemeja a la escena y contexto de la foto target"
+          },
+          {
+            "cell": 8,
+            "class": "not_plausible",
+            "reasoning": "estructura urbana sin elementos naturales, no coincide con foto target"
+          }
+        ],
+        "personas_primer_plano": [
+          7
+        ],
+        "solo_color": [
+          6
+        ],
+        "urbanas_grandes": [
+          1,
+          4
+        ]
+      }
+    },
+    "evaluation": {
+      "json_ok": true,
+      "valid_cells": true,
+      "discrimination_ok": true,
+      "plausible_count": 1,
+      "total_classified": 8,
+      "personas_count": 1,
+      "solo_color_count": 1,
+      "urbanas_count": 2
+    }
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "grid": "2x4",
+    "n_cells": 8,
+    "result": {
+      "raw_text": "{\n  \"celdas\": [\n    {\"cell\": 1, \"class\": \"not_plausible\", \"reasoning\": \"escena urbana asiática con edificios y calle, sin montañas ni grupo de personas en paisaje rural\"},\n    {\"cell\": 2, \"class\": \"maybe\", \"reasoning\": \"vista panorámica de pequeña localidad con edificaciones dispersas y terreno abierto, algo similar al fondo de la foto target con montañas y casas pequeñas, aunque sin personas en primer plano\"},\n    {\"cell\": 3, \"class\": \"not_plausible\", \"reasoning\": \"estación ferroviaria invernal con nieve, contexto urbano industrial, muy distinto al escenario montañoso veraniego\"},\n    {\"cell\": 4, \"class\": \"not_plausible\", \"reasoning\": \"avenida urbana europea con tranvía y árboles alineados, nada que ver con escena rural montañosa\"},\n    {\"cell\": 5, \"class\": \"not_plausible\", \"reasoning\": \"edificio aislado de un piso en zona despejada, contexto urbano o semiurbano sin montañas ni grupo de personas\"},\n    {\"cell\": 6, \"class\": \"not_plausible\", \"reasoning\": \"foto a color de edificio moderno en altura visto desde abajo, completamente diferente en época y contenido\"},\n    {\"cell\": 7, \"class\": \"maybe\", \"reasoning\": \"persona sobre rocas en entorno natural montañoso, comparte el contexto de montaña y presencia humana en exterior, aunque sin grupo numeroso\"},\n    {\"cell\": 8, \"class\": \"not_plausible\", \"reasoning\": \"escena urbana con escalinata monumental y edificios clásicos, sin relación con escena rural montañosa\"}\n  ],\n  \"personas_primer_plano\": [7],\n  \"solo_color\": [6],\n  \"urbanas_grandes\": [1, 4, 8]\n}",
+      "parsed": {
+        "celdas": [
+          {
+            "cell": 1,
+            "class": "not_plausible",
+            "reasoning": "escena urbana asiática con edificios y calle, sin montañas ni grupo de personas en paisaje rural"
+          },
+          {
+            "cell": 2,
+            "class": "maybe",
+            "reasoning": "vista panorámica de pequeña localidad con edificaciones dispersas y terreno abierto, algo similar al fondo de la foto target con montañas y casas pequeñas, aunque sin personas en primer plano"
+          },
+          {
+            "cell": 3,
+            "class": "not_plausible",
+            "reasoning": "estación ferroviaria invernal con nieve, contexto urbano industrial, muy distinto al escenario montañoso veraniego"
+          },
+          {
+            "cell": 4,
+            "class": "not_plausible",
+            "reasoning": "avenida urbana europea con tranvía y árboles alineados, nada que ver con escena rural montañosa"
+          },
+          {
+            "cell": 5,
+            "class": "not_plausible",
+            "reasoning": "edificio aislado de un piso en zona despejada, contexto urbano o semiurbano sin montañas ni grupo de personas"
+          },
+          {
+            "cell": 6,
+            "class": "not_plausible",
+            "reasoning": "foto a color de edificio moderno en altura visto desde abajo, completamente diferente en época y contenido"
+          },
+          {
+            "cell": 7,
+            "class": "maybe",
+            "reasoning": "persona sobre rocas en entorno natural montañoso, comparte el contexto de montaña y presencia humana en exterior, aunque sin grupo numeroso"
+          },
+          {
+            "cell": 8,
+            "class": "not_plausible",
+            "reasoning": "escena urbana con escalinata monumental y edificios clásicos, sin relación con escena rural montañosa"
+          }
+        ],
+        "personas_primer_plano": [
+          7
+        ],
+        "solo_color": [
+          6
+        ],
+        "urbanas_grandes": [
+          1,
+          4,
+          8
+        ]
+      }
+    },
+    "evaluation": {
+      "json_ok": true,
+      "valid_cells": true,
+      "discrimination_ok": true,
+      "plausible_count": 0,
+      "total_classified": 8,
+      "personas_count": 1,
+      "solo_color_count": 1,
+      "urbanas_count": 3
+    }
+  }
+]

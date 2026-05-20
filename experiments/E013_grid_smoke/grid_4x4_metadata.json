@@ -1,0 +1,130 @@
+[
+  {
+    "cell": 1,
+    "cid": 410694,
+    "title": "会議場全景",
+    "country": "Japan",
+    "year": 1915,
+    "bucket_pais": "Resto"
+  },
+  {
+    "cell": 2,
+    "cid": 781325,
+    "title": "Разрушенные петергофские дома",
+    "country": "Russia",
+    "year": 1941,
+    "bucket_pais": "Russia-EU"
+  },
+  {
+    "cell": 3,
+    "cid": 657448,
+    "title": "Внешний вид электрической станции в г. Сормово",
+    "country": "Russia",
+    "year": 1905,
+    "bucket_pais": "Russia-EU"
+  },
+  {
+    "cell": 4,
+    "cid": 763041,
+    "title": "Вокзальная улица",
+    "country": "Latvia",
+    "year": 1910,
+    "bucket_pais": "Ex-URSS"
+  },
+  {
+    "cell": 5,
+    "cid": 2337912,
+    "title": "Вид на вокзал станции Новый Маргелан со стороны двора",
+    "country": "Uzbekistan",
+    "year": 1897,
+    "bucket_pais": "Ex-URSS"
+  },
+  {
+    "cell": 6,
+    "cid": 1492308,
+    "title": "Свердловск. Второй дом Советов",
+    "country": "Russia",
+    "year": 1949,
+    "bucket_pais": "Russia-Asia"
+  },
+  {
+    "cell": 7,
+    "cid": 1897678,
+    "title": "Засечка Черского на мысе Асламов (Асламовский) во время подготовки к строительст",
+    "country": "Russia",
+    "year": 1900,
+    "bucket_pais": "Russia-Asia"
+  },
+  {
+    "cell": 8,
+    "cid": 1336113,
+    "title": "Проспект 25-го Октября",
+    "country": "Russia",
+    "year": 1941,
+    "bucket_pais": "Russia-EU"
+  },
+  {
+    "cell": 9,
+    "cid": 2022344,
+    "title": "Harbour Bridge",
+    "country": "Australia",
+    "year": 1930,
+    "bucket_pais": "Resto"
+  },
+  {
+    "cell": 10,
+    "cid": 1520455,
+    "title": "Jefferson Square Park",
+    "country": "USA",
+    "year": 1924,
+    "bucket_pais": "Norteamerica"
+  },
+  {
+    "cell": 11,
+    "cid": 1578638,
+    "title": "Всехсвятская церковь",
+    "country": "Russia",
+    "year": 1938,
+    "bucket_pais": "Russia-EU"
+  },
+  {
+    "cell": 12,
+    "cid": 901171,
+    "title": "Bankers' Guild 北市钱业会馆",
+    "country": "China",
+    "year": 1890,
+    "bucket_pais": "Resto"
+  },
+  {
+    "cell": 13,
+    "cid": 2034885,
+    "title": "Baslerstrasse im Bau (alt Bäckerstrasse). Teilstück Luggwegstrasse--Mürtschenstr",
+    "country": "Switzerland",
+    "year": 1928,
+    "bucket_pais": "Europa-no-URSS"
+  },
+  {
+    "cell": 14,
+    "cid": 844584,
+    "title": "Большеохтенский проспект",
+    "country": "Russia",
+    "year": 1907,
+    "bucket_pais": "Russia-EU"
+  },
+  {
+    "cell": 15,
+    "cid": 508742,
+    "title": "Торговая (Рыночная) площадь",
+    "country": "Russia",
+    "year": 1900,
+    "bucket_pais": "Russia-EU"
+  },
+  {
+    "cell": 16,
+    "cid": 1886921,
+    "title": "Народный дом",
+    "country": "Russia",
+    "year": 1936,
+    "bucket_pais": "Russia-EU"
+  }
+]

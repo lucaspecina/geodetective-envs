@@ -1,0 +1,66 @@
+[
+  {
+    "cell": 1,
+    "cid": 410694,
+    "title": "会議場全景",
+    "country": "Japan",
+    "year": 1915,
+    "bucket_pais": "Resto"
+  },
+  {
+    "cell": 2,
+    "cid": 781325,
+    "title": "Разрушенные петергофские дома",
+    "country": "Russia",
+    "year": 1941,
+    "bucket_pais": "Russia-EU"
+  },
+  {
+    "cell": 3,
+    "cid": 657448,
+    "title": "Внешний вид электрической станции в г. Сормово",
+    "country": "Russia",
+    "year": 1905,
+    "bucket_pais": "Russia-EU"
+  },
+  {
+    "cell": 4,
+    "cid": 763041,
+    "title": "Вокзальная улица",
+    "country": "Latvia",
+    "year": 1910,
+    "bucket_pais": "Ex-URSS"
+  },
+  {
+    "cell": 5,
+    "cid": 2337912,
+    "title": "Вид на вокзал станции Новый Маргелан со стороны двора",
+    "country": "Uzbekistan",
+    "year": 1897,
+    "bucket_pais": "Ex-URSS"
+  },
+  {
+    "cell": 6,
+    "cid": 1492308,
+    "title": "Свердловск. Второй дом Советов",
+    "country": "Russia",
+    "year": 1949,
+    "bucket_pais": "Russia-Asia"
+  },
+  {
+    "cell": 7,
+    "cid": 1897678,
+    "title": "Засечка Черского на мысе Асламов (Асламовский) во время подготовки к строительст",
+    "country": "Russia",
+    "year": 1900,
+    "bucket_pais": "Russia-Asia"
+  },
+  {
+    "cell": 8,
+    "cid": 1336113,
+    "title": "Проспект 25-го Октября",
+    "country": "Russia",
+    "year": 1941,
+    "bucket_pais": "Russia-EU"
+  }
+]

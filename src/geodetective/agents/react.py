@@ -615,59 +615,76 @@ def run_react_agent(
             elif fname == "image_search":
                 result.image_search_count += 1
                 try:
+                    # v2 (#42): image_search devuelve GridResult | PickResult | ImageSearchError
+                    from ..tools.image_search import GridResult, PickResult, ImageSearchError as ImgSearchErr
                     isr = image_search(
                         query=args.get("query", ""),
-                        max_results=int(args.get("max_results", 3)),
+                        pick=args.get("pick"),
+                        search_id=args.get("search_id"),
                         target_image_path=target_path_str,
                         excluded_domains=excluded_domains,
                     )
-                    result.target_match_count += isr.target_match_count
-                    if verbose:
-                        print(f"     → {len(isr.images)} imgs target_match={isr.target_match_count} blocked_dom={isr.blocked_domain_count} dl_failed={isr.download_failed_count}")
-                    # Tool result: metadata only. Para target matches ocultamos URL también
-                    # — el dominio del match puede ser shortcut por sí solo (#24 review Codex).
-                    def _redact(im) -> dict:
-                        if im.is_likely_target:
-                            return {"hidden_reason": "hash_match_target", "hamming_distance": im.hamming_distance}
-                        return im.metadata_only()
-                    meta = {
-                        "query": isr.query,
-                        "n_images": len(isr.images),
-                        "target_match_count": isr.target_match_count,
-                        "blocked_domain_count": isr.blocked_domain_count,
-                        "images_metadata": [_redact(im) for im in isr.images],
-                    }
-                    payload = json.dumps(meta, ensure_ascii=False)
-                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
-                    visible_imgs = [
-                        {"url": im.url, "hamming_distance": im.hamming_distance, "base64_jpeg": im.base64_jpeg}
-                        for im in isr.images if not im.is_likely_target
-                    ]
-                    result.trace.append({
-                        "step": step + 1, "type": "image_search",
-                        "query": args.get("query"),
-                        "n_images": len(isr.images),
-                        "target_match": isr.target_match_count,
-                        "visible_images": visible_imgs,
-                        "payload_to_model": payload,  # FULL: exactamente lo que el modelo recibe
-                        "payload_full_len": len(payload),
-                    })
 
-                    # Inject images as user message in next turn.
-                    # Hard reject images where hash perceptual matches target (#21 / #24 deuda):
-                    # listamos metadata pero NO inyectamos bytes — no son evidencia válida.
-                    if isr.images:
-                        visible = [im for im in isr.images if not im.is_likely_target]
-                        hidden = [im for im in isr.images if im.is_likely_target]
-                        parts = [{"type": "text", "text": f"[Imágenes encontradas para image_search '{isr.query}'. {len(hidden)} imágenes ocultadas porque coinciden visualmente con la foto target (hash perceptual match)]"}]
-                        for im in visible:
-                            label = f"[img: hamming={im.hamming_distance}, source={im.url[:80]}]"
-                            parts.append({"type": "text", "text": label})
-                            parts.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{im.base64_jpeg}"}})
-                        if visible:
-                            pending_image_injections.append(("image_search", parts))
+                    if isinstance(isr, ImgSearchErr):
+                        if verbose:
+                            print(f"     → image_search error: {isr.error}")
+                        payload = json.dumps({"error": isr.error, "detail": isr.detail}, ensure_ascii=False)
+                        messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
+                        result.trace.append({"step": step + 1, "type": "image_search_error", "error": isr.error, "detail": isr.detail})
+
+                    elif isinstance(isr, GridResult):
+                        result.target_match_count += isr.target_match_count
+                        if verbose:
+                            print(f"     → GRID search_id={isr.search_id} {isr.n_cells} cells target_match={isr.target_match_count} suspicious={isr.suspicious_count}")
+                        payload = json.dumps(isr.to_dict_no_b64(), ensure_ascii=False)
+                        messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
+                        # Inyectar grilla como UNA imagen en next user message
+                        parts = [
+                            {"type": "text", "text": f"[image_search grilla 4×4 search_id={isr.search_id} query='{isr.query}'. {isr.n_cells} celdas numeradas. Para zoom: image_search(query, pick=[N,M], search_id='{isr.search_id}')]"},
+                            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{isr.grid_image_b64}"}},
+                        ]
+                        pending_image_injections.append(("image_search_grid", parts))
+                        result.trace.append({
+                            "step": step + 1, "type": "image_search",
+                            "query": args.get("query"),
+                            "search_id": isr.search_id,
+                            "n_cells": isr.n_cells,
+                            "target_match_count": isr.target_match_count,
+                            "suspicious_count": isr.suspicious_count,
+                            "cells_metadata": [c.to_dict() for c in isr.cells_metadata],
+                            "payload_to_model": payload,
+                            "image_inject_kind": "image_search_grid",
+                        })
+
+                    elif isinstance(isr, PickResult):
+                        if verbose:
+                            print(f"     → PICK search_id={isr.search_id} picks={[p['cell'] for p in isr.picks]} rounds={isr.rounds_used}/{isr.rounds_used + isr.rounds_remaining}")
+                        payload = json.dumps(isr.to_dict_no_b64(), ensure_ascii=False)
+                        messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
+                        # Re-inyectar grilla + celdas pickeadas en alta res
+                        parts = [
+                            {"type": "text", "text": f"[image_search pick search_id={isr.search_id}. Grilla original re-inyectada + {len(isr.picks)} celdas en alta resolución. Rondas usadas {isr.rounds_used}/{isr.rounds_used + isr.rounds_remaining}.]"},
+                            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{isr.grid_image_b64}"}},
+                        ]
+                        for pk in isr.picks:
+                            label_parts = [f"Celda {pk['cell']} HiRes"]
+                            if pk.get("alt_text"):
+                                label_parts.append(f"alt: \"{pk['alt_text']}\"")
+                            label_parts.append(f"source: {pk['url'][:100]}")
+                            parts.append({"type": "text", "text": "[" + " | ".join(label_parts) + "]"})
+                            parts.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{pk['image_b64']}"}})
+                        pending_image_injections.append(("image_search_pick", parts))
+                        result.trace.append({
+                            "step": step + 1, "type": "image_search_pick",
+                            "search_id": isr.search_id,
+                            "picks": [{"cell": p["cell"], "url": p["url"], "alt_text": p.get("alt_text", "")} for p in isr.picks],
+                            "not_picked_cells": isr.not_picked_cells,
+                            "rounds_used": isr.rounds_used,
+                            "payload_to_model": payload,
+                            "image_inject_kind": "image_search_pick",
+                        })
                 except Exception as e:
-                    err = f"image_search error: {e}"
+                    err = f"image_search error: {type(e).__name__}: {e}"
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": err})
                     result.trace.append({"step": step + 1, "type": "image_search_error", "error": str(e)})
 

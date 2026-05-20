@@ -260,6 +260,12 @@ experiments/E012_min_steps/*
 !experiments/E012_min_steps/results_*.json
 !experiments/E012_min_steps/picked_photos.json
 !experiments/E012_min_steps/viewer_*.html
+# E013 grid reading smoke (validación pre-implementación image_search v2).
+!experiments/E013_grid_smoke/
+experiments/E013_grid_smoke/*
+!experiments/E013_grid_smoke/smoke_results.json
+!experiments/E013_grid_smoke/grid_*x*_metadata.json
+!experiments/E013_grid_smoke/grid_*x*.jpg
 results/
 .claude/settings.local.json
 .claude/worktrees/

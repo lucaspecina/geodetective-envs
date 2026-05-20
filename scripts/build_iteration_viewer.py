@@ -278,15 +278,41 @@ HTML_TEMPLATE = """<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
-<title>E010 Iteration Viewer — {model_label}</title>
+<title>Iteration Viewer — {model_label}</title>
 <style>
-  body {{ font-family: -apple-system, "Segoe UI", system-ui, sans-serif; margin: 0; background: #f5f5f7; }}
-  nav.sticky {{ position: sticky; top: 0; background: white; border-bottom: 1px solid #ddd; padding: 12px 20px; z-index: 10; }}
-  nav.sticky h1 {{ margin: 0 0 8px; font-size: 16px; }}
-  nav.sticky .photos a {{ margin-right: 12px; color: #2563eb; text-decoration: none; font-size: 13px; }}
-  nav.sticky .photos a:hover {{ text-decoration: underline; }}
+  * {{ box-sizing: border-box; }}
+  body {{ font-family: -apple-system, "Segoe UI", system-ui, sans-serif; margin: 0; background: #f5f5f7; display: flex; min-height: 100vh; }}
 
-  section.trace {{ margin: 24px auto; max-width: 1200px; background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); padding: 24px; }}
+  /* === Sidebar === */
+  aside.sidebar {{
+    width: 320px; min-width: 320px;
+    background: white; border-right: 1px solid #ddd;
+    height: 100vh; overflow-y: auto;
+    position: sticky; top: 0;
+  }}
+  aside.sidebar header {{ padding: 16px; border-bottom: 1px solid #e5e7eb; background: #1f2937; color: white; }}
+  aside.sidebar header h1 {{ margin: 0; font-size: 15px; }}
+  aside.sidebar header .subtitle {{ font-size: 11px; color: #9ca3af; margin-top: 4px; }}
+  aside.sidebar .photo-list {{ padding: 0; margin: 0; list-style: none; }}
+  aside.sidebar .photo-item {{
+    padding: 12px 14px; cursor: pointer; border-bottom: 1px solid #f3f4f6;
+    transition: background 0.15s;
+  }}
+  aside.sidebar .photo-item:hover {{ background: #f9fafb; }}
+  aside.sidebar .photo-item.active {{ background: #eff6ff; border-left: 4px solid #2563eb; padding-left: 10px; }}
+  aside.sidebar .photo-item .cid {{ font-size: 11px; color: #6b7280; font-family: monospace; }}
+  aside.sidebar .photo-item .zone {{ font-size: 13px; color: #1f2937; font-weight: 500; margin-top: 2px; line-height: 1.3; }}
+  aside.sidebar .photo-item .stats {{ font-size: 11px; color: #4b5563; margin-top: 4px; display: flex; gap: 8px; flex-wrap: wrap; }}
+  aside.sidebar .photo-item .stat-dist {{ font-weight: 600; }}
+  aside.sidebar .photo-item .stat-dist.good {{ color: #16a34a; }}
+  aside.sidebar .photo-item .stat-dist.medium {{ color: #ca8a04; }}
+  aside.sidebar .photo-item .stat-dist.bad {{ color: #dc2626; }}
+
+  /* === Main content === */
+  main.content {{ flex: 1; min-width: 0; padding: 24px; }}
+
+  section.trace {{ display: none; max-width: 1100px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); padding: 24px; }}
+  section.trace.visible {{ display: block; }}
   section.trace header h2 {{ margin: 0 0 8px; color: #1f2937; }}
   section.trace .meta {{ font-size: 13px; color: #4b5563; line-height: 1.7; background: #f9fafb; padding: 12px; border-radius: 6px; margin-bottom: 16px; }}
   section.trace .target-img {{ margin: 0 0 20px; padding: 14px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 6px; }}
@@ -326,15 +352,35 @@ HTML_TEMPLATE = """<!doctype html>
   .event pre {{ white-space: pre-wrap; font-family: ui-monospace, "Cascadia Mono", monospace; font-size: 12px; line-height: 1.5; margin: 0; }}
   .muted {{ color: #9ca3af; font-style: italic; }}
 </style>
+<script>
+  function showTrace(cid) {{
+    document.querySelectorAll('section.trace').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.photo-item').forEach(i => i.classList.remove('active'));
+    const target = document.getElementById('trace-' + cid);
+    if (target) target.classList.add('visible');
+    const item = document.querySelector('.photo-item[data-cid="' + cid + '"]');
+    if (item) item.classList.add('active');
+    window.scrollTo(0, 0);
+  }}
+  document.addEventListener('DOMContentLoaded', () => {{
+    const first = document.querySelector('.photo-item');
+    if (first) showTrace(first.dataset.cid);
+  }});
+</script>
 </head>
 <body>
-<nav class="sticky">
-  <h1>E010 Iteration Viewer — {model_label} ({n_traces} traces)</h1>
-  <div class="photos">
-    {nav_links}
-  </div>
-</nav>
+<aside class="sidebar">
+  <header>
+    <h1>Iteration Viewer</h1>
+    <div class="subtitle">{model_label} · {n_traces} fotos</div>
+  </header>
+  <ul class="photo-list">
+    {sidebar_items}
+  </ul>
+</aside>
+<main class="content">
 {traces_html}
+</main>
 </body>
 </html>
 """
@@ -358,10 +404,33 @@ def main() -> None:
 
     model_label = (data[0].get("react") or {}).get("model", "?")
 
-    nav_links = " | ".join(
-        f'<a href="#trace-{r["cid"]}">{r.get("zone", "?")} {r.get("year", "?")} (cid={r["cid"]})</a>'
-        for r in data
-    )
+    # Sidebar items: cid + zona + año + distance (con color según rango)
+    def _dist_class(d):
+        if d is None: return "bad"
+        if d < 50: return "good"
+        if d < 500: return "medium"
+        return "bad"
+
+    sidebar_items_list = []
+    for r in data:
+        rk = r.get("react") or {}
+        d = rk.get("distance_km")
+        d_str = f"{d:.0f}km" if d is not None else "FAIL"
+        zone = r.get("zone") or r.get("title", "?")
+        year = r.get("year", "?")
+        steps = rk.get("steps_used", "?")
+        sidebar_items_list.append(
+            f'<li class="photo-item" data-cid="{r["cid"]}" onclick="showTrace(\'{r["cid"]}\')">'
+            f'<div class="cid">cid={r["cid"]}</div>'
+            f'<div class="zone">{esc(zone[:70])}</div>'
+            f'<div class="stats">'
+            f'<span class="stat-dist {_dist_class(d)}">{d_str}</span>'
+            f'<span>{year}</span>'
+            f'<span>{steps} steps</span>'
+            f'</div>'
+            f'</li>'
+        )
+    sidebar_items = "\n".join(sidebar_items_list)
 
     photos_dir = args.photos_dir or (args.input.parent / "photos")
     traces_html = "\n".join(render_trace(r, photos_dir=photos_dir) for r in data)
@@ -369,7 +438,7 @@ def main() -> None:
     html_str = HTML_TEMPLATE.format(
         model_label=esc(model_label),
         n_traces=len(data),
-        nav_links=nav_links,
+        sidebar_items=sidebar_items,
         traces_html=traces_html,
     )
 

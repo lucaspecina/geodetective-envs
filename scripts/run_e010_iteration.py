@@ -44,11 +44,14 @@ from geodetective.corpus import CLEAN_VERSION
 
 
 # === Config ===
-EXP_DIR = Path("experiments/E010_iteration_pilot")
+EXP_DIR = Path(os.environ.get("EXP_DIR", "experiments/E010_iteration_pilot"))
 # PHOTOS_DIR es overridable via env var (ej: para ablation con fotos post-blur).
 # Las fotos deben llamarse {cid}_clean_v{CLEAN_VERSION}.jpg en ese dir.
-PHOTOS_DIR = Path(os.environ.get("PHOTOS_DIR", str(EXP_DIR / "photos")))
-PICKED = EXP_DIR / "picked_photos.json"
+PHOTOS_DIR = Path(os.environ.get("PHOTOS_DIR", "corpus/photos"))
+# CANDIDATES_PATH: si CIDS apunta a fotos NO en picked_photos.json, podemos cargar
+# metadata directamente del corpus completo.
+PICKED = Path(os.environ.get("PICKED", str(EXP_DIR / "picked_photos.json")))
+CANDIDATES_PATH = Path(os.environ.get("CANDIDATES_PATH", "experiments/E007_sample_diverso/candidates.json"))
 
 MODEL = os.environ.get("MODEL", "gpt-5.4-mini")
 MAX_STEPS = int(os.environ.get("MAX_STEPS", "50"))
@@ -119,14 +122,39 @@ def process_one(candidate: dict) -> dict:
 
 
 def main() -> None:
-    if not PICKED.exists():
-        raise SystemExit(f"missing: {PICKED}. Sample photos first.")
-    photos = json.loads(PICKED.read_text(encoding="utf-8"))
+    # Cargar photos: primero del PICKED, si CIDs no aparecen ahí, fallback a candidates.json
+    photos = []
+    if PICKED.exists():
+        photos = json.loads(PICKED.read_text(encoding="utf-8"))
 
     cids_filter = None
     if os.environ.get("CIDS"):
         cids_filter = {int(c.strip()) for c in os.environ["CIDS"].split(",")}
-        photos = [p for p in photos if p["cid"] in cids_filter]
+        in_picked = [p for p in photos if p["cid"] in cids_filter]
+        missing_cids = cids_filter - {p["cid"] for p in in_picked}
+        # Fallback: cargar metadata de los faltantes desde candidates.json del corpus
+        if missing_cids and CANDIDATES_PATH.exists():
+            all_candidates = json.loads(CANDIDATES_PATH.read_text(encoding="utf-8"))
+            extras = [c for c in all_candidates if c["cid"] in missing_cids]
+            # Normalizar al shape esperado por process_one (igual que E012)
+            for c in extras:
+                in_picked.append({
+                    "cid": c["cid"],
+                    "geo": c.get("geo"),
+                    "year": c.get("year"),
+                    "year2": c.get("year2"),
+                    "country": c.get("country"),
+                    "zone": (c.get("title") or "")[:50] or c.get("country", "?"),
+                    "title": c.get("title", ""),
+                    "provider": c.get("provider"),
+                    "provenance_source": c.get("provenance_source", ""),
+                    "bucket_pais": c.get("bucket_pais"),
+                    "bucket_decada": c.get("bucket_decada"),
+                })
+        photos = in_picked
+
+    if not photos:
+        raise SystemExit(f"no photos to process. PICKED={PICKED}, CIDS={os.environ.get('CIDS')}")
 
     out_path = EXP_DIR / f"results_{MODEL.replace('.','_').replace('/','_')}{OUT_SUFFIX}.json"
     existing = []

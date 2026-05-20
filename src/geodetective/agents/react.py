@@ -263,8 +263,32 @@ NO podés desactivarlos:
 ## Flujo recomendado y patrones útiles
 
 - **Antes de comprometerte con UNA hipótesis**, considerá ≥2 alternativas explícitas en el thinking. La primera intuición puede ser la trampa.
-- **Verificá VISUALMENTE antes de submit**. Una hipótesis sin street_view o static_map de comparación es debil. `verification_checks` que solo cita texto es menos confiable que comparar visualmente la foto target con un panorama actual.
+- **Verificá VISUALMENTE antes de submit**. Una hipótesis sin street_view o static_map de comparación es débil. `verification_checks` que solo cita texto es menos confiable que comparar visualmente la foto target con un panorama actual.
 - **Las imágenes pueden caducar del contexto** después de muchos pasos (límite hard del sistema). Si una imagen es importante, ANOTÁ en tu thinking lo que viste y guardá la URL/coords/region para re-acceder con `fetch_url`/`street_view`/`static_map`/`crop_image` después si lo necesitás.
+
+## ⚠️ Cuándo submitir (CRÍTICO — leé bien)
+
+**NO submitas hasta tener evidencia fuerte.** Específicamente:
+
+**Submit SOLO si**:
+1. Podés **CITAR explícitamente ≥2 piezas de evidencia independientes** que respaldan tu hipótesis. Ejemplos válidos:
+   - "Wikipedia confirma que el edificio X estaba en Y desde 1920"
+   - "El panorama de street_view en (lat, lon) muestra la misma fachada que la foto target — comparé arquitectura, ventanas y proporciones"
+   - "historical_query confirmó que la iglesia Z existía en 1947 en ese radio"
+   - "El cartel parcial dice 'AVDA 18' + en Buenos Aires hay Av. 18 de Julio = match"
+2. Estimás distancia **< 25 km con alta probabilidad** de tu hipótesis al lugar real. Esto significa identificaste **barrio o landmark específico**, NO solo "está en Rusia".
+
+**Si NO podés citar ≥2 evidencias O NO estás seguro de <25 km**: SEGUÍ investigando.
+- Hipótesis competidoras pendientes → testealas con `street_view` o `image_search`
+- Pistas visuales no investigadas (carteles, vehículos, vegetación) → `crop_image` + `image_search`
+- Falta verificación visual de tu top hipótesis → `street_view` de las coords candidatas
+
+**Hard cap — si llegás al step 18-19** (te quedan 1-2 turns):
+- Submit con tu mejor hipótesis aunque sea débil
+- `confidence='baja'`
+- En `uncertainty_reason` explicá HONESTAMENTE qué evidencia te faltó
+
+NO uses tu budget defensivamente — si tenés evidencia fuerte en step 6, submit en step 6. Pero la barra de "evidencia fuerte" es ALTA: 2+ evidencias citables + estimación de cercanía real.
 
 ## Idioma
 
@@ -412,10 +436,10 @@ def run_react_agent(
                     "submit con confidence='baja' y explicá el motivo en uncertainty_reason."
                 ),
             })
-        elif remaining in (5, 10) and not result.submit_called:
+        elif remaining in (3, 5) and not result.submit_called:
             messages.append({
                 "role": "user",
-                "content": f"[Recordatorio: te quedan {remaining} turns. Considerá ir cerrando con `submit_answer`.]",
+                "content": f"[Recordatorio: te quedan {remaining} turns. Si tu evidencia es fuerte (2+ citables + <25km alta prob), submit YA. Sino, hacé 1-2 verificaciones rápidas más antes del hard cap.]",
             })
         try:
             # max_completion_tokens=8000: Claude con thinking mode puede gastar ~2-3K

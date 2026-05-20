@@ -24,7 +24,11 @@ from ..tools.web_search import web_search, TOOL_SCHEMA as WEB_SEARCH_SCHEMA
 from ..tools.fetch_url import fetch_url, TOOL_SCHEMA_TEXT as FETCH_URL_SCHEMA, TOOL_SCHEMA_WITH_IMAGES as FETCH_URL_IMG_SCHEMA
 from ..tools.image_search import image_search, TOOL_SCHEMA as IMAGE_SEARCH_SCHEMA
 from ..tools.geocode import geocode, reverse_geocode, TOOL_SCHEMA_GEOCODE, TOOL_SCHEMA_REVERSE
-from ..tools.historical_query import historical_query, TOOL_SCHEMA as HISTORICAL_QUERY_SCHEMA
+from ..tools.historical_query import (
+    historical_query, historical_query_at,
+    TOOL_SCHEMA as HISTORICAL_QUERY_SCHEMA,
+    TOOL_SCHEMA_AT as HISTORICAL_QUERY_AT_SCHEMA,
+)
 from ..tools.crop_image import crop_image, crop_image_relative, TOOL_SCHEMA_CROP, TOOL_SCHEMA_CROP_RELATIVE
 from ..tools.static_map import static_map, StaticMapError, TOOL_SCHEMA as STATIC_MAP_SCHEMA
 from ..tools.street_view import street_view, StreetViewError, TOOL_SCHEMA as STREET_VIEW_SCHEMA
@@ -168,74 +172,98 @@ def _validate_submit(args: dict) -> tuple[bool, Optional[str]]:
     return True, None
 
 
-SYSTEM_PROMPT = """Recibís una fotografía. Tu tarea es descubrir DÓNDE fue tomada (coords lat/lon) y CUÁNDO (año aproximado), y devolver la respuesta vía `submit_answer`.
+SYSTEM_PROMPT = """Recibís una fotografía histórica. Tu tarea: descubrir DÓNDE fue tomada (coords lat/lon) y CUÁNDO (año aproximado). Cerrá con `submit_answer`.
 
 ## Herramientas disponibles
 
-Para cada tool: qué hace mecánicamente + qué tipo de información te aporta. NO te decimos cuándo usar cada una — vos decidís según el caso.
+NO te decimos CUÁNDO usar cada una. Vos decidís según el caso. Sí te explicamos exactamente QUÉ hace cada una y QUÉ INFO DEVUELVE, para que sepas elegir bien.
 
-**`web_search(query, max_results)`**
-Busca texto en la web vía Tavily. Devuelve resultados con `url`, `title`, `content` (snippet ~1000-3000 chars en modo advanced).
-*Aporta*: información textual disponible en internet — descripciones de lugares, fechas de eventos, biografías, archivos digitalizados con catalog text, blogs, papers académicos. Lo que la web "dice" sobre una consulta.
+### Texto y páginas web
 
-**`fetch_url(url)`**
-Baja una página web específica. Devuelve `title` + `text` (hasta 12000 chars del contenido principal).
-*Aporta*: el contenido completo de una página identificada por URL.
+**`web_search(query, max_results=10)`** — Buscar en la web (Azure Bing Grounding).
+Devuelve hasta 10 resultados con: `title`, `url`, `snippet` (1000-2000 chars con info concreta), y **metadata enriquecida**: `site_name` (Wikipedia, archive.org, fotopolska.eu, etc.), `date_published` si aparece, `language`, `source_type` (wikipedia/article/archive/blog/forum/social). La metadata te ayuda a priorizar fuentes confiables sin tener que abrir cada página.
 
-**`fetch_url_with_images(url)`**
-Igual que `fetch_url` pero además baja hasta 5 imágenes embebidas. Las que NO coincidan visualmente con la foto target se muestran en el siguiente turn con metadata; las que sí coincidan se cuentan pero no se exponen.
-*Aporta*: además del texto, las imágenes ilustrativas de la página — fotos de archivo, mapas, fachadas, retratos.
+**`fetch_url(url)`** — Bajar texto de una página web específica.
+Devuelve `title` + `text` (hasta 12000 chars del contenido principal, sin imágenes). Útil cuando ya sabés que querés el TEXTO completo y las imágenes no van a ayudar.
 
-**`image_search(query, max_results)`**
-Busca imágenes en la web (estilo Google Images). Las imágenes vienen en el siguiente turn con `url` de origen y `hamming_distance`. Las que coincidan visualmente con la foto target se cuentan pero no se exponen.
-*Aporta*: colección de imágenes que internet asocia con tu query — fotos de tipos de edificio, fachadas, plazas, vehículos de época, vestimenta, vegetación, paisajes.
+**`fetch_url_with_images(url)`** — Bajar la página CON sus imágenes embebidas y contexto.
+Devuelve `title` + `text` + hasta **10 imágenes** embebidas. **Cada imagen viene con su contexto semántico extraído del HTML**: `figcaption` (caption explícita), `alt` text, `nearby_text` (párrafo cercano en el HTML), `title` attribute, atributos `data-caption`, OpenGraph/Twitter Card metadata, JSON-LD schema.org. Esto te permite **conectar imagen + texto como un humano lee una página de archivo**: ves la foto del archivo Y leés "Eléctrico nº 73 en la Praça da Liberdade, 1947" debajo.
+Las imágenes que matchean visualmente con la foto target se ocultan automáticamente (anti-shortcut).
 
-**`crop_image(x, y, width, height)` / `crop_image_relative(region)`**
-Recorta una región de la foto target. La región se muestra ampliada en el siguiente turn. `crop_image_relative` acepta regiones nombradas: `top_left`, `top_right`, `top_center`, `bottom_left`, `bottom_right`, `bottom_center`, `middle`, `center`, `left_half`, `right_half`, `top_half`, `bottom_half`.
-*Aporta*: detalle visual a alta resolución de una zona de la foto target — texto en carteles, fachadas, vehículos, vestimenta, vegetación, postes, idiomas. Detalles que se pierden al ver la foto entera.
+### Imágenes (estilo Google Images con grilla)
 
-**`geocode(query, language)`**
-Convierte un nombre o dirección a coords vía Nominatim (OSM). Ej: "Plaza Mayor Madrid" → coords + dirección estructurada + tipo (residential/city/street/etc).
-*Aporta*: dos cosas — (1) coordenadas precisas de un lugar nombrado, y (2) confirmación de que ese lugar existe en OSM. Es decir, valida la existencia de hipótesis tipo "hay un X en Y".
+**`image_search(query)` — flujo de 3 modos** (replica humano scrolleando Google Images):
 
-**`reverse_geocode(lat, lon, zoom)`**
-Convierte coords a dirección. `zoom` controla detalle: 3=país, 10=ciudad, 17=edificio, 18=calle.
-*Aporta*: el "qué hay" en un punto geográfico — nombre administrativo, calle, edificio.
+1. **Nueva búsqueda** — `image_search(query)`: devuelve UNA grilla 4×4 con 16 candidatos numerados + un `search_id` + flag `has_next_page`. Escaneás visualmente la grilla.
+2. **Página adicional** — `image_search(query, page=2, search_id="abc")`: si los primeros 16 no tenían lo que buscabas, pedí la siguiente página. Las celdas se numeran globalmente (17-32 en página 2, 33-48 en página 3).
+3. **Zoom en celdas** — `image_search(query, pick=[3,7], search_id="abc")`: inspeccionás las celdas interesantes en alta resolución (512×512) + recibís la grilla original re-inyectada para referencia. Después podés llamar `fetch_url_with_images` con la URL de cualquier celda para ver la página fuente.
 
-**`historical_query(south, west, north, east, preset, year, require_dated, max_features)`**
-Busca features de OpenHistoricalMap en un bounding box. `preset`: `buildings`, `churches`, `schools`, `factories`, `railway_stations`, `monuments`, `houses`, `all_named`. Si `year` está dado, filtra features que existían ese año. Cada feature trae `temporal_confidence` (`high` si tiene `start_date`/`end_date` confirmados, `low` si no). OHM cobertura DESIGUAL: ausencia de resultados no prueba ausencia histórica.
-*Aporta*: información temporal-espacial sobre estructuras del pasado. Qué iglesias / fábricas / estaciones / monumentos / casas registra OpenHistoricalMap en una zona, en un año específico, con sus coords y fechas de construcción/demolición. Permite saber qué estaba físicamente en un lugar y momento.
+Límites: max 3 picks por call, max 2 rondas de pick por búsqueda. Si necesitás más, hacé otra búsqueda con query distinta.
+Las imágenes que matchean visualmente con la foto target se descartan automáticamente (anti-shortcut).
 
-**`static_map(lat, lon, zoom, map_type)`**
-Pide imagen de mapa de Google Maps en las coords dadas. `map_type`: `roadmap` (calles), `satellite` (foto aérea actual), `terrain` (relieve 2D con curvas de nivel), `hybrid` (sat+calles).
-*Aporta*: vista cenital del entorno geográfico de un punto cualquiera del planeta — relieve, ríos, layout urbano, costas, montañas, vegetación. Cada `map_type` revela una dimensión distinta del mismo lugar (la geometría del callejero es distinta de la topografía real del satélite).
+### Recorte de la foto target
 
-**`street_view(lat, lon, heading, pitch, fov, contact_sheet)`**
-Imagen(es) actuales de Google Street View en coords arbitrarias. Modo single (1 imagen al heading dado) o `contact_sheet=true` (4 imágenes en N/E/S/W). Devuelve fecha del panorama y distancia entre coords pedidas y panorama real. Error `no_coverage` si no hay panorama disponible.
-*Aporta*: la realidad fotográfica observable HOY desde cualquier punto del planeta — fachadas, calles, perspectivas, paisaje. Cobertura global con huecos (rural, países con regulaciones).
+**`crop_image(x, y, width, height)` / `crop_image_relative(region)`** — Zoom en una región de la foto target.
+La región se muestra ampliada en el siguiente turn. `crop_image_relative` acepta regiones nombradas: `top_left`, `top_right`, `top_center`, `bottom_left`, `bottom_right`, `bottom_center`, `middle`, `center`, `left_half`, `right_half`, `top_half`, `bottom_half`. Útil para leer texto chiquito en carteles, ver detalles arquitectónicos, distinguir vehículos, etc.
 
-**`submit_answer(...)`**
-Devolver respuesta final. Campos: `location`, `lat`, `lon`, `year`, `reasoning`, `confidence` (alta/media/baja), `visual_clues`, `external_evidence`, `rejected_alternatives`, `verification_checks`, `uncertainty_reason`.
+### Geocodificación
 
-## Filtros automáticos (no podés desactivarlos)
+**`geocode(query, language)`** — Nombre → coords. Nominatim/OSM.
+Ej: "Plaza Mayor Madrid" → coords + dirección estructurada + tipo (residential/city/street/etc). Te sirve para (a) obtener coords precisas de un lugar nombrado, (b) confirmar que el lugar EXISTE en OSM.
 
-- En `web_search`, `fetch_url`, `fetch_url_with_images`, `image_search` se bloquean automáticamente algunos dominios para evitar shortcuts: reverse image search engines, agregadores masivos con metadata estructurada (caption + geotag), hosting/sharing platforms con propensión a re-publicar archivos, y la fuente específica de la foto que estás investigando. La lista exacta depende de cada foto; no necesitás conocerla.
-- Cuando una imagen tiene hash perceptual coincidente con la foto target, la ocultamos: te informamos su cantidad pero no te mostramos los bytes (la foto objetivo no es evidencia sobre dónde fue tomada).
+**`reverse_geocode(lat, lon, zoom)`** — Coords → dirección.
+`zoom`: 3=país, 10=ciudad, 17=edificio, 18=calle.
+
+### Mapas con contexto enriquecido
+
+**`static_map(lat, lon, zoom, map_type, view='single')`** — Mapa de Google + contexto.
+Devuelve imagen del mapa **junto con**:
+- **POIs cercanos** (top-5 categorizados por relevancia geo-histórica: monumentos > estaciones > iglesias > puentes > plazas > parques). Cada uno con nombre + distancia en metros.
+- **Altitud** del punto + **categoría de terreno** (`flat`/`rolling`/`mountainous`) computada de muestras en radio 1km.
+- Si pedís `view='multi'`: devuelve UNA imagen compuesta 2×2 con sat + terrain + roadmap + hybrid en simultáneo. Útil para descartar rápido un lugar candidato sin gastar 4 calls.
+
+### Street View con exploración
+
+**`street_view(lat, lon, heading=0, contact_sheet=False, nearby=False)`** — Vista actual + nearby.
+- Modo default: 1 imagen al heading dado.
+- `contact_sheet=True`: 4 imágenes (N/E/S/W) — usá esto para **VERIFICAR una hipótesis sin comprometerte a una sola vista**.
+- `nearby=True`: además del centro, devuelve 3-4 panoramas **reales sobre calles vecinas** en radio ~50m (usa Street View metadata para encontrar panoramas reales, no construye direcciones random). Imita "caminar la cuadra".
+- Payload incluye POIs cercanos en radio 30m + fecha del panorama + distancia entre las coords pedidas y el panorama real.
+
+### Información histórico-temporal
+
+**`historical_query(south, west, north, east, preset, year)`** — OpenHistoricalMap.
+Busca estructuras histórico-espaciales en un bbox: `buildings`, `churches`, `schools`, `factories`, `railway_stations`, `monuments`, `houses`, `all_named`. Si dado `year`, filtra features existentes ese año. **Cobertura desigual** (mucha información en Europa, poca en otras regiones) — ausencia de resultados NO prueba ausencia histórica. Es la única tool que distingue "esto EXISTÍA en YYYY" de "esto existe HOY".
+
+### Submit final
+
+**`submit_answer(location, lat, lon, year, reasoning, confidence, ...)`** — Devolvé respuesta.
+Campos: `location` (texto descriptivo), `lat`, `lon`, `year` (puede ser rango "1960-1970"), `reasoning`, `confidence` (alta/media/baja), `visual_clues` (lista de pistas concretas que extrajiste de la foto), `external_evidence` (URLs + qué confirma cada una), `rejected_alternatives` (hipótesis descartadas + por qué), `verification_checks` (chequeos independientes, idealmente VISUALES con street_view/static_map/comparación), `uncertainty_reason` (si confianza ≠ alta, qué falta).
+
+## Filtros automáticos anti-shortcut
+
+NO podés desactivarlos:
+- **Blacklist de dominios**: bloqueamos reverse image search, agregadores con metadata estructurada, hosting/sharing, y la fuente específica de la foto target. Específicos por foto.
+- **Hash perceptual de la foto target**: imágenes que matchean visualmente con la foto se descartan o se ocultan completamente (no es evidencia válida).
+
+## Flujo recomendado y patrones útiles
+
+- **Antes de comprometerte con UNA hipótesis**, considerá ≥2 alternativas explícitas en el thinking. La primera intuición puede ser la trampa.
+- **Verificá VISUALMENTE antes de submit**. Una hipótesis sin street_view o static_map de comparación es debil. `verification_checks` que solo cita texto es menos confiable que comparar visualmente la foto target con un panorama actual.
+- **Las imágenes pueden caducar del contexto** después de muchos pasos (límite hard del sistema). Si una imagen es importante, ANOTÁ en tu thinking lo que viste y guardá la URL/coords/region para re-acceder con `fetch_url`/`street_view`/`static_map`/`crop_image` después si lo necesitás.
 
 ## Idioma
 
-Las queries pueden estar en cualquier idioma. Tus respuestas y razonamiento, en español.
+Tus razonamientos y respuestas en **español**. Las queries de búsqueda en el idioma apropiado al contexto (ruso para fotos cirílicas, portugués para Brasil/Portugal, etc.).
 
 ## Razonamiento visible (formato ReAct)
 
 Antes de cada turn de acciones, escribí en TEXTO breve (1-3 oraciones):
-1. Qué observás ahora mismo de la foto target o de las observaciones previas.
+1. Qué observás de la foto target o de las observaciones previas.
 2. Qué hipótesis estás considerando (idealmente >1, ranqueadas por plausibilidad).
 3. Qué esperás conseguir de la(s) próxima(s) acción(es).
 
-Ese texto va como `content` de tu respuesta, separado de los `tool_calls`. Es
-para que un investigador humano pueda seguir tu proceso paso a paso — no es
-input para las tools.
+Ese texto va como `content` de tu respuesta, separado de los `tool_calls`. Es para que un investigador humano pueda seguir tu proceso paso a paso — no es input para las tools.
 
 Si en algún turn realmente no tenés nada nuevo que razonar, podés saltearlo."""
 
@@ -329,6 +357,7 @@ def run_react_agent(
         TOOL_SCHEMA_GEOCODE,
         TOOL_SCHEMA_REVERSE,
         HISTORICAL_QUERY_SCHEMA,
+        HISTORICAL_QUERY_AT_SCHEMA,
         TOOL_SCHEMA_CROP,
         TOOL_SCHEMA_CROP_RELATIVE,
         STATIC_MAP_SCHEMA,
@@ -737,31 +766,44 @@ def run_react_agent(
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"{fname} error: {e}"})
                     result.trace.append({"step": step + 1, "type": f"{fname}_error", "error": str(e)})
 
-            elif fname == "historical_query":
+            elif fname in ("historical_query", "historical_query_at"):
                 result.historical_query_count += 1
                 try:
-                    hq = historical_query(
-                        south=float(args["south"]),
-                        west=float(args["west"]),
-                        north=float(args["north"]),
-                        east=float(args["east"]),
-                        preset=args.get("preset"),
-                        year=args.get("year"),
-                        max_features=int(args.get("max_features", 30)),
-                    )
+                    if fname == "historical_query_at":
+                        # Wrapper amigable: lat/lon + radius_km
+                        hq = historical_query_at(
+                            lat=float(args["lat"]),
+                            lon=float(args["lon"]),
+                            radius_km=float(args.get("radius_km", 5.0)),
+                            preset=args.get("preset", "all_named"),
+                            year=args.get("year"),
+                            require_dated=bool(args.get("require_dated", False)),
+                            max_features=int(args.get("max_features", 30)),
+                        )
+                    else:
+                        hq = historical_query(
+                            south=float(args["south"]),
+                            west=float(args["west"]),
+                            north=float(args["north"]),
+                            east=float(args["east"]),
+                            preset=args.get("preset"),
+                            year=args.get("year"),
+                            require_dated=bool(args.get("require_dated", False)),
+                            max_features=int(args.get("max_features", 30)),
+                        )
                     if verbose:
-                        print(f"     → {hq.n_features} features (truncated={hq.truncated}, err={hq.error})")
+                        print(f"     → {fname}: {hq.n_features} features (truncated={hq.truncated}, err={hq.error})")
                     payload = json.dumps(hq.to_dict(), ensure_ascii=False)[:8000]
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": payload})
                     result.trace.append({
-                        "step": step + 1, "type": "historical_query",
+                        "step": step + 1, "type": fname,
                         "args": args, "n_features": hq.n_features,
-                        "payload_to_model": payload,  # FULL: exactamente lo que el modelo recibe
+                        "payload_to_model": payload,
                         "payload_full_len": len(payload),
                     })
                 except Exception as e:
-                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"historical_query error: {e}"})
-                    result.trace.append({"step": step + 1, "type": "historical_query_error", "error": str(e)})
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"{fname} error: {e}"})
+                    result.trace.append({"step": step + 1, "type": f"{fname}_error", "error": str(e)})
 
             elif fname in ("crop_image", "crop_image_relative"):
                 result.crop_count += 1

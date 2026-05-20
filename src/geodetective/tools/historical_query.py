@@ -241,6 +241,45 @@ def historical_query(
 
 
 # OpenAI tool schema
+# === Wrapper amigable: historical_query_at ===
+
+def historical_query_at(
+    lat: float,
+    lon: float,
+    radius_km: float = 5.0,
+    preset: Optional[str] = "all_named",
+    year: Optional[int] = None,
+    require_dated: bool = False,
+    max_features: int = 30,
+):
+    """Wrapper amigable de historical_query: usa lat/lon + radio en vez de bbox.
+
+    Args:
+        lat, lon: punto central.
+        radius_km: radio aproximado en km (default 5km — barrio).
+        preset: categoría. Default 'all_named' = todo con nombre.
+        year: año para filtrar features que existían entonces.
+        require_dated: si True, solo features con fecha confirmada.
+        max_features: cap del output.
+
+    Returns: HistoricalQueryResult (mismo shape que historical_query).
+    """
+    from math import cos, radians as rad
+    delta_lat = radius_km / 111.0  # 1 grado lat ≈ 111 km
+    delta_lon = radius_km / (111.0 * max(0.1, cos(rad(lat))))
+    south = lat - delta_lat
+    north = lat + delta_lat
+    west = lon - delta_lon
+    east = lon + delta_lon
+    return historical_query(
+        south=south, west=west, north=north, east=east,
+        preset=preset, year=year,
+        require_dated=require_dated, max_features=max_features,
+    )
+
+
+# === Tool schema viejo (bbox) — mantener por back-compat ===
+
 TOOL_SCHEMA = {
     "type": "function",
     "function": {
@@ -251,7 +290,9 @@ TOOL_SCHEMA = {
             "dimensión temporal). Devuelve lista de features con nombre, coords, tags, fechas. "
             "Cada feature trae `temporal_confidence`: 'high' si tiene start_date confirmado, 'low' "
             "si no tiene tags temporales (asume que existía en el año pero sin confirmar). "
-            "OHM tiene cobertura DESIGUAL: ausencia de resultados NO prueba ausencia histórica."
+            "OHM tiene cobertura DESIGUAL: ausencia de resultados NO prueba ausencia histórica. "
+            "**Si solo tenés un punto + radio, usá `historical_query_at(lat, lon, radius_km, ...)` "
+            "que es más simple.**"
         ),
         "parameters": {
             "type": "object",
@@ -281,6 +322,57 @@ TOOL_SCHEMA = {
                 },
             },
             "required": ["south", "west", "north", "east"],
+        },
+    },
+}
+
+
+# === Tool schema del wrapper amigable ===
+
+TOOL_SCHEMA_AT = {
+    "type": "function",
+    "function": {
+        "name": "historical_query_at",
+        "description": (
+            "Versión SIMPLE de historical_query: en vez de bbox, pasás un punto (lat/lon) + radio en km. "
+            "Útil para investigar 'qué había en esta zona en este año' sin calcular bboxes. "
+            "Devuelve lista de features de OpenHistoricalMap con coords, nombre, tipo, fechas de "
+            "construcción/demolición. Cobertura DESIGUAL — ausencia de resultados NO prueba ausencia. "
+            "Es la única tool con dimensión temporal — usala cuando querés saber qué EXISTÍA en cierto "
+            "año, no qué existe hoy."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "lat": {"type": "number"},
+                "lon": {"type": "number"},
+                "radius_km": {
+                    "type": "number",
+                    "description": "Radio en km. Default 5 (barrio). Usar 1-2 para manzana, 10-20 para ciudad.",
+                    "default": 5.0,
+                },
+                "preset": {
+                    "type": "string",
+                    "description": "Categoría. Default 'all_named'.",
+                    "enum": list(PRESET_QUERIES.keys()),
+                    "default": "all_named",
+                },
+                "year": {
+                    "type": "integer",
+                    "description": "Año a filtrar. Si dado, devuelve solo features que existían en esa fecha.",
+                },
+                "require_dated": {
+                    "type": "boolean",
+                    "description": "Si true, descarta features sin fecha confirmada.",
+                    "default": False,
+                },
+                "max_features": {
+                    "type": "integer",
+                    "description": "Cap de features (1-50). Default 30.",
+                    "default": 30,
+                },
+            },
+            "required": ["lat", "lon"],
         },
     },
 }

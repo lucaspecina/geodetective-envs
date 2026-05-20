@@ -2,17 +2,41 @@
 
 Carpeta canónica para las fotos del benchmark. **Gitignored** (binarios + copyright).
 
+⚠️ **Importante**: las fotos en `corpus/photos/{cid}_clean_v1.jpg` ya tienen aplicado el **blur de overlays textuales** (captions archivísticas, sellos, watermarks). Esto es **necesario** para que el benchmark mida razonamiento, no shortcut OCR. Sin este blur, ~45% de las fotos serían resolubles leyendo el caption con el modelo + googleando.
+
 ## Estructura
 
 ```
 corpus/
 ├── photos/                 # todas las fotos del corpus, planas
-│   ├── {cid}_raw.jpg       # original tal cual se bajó del provider
-│   └── {cid}_clean_v{N}.jpg  # post clean_image.py (EXIF strippeado + watermark cropeado)
+│   ├── {cid}_raw.jpg       # original tal cual se bajó del provider (sin procesar)
+│   └── {cid}_clean_v{N}.jpg  # listas para el agente: clean + blur de overlays
 └── README.md               # este archivo
 ```
 
 `{cid}` es el ID en el provider (ej PastVu cid). Una foto ocupa 2 archivos (raw + clean).
+
+## Pipeline de preparación
+
+```
+download_corpus_photos.py
+  ↓
+{cid}_raw.jpg  (descargado tal cual)
+  ↓
+clean_image.py
+  - strip EXIF, ICC, comments
+  - crop watermark del provider (banda inferior PastVu)
+  - RGBA → RGB
+  ↓
+{cid}_clean_v1.jpg  (intermediate, NO usado directamente por el agente)
+  ↓
+detect_text_overlays.py
+  - VLM (claude-sonnet) detecta texto archivístico (caption, sello, watermark)
+  - blur gaussiano sobre regiones clasificadas `archive_overlay`
+  - pass-through si no detecta nada
+  ↓
+{cid}_clean_v1.jpg  (final, lo que el agente ve)  ← sobrescribe el intermediate
+```
 
 ## Cómo poblar la carpeta
 

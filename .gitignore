@@ -309,5 +309,7 @@ results/
 # Corpus de fotos — NO va a git (binarios, pesa, copyrighted).
 # README explica cómo regenerar o sincronizar desde otra máquina.
 corpus/photos/
+corpus/photos_pre_blur/
+corpus/download_log.json
 !corpus/photos/README.md
 !corpus/README.md

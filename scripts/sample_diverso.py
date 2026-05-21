@@ -29,49 +29,101 @@ import zstandard as zstd
 
 DATA_PATH = Path("experiments/E006_pastvu_audit/data/pastvu.jsonl.zst")
 OUT_DIR = Path("experiments/E007_sample_diverso")
-OUT_CANDIDATES = OUT_DIR / "candidates.json"
-OUT_AUDIT = OUT_DIR / "audit_summary.json"
+# v2 (#46): output a candidates_v2.json para no pisar el original (180 fotos sesgadas a Rusia)
+OUT_CANDIDATES = OUT_DIR / "candidates_v2.json"
+OUT_AUDIT = OUT_DIR / "audit_v2_summary.json"
 
 YEAR_MIN = 1890
 YEAR_MAX = 1949  # 1940s inclusive
-K_PER_CELL = 5
 SEED = 42
 GEOHASH_PRECISION = 5
+
+# === v2 (#46): buckets más desagregados para reducir sesgo geográfico ===
+#
+# Antes: 6 buckets, "Resto" comoduplicado catch-all → LatAm/África/Asia-noCN/Oceanía
+# quedaban con migajas. Ahora: 13 buckets explícitos con cuotas distintas.
 
 EX_URSS = frozenset({
     "Ukraine", "Belarus", "Georgia", "Uzbekistan", "Latvia", "Lithuania",
     "Kazakhstan", "Armenia", "Azerbaijan", "Moldova", "Estonia",
     "Tajikistan", "Kyrgyzstan", "Turkmenistan",
 })
-EUROPA_NO_URSS = frozenset({
-    "Germany", "France", "Denmark", "Netherlands", "Czech Republic", "Italy",
-    "United Kingdom", "Switzerland", "Sweden", "Poland", "Hungary", "Romania",
-    "Bulgaria", "Spain", "Portugal", "Austria", "Belgium", "Norway", "Finland",
-    "Greece", "Ireland", "Iceland", "Serbia", "Croatia", "Slovakia", "Slovenia",
-    "Bosnia and Herzegovina", "Montenegro", "North Macedonia", "Albania",
-    "Luxembourg", "Malta", "Cyprus",
-    # Microestados (Codex review):
-    "Monaco", "Vatican City", "San Marino", "Andorra", "Liechtenstein",
+EUROPA_OCCIDENTAL = frozenset({
+    "Germany", "France", "Netherlands", "Belgium", "Luxembourg",
+    "Austria", "Switzerland", "Liechtenstein", "Monaco",
+})
+EUROPA_MEDITERRANEA = frozenset({
+    "Italy", "Spain", "Portugal", "Greece", "Malta", "Cyprus",
+    "Vatican City", "San Marino",
+})
+EUROPA_NORDICA = frozenset({
+    "Sweden", "Norway", "Denmark", "Finland", "Iceland",
+})
+EUROPA_BRITANICA = frozenset({"United Kingdom", "Ireland"})
+EUROPA_CENTRO_ESTE = frozenset({
+    "Poland", "Czech Republic", "Slovakia", "Hungary", "Romania", "Bulgaria",
+    "Serbia", "Croatia", "Slovenia", "Bosnia and Herzegovina", "Montenegro",
+    "North Macedonia", "Albania", "Andorra",
 })
 NORTEAMERICA = frozenset({"USA", "Canada"})
+LATINOAMERICA = frozenset({
+    "Mexico", "Brazil", "Argentina", "Chile", "Colombia", "Peru", "Venezuela",
+    "Uruguay", "Paraguay", "Bolivia", "Ecuador", "Cuba", "Dominican Republic",
+    "Puerto Rico", "Guatemala", "Honduras", "Nicaragua", "Costa Rica", "Panama",
+    "El Salvador", "Haiti", "Jamaica", "Trinidad and Tobago",
+})
+ASIA_NON_URSS = frozenset({
+    "China", "Japan", "India", "Indonesia", "Turkey", "Iran", "Iraq", "Pakistan",
+    "Bangladesh", "Thailand", "Vietnam", "Philippines", "South Korea", "North Korea",
+    "Malaysia", "Singapore", "Myanmar", "Cambodia", "Laos", "Sri Lanka", "Nepal",
+    "Afghanistan", "Mongolia", "Taiwan", "Hong Kong",
+})
+AFRICA_ME = frozenset({
+    "Egypt", "Morocco", "South Africa", "Algeria", "Tunisia", "Libya", "Sudan",
+    "Ethiopia", "Kenya", "Nigeria", "Ghana", "Tanzania", "Uganda", "Senegal",
+    "Israel", "Saudi Arabia", "Jordan", "Lebanon", "Syria", "UAE", "Yemen", "Oman",
+    "Qatar", "Kuwait", "Bahrain", "Palestine",
+})
+OCEANIA = frozenset({
+    "Australia", "New Zealand", "Fiji", "Papua New Guinea", "Samoa",
+})
 
 DECADES = ["1890s", "1900s", "1910s", "1920s", "1930s", "1940s"]
-PAIS_BUCKETS = [
-    "Russia-EU", "Russia-Asia", "Ex-URSS",
-    "Europa-no-URSS", "Norteamerica", "Resto",
-]
+
+# Cuotas por bucket (total = 250 al sumarlas)
+QUOTAS = {
+    "Russia-EU":           15,
+    "Russia-Asia":         15,
+    "Ex-URSS":             20,
+    "Europa-Occidental":   12,
+    "Europa-Mediterranea": 12,
+    "Europa-Nordica":      12,
+    "Europa-Britanica":    12,
+    "Europa-CentroEste":   12,
+    "Norteamerica":        20,
+    "LatinoAmerica":       30,
+    "Asia-non-URSS":       40,
+    "Africa-ME":           30,
+    "Oceania":             20,
+}
+PAIS_BUCKETS = list(QUOTAS.keys())
 
 
-def country_bucket(country: str, lon: float) -> str:
+def country_bucket(country: str, lon: float) -> str | None:
     if country == "Russia":
         return "Russia-EU" if lon < 60 else "Russia-Asia"
-    if country in EX_URSS:
-        return "Ex-URSS"
-    if country in EUROPA_NO_URSS:
-        return "Europa-no-URSS"
-    if country in NORTEAMERICA:
-        return "Norteamerica"
-    return "Resto"
+    if country in EX_URSS:                return "Ex-URSS"
+    if country in EUROPA_OCCIDENTAL:      return "Europa-Occidental"
+    if country in EUROPA_MEDITERRANEA:    return "Europa-Mediterranea"
+    if country in EUROPA_NORDICA:         return "Europa-Nordica"
+    if country in EUROPA_BRITANICA:       return "Europa-Britanica"
+    if country in EUROPA_CENTRO_ESTE:     return "Europa-CentroEste"
+    if country in NORTEAMERICA:           return "Norteamerica"
+    if country in LATINOAMERICA:          return "LatinoAmerica"
+    if country in ASIA_NON_URSS:          return "Asia-non-URSS"
+    if country in AFRICA_ME:              return "Africa-ME"
+    if country in OCEANIA:                return "Oceania"
+    return None  # país no mapeado → descartar
 
 
 def decade_bucket(year: int) -> str:
@@ -140,6 +192,8 @@ def main() -> None:
                 continue
 
             pais = country_bucket(country, lon)
+            if pais is None:
+                continue  # país no mapeado, descartar
             dec = decade_bucket(year)
             gh5 = pygeohash.encode(lat, lon, precision=GEOHASH_PRECISION)
             cand = rec_to_candidate(rec, lat, lon, year, country, gh5, pais, dec)
@@ -148,13 +202,19 @@ def main() -> None:
 
     print(f"total eligibles: {total:,} ({time.time()-t0:.1f}s)")
 
-    # Per-cell: shuffle (seeded), dedupe by geohash5, take K_PER_CELL.
+    # Per-bucket: distribuir cuota target entre 6 décadas (ceil), redistribuir si una década escasa.
+    # Estrategia: K_per_cell base = ceil(quota / 6). Sobrecuota se rellena con sobrantes de otras décadas.
+    import math
     sample: list[dict] = []
     cell_summary: dict[str, dict] = {}
     for pais in PAIS_BUCKETS:
+        target = QUOTAS[pais]
+        base_k = math.ceil(target / len(DECADES))  # cuota base por década
+        # Primera pasada: tomar base_k por década (con dedupe gh5)
+        picked_by_dec = {}
+        leftover_by_dec = {}
         for dec in DECADES:
-            cell = (pais, dec)
-            cands = by_cell.get(cell, [])
+            cands = by_cell.get((pais, dec), [])
             random.shuffle(cands)
             seen_gh = set()
             unique = []
@@ -163,13 +223,32 @@ def main() -> None:
                     continue
                 seen_gh.add(c["geohash5"])
                 unique.append(c)
-            picked = unique[:K_PER_CELL]
-            sample.extend(picked)
+            picked_by_dec[dec] = unique[:base_k]
+            leftover_by_dec[dec] = unique[base_k:]
             cell_summary[f"{pais} x {dec}"] = {
                 "available_raw": len(cands),
                 "available_unique_gh5": len(unique),
-                "sampled": len(picked),
+                "sampled_base": len(picked_by_dec[dec]),
             }
+        # Segunda pasada: rellenar hasta target con leftovers (de cualquier década del mismo bucket)
+        total_picked = sum(len(v) for v in picked_by_dec.values())
+        if total_picked < target:
+            need = target - total_picked
+            # Mezclar leftovers de todas las décadas, tomar `need`
+            all_leftovers = []
+            for dec in DECADES:
+                all_leftovers.extend(leftover_by_dec[dec])
+            random.shuffle(all_leftovers)
+            extras = all_leftovers[:need]
+            # Distribuir extras y actualizar summary
+            for ex in extras:
+                picked_by_dec[ex["bucket_decada"]].append(ex)
+                cell_summary[f"{pais} x {ex['bucket_decada']}"]["sampled_extra"] = \
+                    cell_summary[f"{pais} x {ex['bucket_decada']}"].get("sampled_extra", 0) + 1
+        # Acumular en el sample final
+        for dec in DECADES:
+            sample.extend(picked_by_dec[dec])
+            cell_summary[f"{pais} x {dec}"]["sampled_total"] = len(picked_by_dec[dec])
 
     OUT_CANDIDATES.write_text(json.dumps(sample, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nwrote {OUT_CANDIDATES} ({len(sample)} fotos)")
@@ -177,7 +256,7 @@ def main() -> None:
     audit = {
         "seed": SEED,
         "year_range": [YEAR_MIN, YEAR_MAX],
-        "k_per_cell": K_PER_CELL,
+        "quotas": QUOTAS,
         "geohash_precision": GEOHASH_PRECISION,
         "total_eligibles": total,
         "final_sample_size": len(sample),
@@ -195,9 +274,10 @@ def main() -> None:
         for dec in DECADES:
             key = f"{pais} x {dec}"
             s = cell_summary[key]
-            row_total += s["sampled"]
-            print(f"  {key:<33} {s['available_raw']:>10,} {s['available_unique_gh5']:>8,} {s['sampled']:>6}")
-        print(f"  {pais + ' TOTAL':<33} {'':<10} {'':<8} {row_total:>6}")
+            n = s.get("sampled_total", 0)
+            row_total += n
+            print(f"  {key:<33} {s['available_raw']:>10,} {s['available_unique_gh5']:>8,} {n:>6}")
+        print(f"  {pais + ' TOTAL':<33} {'':<10} {'':<8} {row_total:>6} (target {QUOTAS[pais]})")
 
 
 if __name__ == "__main__":

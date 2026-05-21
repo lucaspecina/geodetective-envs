@@ -1,0 +1,518 @@
+{
+  "seed": 42,
+  "year_range": [
+    1890,
+    1949
+  ],
+  "quotas": {
+    "Russia-EU": 15,
+    "Russia-Asia": 15,
+    "Ex-URSS": 20,
+    "Europa-Occidental": 12,
+    "Europa-Mediterranea": 12,
+    "Europa-Nordica": 12,
+    "Europa-Britanica": 12,
+    "Europa-CentroEste": 12,
+    "Norteamerica": 20,
+    "LatinoAmerica": 30,
+    "Asia-non-URSS": 40,
+    "Africa-ME": 30,
+    "Oceania": 20
+  },
+  "geohash_precision": 5,
+  "total_eligibles": 595960,
+  "final_sample_size": 270,
+  "pais_buckets": [
+    "Russia-EU",
+    "Russia-Asia",
+    "Ex-URSS",
+    "Europa-Occidental",
+    "Europa-Mediterranea",
+    "Europa-Nordica",
+    "Europa-Britanica",
+    "Europa-CentroEste",
+    "Norteamerica",
+    "LatinoAmerica",
+    "Asia-non-URSS",
+    "Africa-ME",
+    "Oceania"
+  ],
+  "decade_buckets": [
+    "1890s",
+    "1900s",
+    "1910s",
+    "1920s",
+    "1930s",
+    "1940s"
+  ],
+  "cell_distribution": {
+    "Russia-EU x 1890s": {
+      "available_raw": 19302,
+      "available_unique_gh5": 1674,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-EU x 1900s": {
+      "available_raw": 58084,
+      "available_unique_gh5": 3750,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-EU x 1910s": {
+      "available_raw": 42818,
+      "available_unique_gh5": 2981,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-EU x 1920s": {
+      "available_raw": 34335,
+      "available_unique_gh5": 2337,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-EU x 1930s": {
+      "available_raw": 56552,
+      "available_unique_gh5": 2877,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-EU x 1940s": {
+      "available_raw": 59435,
+      "available_unique_gh5": 3730,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-Asia x 1890s": {
+      "available_raw": 3032,
+      "available_unique_gh5": 395,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-Asia x 1900s": {
+      "available_raw": 7182,
+      "available_unique_gh5": 637,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-Asia x 1910s": {
+      "available_raw": 11795,
+      "available_unique_gh5": 701,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-Asia x 1920s": {
+      "available_raw": 6873,
+      "available_unique_gh5": 565,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-Asia x 1930s": {
+      "available_raw": 7878,
+      "available_unique_gh5": 736,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Russia-Asia x 1940s": {
+      "available_raw": 3793,
+      "available_unique_gh5": 482,
+      "sampled_base": 3,
+      "sampled_total": 3
+    },
+    "Ex-URSS x 1890s": {
+      "available_raw": 5301,
+      "available_unique_gh5": 754,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Ex-URSS x 1900s": {
+      "available_raw": 11292,
+      "available_unique_gh5": 1331,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Ex-URSS x 1910s": {
+      "available_raw": 11705,
+      "available_unique_gh5": 1420,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Ex-URSS x 1920s": {
+      "available_raw": 10224,
+      "available_unique_gh5": 1023,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Ex-URSS x 1930s": {
+      "available_raw": 15118,
+      "available_unique_gh5": 1242,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Ex-URSS x 1940s": {
+      "available_raw": 14152,
+      "available_unique_gh5": 1235,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Europa-Occidental x 1890s": {
+      "available_raw": 11180,
+      "available_unique_gh5": 1040,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Occidental x 1900s": {
+      "available_raw": 23966,
+      "available_unique_gh5": 1300,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Occidental x 1910s": {
+      "available_raw": 12335,
+      "available_unique_gh5": 869,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Occidental x 1920s": {
+      "available_raw": 10994,
+      "available_unique_gh5": 865,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Occidental x 1930s": {
+      "available_raw": 13007,
+      "available_unique_gh5": 913,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Occidental x 1940s": {
+      "available_raw": 8906,
+      "available_unique_gh5": 825,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Mediterranea x 1890s": {
+      "available_raw": 1195,
+      "available_unique_gh5": 170,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Mediterranea x 1900s": {
+      "available_raw": 1467,
+      "available_unique_gh5": 232,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Mediterranea x 1910s": {
+      "available_raw": 909,
+      "available_unique_gh5": 194,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Mediterranea x 1920s": {
+      "available_raw": 1241,
+      "available_unique_gh5": 267,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Mediterranea x 1930s": {
+      "available_raw": 3373,
+      "available_unique_gh5": 517,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Mediterranea x 1940s": {
+      "available_raw": 2771,
+      "available_unique_gh5": 597,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Nordica x 1890s": {
+      "available_raw": 2463,
+      "available_unique_gh5": 126,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Nordica x 1900s": {
+      "available_raw": 5586,
+      "available_unique_gh5": 247,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Nordica x 1910s": {
+      "available_raw": 3870,
+      "available_unique_gh5": 246,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Nordica x 1920s": {
+      "available_raw": 3438,
+      "available_unique_gh5": 233,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Nordica x 1930s": {
+      "available_raw": 6640,
+      "available_unique_gh5": 363,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Nordica x 1940s": {
+      "available_raw": 5549,
+      "available_unique_gh5": 315,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Britanica x 1890s": {
+      "available_raw": 1531,
+      "available_unique_gh5": 401,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Britanica x 1900s": {
+      "available_raw": 2036,
+      "available_unique_gh5": 293,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Britanica x 1910s": {
+      "available_raw": 1000,
+      "available_unique_gh5": 194,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Britanica x 1920s": {
+      "available_raw": 1018,
+      "available_unique_gh5": 207,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Britanica x 1930s": {
+      "available_raw": 999,
+      "available_unique_gh5": 218,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-Britanica x 1940s": {
+      "available_raw": 792,
+      "available_unique_gh5": 163,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-CentroEste x 1890s": {
+      "available_raw": 2246,
+      "available_unique_gh5": 404,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-CentroEste x 1900s": {
+      "available_raw": 3910,
+      "available_unique_gh5": 792,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-CentroEste x 1910s": {
+      "available_raw": 3862,
+      "available_unique_gh5": 895,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-CentroEste x 1920s": {
+      "available_raw": 3296,
+      "available_unique_gh5": 774,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-CentroEste x 1930s": {
+      "available_raw": 5922,
+      "available_unique_gh5": 1129,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Europa-CentroEste x 1940s": {
+      "available_raw": 4904,
+      "available_unique_gh5": 1067,
+      "sampled_base": 2,
+      "sampled_total": 2
+    },
+    "Norteamerica x 1890s": {
+      "available_raw": 2324,
+      "available_unique_gh5": 247,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Norteamerica x 1900s": {
+      "available_raw": 7214,
+      "available_unique_gh5": 463,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Norteamerica x 1910s": {
+      "available_raw": 7050,
+      "available_unique_gh5": 394,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Norteamerica x 1920s": {
+      "available_raw": 13998,
+      "available_unique_gh5": 388,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Norteamerica x 1930s": {
+      "available_raw": 12846,
+      "available_unique_gh5": 548,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Norteamerica x 1940s": {
+      "available_raw": 6592,
+      "available_unique_gh5": 646,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "LatinoAmerica x 1890s": {
+      "available_raw": 186,
+      "available_unique_gh5": 44,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "LatinoAmerica x 1900s": {
+      "available_raw": 660,
+      "available_unique_gh5": 65,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "LatinoAmerica x 1910s": {
+      "available_raw": 420,
+      "available_unique_gh5": 58,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "LatinoAmerica x 1920s": {
+      "available_raw": 361,
+      "available_unique_gh5": 67,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "LatinoAmerica x 1930s": {
+      "available_raw": 368,
+      "available_unique_gh5": 66,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "LatinoAmerica x 1940s": {
+      "available_raw": 289,
+      "available_unique_gh5": 95,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "Asia-non-URSS x 1890s": {
+      "available_raw": 513,
+      "available_unique_gh5": 104,
+      "sampled_base": 7,
+      "sampled_total": 7
+    },
+    "Asia-non-URSS x 1900s": {
+      "available_raw": 1184,
+      "available_unique_gh5": 180,
+      "sampled_base": 7,
+      "sampled_total": 7
+    },
+    "Asia-non-URSS x 1910s": {
+      "available_raw": 1207,
+      "available_unique_gh5": 156,
+      "sampled_base": 7,
+      "sampled_total": 7
+    },
+    "Asia-non-URSS x 1920s": {
+      "available_raw": 1519,
+      "available_unique_gh5": 150,
+      "sampled_base": 7,
+      "sampled_total": 7
+    },
+    "Asia-non-URSS x 1930s": {
+      "available_raw": 3404,
+      "available_unique_gh5": 171,
+      "sampled_base": 7,
+      "sampled_total": 7
+    },
+    "Asia-non-URSS x 1940s": {
+      "available_raw": 2408,
+      "available_unique_gh5": 146,
+      "sampled_base": 7,
+      "sampled_total": 7
+    },
+    "Africa-ME x 1890s": {
+      "available_raw": 269,
+      "available_unique_gh5": 66,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "Africa-ME x 1900s": {
+      "available_raw": 387,
+      "available_unique_gh5": 74,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "Africa-ME x 1910s": {
+      "available_raw": 303,
+      "available_unique_gh5": 59,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "Africa-ME x 1920s": {
+      "available_raw": 443,
+      "available_unique_gh5": 78,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "Africa-ME x 1930s": {
+      "available_raw": 985,
+      "available_unique_gh5": 132,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "Africa-ME x 1940s": {
+      "available_raw": 748,
+      "available_unique_gh5": 145,
+      "sampled_base": 5,
+      "sampled_total": 5
+    },
+    "Oceania x 1890s": {
+      "available_raw": 68,
+      "available_unique_gh5": 14,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Oceania x 1900s": {
+      "available_raw": 230,
+      "available_unique_gh5": 49,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Oceania x 1910s": {
+      "available_raw": 156,
+      "available_unique_gh5": 27,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Oceania x 1920s": {
+      "available_raw": 209,
+      "available_unique_gh5": 27,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Oceania x 1930s": {
+      "available_raw": 199,
+      "available_unique_gh5": 28,
+      "sampled_base": 4,
+      "sampled_total": 4
+    },
+    "Oceania x 1940s": {
+      "available_raw": 143,
+      "available_unique_gh5": 46,
+      "sampled_base": 4,
+      "sampled_total": 4
+    }
+  }
+}

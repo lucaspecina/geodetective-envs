@@ -1,74 +1,63 @@
 # Cómo retomar desde otra máquina / sesión nueva
 
-> **Última sesión**: 2026-05-20 — sesión muy productiva con rediseño de tools (Fases 1-3), prompt iteration, corpus blureado canónico, métricas eval. **Próximo paso claro**: expansión + re-balance del corpus (issue #46).
+> **Última sesión**: 2026-05-22 — corpus v2 cerrado (151 fotos finales post-selección manual). Related work checked: SpotAgent (feb 2026) y GeoVista (nov 2025) son competidores cercanos. **Próximo paso claro**: implementar CORRAL annotator (diferenciador metodológico crítico) + cross-model run sobre el corpus consolidado.
 >
 > Si retomás en otra máquina, leé este doc PRIMERO. Después tenés `CURRENT_STATE.md` para el panorama completo.
 
 ---
 
-## Estado al cierre (2026-05-20)
+## Estado al cierre (2026-05-22)
 
-### Sistema técnico — ya está sólido
+### Corpus consolidado — listo
 
-| Capa | Estado |
+| Item | Detalle |
 |---|---|
-| **Tools v2** (Fases 1-3 rediseño) | ✅ Implementadas, commiteadas, validadas: fetch_url_with_images (con captions), web_search (metadata), static_map enriquecido (POIs + elevation + multi), street_view (nearby), image_search (grilla 4×4 + pick + paginación) |
-| **Cliente Google común** (`google_api.py`) | ✅ Cache compartido, error handling non-fatal |
-| **historical_query_at** wrapper amigable | ✅ |
-| **min_steps** parameter | ✅ Implementado en react.py |
-| **Sliding-window cleanup** de imágenes (Azure 50 limit) | ✅ |
-| **Corpus blureado canónico** | ✅ `corpus/photos/{cid}_clean_v1.jpg` = versiones blureadas (post issue #33) |
-| **Métricas eval module** | ✅ year + calibration + buckets en `src/geodetective/eval/metrics.py` |
-| **SYSTEM_PROMPT actualizado** | ✅ con regla "evidence-driven submit" + descripciones tools v2 |
-| **Adapter cross-provider** | ✅ OpenAI + Anthropic via Foundry |
-| **README orientado a usuarios** | ✅ reescrito |
+| **Corpus final canónico** | 151 fotos blureadas, balanceadas país × década |
+| **Metadata canónica** | `experiments/E007_sample_diverso/candidates_v2_final.json` (en git) |
+| **Need re-blur** | 26 fotos pendientes de re-blureado, `candidates_need_reblur.json` (en git) |
+| **Rechazadas** | 93 fotos descartadas en selección manual, `candidates_rejected_v2.json` (en git) |
+| **Blacklist consolidada** | 390 cids ya procesados, `blacklist_cids.json` (en git) — para futuros sampleos suplementarios |
+| **Detections (anti-shortcut)** | `experiments/E011_text_overlay_detection/sample270_v2/detections.json` (en git, 580KB) — fuente canon de bboxes para re-aplicar blur |
 
-### Hallazgos clave de la sesión
+### Distribución del corpus final (151)
 
-1. **El prompt actualizado destraba el lock-in**: Lisboa 274 km (Porto) → 2 km (Lisboa) solo cambiando el prompt para que el modelo conozca las tools.
-2. **Prompt-only es insuficiente para forzar más exploración**: gpt-5.4-mini ignora "seguí investigando" del prompt. Hace falta restricción de código (min_steps).
-3. **min_steps=12 funciona técnicamente** (steps suben de 7 a 12.6, distance baja 38%) pero introduce FAILs (1/10) por modelo "rindiéndose" con contexto lleno.
-4. **Corpus contaminado por shortcut OCR**: corridas E010/E012/E014 anteriores usaron fotos sin blur. **Bug fixed en commit `ef4dee6`**, pero results históricos quedaron contaminados.
-5. **Corpus sesgado a Rusia (33%)** — limitación grave para benchmark con pretensión de generalización.
+```
+Asia-non-URSS        24   |  China        16
+LatinoAmerica        22   |  Russia       15
+Africa-ME            17   |  USA          14
+Oceania              15   |  UK            9
+Norteamerica         15   |  Israel        7
+Ex-URSS              11   |  Australia     7
+Europa-Britanica      9   |  NZ            6
+Europa-Nordica        8   |  Denmark       6
+Russia-Asia           8   |  Turkey        6
+Russia-EU             7   |  Egypt         5
+Europa-Occidental     6   |  ...
+Europa-Mediterranea   5   |
+Europa-CentroEste     4   |
+```
 
-### Issue de continuidad
+Décadas: 1890s=26, 1900s=26, 1910s=22, 1920s=23, 1930s=25, 1940s=29. Muy uniforme.
 
-**[#46 Expansión + re-balance corpus a 250 → ~100 finales](https://github.com/lucaspecina/geodetective-envs/issues/46)** — el siguiente trabajo concreto.
+### Hallazgo clave: competitive landscape (mayo 2026)
+
+**No estamos reinventando**, pero hay competidores cercanos publicados últimos 6 meses:
+
+- **SpotAgent** (feb 2026, Fudan/Tencent) — agentic + 3 tools + GRPO + reward geodésico piecewise. **Contemporáneo, no histórico, sin process eval**.
+- **GeoVista + GeoBench** (nov 2025, Fudan/Tencent/Tsinghua) — agentic + 2 tools + GRPO. **Contemporáneo, sin process eval**.
+- **WanderBench / GeoAoT** (2026, SJTU) — geo embodied (StreetView navigable). **No histórico**.
+
+**Nuestro moat queda en**: histórico + 12 tools (vs 2-3 competidores) + process eval CORRAL + pipeline anti-shortcut serio + environment reusable para RL training.
+
+**Sin CORRAL implementado, somos "SpotAgent con fotos viejas y más tools"**. CORRAL es CRÍTICO para diferenciación metodológica.
+
+Detalle completo en `research/synthesis/related_work.md` (actualizar al volver).
 
 ---
 
-## Próximos pasos en orden
+## Cómo retomar técnicamente en otra máquina
 
-### 1. EXPANSIÓN DEL CORPUS (issue #46) — lo siguiente que hay que hacer
-
-Plan detallado en la issue. Resumen:
-
-```
-Actual: 180 fotos → 33% Rusia, prácticamente 0% LatAm/África/Oceanía/Asia non-CN
-Target: 250 candidatos sampleados → pipeline filtra → usuario selecciona → ~100 finales bien distribuidos
-```
-
-Pasos concretos:
-1. **Modificar `sample_diverso.py`** para subdividir "Resto" en LatAm / Asia-non-CN / África-ME / Oceanía
-2. **Re-samplear** con nuevas cuotas (ver issue #46)
-3. **Pipeline completo** sobre las nuevas: download → clean → blur → atacante
-4. **Selección manual del usuario** sobre las que sobrevivan (HTML grid clickeable propuesto)
-5. **Re-blureado opcional** de las 180 existentes para uniformidad
-
-### 2. Después del corpus consolidado
-
-Una vez que tengamos ~100 fotos canónicas bien distribuidas:
-
-- **Cross-model evaluation** (Codex priorizó): 4 modelos (gpt-4o, claude-sonnet, claude-opus, gpt-5.4-mini) × 100 fotos × N=3 runs × min_steps tuneado
-- **Annotator CORRAL** sobre todas las traces para process metrics
-- **Estratificación por dificultad** vía atacante
-- **Baseline humano** opcional (5-10 fotos cronometradas)
-
----
-
-## Cómo retomar técnicamente
-
-### Setup nuevo (si nunca clonó)
+### Paso 1 — clone + setup
 
 ```bash
 git clone https://github.com/lucaspecina/geodetective-envs.git
@@ -77,38 +66,87 @@ conda create -n geodetective python=3.11 -y && conda activate geodetective
 pip install openai httpx pillow imagehash beautifulsoup4 lxml geopy pydantic ddgs zstandard huggingface_hub pygeohash
 ```
 
-`.env` con:
+Crear `.env` (no va a git):
+
 ```
 AZURE_INFERENCE_CREDENTIAL=...
-AZURE_FOUNDRY_BASE_URL=https://your-resource.openai.azure.com/openai/v1
+AZURE_FOUNDRY_BASE_URL=https://amalia-resource.openai.azure.com/openai/v1
 AZURE_MODEL=gpt-5.4
 GOOGLE_MAPS_API_KEY=...
 ```
 
-### Regenerar corpus (si arrancás en máquina nueva)
+### Paso 2 — regenerar el corpus canónico (151 fotos)
+
+Las fotos NO van a git (binarios + copyright). Pero los JSONs sí, así que se regeneran:
 
 ```bash
-# 1. Dump PastVu (282 MB, una vez)
-python scripts/download_pastvu_dump.py
+# Baja las 151 fotos y aplica clean_image (strip EXIF + crop watermark)
+# Output: corpus/photos/{cid}_{raw,clean_v1}.jpg sin blur
+python scripts/download_corpus_photos.py experiments/E007_sample_diverso/candidates_v2_final.json
 
-# 2. Re-samplear 180 (estado actual) o 250 (target post-#46)
-python scripts/sample_diverso.py
-# Output: experiments/E007_sample_diverso/candidates.json
-
-# 3. Bajar las fotos
-python scripts/download_corpus_photos.py experiments/E007_sample_diverso/candidates.json
-
-# 4. Blureado (anti-shortcut OCR) — IMPORTANTE
-python scripts/detect_text_overlays.py --photos-dir corpus/photos --out-dir experiments/E011_text_overlay_detection/sample185_sonnet --model claude-sonnet-4-6 --workers 5
-
-# 5. Sobreescribir corpus con blureadas
-for blur in experiments/E011_text_overlay_detection/sample185_sonnet/blurred/*.jpg; do
-    cid=$(basename "$blur" .jpg)
-    cp "$blur" "corpus/photos/${cid}_clean_v1.jpg"
-done
+# Aplica blur sobre archive_overlays usando detections.json (ya en git)
+# Sobreescribe corpus/photos/{cid}_clean_v1.jpg in-place
+python scripts/apply_blur_from_detections.py --candidates-filter experiments/E007_sample_diverso/candidates_v2_final.json
 ```
 
-### Comandos típicos
+Después de esos 2 comandos, `corpus/photos/` queda idéntico bit-a-bit (módulo re-encode JPEG) al estado de la máquina origen.
+
+Verificar:
+```bash
+ls corpus/photos/*_clean_v1.jpg | wc -l   # debería dar 151
+```
+
+### Paso 3 — opcionalmente bajar el dump PastVu (solo si vas a re-samplear)
+
+Solo necesario si querés hacer un sampleo suplementario (no para usar el corpus existente):
+
+```bash
+python scripts/download_pastvu_dump.py   # 282 MB, una vez
+```
+
+---
+
+## Próximos pasos en orden de prioridad
+
+### 1. CORRAL annotator implementado (CRÍTICO)
+
+Es el diferenciador metodológico clave vs SpotAgent/GeoVista. Stub ya implementado en sesiones pasadas (`research/synthesis/process_eval_design.md` + stub sobre traces E005).
+
+Pasos:
+1. Refinar el annotator stub con dimensiones CORRAL adaptadas a geo-investigación
+2. Correr sobre traces existentes (E005, E010, E014) para validar
+3. Documentar criterios + ejemplos worked-out en `research/examples/`
+
+### 2. Cross-model run sobre el corpus consolidado (151 fotos)
+
+Una vez el annotator funciona, correr eval cuantitativo:
+
+```bash
+# 4 modelos × 151 fotos × N=3 runs × min_steps=12, max_steps=30
+# Estimación: ~1800 corridas, $300-500, ~6-12 horas en background
+MODELS="gpt-5.4-mini,gpt-4o,claude-sonnet-4-6,claude-opus-4-6"
+python scripts/run_multimodel_pilot.py \
+    --candidates experiments/E007_sample_diverso/candidates_v2_final.json \
+    --models $MODELS --n-runs 3 --min-steps 12 --max-steps 30
+```
+
+### 3. Process eval con annotator sobre las traces
+
+Aplica CORRAL annotator a cada traza del cross-model run. Genera métricas process (no solo outcome).
+
+### 4. (Opcional, después) Sampleo suplementario para escalar corpus
+
+Si el cross-model muestra señal y queremos más power estadístico:
+- Sampleo de buckets sub-representados (Europa-CentroEste/Mediterranea con 4-5 fotos)
+- Usar `blacklist_cids.json` para excluir las 390 cids ya tocadas
+
+### 5. (Opcional, después) Entrenar policy con GRPO sobre el environment
+
+Si el ángulo final es "environment para RL training" (no solo benchmark), hay que mostrar al menos UNA policy entrenada.
+
+---
+
+## Comandos típicos
 
 ```bash
 # Correr agente sobre fotos específicas
@@ -119,6 +157,9 @@ python scripts/compute_metrics.py experiments/E010_iteration_pilot/results_*.jso
 
 # Viewer step-by-step (con sidebar navigation)
 python scripts/build_iteration_viewer.py path/to/results.json --photos-dir corpus/photos
+
+# Status del proyecto (skill)
+# /status
 ```
 
 ---
@@ -127,55 +168,46 @@ python scripts/build_iteration_viewer.py path/to/results.json --photos-dir corpu
 
 Orden recomendado:
 
-1. **`SESSION_RESUME.md`** (este doc) — estado al cierre + próximos pasos
-2. **Issue [#46](https://github.com/lucaspecina/geodetective-envs/issues/46)** — el siguiente trabajo concreto
-3. **`CURRENT_STATE.md`** — panorama actual del proyecto
-4. **`research/synthesis/tools_redesign.md`** — qué se cambió en tools (referencia)
-5. **`research/synthesis/findings_so_far.md`** — hallazgos cross-experimento
-6. **`research/synthesis/experiment_design.md`** — ejes a medir en el paper
-7. **GitHub issues abiertas** — siguiente trabajo
-8. **`CLAUDE.md`** — convenciones del repo
+1. **`SESSION_RESUME.md`** (este doc)
+2. **`research/synthesis/related_work.md`** — landscape competitivo 2025-2026
+3. **`research/synthesis/process_eval_design.md`** — diseño del annotator CORRAL
+4. **`CURRENT_STATE.md`** — panorama actual del proyecto
+5. **GitHub issues abiertas** — siguiente trabajo (`gh issue list`)
+6. **`CLAUDE.md`** — convenciones del repo
 
 ---
 
-## Commits importantes de esta sesión
+## Cambios importantes desde 2026-05-20
 
-```
-9557064 data: E014 diverse10 results (evidence + blurred+minsteps)
-ef4dee6 fix: corpus canónico ahora usa fotos blureadas (cierra #33)
-a883d76 feat: regla evidence-driven submit + viewer nav sidebar
-1b98ae9 chore: limpieza experiments (235MB → 49MB)
-38a05ea feat: prompt v3 image_search semántico
-8f64def feat: SYSTEM_PROMPT actualizado + historical_query_at
-7567e69 docs: README reescrito para usuarios
-29444e2 feat: image_search paginación
-ebad6b5 feat: eval module (year + calibration + buckets)
-fc0193f feat: Fase 3 image_search grilla
-4186867 feat: Fase 2 google_api + static_map + street_view
-b7992ba feat: Fase 1.2 + 1.3 web_search + street_view
-255b8b4 feat: fetch_url_with_images v2 con captions
-43e0f0b docs: tools redesign plan + audit
-```
+- Corpus expandido de 180 a 270 sampleadas con balanceo país × década (13 buckets, sin sesgo a Rusia)
+- Selección manual → 151 fotos finales canónicas
+- Atacante GPT-4o N=3 corrido sobre las 270 → 113 rechazadas (shortcut), 157 sobrevivientes (de ahí salieron las 151 + 26 need_reblur)
+- Carpetas auxiliares en `corpus/` (`photos_rejected_v2/`, `photos_need_reblur/`) — locales, NO en git
+- Blacklist consolidada de 390 cids para futuros sampleos
 
 ---
 
 ## Notas importantes / gotchas
 
-- **Corpus blureado** es ahora canónico. Si re-descargás fotos, hay que aplicar el blur otra vez.
-- **`corpus/photos_pre_blur/`** existe como backup local de las fotos sin blur (gitignored).
-- **Results históricos contaminados**: E010, E012, E014 (excepto blurred_minsteps), E009 corrieron sobre fotos sin blur. **No usar como baseline canónico** del paper — sí como "pre anti-shortcut comparison".
-- **Issue [#33 cerrada](https://github.com/lucaspecina/geodetective-envs/issues/33)** — pipeline corpus Paso 0.5 ya aplicado.
-- **Issues abiertas relevantes**: #46 (corpus expansion), #34 (main run), #35 (estratificación), #39 (annotator E009/E010), #43 (ablations), #44 (validación E010).
+- **Corpus blureado** es ahora canónico. En máquina nueva: download → apply_blur. No usar fotos sin blur.
+- **`detections.json`** en `E011/sample270_v2/` es la fuente canon de bboxes — está en git, no hace falta re-correr el VLM detector.
+- **Carpetas `corpus/photos_rejected_v2/`, `corpus/photos_need_reblur/`, `corpus/candidates_*/`, `corpus/a-remove/`** son locales, NO se sincronizan vía git. Si las necesitás en otra máquina, hay que rsync manual.
+- **Results históricos contaminados**: E010, E012, E014 (excepto blurred_minsteps), E009 corrieron sobre fotos sin blur. **No usar como baseline canónico** del paper.
+- **Issues abiertas relevantes**: #46 (corpus expansion — CERRARLO al volver), #34 (main run), #35 (estratificación), #39 (annotator E009/E010), #43 (ablations), #44 (validación E010).
 
 ---
 
-## Comando sugerido al retomar mañana
+## Comando sugerido al retomar en máquina nueva
 
-```powershell
-cd C:\Users\YT40432\Desktop\lp\research\lucaspecina\geodetective-envs
-git pull
-# Leer SESSION_RESUME.md y issue #46
-gh issue view 46
+```bash
+git clone https://github.com/lucaspecina/geodetective-envs.git
+cd geodetective-envs
+# crear .env con AZURE_* y GOOGLE_MAPS_API_KEY
+conda create -n geodetective python=3.11 -y && conda activate geodetective
+pip install openai httpx pillow imagehash beautifulsoup4 lxml geopy pydantic ddgs zstandard huggingface_hub pygeohash
+python scripts/download_corpus_photos.py experiments/E007_sample_diverso/candidates_v2_final.json
+python scripts/apply_blur_from_detections.py --candidates-filter experiments/E007_sample_diverso/candidates_v2_final.json
+gh issue view 46    # o tu issue prioritario
 ```
 
-Y arrancar con #46 — modificar `sample_diverso.py` para los buckets nuevos.
+Después de eso ya podés correr cualquier experimento sobre el corpus canónico.

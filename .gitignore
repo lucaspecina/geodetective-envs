@@ -242,13 +242,17 @@ experiments/E004_attacker_filter/*
 experiments/E005_react_pilot/*
 !experiments/E005_react_pilot/annotated_v3_thinking_visible.json
 
-# E007 corpus sample (v1 + v2)
+# E007 corpus sample (v1 + v2 + final post-selección manual + blacklist)
 !experiments/E007_sample_diverso/
 experiments/E007_sample_diverso/*
 !experiments/E007_sample_diverso/candidates.json
 !experiments/E007_sample_diverso/audit_summary.json
 !experiments/E007_sample_diverso/candidates_v2.json
 !experiments/E007_sample_diverso/audit_v2_summary.json
+!experiments/E007_sample_diverso/candidates_v2_final.json
+!experiments/E007_sample_diverso/candidates_need_reblur.json
+!experiments/E007_sample_diverso/candidates_rejected_v2.json
+!experiments/E007_sample_diverso/blacklist_cids.json
 
 # E008 smoke cross-model
 !experiments/E008_multimodel/

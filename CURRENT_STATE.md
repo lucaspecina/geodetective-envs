@@ -1,6 +1,6 @@
 # GeoDetective Envs — Estado Actual
 
-> **Mayo 2026**: agente investigador funcional con stack completo de 12 tools end-to-end. Concepto del benchmark **VALIDADO** sobre fotos de PastVu (sweet spot identificado, filtro adversarial v2 funcionando, mejora 300x con tools en el caso ideal). Pivote framing benchmark primario activo (env como deuda futura) — ver disclaimer en `PROJECT.md`.
+> **Mayo 2026**: agente investigador funcional con stack completo de 12 tools end-to-end. Concepto del benchmark **VALIDADO** sobre fotos de PastVu (sweet spot identificado, filtro adversarial v2 funcionando, mejora 300x con tools en el caso ideal). **Corpus v2 cerrado** (2026-05-22): 151 fotos finales balanceadas país×década post-selección manual, blacklist consolidada de 390 cids para futuros sampleos. Pivote framing benchmark primario activo (env como deuda futura) — ver disclaimer en `PROJECT.md`.
 >
 > Para visión y norte: `PROJECT.md` · Para roadmap: [Project v2](https://github.com/users/lucaspecina/projects/6) · Para historial: `CHANGELOG.md`.
 
@@ -55,8 +55,9 @@ experiments/
 ├── E008_multimodel/             # 5 modelos × 3 fotos (pre-adapter, DeepSeek vision broken)
 ├── E009_multimodel/             # 9 modelos × 3 fotos × v3 + agentic_probe.json (post-adapter)
 ├── E010_iteration_pilot/        # gpt-5.4-mini × 5 fotos con payload_to_model completo + ablation blur
-├── E011_text_overlay_detection/ # VLM detector overlay (4 modelos × 30 + Sonnet × 185)
-└── E012_min_steps/              # ablation min_steps {0, 15, 30} gpt-5.4-mini × 10 fotos
+├── E011_text_overlay_detection/ # VLM detector overlay (4 modelos × 30 + Sonnet × 185 + sample270_v2)
+├── E012_min_steps/              # ablation min_steps {0, 15, 30} gpt-5.4-mini × 10 fotos
+└── E015_attacker_v2/            # atacante GPT-4o sobre las 270 v2 → results.json reconstruido del log
 ```
 
 ```

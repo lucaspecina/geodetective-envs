@@ -37,9 +37,10 @@ sys.path.insert(0, str(Path("src").resolve()))
 from geodetective.corpus import CLEAN_VERSION, clean_image
 
 # === Config ===
-INPUT = Path("experiments/E007_sample_diverso/candidates.json")
-EXP = Path("experiments/E004_attacker_filter")
-PHOTOS = EXP / "photos"
+# v2 (#46): overridable via env vars para corpus nuevo (270 fotos blureadas)
+INPUT = Path(os.environ.get("CANDIDATES_PATH", "experiments/E007_sample_diverso/candidates.json"))
+EXP = Path(os.environ.get("EXP_DIR", "experiments/E004_attacker_filter"))
+PHOTOS = Path(os.environ.get("PHOTOS_DIR", str(EXP / "photos")))  # usa corpus/photos si pasa env
 OUT_JSON = EXP / "results.json"
 
 N_RUNS = int(os.environ.get("N_RUNS", "3"))
@@ -79,12 +80,17 @@ def make_client() -> OpenAI:
 
 
 def download_photo(c: dict) -> Path | None:
-    """Bajar la foto y limpiarla (strip EXIF + crop watermark)."""
-    url = c["file_url"]
-    out_raw = PHOTOS / f"{c['cid']}_raw.jpg"
+    """Bajar la foto y limpiarla (strip EXIF + crop watermark).
+
+    v2 (#46): si la foto ya existe en PHOTOS_DIR (ej corpus/photos blureado),
+    la usa directamente sin re-descargar. Esto permite reusar el corpus
+    canónico con blur ya aplicado.
+    """
     out_clean = PHOTOS / f"{c['cid']}_clean_v{CLEAN_VERSION}.jpg"
     if out_clean.exists():
-        return out_clean
+        return out_clean  # ← usa la versión ya procesada (blur si está)
+    url = c["file_url"]
+    out_raw = PHOTOS / f"{c['cid']}_raw.jpg"
     try:
         r = httpx.get(url, timeout=30.0, follow_redirects=True)
         r.raise_for_status()
@@ -215,7 +221,7 @@ def process_one(c: dict, client: OpenAI) -> dict:
 def main() -> None:
     if not INPUT.exists():
         raise SystemExit(f"missing input: {INPUT}. Run sample_diverso.py first.")
-    candidates = json.loads(INPUT.read_text())
+    candidates = json.loads(INPUT.read_text(encoding="utf-8"))
     if MAX_PHOTOS > 0:
         candidates = candidates[:MAX_PHOTOS]
     print(f"loaded {len(candidates)} candidates")
@@ -249,7 +255,8 @@ def main() -> None:
     # Reorder by original index
     results.sort(key=lambda r: cid_to_idx.get(r["cid"], 99999))
 
-    OUT_JSON.write_text(json.dumps(results, indent=2, ensure_ascii=False))
+    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
+    OUT_JSON.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
     elapsed = time.time() - t0
     print(f"\nwrote {OUT_JSON} ({elapsed:.0f}s for {len(results)} fotos)")
 

@@ -1,0 +1,3572 @@
+[
+  {
+    "cid": 8987,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1934
+  },
+  {
+    "cid": 156020,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1915
+  },
+  {
+    "cid": 165337,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1948
+  },
+  {
+    "cid": 176980,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1912
+  },
+  {
+    "cid": 184969,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1947
+  },
+  {
+    "cid": 189576,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Sweden",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1896
+  },
+  {
+    "cid": 197890,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Belarus",
+    "bucket_pais": "Ex-URSS",
+    "year": 1890
+  },
+  {
+    "cid": 209030,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1910
+  },
+  {
+    "cid": 210216,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1929
+  },
+  {
+    "cid": 215383,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1909
+  },
+  {
+    "cid": 216310,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Colombia",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1915
+  },
+  {
+    "cid": 218693,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1890
+  },
+  {
+    "cid": 223097,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1899
+  },
+  {
+    "cid": 229068,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1896
+  },
+  {
+    "cid": 230736,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Brazil",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1947
+  },
+  {
+    "cid": 237633,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1900
+  },
+  {
+    "cid": 238092,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1946
+  },
+  {
+    "cid": 241744,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1910
+  },
+  {
+    "cid": 264916,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1913
+  },
+  {
+    "cid": 265212,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1930
+  },
+  {
+    "cid": 269451,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1905
+  },
+  {
+    "cid": 269750,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Norway",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1900
+  },
+  {
+    "cid": 276215,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1945
+  },
+  {
+    "cid": 277199,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1949
+  },
+  {
+    "cid": 284393,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Papua New Guinea",
+    "bucket_pais": "Oceania",
+    "year": 1943
+  },
+  {
+    "cid": 285885,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1910
+  },
+  {
+    "cid": 288909,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Singapore",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1930
+  },
+  {
+    "cid": 290415,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Singapore",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1914
+  },
+  {
+    "cid": 293274,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1895
+  },
+  {
+    "cid": 294719,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1901
+  },
+  {
+    "cid": 296448,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Iraq",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1925
+  },
+  {
+    "cid": 300201,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1944
+  },
+  {
+    "cid": 304045,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Finland",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1941
+  },
+  {
+    "cid": 308540,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1900
+  },
+  {
+    "cid": 311872,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1910
+  },
+  {
+    "cid": 319963,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1949
+  },
+  {
+    "cid": 347606,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Estonia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1925
+  },
+  {
+    "cid": 348688,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1935
+  },
+  {
+    "cid": 353856,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1890
+  },
+  {
+    "cid": 354466,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Switzerland",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1925
+  },
+  {
+    "cid": 359553,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1914
+  },
+  {
+    "cid": 369962,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1922
+  },
+  {
+    "cid": 370177,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Poland",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1905
+  },
+  {
+    "cid": 378198,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Estonia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1890
+  },
+  {
+    "cid": 379732,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1906
+  },
+  {
+    "cid": 380861,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Oceania",
+    "year": 1895
+  },
+  {
+    "cid": 387456,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Oceania",
+    "year": 1937
+  },
+  {
+    "cid": 400408,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1910
+  },
+  {
+    "cid": 403047,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1937
+  },
+  {
+    "cid": 405597,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1919
+  },
+  {
+    "cid": 410694,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Japan",
+    "bucket_pais": "Resto",
+    "year": 1915
+  },
+  {
+    "cid": 414978,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1895
+  },
+  {
+    "cid": 423107,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1898
+  },
+  {
+    "cid": 424595,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Oceania",
+    "year": 1935
+  },
+  {
+    "cid": 426488,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Montenegro",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1920
+  },
+  {
+    "cid": 426514,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1907
+  },
+  {
+    "cid": 442403,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1925
+  },
+  {
+    "cid": 458335,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1920
+  },
+  {
+    "cid": 463165,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Fiji",
+    "bucket_pais": "Oceania",
+    "year": 1945
+  },
+  {
+    "cid": 466321,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Brazil",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1936
+  },
+  {
+    "cid": 473696,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1890
+  },
+  {
+    "cid": 475046,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Poland",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1900
+  },
+  {
+    "cid": 507678,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1919
+  },
+  {
+    "cid": 508742,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1900
+  },
+  {
+    "cid": 509954,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1925
+  },
+  {
+    "cid": 545661,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1924
+  },
+  {
+    "cid": 554592,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Mexico",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1948
+  },
+  {
+    "cid": 563698,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "France",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1924
+  },
+  {
+    "cid": 582630,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Bolivia",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1948
+  },
+  {
+    "cid": 583911,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Peru",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1935
+  },
+  {
+    "cid": 587931,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Egypt",
+    "bucket_pais": "Africa-ME",
+    "year": 1947
+  },
+  {
+    "cid": 588185,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1890
+  },
+  {
+    "cid": 589179,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1918
+  },
+  {
+    "cid": 601716,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1925
+  },
+  {
+    "cid": 617982,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "South Africa",
+    "bucket_pais": "Africa-ME",
+    "year": 1891
+  },
+  {
+    "cid": 623591,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1939
+  },
+  {
+    "cid": 624433,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Austria",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1910
+  },
+  {
+    "cid": 636474,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Belarus",
+    "bucket_pais": "Ex-URSS",
+    "year": 1915
+  },
+  {
+    "cid": 644982,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Germany",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1905
+  },
+  {
+    "cid": 647579,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1944
+  },
+  {
+    "cid": 649122,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1904
+  },
+  {
+    "cid": 657448,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1905
+  },
+  {
+    "cid": 663288,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1925
+  },
+  {
+    "cid": 669221,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1901
+  },
+  {
+    "cid": 676169,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1944
+  },
+  {
+    "cid": 685108,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1900
+  },
+  {
+    "cid": 687785,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1890
+  },
+  {
+    "cid": 691003,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1900
+  },
+  {
+    "cid": 702140,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1927
+  },
+  {
+    "cid": 703459,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "France",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1900
+  },
+  {
+    "cid": 707182,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1900
+  },
+  {
+    "cid": 708739,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Spain",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1935
+  },
+  {
+    "cid": 725135,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Poland",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1944
+  },
+  {
+    "cid": 725885,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1891
+  },
+  {
+    "cid": 732073,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Greece",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1907
+  },
+  {
+    "cid": 742380,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "France",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1940
+  },
+  {
+    "cid": 742473,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Germany",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1945
+  },
+  {
+    "cid": 745340,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1897
+  },
+  {
+    "cid": 752620,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Oceania",
+    "year": 1942
+  },
+  {
+    "cid": 758151,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1932
+  },
+  {
+    "cid": 758273,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1900
+  },
+  {
+    "cid": 760490,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1949
+  },
+  {
+    "cid": 763041,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Latvia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1910
+  },
+  {
+    "cid": 778528,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "France",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1948
+  },
+  {
+    "cid": 781275,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1900
+  },
+  {
+    "cid": 781325,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1941
+  },
+  {
+    "cid": 844584,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1907
+  },
+  {
+    "cid": 850677,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1901
+  },
+  {
+    "cid": 854405,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1914
+  },
+  {
+    "cid": 855349,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Georgia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1930
+  },
+  {
+    "cid": 857630,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1930
+  },
+  {
+    "cid": 883138,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1913
+  },
+  {
+    "cid": 888377,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1949
+  },
+  {
+    "cid": 901171,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1890
+  },
+  {
+    "cid": 912776,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Switzerland",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1890
+  },
+  {
+    "cid": 913275,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Sweden",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1932
+  },
+  {
+    "cid": 921822,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1890
+  },
+  {
+    "cid": 926095,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Germany",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1890
+  },
+  {
+    "cid": 942809,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Georgia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1900
+  },
+  {
+    "cid": 942888,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Georgia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1900
+  },
+  {
+    "cid": 947961,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1890
+  },
+  {
+    "cid": 953150,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1937
+  },
+  {
+    "cid": 953571,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1937
+  },
+  {
+    "cid": 960046,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1935
+  },
+  {
+    "cid": 962242,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Uruguay",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1900
+  },
+  {
+    "cid": 963644,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Uruguay",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1907
+  },
+  {
+    "cid": 975907,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Uruguay",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1930
+  },
+  {
+    "cid": 981733,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1924
+  },
+  {
+    "cid": 983263,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Sweden",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1917
+  },
+  {
+    "cid": 1008661,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1907
+  },
+  {
+    "cid": 1025790,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Georgia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1890
+  },
+  {
+    "cid": 1027661,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1944
+  },
+  {
+    "cid": 1028948,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1925
+  },
+  {
+    "cid": 1033099,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1940
+  },
+  {
+    "cid": 1038981,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1890
+  },
+  {
+    "cid": 1048332,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1905
+  },
+  {
+    "cid": 1051106,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1935
+  },
+  {
+    "cid": 1053879,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Georgia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1930
+  },
+  {
+    "cid": 1056438,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1939
+  },
+  {
+    "cid": 1061681,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1930
+  },
+  {
+    "cid": 1079238,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "France",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1914
+  },
+  {
+    "cid": 1088231,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Oceania",
+    "year": 1900
+  },
+  {
+    "cid": 1088306,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Resto",
+    "year": 1890
+  },
+  {
+    "cid": 1089486,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Oceania",
+    "year": 1910
+  },
+  {
+    "cid": 1110761,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1910
+  },
+  {
+    "cid": 1113198,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1900
+  },
+  {
+    "cid": 1123986,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Netherlands",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1900
+  },
+  {
+    "cid": 1129321,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1941
+  },
+  {
+    "cid": 1134072,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1935
+  },
+  {
+    "cid": 1140232,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Sweden",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1916
+  },
+  {
+    "cid": 1156439,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Oceania",
+    "year": 1948
+  },
+  {
+    "cid": 1157447,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1945
+  },
+  {
+    "cid": 1161800,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1942
+  },
+  {
+    "cid": 1165389,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Japan",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1945
+  },
+  {
+    "cid": 1166858,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1932
+  },
+  {
+    "cid": 1169777,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1937
+  },
+  {
+    "cid": 1185909,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Norway",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1920
+  },
+  {
+    "cid": 1190548,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1923
+  },
+  {
+    "cid": 1191627,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1932
+  },
+  {
+    "cid": 1199033,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1900
+  },
+  {
+    "cid": 1201133,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Georgia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1930
+  },
+  {
+    "cid": 1204354,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1911
+  },
+  {
+    "cid": 1205384,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1900
+  },
+  {
+    "cid": 1205827,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Netherlands",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1922
+  },
+  {
+    "cid": 1216435,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1947
+  },
+  {
+    "cid": 1217569,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Canada",
+    "bucket_pais": "Norteamerica",
+    "year": 1890
+  },
+  {
+    "cid": 1219788,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Egypt",
+    "bucket_pais": "Africa-ME",
+    "year": 1934
+  },
+  {
+    "cid": 1220722,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1937
+  },
+  {
+    "cid": 1226590,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1924
+  },
+  {
+    "cid": 1231950,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Egypt",
+    "bucket_pais": "Africa-ME",
+    "year": 1895
+  },
+  {
+    "cid": 1248585,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1928
+  },
+  {
+    "cid": 1258367,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Egypt",
+    "bucket_pais": "Africa-ME",
+    "year": 1900
+  },
+  {
+    "cid": 1264269,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1941
+  },
+  {
+    "cid": 1267028,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Belarus",
+    "bucket_pais": "Ex-URSS",
+    "year": 1916
+  },
+  {
+    "cid": 1267340,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1920
+  },
+  {
+    "cid": 1268780,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1928
+  },
+  {
+    "cid": 1292606,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1933
+  },
+  {
+    "cid": 1294752,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1930
+  },
+  {
+    "cid": 1311033,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Uzbekistan",
+    "bucket_pais": "Ex-URSS",
+    "year": 1895
+  },
+  {
+    "cid": 1313876,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1915
+  },
+  {
+    "cid": 1322425,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Egypt",
+    "bucket_pais": "Africa-ME",
+    "year": 1900
+  },
+  {
+    "cid": 1328168,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1920
+  },
+  {
+    "cid": 1334618,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Egypt",
+    "bucket_pais": "Africa-ME",
+    "year": 1904
+  },
+  {
+    "cid": 1336113,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1941
+  },
+  {
+    "cid": 1337989,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1940
+  },
+  {
+    "cid": 1341474,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1920
+  },
+  {
+    "cid": 1342713,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1898
+  },
+  {
+    "cid": 1355520,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Netherlands",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1935
+  },
+  {
+    "cid": 1363059,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Hungary",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1890
+  },
+  {
+    "cid": 1367417,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1920
+  },
+  {
+    "cid": 1369812,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1915
+  },
+  {
+    "cid": 1372978,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1890
+  },
+  {
+    "cid": 1382032,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1918
+  },
+  {
+    "cid": 1385743,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1946
+  },
+  {
+    "cid": 1392927,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Belarus",
+    "bucket_pais": "Ex-URSS",
+    "year": 1920
+  },
+  {
+    "cid": 1399418,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Poland",
+    "bucket_pais": "Europa-CentroEste",
+    "year": 1910
+  },
+  {
+    "cid": 1404885,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Canada",
+    "bucket_pais": "Norteamerica",
+    "year": 1907
+  },
+  {
+    "cid": 1407036,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Austria",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1898
+  },
+  {
+    "cid": 1410545,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1906
+  },
+  {
+    "cid": 1410781,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1898
+  },
+  {
+    "cid": 1423370,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Egypt",
+    "bucket_pais": "Africa-ME",
+    "year": 1895
+  },
+  {
+    "cid": 1425411,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1900
+  },
+  {
+    "cid": 1425423,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1895
+  },
+  {
+    "cid": 1428259,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Oceania",
+    "year": 1901
+  },
+  {
+    "cid": 1445489,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Resto",
+    "year": 1895
+  },
+  {
+    "cid": 1448358,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1890
+  },
+  {
+    "cid": 1450829,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Resto",
+    "year": 1928
+  },
+  {
+    "cid": 1452863,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1935
+  },
+  {
+    "cid": 1457276,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Resto",
+    "year": 1914
+  },
+  {
+    "cid": 1461285,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Denmark",
+    "bucket_pais": "Europa-Nordica",
+    "year": 1918
+  },
+  {
+    "cid": 1463105,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Antarctica",
+    "bucket_pais": "Resto",
+    "year": 1911
+  },
+  {
+    "cid": 1476173,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1897
+  },
+  {
+    "cid": 1476222,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1923
+  },
+  {
+    "cid": 1490019,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "France",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1900
+  },
+  {
+    "cid": 1492308,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1949
+  },
+  {
+    "cid": 1500456,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1906
+  },
+  {
+    "cid": 1502422,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1895
+  },
+  {
+    "cid": 1505448,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1905
+  },
+  {
+    "cid": 1508456,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1946
+  },
+  {
+    "cid": 1510977,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1898
+  },
+  {
+    "cid": 1516437,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1890
+  },
+  {
+    "cid": 1516449,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1909
+  },
+  {
+    "cid": 1520455,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1924
+  },
+  {
+    "cid": 1528833,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Netherlands",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1938
+  },
+  {
+    "cid": 1529723,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Georgia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1933
+  },
+  {
+    "cid": 1544800,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1910
+  },
+  {
+    "cid": 1546843,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1893
+  },
+  {
+    "cid": 1548687,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1912
+  },
+  {
+    "cid": 1548772,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1928
+  },
+  {
+    "cid": 1558120,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1927
+  },
+  {
+    "cid": 1562122,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1920
+  },
+  {
+    "cid": 1563667,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1915
+  },
+  {
+    "cid": 1578638,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1938
+  },
+  {
+    "cid": 1581683,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "North Korea",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1925
+  },
+  {
+    "cid": 1582265,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1945
+  },
+  {
+    "cid": 1587049,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1890
+  },
+  {
+    "cid": 1587935,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1946
+  },
+  {
+    "cid": 1590537,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1946
+  },
+  {
+    "cid": 1590540,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1946
+  },
+  {
+    "cid": 1590626,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1946
+  },
+  {
+    "cid": 1605345,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1902
+  },
+  {
+    "cid": 1605499,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1934
+  },
+  {
+    "cid": 1626616,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Bulgaria",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1895
+  },
+  {
+    "cid": 1634930,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1927
+  },
+  {
+    "cid": 1637544,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1900
+  },
+  {
+    "cid": 1637980,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1928
+  },
+  {
+    "cid": 1648401,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1933
+  },
+  {
+    "cid": 1657710,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1945
+  },
+  {
+    "cid": 1673220,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Switzerland",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1907
+  },
+  {
+    "cid": 1683170,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1949
+  },
+  {
+    "cid": 1685649,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1936
+  },
+  {
+    "cid": 1700875,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1918
+  },
+  {
+    "cid": 1703270,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Switzerland",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1891
+  },
+  {
+    "cid": 1705072,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Switzerland",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1891
+  },
+  {
+    "cid": 1719282,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1917
+  },
+  {
+    "cid": 1723131,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1892
+  },
+  {
+    "cid": 1739421,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Argentina",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1890
+  },
+  {
+    "cid": 1739659,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Panama",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1900
+  },
+  {
+    "cid": 1740785,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Sudan",
+    "bucket_pais": "Africa-ME",
+    "year": 1936
+  },
+  {
+    "cid": 1740802,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Sudan",
+    "bucket_pais": "Africa-ME",
+    "year": 1920
+  },
+  {
+    "cid": 1745177,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Argentina",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1919
+  },
+  {
+    "cid": 1747102,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Tajikistan",
+    "bucket_pais": "Ex-URSS",
+    "year": 1927
+  },
+  {
+    "cid": 1749206,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Argentina",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1920
+  },
+  {
+    "cid": 1749208,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Argentina",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1947
+  },
+  {
+    "cid": 1752530,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1948
+  },
+  {
+    "cid": 1753978,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Argentina",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1890
+  },
+  {
+    "cid": 1754950,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1895
+  },
+  {
+    "cid": 1755786,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1947
+  },
+  {
+    "cid": 1757509,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1934
+  },
+  {
+    "cid": 1757962,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "South Africa",
+    "bucket_pais": "Africa-ME",
+    "year": 1910
+  },
+  {
+    "cid": 1761522,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1910
+  },
+  {
+    "cid": 1761894,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1946
+  },
+  {
+    "cid": 1784113,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1920
+  },
+  {
+    "cid": 1791297,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1922
+  },
+  {
+    "cid": 1791324,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Resto",
+    "year": 1948
+  },
+  {
+    "cid": 1793125,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1915
+  },
+  {
+    "cid": 1798886,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1898
+  },
+  {
+    "cid": 1803112,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1916
+  },
+  {
+    "cid": 1803421,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1928
+  },
+  {
+    "cid": 1815126,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1930
+  },
+  {
+    "cid": 1820767,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1920
+  },
+  {
+    "cid": 1825427,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1909
+  },
+  {
+    "cid": 1826287,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1923
+  },
+  {
+    "cid": 1828531,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1900
+  },
+  {
+    "cid": 1828887,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1917
+  },
+  {
+    "cid": 1831436,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1910
+  },
+  {
+    "cid": 1834853,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1920
+  },
+  {
+    "cid": 1836073,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1890
+  },
+  {
+    "cid": 1838597,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1920
+  },
+  {
+    "cid": 1840912,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1939
+  },
+  {
+    "cid": 1844518,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Netherlands",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1893
+  },
+  {
+    "cid": 1846527,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1930
+  },
+  {
+    "cid": 1849216,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Argentina",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1910
+  },
+  {
+    "cid": 1849511,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Argentina",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1905
+  },
+  {
+    "cid": 1849699,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Argentina",
+    "bucket_pais": "Resto",
+    "year": 1902
+  },
+  {
+    "cid": 1852672,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1933
+  },
+  {
+    "cid": 1854541,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1894
+  },
+  {
+    "cid": 1856912,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1930
+  },
+  {
+    "cid": 1862358,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1930
+  },
+  {
+    "cid": 1862569,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1912
+  },
+  {
+    "cid": 1867216,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Cuba",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1935
+  },
+  {
+    "cid": 1870036,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1908
+  },
+  {
+    "cid": 1870156,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1932
+  },
+  {
+    "cid": 1870870,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Japan",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1915
+  },
+  {
+    "cid": 1871337,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1943
+  },
+  {
+    "cid": 1873712,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Switzerland",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1911
+  },
+  {
+    "cid": 1875319,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Cuba",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1898
+  },
+  {
+    "cid": 1875786,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Cuba",
+    "bucket_pais": "Resto",
+    "year": 1920
+  },
+  {
+    "cid": 1875820,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Cuba",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1945
+  },
+  {
+    "cid": 1886921,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1936
+  },
+  {
+    "cid": 1888992,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1920
+  },
+  {
+    "cid": 1889920,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Cuba",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1910
+  },
+  {
+    "cid": 1894494,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Cuba",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1900
+  },
+  {
+    "cid": 1897121,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Cuba",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1923
+  },
+  {
+    "cid": 1897678,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1900
+  },
+  {
+    "cid": 1903521,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "China",
+    "bucket_pais": "Resto",
+    "year": 1929
+  },
+  {
+    "cid": 1912934,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1936
+  },
+  {
+    "cid": 1933872,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1899
+  },
+  {
+    "cid": 1985413,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Colombia",
+    "bucket_pais": "Resto",
+    "year": 1948
+  },
+  {
+    "cid": 1991019,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1904
+  },
+  {
+    "cid": 1996844,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Brazil",
+    "bucket_pais": "Resto",
+    "year": 1905
+  },
+  {
+    "cid": 2005609,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Resto",
+    "year": 1934
+  },
+  {
+    "cid": 2010274,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "France",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1910
+  },
+  {
+    "cid": 2010452,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Peru",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1920
+  },
+  {
+    "cid": 2011560,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Peru",
+    "bucket_pais": "Resto",
+    "year": 1900
+  },
+  {
+    "cid": 2016650,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Ecuador",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1920
+  },
+  {
+    "cid": 2022344,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Australia",
+    "bucket_pais": "Resto",
+    "year": 1930
+  },
+  {
+    "cid": 2023940,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Italy",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1944
+  },
+  {
+    "cid": 2025276,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1929
+  },
+  {
+    "cid": 2026463,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1905
+  },
+  {
+    "cid": 2028150,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Czech Republic",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1940
+  },
+  {
+    "cid": 2033716,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Portugal",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1900
+  },
+  {
+    "cid": 2034885,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Switzerland",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1928
+  },
+  {
+    "cid": 2039361,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1945
+  },
+  {
+    "cid": 2041007,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1923
+  },
+  {
+    "cid": 2041905,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Portugal",
+    "bucket_pais": "Europa-Mediterranea",
+    "year": 1910
+  },
+  {
+    "cid": 2041983,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1930
+  },
+  {
+    "cid": 2047673,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1930
+  },
+  {
+    "cid": 2051104,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1945
+  },
+  {
+    "cid": 2056306,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1942
+  },
+  {
+    "cid": 2057896,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1935
+  },
+  {
+    "cid": 2061713,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1925
+  },
+  {
+    "cid": 2063467,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1945
+  },
+  {
+    "cid": 2063941,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1925
+  },
+  {
+    "cid": 2065751,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1901
+  },
+  {
+    "cid": 2067499,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1924
+  },
+  {
+    "cid": 2069043,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Turkey",
+    "bucket_pais": "Resto",
+    "year": 1912
+  },
+  {
+    "cid": 2084011,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Ukraine",
+    "bucket_pais": "Ex-URSS",
+    "year": 1941
+  },
+  {
+    "cid": 2084193,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Israel",
+    "bucket_pais": "Africa-ME",
+    "year": 1930
+  },
+  {
+    "cid": 2094983,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Netherlands",
+    "bucket_pais": "Europa-no-URSS",
+    "year": 1936
+  },
+  {
+    "cid": 2097533,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1900
+  },
+  {
+    "cid": 2102112,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1941
+  },
+  {
+    "cid": 2103141,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1919
+  },
+  {
+    "cid": 2107248,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1928
+  },
+  {
+    "cid": 2116008,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Lithuania",
+    "bucket_pais": "Ex-URSS",
+    "year": 1934
+  },
+  {
+    "cid": 2126812,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1898
+  },
+  {
+    "cid": 2128446,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Singapore",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1890
+  },
+  {
+    "cid": 2130432,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Egypt",
+    "bucket_pais": "Africa-ME",
+    "year": 1916
+  },
+  {
+    "cid": 2131675,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Libya",
+    "bucket_pais": "Africa-ME",
+    "year": 1943
+  },
+  {
+    "cid": 2131854,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Singapore",
+    "bucket_pais": "Resto",
+    "year": 1890
+  },
+  {
+    "cid": 2134340,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1890
+  },
+  {
+    "cid": 2167675,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Netherlands",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1920
+  },
+  {
+    "cid": 2192114,
+    "sources": [
+      "v2_need_reblur",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "year": 1915
+  },
+  {
+    "cid": 2202530,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "Switzerland",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1931
+  },
+  {
+    "cid": 2206980,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Belarus",
+    "bucket_pais": "Ex-URSS",
+    "year": 1915
+  },
+  {
+    "cid": 2209583,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Senegal",
+    "bucket_pais": "Africa-ME",
+    "year": 1910
+  },
+  {
+    "cid": 2255098,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Tunisia",
+    "bucket_pais": "Africa-ME",
+    "year": 1900
+  },
+  {
+    "cid": 2257791,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Tunisia",
+    "bucket_pais": "Africa-ME",
+    "year": 1925
+  },
+  {
+    "cid": 2259921,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Canada",
+    "bucket_pais": "Norteamerica",
+    "year": 1920
+  },
+  {
+    "cid": 2260467,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Canada",
+    "bucket_pais": "Norteamerica",
+    "year": 1912
+  },
+  {
+    "cid": 2275023,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1932
+  },
+  {
+    "cid": 2290683,
+    "sources": [
+      "v2_need_reblur"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1917
+  },
+  {
+    "cid": 2291680,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "year": 1936
+  },
+  {
+    "cid": 2310364,
+    "sources": [
+      "v2_final",
+      "v1_candidates"
+    ],
+    "country": "Latvia",
+    "bucket_pais": "Ex-URSS",
+    "year": 1925
+  },
+  {
+    "cid": 2328833,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1936
+  },
+  {
+    "cid": 2337912,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Uzbekistan",
+    "bucket_pais": "Ex-URSS",
+    "year": 1897
+  },
+  {
+    "cid": 2342859,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1910
+  },
+  {
+    "cid": 2348943,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1945
+  },
+  {
+    "cid": 2353368,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Jamaica",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1913
+  },
+  {
+    "cid": 2353695,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Jamaica",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1920
+  },
+  {
+    "cid": 2354050,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "Jamaica",
+    "bucket_pais": "Resto",
+    "year": 1920
+  },
+  {
+    "cid": 2354055,
+    "sources": [
+      "v2_rejected"
+    ],
+    "country": "Jamaica",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1938
+  },
+  {
+    "cid": 2354057,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "year": 1890
+  },
+  {
+    "cid": 2358050,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Jamaica",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1898
+  },
+  {
+    "cid": 2358132,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "Jamaica",
+    "bucket_pais": "LatinoAmerica",
+    "year": 1891
+  },
+  {
+    "cid": 2362399,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "year": 1910
+  },
+  {
+    "cid": 2377787,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "France",
+    "bucket_pais": "Europa-Occidental",
+    "year": 1919
+  },
+  {
+    "cid": 2384781,
+    "sources": [
+      "v1_candidates"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1949
+  },
+  {
+    "cid": 2388218,
+    "sources": [
+      "v2_rejected",
+      "v1_candidates"
+    ],
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "year": 1948
+  },
+  {
+    "cid": 2389579,
+    "sources": [
+      "v2_final"
+    ],
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "year": 1898
+  }
+]

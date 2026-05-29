@@ -343,6 +343,7 @@ def run_react_agent(
     user_prompt: str = "Investigá esta foto y devolvé las coordenadas (lat, lon) y año con submit_answer.",
     provider: Optional[str] = None,
     provenance_source: Optional[str] = None,
+    system_prompt: Optional[str] = None,
 ) -> ReActResult:
     """Correr el agente ReAct con todas las tools.
 
@@ -351,7 +352,11 @@ def run_react_agent(
       van al excluido per-photo además del GLOBAL.
     - `provenance_source`: campo `source` del candidate (free-text con URLs originales).
       Se extraen hosts y se agregan al excluido.
+
+    `system_prompt`: si None, usa el SYSTEM_PROMPT global del módulo (canónico v3).
+    Override útil para iteración de prompts desde notebook/scripts ad-hoc.
     """
+    sys_prompt = system_prompt if system_prompt is not None else SYSTEM_PROMPT
     # LLM provider determinado por modelo (vía llm_adapter.MODEL_SPECS).
     # OpenAI-compatible → passthrough cliente openai; Anthropic → /anthropic/v1/messages.
     llm_provider = get_provider(model)
@@ -378,7 +383,7 @@ def run_react_agent(
         f"Cuando te queden pocos turns te vamos a recordar."
     )
     messages: list[dict] = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": sys_prompt},
         {
             "role": "user",
             "content": [

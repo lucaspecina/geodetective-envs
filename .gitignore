@@ -296,6 +296,12 @@ experiments/E013_grid_smoke/*
 experiments/E014_diverse10/*
 !experiments/E014_diverse10/results_*.json
 
+# E016 belief-state pilot (#47)
+!experiments/E016_belief_pilot/
+experiments/E016_belief_pilot/*
+!experiments/E016_belief_pilot/pilot_photos.json
+!experiments/E016_belief_pilot/results_*.json
+
 # Métricas agregadas
 !experiments/metrics_summary.json
 

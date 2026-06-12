@@ -155,6 +155,46 @@ Reglas del juego:
 - `report_belief` NO reemplaza a `submit_answer`: al final igual cerrás con submit."""
 
 
+# === Budget económico (E016, #47 — belief_state_redesign.md §4.4) ===
+# Cada tool call tiene costo en puntos; el episodio tiene budget. Acoplado al
+# reward denso: la cantidad optimizable pasa a ser ganancia de información por
+# unidad de costo. report_belief y submit_answer son GRATIS (queremos reportes
+# frecuentes y el cierre nunca bloqueado). Se cobra por invocación, incluso si
+# la tool falla (igual que una API real — el mal uso cuesta).
+
+DEFAULT_TOOL_COSTS: dict[str, float] = {
+    "web_search": 3.0,
+    "image_search": 3.0,
+    "fetch_url": 2.0,
+    "fetch_url_with_images": 3.0,
+    "geocode": 1.0,
+    "reverse_geocode": 1.0,
+    "historical_query": 2.0,
+    "historical_query_at": 2.0,
+    "crop_image": 1.0,
+    "crop_image_relative": 1.0,
+    "static_map": 2.0,
+    "street_view": 3.0,
+    "report_belief": 0.0,
+    "submit_answer": 0.0,
+}
+
+
+def _budget_prompt_section(tool_budget: float, costs: dict[str, float]) -> str:
+    rows = "\n".join(
+        f"- `{name}`: {cost:g} puntos" for name, cost in sorted(costs.items(), key=lambda kv: -kv[1])
+        if cost > 0
+    )
+    return f"""## Budget de investigación — {tool_budget:g} puntos
+
+Cada tool call cuesta puntos (se cobra al invocar, también si la llamada falla por mal uso):
+
+{rows}
+- `report_belief` y `submit_answer`: GRATIS, siempre disponibles.
+
+Cuando el budget se agota, las tools pagas se bloquean — solo podés reportar creencias y submitir. Elegí cada llamada por su valor de información esperado: una buena pregunta barata vale más que tres búsquedas redundantes. Te avisamos el saldo restante después de cada step con gasto."""
+
+
 def _submit_schema_with_evidence_chain() -> dict:
     """SUBMIT_TOOL_SCHEMA + campo evidence_chain auditable (belief mode only)."""
     schema = copy.deepcopy(SUBMIT_TOOL_SCHEMA)
@@ -465,6 +505,10 @@ class ReActResult:
     target_match_count: int = 0
     belief_report_count: int = 0
     belief_reports: list[dict] = field(default_factory=list)  # [{step, belief}] — scoring post-hoc
+    budget_total: Optional[float] = None
+    budget_spent: float = 0.0
+    budget_spent_by_tool: dict = field(default_factory=dict)
+    budget_blocked_count: int = 0
     submit_called: bool = False
     steps_used: int = 0
     error: Optional[str] = None
@@ -492,6 +536,8 @@ def run_react_agent(
     system_prompt: Optional[str] = None,
     belief_mode: bool = False,
     belief_nudge_after: int = 3,
+    tool_budget: Optional[float] = None,
+    tool_costs: Optional[dict[str, float]] = None,
 ) -> ReActResult:
     """Correr el agente ReAct con todas las tools.
 
@@ -511,10 +557,19 @@ def run_react_agent(
     - `belief_nudge_after`: si pasan N steps con tools sin report_belief, se inyecta
       un recordatorio. Los beliefs NO se puntúan en runtime (ground truth no entra
       al loop); quedan en result.belief_reports para scoring post-hoc.
+
+    Budget económico (E016, #47):
+    - `tool_budget=N` activa el cobro por tool call según `tool_costs` (default
+      DEFAULT_TOOL_COSTS). Se cobra al invocar (también si la tool falla). Agotado
+      el budget, las tools pagas se bloquean; report_belief y submit_answer son
+      gratis y nunca se bloquean. None = sin budget (comportamiento canónico).
     """
     sys_prompt = system_prompt if system_prompt is not None else SYSTEM_PROMPT
     if belief_mode:
         sys_prompt = sys_prompt + "\n\n" + BELIEF_PROMPT_SECTION
+    costs = tool_costs if tool_costs is not None else DEFAULT_TOOL_COSTS
+    if tool_budget is not None:
+        sys_prompt = sys_prompt + "\n\n" + _budget_prompt_section(tool_budget, costs)
     # LLM provider determinado por modelo (vía llm_adapter.MODEL_SPECS).
     # OpenAI-compatible → passthrough cliente openai; Anthropic → /anthropic/v1/messages.
     llm_provider = get_provider(model)
@@ -568,6 +623,7 @@ def run_react_agent(
     if belief_mode:
         tools.append(BELIEF_TOOL_SCHEMA)
     result = ReActResult()
+    result.budget_total = tool_budget
     target_path_str = str(image_path)  # para hash perceptual
     steps_since_belief = 0  # steps con tools sin report_belief (para el nudge)
 
@@ -712,6 +768,7 @@ def run_react_agent(
         # Pending images to inject as user message after tool results
         pending_image_injections: list[tuple[str, list[dict]]] = []  # (label, content_parts)
         belief_reported_this_step = False
+        step_charge = 0.0
 
         for tc in msg.tool_calls:
             fname = tc.function.name
@@ -722,6 +779,32 @@ def run_react_agent(
             if verbose:
                 preview = json.dumps(args, ensure_ascii=False)[:250]
                 print(f"  ⚙ {fname}({preview})")
+
+            # Budget: cobrar/bloquear ANTES de ejecutar. report_belief y
+            # submit_answer son gratis y nunca se bloquean.
+            if tool_budget is not None and fname not in ("report_belief", "submit_answer"):
+                cost = costs.get(fname, 1.0)
+                remaining_budget = tool_budget - result.budget_spent
+                if cost > remaining_budget:
+                    result.budget_blocked_count += 1
+                    if verbose:
+                        print(f"     ⚠ BLOQUEADA por budget: cuesta {cost:g}, quedan {remaining_budget:g}")
+                    messages.append({
+                        "role": "tool", "tool_call_id": tc.id,
+                        "content": (
+                            f"Tool bloqueada por budget: `{fname}` cuesta {cost:g} puntos pero te quedan "
+                            f"{remaining_budget:g}. Solo `report_belief` (gratis) y `submit_answer` siguen "
+                            f"disponibles. Submití tu mejor hipótesis con la evidencia que ya tenés."
+                        ),
+                    })
+                    result.trace.append({
+                        "step": step + 1, "type": "tool_blocked_budget",
+                        "tool": fname, "cost": cost, "remaining": remaining_budget,
+                    })
+                    continue
+                result.budget_spent += cost
+                result.budget_spent_by_tool[fname] = result.budget_spent_by_tool.get(fname, 0.0) + cost
+                step_charge += cost
 
             if fname == "web_search":
                 result.web_search_count += 1
@@ -1255,6 +1338,14 @@ def run_react_agent(
         # After all tool results are appended, inject pending image messages
         for label, parts in pending_image_injections:
             messages.append({"role": "user", "content": parts})
+
+        # Aviso de saldo después de cada step con gasto (budget mode).
+        if tool_budget is not None and step_charge > 0 and not result.submit_called:
+            remaining_budget = tool_budget - result.budget_spent
+            messages.append({
+                "role": "user",
+                "content": f"[Budget: gastaste {step_charge:g} puntos este step. Te quedan {remaining_budget:g}/{tool_budget:g}.]",
+            })
 
         if belief_mode:
             steps_since_belief = 0 if belief_reported_this_step else steps_since_belief + 1

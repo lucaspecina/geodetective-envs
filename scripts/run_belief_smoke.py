@@ -50,6 +50,7 @@ CANDIDATES_PATH = Path(os.environ.get("CANDIDATES_PATH", "experiments/E007_sampl
 MODEL = os.environ.get("MODEL", "gpt-5.4-mini")
 MAX_STEPS = int(os.environ.get("MAX_STEPS", "50"))
 BELIEF_NUDGE_AFTER = int(os.environ.get("BELIEF_NUDGE_AFTER", "3"))
+TOOL_BUDGET = float(os.environ["TOOL_BUDGET"]) if os.environ.get("TOOL_BUDGET") else None
 DEFAULT_CIDS = "1140232"  # Estocolmo 1916, corpus v2
 
 
@@ -110,7 +111,7 @@ def main() -> None:
 
     print("=" * 70)
     print("E016 BELIEF-MODE SMOKE TEST")
-    print(f"  Model: {MODEL} | MAX_STEPS: {MAX_STEPS} | nudge_after: {BELIEF_NUDGE_AFTER}")
+    print(f"  Model: {MODEL} | MAX_STEPS: {MAX_STEPS} | nudge_after: {BELIEF_NUDGE_AFTER} | budget: {TOOL_BUDGET}")
     print(f"  Fotos: {sorted(cids)}")
     print("=" * 70)
 
@@ -132,6 +133,7 @@ def main() -> None:
                 provenance_source=cand.get("provenance_source", ""),
                 belief_mode=True,
                 belief_nudge_after=BELIEF_NUDGE_AFTER,
+                tool_budget=TOOL_BUDGET,
             )
         except Exception as e:
             print(f"[FAIL] {type(e).__name__}: {e}")
@@ -169,6 +171,10 @@ def main() -> None:
             "terminal_state": res.terminal_state,
             "error": res.error,
             "belief_report_count": res.belief_report_count,
+            "budget_total": res.budget_total,
+            "budget_spent": res.budget_spent,
+            "budget_spent_by_tool": res.budget_spent_by_tool,
+            "budget_blocked_count": res.budget_blocked_count,
             "belief_reports": res.belief_reports,
             "belief_trajectory": trajectory,
             "evidence_chain": (res.final_answer or {}).get("evidence_chain"),

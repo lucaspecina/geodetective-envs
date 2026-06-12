@@ -1,0 +1,372 @@
+[
+  {
+    "cid": 1220722,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/1220722",
+    "file_url": "https://pastvu.com/_p/a/b/h/e/bhe1m3dl99cn2ovqwl.jpg",
+    "title": "Tram passing the confectionery of Tchakalian Bros., on the corner of Avenue Joffre",
+    "year": 1937,
+    "year2": 1945,
+    "country": "China",
+    "bucket_pais": "Asia-non-URSS",
+    "bucket_decada": "1930s",
+    "geo": [
+      31.219637,
+      121.456749
+    ],
+    "geohash5": "wtw3e",
+    "type": 1,
+    "h": 578,
+    "w": 1024,
+    "waterh": 14,
+    "dir": "sw",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  },
+  {
+    "cid": 963644,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/963644",
+    "file_url": "https://pastvu.com/_p/a/f/r/6/fr68hiu6xuhu6eloc1.jpg",
+    "title": "Montevideo. Plaza Zabala",
+    "year": 1907,
+    "year2": 1907,
+    "country": "Uruguay",
+    "bucket_pais": "LatinoAmerica",
+    "bucket_decada": "1900s",
+    "geo": [
+      -34.907287,
+      -56.208599
+    ],
+    "geohash5": "6cb12",
+    "type": 1,
+    "h": 3707,
+    "w": 6324,
+    "waterh": 86,
+    "dir": "se",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  },
+  {
+    "cid": 2255098,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/2255098",
+    "file_url": "https://pastvu.com/_p/a/m/g/h/mghz7v2cbe2t1hrza4.jpg",
+    "title": "Tunis. Rue des Teinturiers. El Jedid Masjid",
+    "year": 1900,
+    "year2": 1915,
+    "country": "Tunisia",
+    "bucket_pais": "Africa-ME",
+    "bucket_decada": "1900s",
+    "geo": [
+      36.794542,
+      10.174426
+    ],
+    "geohash5": "snx1r",
+    "type": 1,
+    "h": 1056,
+    "w": 763,
+    "waterh": 25,
+    "dir": "nw",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  },
+  {
+    "cid": 2063941,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/2063941",
+    "file_url": "https://pastvu.com/_p/a/t/3/b/t3bpqk36ajshiwyza5.jpg",
+    "title": "442-444 St. Nicholas Avenue",
+    "year": 1925,
+    "year2": 1925,
+    "country": "USA",
+    "bucket_pais": "Norteamerica",
+    "bucket_decada": "1920s",
+    "geo": [
+      40.815239,
+      -73.949068
+    ],
+    "geohash5": "dr72j",
+    "type": 1,
+    "h": 3867,
+    "w": 3066,
+    "waterh": 90,
+    "dir": "se",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  },
+  {
+    "cid": 1425423,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/1425423",
+    "file_url": "https://pastvu.com/_p/a/l/d/j/ldjrz949d131i4suq7.jpg",
+    "title": "Auckland. Queen Street",
+    "year": 1895,
+    "year2": 1905,
+    "country": "New Zealand",
+    "bucket_pais": "Oceania",
+    "bucket_decada": "1890s",
+    "geo": [
+      -36.843864,
+      174.766873
+    ],
+    "geohash5": "rckq2",
+    "type": 1,
+    "h": 744,
+    "w": 1194,
+    "waterh": 17,
+    "dir": "s",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  },
+  {
+    "cid": 636474,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/636474",
+    "file_url": "https://pastvu.com/_p/a/j/6/7/j67oj4trek9s5pt1o0.jpg",
+    "title": "Лида. Виленская улица",
+    "year": 1915,
+    "year2": 1915,
+    "country": "Belarus",
+    "bucket_pais": "Ex-URSS",
+    "bucket_decada": "1910s",
+    "geo": [
+      53.890874,
+      25.302632
+    ],
+    "geohash5": "u99fx",
+    "type": 1,
+    "h": 673,
+    "w": 1024,
+    "waterh": 16,
+    "dir": "ne",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  },
+  {
+    "cid": 1862569,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/1862569",
+    "file_url": "https://pastvu.com/_p/a/t/9/b/t9b1z6587n7iy0zxev.jpg",
+    "title": "St Peter's Street",
+    "year": 1912,
+    "year2": 1912,
+    "country": "United Kingdom",
+    "bucket_pais": "Europa-Britanica",
+    "bucket_decada": "1910s",
+    "geo": [
+      52.053582,
+      1.153493
+    ],
+    "geohash5": "u12b4",
+    "type": 1,
+    "h": 3027,
+    "w": 5120,
+    "waterh": 71,
+    "dir": "n",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  },
+  {
+    "cid": 947961,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/947961",
+    "file_url": "https://pastvu.com/_p/a/l/8/a/l8a9ozu12llrd9tm9b.jpg",
+    "title": "Admiralgade",
+    "year": 1890,
+    "year2": 1910,
+    "country": "Denmark",
+    "bucket_pais": "Europa-Nordica",
+    "bucket_decada": "1890s",
+    "geo": [
+      55.677222,
+      12.582628
+    ],
+    "geohash5": "u3buw",
+    "type": 1,
+    "h": 6375,
+    "w": 4781,
+    "waterh": 149,
+    "dir": "nw",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  },
+  {
+    "cid": 1134072,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/1134072",
+    "file_url": "https://pastvu.com/_p/a/x/q/g/xqgq9izitvrvu1j3wv.jpg",
+    "title": "Свердловск. \"Белая башня\"",
+    "year": 1935,
+    "year2": 1939,
+    "country": "Russia",
+    "bucket_pais": "Russia-Asia",
+    "bucket_decada": "1930s",
+    "geo": [
+      56.893344,
+      60.572704
+    ],
+    "geohash5": "v655d",
+    "type": 1,
+    "h": 700,
+    "w": 537,
+    "waterh": 16,
+    "dir": "sw",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  },
+  {
+    "cid": 1336113,
+    "provider": "pastvu",
+    "provenance_source": "",
+    "page_url": "https://pastvu.com/p/1336113",
+    "file_url": "https://pastvu.com/_p/a/n/k/t/nktypv6jhgm2br2c14.jpg",
+    "title": "Проспект 25-го Октября",
+    "year": 1941,
+    "year2": 1943,
+    "country": "Russia",
+    "bucket_pais": "Russia-EU",
+    "bucket_decada": "1940s",
+    "geo": [
+      59.934567,
+      30.330021
+    ],
+    "geohash5": "udtsf",
+    "type": 1,
+    "h": 871,
+    "w": 549,
+    "waterh": 20,
+    "dir": "nw",
+    "certification": {
+      "status": "pending",
+      "certified_by": null,
+      "date": null,
+      "chain": [
+        {
+          "clue": "",
+          "tool": "",
+          "expected_evidence": ""
+        }
+      ],
+      "min_hops_estimate": null,
+      "notes": ""
+    }
+  }
+]

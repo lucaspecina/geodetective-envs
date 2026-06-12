@@ -21,7 +21,9 @@ sys.path.insert(0, str(Path("src").resolve()))
 from geodetective.agents.react import (  # noqa: E402
     BELIEF_PROMPT_SECTION,
     BELIEF_TOOL_SCHEMA,
+    DEFAULT_TOOL_COSTS,
     SUBMIT_TOOL_SCHEMA,
+    _budget_prompt_section,
     _submit_schema_with_evidence_chain,
     _validate_belief,
 )
@@ -94,7 +96,26 @@ def run_tests() -> int:
                            "evidence_chain" not in canon_props,
                            "el brazo OFF de la ablation debe quedar idéntico")
 
-    print("\nT4 — round-trip scaffold -> scorer post-hoc")
+    print("\nT4 — budget económico")
+    agent_tools = {
+        "web_search", "fetch_url", "fetch_url_with_images", "image_search",
+        "geocode", "reverse_geocode", "historical_query", "historical_query_at",
+        "crop_image", "crop_image_relative", "static_map", "street_view",
+        "report_belief", "submit_answer",
+    }
+    failures += not _check("DEFAULT_TOOL_COSTS cubre las 14 tools",
+                           set(DEFAULT_TOOL_COSTS) == agent_tools,
+                           f"diff={set(DEFAULT_TOOL_COSTS) ^ agent_tools or '{}'}")
+    failures += not _check("report_belief y submit_answer gratis",
+                           DEFAULT_TOOL_COSTS["report_belief"] == 0 and DEFAULT_TOOL_COSTS["submit_answer"] == 0)
+    failures += not _check("el resto cuesta > 0",
+                           all(v > 0 for k, v in DEFAULT_TOOL_COSTS.items()
+                               if k not in ("report_belief", "submit_answer")))
+    section = _budget_prompt_section(40.0, DEFAULT_TOOL_COSTS)
+    failures += not _check("prompt section menciona el total y las tools gratis",
+                           "40" in section and "GRATIS" in section)
+
+    print("\nT5 — round-trip scaffold -> scorer post-hoc")
     report = {
         "location_belief": [
             {"name": "Lisboa, Portugal", "lat": 38.72, "lon": -9.14, "weight": 0.55, "radius_km": 30},

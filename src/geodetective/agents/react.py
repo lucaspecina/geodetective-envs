@@ -14,6 +14,7 @@ from __future__ import annotations
 import os
 import json
 import base64
+import copy
 from pathlib import Path
 from typing import Any, Optional
 from dataclasses import dataclass, field
@@ -77,6 +78,149 @@ SUBMIT_TOOL_SCHEMA = {
         },
     },
 }
+
+
+# === Belief-mode (E016, #47 — research/synthesis/belief_state_redesign.md) ===
+# Tool report_belief + evidence_chain en submit. SOLO activos con belief_mode=True
+# para que el brazo OFF de la ablation sea idéntico al scaffold canónico.
+# El runtime NO puntúa beliefs (el ground truth no entra al loop): el scoring
+# es post-hoc con geodetective.eval.belief_scoring.
+
+BELIEF_TOOL_SCHEMA = {
+    "type": "function",
+    "function": {
+        "name": "report_belief",
+        "description": (
+            "Reportá tu distribución de creencias ACTUAL sobre dónde y cuándo fue tomada la foto. "
+            "NO termina la investigación (eso es submit_answer). Llamala después de cada paso en que "
+            "la evidencia nueva cambie (o confirme) tu visión del caso. Tu score se calcula con una "
+            "proper scoring rule: la estrategia óptima es reportar tu creencia HONESTA — exagerar "
+            "confianza te castiga si errás, y reportar más vago de lo que sabés también pierde."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location_belief": {
+                    "type": "array",
+                    "maxItems": 5,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {"type": "string", "description": "Nombre del candidato (ej 'Lisboa, Portugal')."},
+                            "lat": {"type": "number", "minimum": -90, "maximum": 90},
+                            "lon": {"type": "number", "minimum": -180, "maximum": 180},
+                            "weight": {"type": "number", "minimum": 0, "maximum": 1, "description": "Probabilidad que le asignás a este candidato. Los weights suman ≤ 1; la masa restante es 'no sé todavía'."},
+                            "radius_km": {"type": "number", "description": "Incertidumbre espacial alrededor del centro: ~20 = ciudad, ~200 = región chica, ~800 = región grande, 2000+ = continente aprox."},
+                        },
+                        "required": ["name", "lat", "lon", "weight", "radius_km"],
+                    },
+                    "description": "Hasta 5 candidatos de ubicación con peso y radio de incertidumbre. Lista vacía = 'todavía no tengo hipótesis localizable'.",
+                },
+                "year_belief": {
+                    "type": "array",
+                    "maxItems": 4,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "from": {"type": "number", "description": "Año inicial del rango."},
+                            "to": {"type": "number", "description": "Año final del rango."},
+                            "weight": {"type": "number", "minimum": 0, "maximum": 1},
+                        },
+                        "required": ["from", "to", "weight"],
+                    },
+                    "description": "Rangos de año candidatos con peso (suman ≤ 1; masa restante = 'no sé').",
+                },
+                "rationale": {
+                    "type": "string",
+                    "description": "1-2 oraciones: qué evidencia sostiene este update respecto del reporte anterior.",
+                },
+            },
+            "required": ["location_belief", "year_belief"],
+        },
+    },
+}
+
+BELIEF_PROMPT_SECTION = """## Reporte de creencias (`report_belief`) — OBLIGATORIO en este modo
+
+Además de investigar, tenés que mantener explícito tu estado de creencias. Después de cada paso en que obtengas evidencia relevante (un resultado de tool que cambie o confirme tu visión del caso), llamá `report_belief` con tu distribución ACTUAL:
+
+- `location_belief`: hasta 5 candidatos `{name, lat, lon, weight, radius_km}`. `weight` = probabilidad que le asignás (los weights suman ≤ 1; la masa restante significa "no sé todavía"). `radius_km` = tu incertidumbre espacial (~20 = ciudad, ~200 = región chica, ~800 = región grande, 2000+ = continente).
+- `year_belief`: rangos `{from, to, weight}` con la misma lógica.
+- `rationale`: 1-2 oraciones con la evidencia que sostiene el update.
+
+Reglas del juego:
+- Tu trayectoria de creencias se puntúa con una **proper scoring rule**: reportar tu creencia honesta es la estrategia que maximiza tu score esperado. Sobreconfianza castiga si errás; vaguedad innecesaria también pierde.
+- Reportá temprano y seguido: el primer report (después de inspeccionar la foto) puede ser vago (radios grandes, masa sin asignar) — eso es honesto y está bien.
+- Si la evidencia contradice tu hipótesis principal, el update tiene que verse en los weights — no la sostengas por inercia.
+- `report_belief` NO reemplaza a `submit_answer`: al final igual cerrás con submit."""
+
+
+def _submit_schema_with_evidence_chain() -> dict:
+    """SUBMIT_TOOL_SCHEMA + campo evidence_chain auditable (belief mode only)."""
+    schema = copy.deepcopy(SUBMIT_TOOL_SCHEMA)
+    schema["function"]["parameters"]["properties"]["evidence_chain"] = {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "claim": {"type": "string", "description": "Afirmación concreta y verificable que respalda tu respuesta."},
+                "step": {"type": "integer", "description": "Step en el que una tool devolvió la evidencia que respalda el claim."},
+                "tool": {"type": "string", "description": "Nombre de la tool cuyo resultado respalda el claim."},
+            },
+            "required": ["claim", "step", "tool"],
+        },
+        "description": (
+            "Cadena de evidencia AUDITABLE: cada claim cita el step y la tool cuyo output real lo respalda. "
+            "Un auditor va a verificar cada claim contra el log registrado de esa tool — no cites nada que el log no muestre."
+        ),
+    }
+    return schema
+
+
+def _validate_belief(args: dict) -> tuple[bool, Optional[str]]:
+    """Validación estructural de report_belief. Devuelve (ok, error_msg).
+
+    Solo estructura/rangos — NO evalúa calidad (eso es el scoring post-hoc).
+    Listas vacías son válidas ("no sé todavía").
+    """
+    loc = args.get("location_belief")
+    yr = args.get("year_belief")
+    if not isinstance(loc, list) or not isinstance(yr, list):
+        return False, "location_belief y year_belief deben ser listas (pueden ser vacías si todavía no sabés)."
+    if len(loc) > 5:
+        return False, f"location_belief tiene {len(loc)} candidatos, máximo 5. Consolidá los menos plausibles en uno regional con radius_km grande."
+    total_w = 0.0
+    for i, c in enumerate(loc):
+        try:
+            lat, lon = float(c["lat"]), float(c["lon"])
+            w = float(c["weight"])
+            r = float(c["radius_km"])
+        except (KeyError, TypeError, ValueError):
+            return False, f"location_belief[{i}] inválido: cada candidato necesita name, lat, lon, weight, radius_km (numéricos)."
+        if not (-90.0 <= lat <= 90.0) or not (-180.0 <= lon <= 180.0):
+            return False, f"location_belief[{i}]: lat/lon fuera de rango ({lat}, {lon})."
+        if w < 0:
+            return False, f"location_belief[{i}]: weight negativo."
+        if r <= 0:
+            return False, f"location_belief[{i}]: radius_km debe ser > 0 (expresá tu incertidumbre espacial)."
+        total_w += w
+    if total_w > 1.001:
+        return False, f"los weights de location_belief suman {total_w:.2f} > 1. Renormalizá: la masa no asignada significa 'no sé'."
+    total_yw = 0.0
+    for i, c in enumerate(yr):
+        try:
+            yf, yt = float(c["from"]), float(c["to"])
+            w = float(c["weight"])
+        except (KeyError, TypeError, ValueError):
+            return False, f"year_belief[{i}] inválido: necesita from, to, weight numéricos."
+        if yt < yf:
+            return False, f"year_belief[{i}]: from ({yf:.0f}) > to ({yt:.0f})."
+        if w < 0:
+            return False, f"year_belief[{i}]: weight negativo."
+        total_yw += w
+    if total_yw > 1.001:
+        return False, f"los weights de year_belief suman {total_yw:.2f} > 1. Renormalizá."
+    return True, None
 
 
 def _count_images_in_messages(messages: list[dict]) -> int:
@@ -319,6 +463,8 @@ class ReActResult:
     static_map_count: int = 0
     street_view_count: int = 0
     target_match_count: int = 0
+    belief_report_count: int = 0
+    belief_reports: list[dict] = field(default_factory=list)  # [{step, belief}] — scoring post-hoc
     submit_called: bool = False
     steps_used: int = 0
     error: Optional[str] = None
@@ -344,6 +490,8 @@ def run_react_agent(
     provider: Optional[str] = None,
     provenance_source: Optional[str] = None,
     system_prompt: Optional[str] = None,
+    belief_mode: bool = False,
+    belief_nudge_after: int = 3,
 ) -> ReActResult:
     """Correr el agente ReAct con todas las tools.
 
@@ -355,8 +503,18 @@ def run_react_agent(
 
     `system_prompt`: si None, usa el SYSTEM_PROMPT global del módulo (canónico v3).
     Override útil para iteración de prompts desde notebook/scripts ad-hoc.
+
+    Belief-mode (E016, #47):
+    - `belief_mode=True` agrega la tool `report_belief` + sección de prompt + campo
+      `evidence_chain` en submit_answer. Con False el scaffold es EXACTAMENTE el
+      canónico (brazo OFF de la ablation).
+    - `belief_nudge_after`: si pasan N steps con tools sin report_belief, se inyecta
+      un recordatorio. Los beliefs NO se puntúan en runtime (ground truth no entra
+      al loop); quedan en result.belief_reports para scoring post-hoc.
     """
     sys_prompt = system_prompt if system_prompt is not None else SYSTEM_PROMPT
+    if belief_mode:
+        sys_prompt = sys_prompt + "\n\n" + BELIEF_PROMPT_SECTION
     # LLM provider determinado por modelo (vía llm_adapter.MODEL_SPECS).
     # OpenAI-compatible → passthrough cliente openai; Anthropic → /anthropic/v1/messages.
     llm_provider = get_provider(model)
@@ -405,10 +563,13 @@ def run_react_agent(
         TOOL_SCHEMA_CROP_RELATIVE,
         STATIC_MAP_SCHEMA,
         STREET_VIEW_SCHEMA,
-        SUBMIT_TOOL_SCHEMA,
+        _submit_schema_with_evidence_chain() if belief_mode else SUBMIT_TOOL_SCHEMA,
     ]
+    if belief_mode:
+        tools.append(BELIEF_TOOL_SCHEMA)
     result = ReActResult()
     target_path_str = str(image_path)  # para hash perceptual
+    steps_since_belief = 0  # steps con tools sin report_belief (para el nudge)
 
     for step in range(max_steps):
         # Sliding-window cleanup de imágenes acumuladas. Azure tiene un límite hard
@@ -446,6 +607,18 @@ def run_react_agent(
                 "role": "user",
                 "content": f"[Recordatorio: te quedan {remaining} turns. Si tu evidencia es fuerte (2+ citables + <25km alta prob), submit YA. Sino, hacé 1-2 verificaciones rápidas más antes del hard cap.]",
             })
+        # Nudge belief-mode: pasaron N steps con tools sin report_belief.
+        if belief_mode and steps_since_belief >= belief_nudge_after and not result.submit_called:
+            messages.append({
+                "role": "user",
+                "content": (
+                    f"[Belief-mode: pasaron {steps_since_belief} steps desde tu último report_belief. "
+                    f"Si tu creencia cambió con la evidencia reciente, reportala ahora. Si NO cambió, "
+                    f"reportá igual la actual — una creencia que no se mueve también es señal.]"
+                ),
+            })
+            result.trace.append({"step": step + 1, "type": "belief_nudge", "steps_since_belief": steps_since_belief})
+            steps_since_belief = 0
         try:
             # max_completion_tokens=8000: Claude con thinking mode puede gastar ~2-3K
             # tokens en thinking antes de emitir tool_use/text. Con 3000 algunos
@@ -538,6 +711,7 @@ def run_react_agent(
 
         # Pending images to inject as user message after tool results
         pending_image_injections: list[tuple[str, list[dict]]] = []  # (label, content_parts)
+        belief_reported_this_step = False
 
         for tc in msg.tool_calls:
             fname = tc.function.name
@@ -991,6 +1165,39 @@ def run_react_agent(
                     messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"street_view error: {e}"})
                     result.trace.append({"step": step + 1, "type": "street_view_error", "error": str(e)})
 
+            elif fname == "report_belief":
+                # NO se puntúa en runtime (ground truth no entra al loop). Solo
+                # validación estructural + registro para scoring post-hoc.
+                ok, err_msg = _validate_belief(args)
+                if not ok:
+                    if verbose:
+                        print(f"     ⚠ report_belief rechazado: {err_msg}")
+                    messages.append({
+                        "role": "tool", "tool_call_id": tc.id,
+                        "content": f"report_belief rechazado: {err_msg} Reintentá con el formato correcto.",
+                    })
+                    result.trace.append({
+                        "step": step + 1, "type": "report_belief_rejected",
+                        "belief": args, "error": err_msg,
+                    })
+                else:
+                    result.belief_report_count += 1
+                    result.belief_reports.append({"step": step + 1, "belief": args})
+                    belief_reported_this_step = True
+                    n_loc = len(args.get("location_belief", []))
+                    n_yr = len(args.get("year_belief", []))
+                    top = ""
+                    if n_loc:
+                        c0 = max(args["location_belief"], key=lambda c: c.get("weight", 0))
+                        top = f" top={c0.get('name', '?')} w={c0.get('weight')}"
+                    if verbose:
+                        print(f"     → belief #{result.belief_report_count}: {n_loc} loc, {n_yr} year.{top}")
+                    messages.append({
+                        "role": "tool", "tool_call_id": tc.id,
+                        "content": f"belief_recorded ({n_loc} candidatos de ubicación, {n_yr} rangos de año).",
+                    })
+                    result.trace.append({"step": step + 1, "type": "report_belief", "belief": args})
+
             elif fname == "submit_answer":
                 # min_steps: bloqueo "hard" — si el modelo intenta terminar antes
                 # del piso mínimo, le pedimos que siga investigando. No cuenta como
@@ -1048,6 +1255,9 @@ def run_react_agent(
         # After all tool results are appended, inject pending image messages
         for label, parts in pending_image_injections:
             messages.append({"role": "user", "content": parts})
+
+        if belief_mode:
+            steps_since_belief = 0 if belief_reported_this_step else steps_since_belief + 1
 
         if result.submit_called:
             break

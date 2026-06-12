@@ -467,7 +467,7 @@ NO podés desactivarlos:
 - Pistas visuales no investigadas (carteles, vehículos, vegetación) → `crop_image` + `image_search`
 - Falta verificación visual de tu top hipótesis → `street_view` de las coords candidatas
 
-**Hard cap — si llegás al step 18-19** (te quedan 1-2 turns):
+**Hard cap — cuando te queden 1-2 turns** (te lo avisamos explícitamente con recordatorios de budget):
 - Submit con tu mejor hipótesis aunque sea débil
 - `confidence='baja'`
 - En `uncertainty_reason` explicá HONESTAMENTE qué evidencia te faltó
@@ -769,6 +769,7 @@ def run_react_agent(
         pending_image_injections: list[tuple[str, list[dict]]] = []  # (label, content_parts)
         belief_reported_this_step = False
         step_charge = 0.0
+        abort_episode = False  # terminación dura (ej: invalid_submit ×3)
 
         for tc in msg.tool_calls:
             fname = tc.function.name
@@ -811,7 +812,9 @@ def run_react_agent(
                 try:
                     sr = web_search(
                         query=args.get("query", ""),
-                        max_results=int(args.get("max_results", 5)),
+                        # Fix junio 2026: el default era 5 acá pero el schema y el
+                        # prompt prometen 10 — el modelo recibía la mitad.
+                        max_results=int(args.get("max_results", 10)),
                         excluded_domains=excluded_domains,
                     )
                     if verbose:
@@ -1069,6 +1072,10 @@ def run_react_agent(
             elif fname in ("historical_query", "historical_query_at"):
                 result.historical_query_count += 1
                 try:
+                    # Fix junio 2026: coercionar year — si el modelo manda "1947"
+                    # (string), el filtro temporal tiraba TypeError críptico.
+                    year_arg = args.get("year")
+                    year_val = int(float(year_arg)) if year_arg not in (None, "") else None
                     if fname == "historical_query_at":
                         # Wrapper amigable: lat/lon + radius_km
                         hq = historical_query_at(
@@ -1076,7 +1083,7 @@ def run_react_agent(
                             lon=float(args["lon"]),
                             radius_km=float(args.get("radius_km", 5.0)),
                             preset=args.get("preset", "all_named"),
-                            year=args.get("year"),
+                            year=year_val,
                             require_dated=bool(args.get("require_dated", False)),
                             max_features=int(args.get("max_features", 30)),
                         )
@@ -1087,7 +1094,7 @@ def run_react_agent(
                             north=float(args["north"]),
                             east=float(args["east"]),
                             preset=args.get("preset"),
-                            year=args.get("year"),
+                            year=year_val,
                             require_dated=bool(args.get("require_dated", False)),
                             max_features=int(args.get("max_features", 30)),
                         )
@@ -1204,6 +1211,9 @@ def run_react_agent(
                         pitch=float(args.get("pitch", 0)),
                         fov=int(args.get("fov", 90)),
                         contact_sheet=bool(args.get("contact_sheet", False)),
+                        # Fix junio 2026: el prompt prometía nearby pero el handler
+                        # nunca lo pasaba (se ignoraba silenciosamente).
+                        nearby=bool(args.get("nearby", False)),
                     )
                     if isinstance(sv, StreetViewError):
                         if verbose:
@@ -1214,6 +1224,7 @@ def run_react_agent(
                         n_imgs = len(sv.images)
                         if verbose:
                             print(f"     → street_view ok n_images={n_imgs} pano={sv.panorama_id} dist={sv.distance_to_pano_m:.0f}m" if sv.distance_to_pano_m else f"     → street_view ok n_images={n_imgs}")
+                        nearby_panos = getattr(sv, "nearby_panoramas", None) or []
                         meta = {
                             "lat": sv.lat, "lon": sv.lon,
                             "n_images": n_imgs,
@@ -1223,6 +1234,7 @@ def run_react_agent(
                             "actual_lat": sv.actual_lat,
                             "actual_lon": sv.actual_lon,
                             "distance_to_pano_m": sv.distance_to_pano_m,
+                            "n_nearby_panoramas": len(nearby_panos),
                             "note": sv.note,
                         }
                         payload = json.dumps(meta, ensure_ascii=False)
@@ -1231,6 +1243,16 @@ def run_react_agent(
                         for im in sv.images:
                             parts.append({"type": "text", "text": f"[heading={im.heading} pitch={im.pitch} fov={im.fov}]"})
                             parts.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{im.base64_jpeg}"}})
+                        # Fix junio 2026: los panoramas nearby existían en el backend
+                        # pero nunca se inyectaban al modelo.
+                        for np_ in nearby_panos:
+                            parts.append({"type": "text", "text": (
+                                f"[Panorama VECINO a {np_.distance_from_center_m:.0f}m del centro "
+                                f"({np_.lat}, {np_.lon}), fecha {np_.pano_date or '?'}]"
+                            )})
+                            for im in np_.images:
+                                parts.append({"type": "text", "text": f"[heading={im.heading}]"})
+                                parts.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{im.base64_jpeg}"}})
                         pending_image_injections.append(("street_view", parts))
                         result.trace.append({
                             "step": step + 1, "type": "street_view",
@@ -1321,8 +1343,15 @@ def run_react_agent(
                         result.terminal_state = "invalid_submit"
                         result.error = f"submit_answer rechazado 3 veces. Último error: {err_msg}"
                         if verbose:
-                            print(f"     [break] submit rechazado 3 veces, abandono")
-                        break
+                            print(f"     [abort] submit rechazado 3 veces, abandono")
+                        # Fix junio 2026: antes esto era `break`, que solo salía del
+                        # for de tool_calls — el episodio SEGUÍA hasta max_steps
+                        # (pisando terminal_state) y, con tool_calls paralelas, las
+                        # restantes quedaban sin mensaje role:tool → 400 de la API.
+                        # Con continue, las tcs restantes se responden normal y el
+                        # flag corta el loop de steps después del for.
+                        abort_episode = True
+                        continue
                 else:
                     result.final_answer = args
                     result.submit_called = True
@@ -1350,7 +1379,7 @@ def run_react_agent(
         if belief_mode:
             steps_since_belief = 0 if belief_reported_this_step else steps_since_belief + 1
 
-        if result.submit_called:
+        if result.submit_called or abort_episode:
             break
 
     # Si salimos del loop sin terminal_state seteado, fue por max_steps.

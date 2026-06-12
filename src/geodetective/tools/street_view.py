@@ -336,6 +336,11 @@ TOOL_SCHEMA = {
                     "description": "Si true, devuelve 4 imágenes en N/E/S/W (cobertura completa). Más caro pero útil cuando no sabés qué ángulo mirar.",
                     "default": False,
                 },
+                "nearby": {
+                    "type": "boolean",
+                    "description": "Si true, además del punto pedido devuelve hasta 3 panoramas REALES sobre calles vecinas en radio ~50m (2 vistas opuestas c/u). Imita 'caminar la cuadra' — útil para verificar una hipótesis sin comprometerte a un solo punto de vista.",
+                    "default": False,
+                },
             },
             "required": ["lat", "lon"],
         },

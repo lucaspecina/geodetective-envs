@@ -103,6 +103,7 @@ class _CachedSearch:
     created_ts: float = field(default_factory=time.time)
     pick_rounds: int = 0
     picked_cells: set[int] = field(default_factory=set)
+    query_note: str = ""  # aviso al modelo (ej: fallback de query simplificada)
 
     @property
     def n_pages(self) -> int:
@@ -244,18 +245,27 @@ def _diversity_pick(candidates: list[_CellInternal], n: int) -> list[_CellIntern
 
 
 def _build_grid(cells: list[_CellInternal]) -> Image.Image:
-    """Componer grilla 4×4 con números y gutters."""
-    w = GRID_COLS * CELL_SIZE + (GRID_COLS + 1) * GUTTER
-    h = GRID_ROWS * CELL_SIZE + (GRID_ROWS + 1) * GUTTER
+    """Componer grilla con números y gutters, dimensionada a las celdas reales.
+
+    Fix junio 2026: antes el canvas era SIEMPRE 4×4 (~1568px) aunque hubiera
+    1 celda — imagen gigante mayormente negra quemando tokens de visión.
+    """
+    n = len(cells)
+    cols = min(GRID_COLS, max(1, n))
+    rows = (n + cols - 1) // cols
+    w = cols * CELL_SIZE + (cols + 1) * GUTTER
+    h = rows * CELL_SIZE + (rows + 1) * GUTTER
     canvas = Image.new("RGB", (w, h), (0, 0, 0))
     try:
         font = ImageFont.truetype("arial.ttf", size=36)
     except Exception:
         font = ImageFont.load_default()
     draw = ImageDraw.Draw(canvas)
-    for c in cells:
-        idx = c.cell - 1
-        row, col = divmod(idx, GRID_COLS)
+    for pos, c in enumerate(cells):
+        # Posición LOCAL en la grilla; el label sigue siendo el número global.
+        # Fix junio 2026: antes se usaba c.cell-1 (global) → en página 2+ las
+        # celdas 17-32 se pegaban FUERA del canvas (grilla negra).
+        row, col = divmod(pos, cols)
         x = GUTTER + col * (CELL_SIZE + GUTTER)
         y = GUTTER + row * (CELL_SIZE + GUTTER)
         thumb = c.image.copy()
@@ -278,6 +288,28 @@ def _image_to_b64(img: Image.Image, quality: int = 85) -> str:
     return base64.b64encode(buf.getvalue()).decode()
 
 
+def _simplify_query(query: str) -> str:
+    """Variante corta de una query larga: sin comillas, primeras 6 palabras.
+
+    DDG devuelve MUY pocos resultados para queries largas/descriptivas
+    (diagnóstico junio 2026: query de 9 palabras → 1 resultado crudo).
+    """
+    words = query.replace('"', " ").replace("'", " ").split()
+    return " ".join(words[:6])
+
+
+def _ddg_images(query: str) -> list[dict]:
+    """DDG images con 1 retry ante rate-limit/errores transitorios."""
+    for attempt in (1, 2):
+        try:
+            return list(DDGS().images(query, max_results=OVERFETCH_N))
+        except Exception:
+            if attempt == 2:
+                raise
+            time.sleep(2.0)
+    return []
+
+
 def _search_new(
     query: str,
     target_image_path: Optional[str],
@@ -291,14 +323,38 @@ def _search_new(
         except Exception:
             target_hash = None
 
+    query_note = ""
     try:
-        ddgs = DDGS()
-        raw_items = list(ddgs.images(query, max_results=OVERFETCH_N))
+        raw_items = _ddg_images(query)
     except Exception as e:
         return ImageSearchError(error="ddg_fetch_failed", detail=str(e))
 
+    # Fallback TRANSPARENTE: si la query (típicamente larga/descriptiva) devolvió
+    # pocos crudos, sumar resultados de una variante simplificada, deduplicados,
+    # y avisarle al modelo en el note (provenance honesta + señal de que las
+    # queries cortas rinden más en este buscador).
+    if len(raw_items) < N_CELLS:
+        simplified = _simplify_query(query)
+        if simplified and simplified.lower() != query.lower():
+            try:
+                extra = _ddg_images(simplified)
+            except Exception:
+                extra = []
+            seen_urls = {it.get("image") for it in raw_items}
+            added = [it for it in extra if it.get("image") not in seen_urls]
+            if added:
+                raw_items.extend(added)
+                query_note = (
+                    f"AVISO: tu query devolvió solo {len(seen_urls)} resultados crudos — "
+                    f"se agregaron {len(added)} de la variante simplificada '{simplified}'. "
+                    f"En este buscador las queries cortas (≤6 palabras) rinden mucho más que las descriptivas."
+                )
+
     if not raw_items:
-        return ImageSearchError(error="no_results", detail=f"DDG devolvió 0 para '{query}'")
+        return ImageSearchError(
+            error="no_results",
+            detail=f"DDG devolvió 0 para '{query}'. Probá una query más corta y genérica (≤6 palabras).",
+        )
 
     blocked = 0
     download_failed = 0
@@ -369,7 +425,15 @@ def _search_new(
             ))
 
     if not accepted:
-        return ImageSearchError(error="all_filtered", detail="Todas las imágenes fueron descartadas por filtros.")
+        return ImageSearchError(
+            error="all_filtered",
+            detail=(
+                f"Todas las imágenes fueron descartadas por filtros del benchmark "
+                f"(bloqueadas por dominio: {blocked}, download falló: {download_failed}, "
+                f"match con foto target: {target_match}). Probá otra query — si insistías "
+                f"con un dominio/fuente específica, está bloqueada para esta foto."
+            ),
+        )
 
     # v2.1 (#45): paginación. Aplicar diversidad a TODOS los aceptados (no solo 16),
     # numerar globalmente 1-N. Las páginas se generan on-demand a partir de all_cells.
@@ -390,6 +454,7 @@ def _search_new(
         download_failed_count=download_failed,
         target_match_count=target_match,
         total_raw_urls=len(raw_items),
+        query_note=query_note,
     )
     # Pre-generar grilla página 1 (se generan otras on-demand)
     page1_cells = cached.get_cells_for_page(1)
@@ -405,11 +470,14 @@ def _do_pick(search_id: str, picks: list[int]) -> Union[PickResult, ImageSearchE
     if cached is None:
         return ImageSearchError(error="invalid_search_id", detail=f"search_id '{search_id}' no encontrado o expirado.")
 
-    # Validar picks
+    # Validar picks contra TODAS las celdas (numeración global cruza páginas).
+    # Fix junio 2026: antes se validaba contra N_CELLS=16 → las celdas 17+ de
+    # páginas siguientes eran impickeables.
+    max_cell = len(cached.all_cells)
     valid_picks: list[int] = []
     invalid_picks: list[int] = []
     for p in picks:
-        if not isinstance(p, int) or p < 1 or p > N_CELLS:
+        if not isinstance(p, int) or p < 1 or p > max_cell:
             invalid_picks.append(p)
             continue
         valid_picks.append(p)
@@ -417,7 +485,7 @@ def _do_pick(search_id: str, picks: list[int]) -> Union[PickResult, ImageSearchE
     if invalid_picks:
         return ImageSearchError(
             error="invalid_picks",
-            detail=f"Picks fuera de rango 1-{N_CELLS}: {invalid_picks}",
+            detail=f"Picks fuera de rango 1-{max_cell}: {invalid_picks}",
         )
 
     # Codex: max 3 picks por call
@@ -435,8 +503,11 @@ def _do_pick(search_id: str, picks: list[int]) -> Union[PickResult, ImageSearchE
         )
 
     cached.pick_rounds += 1
-    # Componer respuesta
-    cells_by_num = {c.cell: c for c in cached.cells}
+    # Componer respuesta.
+    # Fix junio 2026: _do_pick referenciaba cached.cells y cached.grid_image,
+    # campos que NO existen desde el refactor de paginación (#45: all_cells +
+    # grid_images dict) → TODO pick crasheaba con AttributeError.
+    cells_by_num = {c.cell: c for c in cached.all_cells}
     pick_items = []
     for p in valid_picks:
         cell = cells_by_num.get(p)
@@ -454,13 +525,19 @@ def _do_pick(search_id: str, picks: list[int]) -> Union[PickResult, ImageSearchE
         })
         cached.picked_cells.add(p)
 
-    not_picked = [c.cell for c in cached.cells if c.cell not in cached.picked_cells]
+    # Grilla de referencia: la página que contiene el primer pick (on-demand).
+    ref_page = ((valid_picks[0] - 1) // N_CELLS) + 1 if valid_picks else 1
+    if ref_page not in cached.grid_images:
+        cached.grid_images[ref_page] = _build_grid(cached.get_cells_for_page(ref_page))
+
+    page_cells = cached.get_cells_for_page(ref_page)
+    not_picked = [c.cell for c in page_cells if c.cell not in cached.picked_cells]
 
     return PickResult(
         search_id=search_id,
         query=cached.query,
         picks=pick_items,
-        grid_image_b64=_image_to_b64(cached.grid_image),
+        grid_image_b64=_image_to_b64(cached.grid_images[ref_page]),
         not_picked_cells=not_picked,
         rounds_used=cached.pick_rounds,
         rounds_remaining=MAX_PICK_ROUNDS - cached.pick_rounds,
@@ -503,7 +580,8 @@ def _build_grid_result(cached: _CachedSearch, page: int) -> Union[GridResult, Im
         target_match_count=cached.target_match_count,
         suspicious_count=len(cached.suspicious),
         note=(
-            f"Página {page}/{cached.n_pages}. Celdas {cells_range[0]}-{cells_range[1]}. "
+            (cached.query_note + " " if cached.query_note else "")
+            + f"Página {page}/{cached.n_pages}. Celdas {cells_range[0]}-{cells_range[1]}. "
             + (f"Hay más páginas: image_search(query, page={page+1}, search_id='{cached.search_id}'). " if has_next else "")
             + f"Para zoom en celdas: image_search(query, pick=[N,M], search_id='{cached.search_id}'). "
             f"Max {MAX_PICKS_PER_SEARCH} picks/call, {MAX_PICK_ROUNDS} rondas total."

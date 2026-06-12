@@ -191,9 +191,15 @@ def historical_query(
     elements = data.get("elements", [])
     features = []
     filtered_by_year = 0
+    truncated = False
     seen_ids = set()  # dedupe (porque pueden venir en múltiples queries OR'd)
     for el in elements:
         if len(features) >= max_features:
+            # Fix junio 2026: truncated solo si el loop cortó por el cap real.
+            # Antes era `len(elements) > max_features`, que con overfetch ×3 +
+            # duplicados daba true casi siempre → el modelo creía que había más
+            # resultados disponibles cuando no.
+            truncated = True
             break
         osm_id = f"{el['type']}/{el['id']}"
         if osm_id in seen_ids:
@@ -236,7 +242,7 @@ def historical_query(
     return HistoricalQueryResponse(
         bbox=[south, west, north, east], year=year, preset=preset, custom_query=custom_overpass,
         n_features=len(features), features=features,
-        truncated=len(elements) > max_features,
+        truncated=truncated,
     )
 
 

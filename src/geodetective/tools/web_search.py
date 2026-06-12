@@ -69,14 +69,18 @@ class SearchResponse:
     results: list[SearchResult]
     blocked_count: int
     total_raw: int
+    note: str = ""  # feedback al modelo (ej: "dominio bloqueado por el benchmark")
 
     def to_dict(self) -> dict:
-        return {
+        out = {
             "query": self.query,
             "results": [r.to_dict() for r in self.results],
             "blocked_count": self.blocked_count,
             "total_raw": self.total_raw,
         }
+        if self.note:
+            out["note"] = self.note
+        return out
 
 
 # === Cache ===
@@ -206,8 +210,10 @@ def _call_websearch(query: str, n: int) -> list[dict]:
         f"texto antes ni después del JSON, ni markdown code fences):\n\n"
         f'{{"results": [\n'
         f'  {{"title": "título descriptivo", "url": "https://...", '
-        f'"snippet": "1500-2000 chars con la información concreta del contenido. '
-        f'Sé extenso — incluí fechas, nombres, ubicaciones, detalles relevantes.", '
+        f'"snippet": "1000-2000 chars de EXTRACTOS LITERALES del contenido de la fuente '
+        f'(citas textuales, copiadas tal cual — con fechas, nombres, ubicaciones). '
+        f'NO redactes tu propio resumen, NO sintetices, NO infieras: si un dato no está '
+        f'textual en la fuente, no lo pongas. Uní extractos con [...] si hace falta.", '
         f'"site_name": "Wikipedia|nombre del sitio", '
         f'"date_published": "YYYY-MM-DD o vacío si no aparece", '
         f'"language": "ISO 2-letter (en|es|ru|pt|...)", '
@@ -287,6 +293,22 @@ def web_search(
     """
     del search_depth  # silenciar lint
     excluded = list(excluded_domains) if excluded_domains else []
+
+    # Detección temprana de `site:` sobre dominio bloqueado: cortar ANTES de
+    # pagar la call a Bing. (Fix junio 2026: observamos en smokes E016 al modelo
+    # quemar 3 calls consecutivas con site:wikimedia.org → 0 results sin saber
+    # que el dominio estaba en blacklist.)
+    site_m = re.search(r"site:([\w.-]+)", query)
+    if site_m and is_blocked(f"https://{site_m.group(1)}/", excluded):
+        return SearchResponse(
+            query=query, results=[], blocked_count=0, total_raw=0,
+            note=(
+                f"El dominio '{site_m.group(1)}' está BLOQUEADO por el benchmark para esta "
+                f"foto (filtro anti-shortcut). No insistas con esa fuente ni sus mirrors — "
+                f"buscá la información en otros sitios."
+            ),
+        )
+
     cache_key = (query, frozenset(excluded), max_results)
     cached = _cache_get(cache_key)
     if cached is not None:
@@ -313,11 +335,21 @@ def web_search(
         filtered, blocked = _filter_sources(merged, excluded, max_results)
         sources = merged
 
+    note = ""
+    if not filtered and blocked > 0:
+        note = (
+            f"Los {blocked} resultados encontrados fueron bloqueados por la blacklist "
+            f"anti-shortcut del benchmark (agregadores, hosting de la foto original, "
+            f"reverse image search). Reformulá la búsqueda hacia otras fuentes — "
+            f"insistir con la misma query/sitio va a dar siempre 0."
+        )
+
     result = SearchResponse(
         query=query,
         results=filtered,
         blocked_count=blocked,
         total_raw=len(sources),
+        note=note,
     )
     _cache_set(cache_key, result)
     return result

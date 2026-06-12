@@ -22,18 +22,33 @@
     "waterh": 14,
     "dir": "sw",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Cartel in-scene 'TCHAKALIAN BROS' + 'CONFECTIONERY' en la esquina (no es overlay de archivo)",
+          "tool": "crop_image",
+          "expected_evidence": "texto legible en el toldo/frente del local"
+        },
+        {
+          "clue": "Confitería armenia Tchakalian en la concesión francesa",
+          "tool": "web_search",
+          "expected_evidence": "'Tchakalian Bros Shanghai Avenue Joffre' documentado en historias de la French Concession"
+        },
+        {
+          "clue": "Avenue Joffre = actual Huaihai Road; plátanos + tranvía francés coherentes",
+          "tool": "geocode + static_map",
+          "expected_evidence": "esquina sobre Huaihai Rd; arbolado y trazado coherentes"
+        },
+        {
+          "clue": "Datación: tranvía + autos ~1937 + caracteres chinos",
+          "tool": "image_search",
+          "expected_evidence": "modelos de auto y tranvía de los 30s"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 3,
+      "notes": "Tier media-fácil: texto in-scene directo. La pista textual es legítima (está en la escena, no en el borde de archivo)."
     }
   },
   {
@@ -59,18 +74,33 @@
     "waterh": 86,
     "dir": "se",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Plaza ajardinada con reja perimetral + farolas + edificación baja europea",
+          "tool": "(percepción)",
+          "expected_evidence": "espacio urbano rioplatense/colonial"
+        },
+        {
+          "clue": "Candidatos discriminables barato: Plaza Zabala / Matriz / San Martín",
+          "tool": "geocode",
+          "expected_evidence": "coords de las 3 plazas"
+        },
+        {
+          "clue": "Geometría DIAGONAL del jardín de Zabala respecto a la grilla de Ciudad Vieja (distintiva)",
+          "tool": "static_map",
+          "expected_evidence": "el jardín en diagonal matchea la foto"
+        },
+        {
+          "clue": "Datación: farolas + vestimenta + sin autos",
+          "tool": "(percepción)",
+          "expected_evidence": "1900-1915"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 3,
+      "notes": "VALIDADA EMPÍRICAMENTE: smoke run gpt-5.4-mini con budget=25 llegó a 0.1 km por exactamente esta cadena."
     }
   },
   {
@@ -96,18 +126,33 @@
     "waterh": 25,
     "dir": "nw",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Minarete OCTOGONAL con balcón de madera = firma de mezquitas hanafíes de Túnez",
+          "tool": "(percepción) + image_search",
+          "expected_evidence": "minaretes octogonales tunecinos comparables"
+        },
+        {
+          "clue": "Cartel 'OSPEDALE ITALIANO' colgando a la derecha",
+          "tool": "crop_image + web_search",
+          "expected_evidence": "hospital italiano en la medina de Túnez, zona Bab Jedid"
+        },
+        {
+          "clue": "Mezquita El Jedid + alineación de Rue des Teinturiers",
+          "tool": "geocode + static_map",
+          "expected_evidence": "calle estrecha apuntando al minarete"
+        },
+        {
+          "clue": "Datación: calle de tierra + vestimenta",
+          "tool": "(percepción)",
+          "expected_evidence": "1890-1910"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 4,
+      "notes": "Tier media. El cruce minarete octogonal × hospital italiano es muy discriminante."
     }
   },
   {
@@ -133,18 +178,33 @@
     "waterh": 90,
     "dir": "se",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Farola 'bishop's crook' + hidrante + stoops con barandas de hierro",
+          "tool": "(percepción)",
+          "expected_evidence": "mobiliario urbano inconfundiblemente NYC"
+        },
+        {
+          "clue": "Tipología: row de flats de 5-6 pisos con bay windows y toldos",
+          "tool": "image_search",
+          "expected_evidence": "Harlem / Upper Manhattan, avenidas residenciales"
+        },
+        {
+          "clue": "Matching de fachada sobre avenidas candidatas (los edificios PERSISTEN)",
+          "tool": "street_view (exploración)",
+          "expected_evidence": "fachada de 442-444 St. Nicholas Ave matchea ornamentos y bay windows"
+        },
+        {
+          "clue": "Datación: toldos + vereda + farola",
+          "tool": "(percepción)",
+          "expected_evidence": "1910-1930"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 5,
+      "notes": "Tier DIFÍCIL: sin texto. La cadena existe pero exige búsqueda visual sistemática — mide exactamente la estrategia de verificación visual que E010 mostró ausente. Si resulta impracticable en el pilot, candidata a tier frontera."
     }
   },
   {
@@ -170,18 +230,33 @@
     "waterh": 17,
     "dir": "s",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Cartel in-scene 'T.H. HALL' en el edificio derecho",
+          "tool": "crop_image + web_search",
+          "expected_evidence": "comercio T.H. Hall documentado en Queen Street, Auckland"
+        },
+        {
+          "clue": "Calle principal ancha con tranvía + arquitectura victoriana colonial",
+          "tool": "(percepción)",
+          "expected_evidence": "main street de ciudad colonial británica"
+        },
+        {
+          "clue": "Pendiente de Queen St bajando al puerto + algunos edificios persisten",
+          "tool": "static_map + street_view",
+          "expected_evidence": "topografía y trazado matchean"
+        },
+        {
+          "clue": "Datación: tranvía temprano + vestimenta",
+          "tool": "(percepción)",
+          "expected_evidence": "1890-1905"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 3,
+      "notes": "Tier media-fácil. Postal coloreada — el agente debe notar que el color no es confiable para datar."
     }
   },
   {
@@ -207,18 +282,33 @@
     "waterh": 16,
     "dir": "ne",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Columna de infantería con PICKELHAUBEN (cascos con pincho) = ejército alemán WWI",
+          "tool": "crop_image",
+          "expected_evidence": "cascos y uniformes alemanes → frente oriental, avance de 1915"
+        },
+        {
+          "clue": "Carteles cirílicos en comercios + arquitectura provincial mixta madera/ladrillo",
+          "tool": "crop_image",
+          "expected_evidence": "Imperio Ruso occidental (Bielorrusia/Lituania actual)"
+        },
+        {
+          "clue": "Postales alemanas de ocupación de Lida 1915 están documentadas",
+          "tool": "image_search + web_search",
+          "expected_evidence": "'Lida 1915 deutsche Truppen' / postales WWI de la calle Wilenska"
+        },
+        {
+          "clue": "Trazado de la calle principal (ex-Виленская, hoy Sovetskaya)",
+          "tool": "static_map",
+          "expected_evidence": "geometría de la calle coherente"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 5,
+      "notes": "Tier DIFÍCIL: muchas ciudades provinciales similares. La datación por Pickelhaube es la pista fuerte; la localización exacta exige el hop por postales de ocupación."
     }
   },
   {
@@ -244,18 +334,33 @@
     "waterh": 71,
     "dir": "n",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Cartel in-scene 'J. HADDOCK' en el local derecho",
+          "tool": "crop_image + web_search",
+          "expected_evidence": "comercio J. Haddock en St Peter's Street, Ipswich (directorios de época)"
+        },
+        {
+          "clue": "Casas Tudor con gables + cables de tranvía",
+          "tool": "(percepción)",
+          "expected_evidence": "East Anglia, ciudad media con tranvía (Ipswich 1903-1926)"
+        },
+        {
+          "clue": "Los edificios Tudor PERSISTEN (listed buildings)",
+          "tool": "street_view",
+          "expected_evidence": "match de fachadas actuales en St Peter's St"
+        },
+        {
+          "clue": "Datación: tranvía eléctrico + vestimenta + bicicletas",
+          "tool": "(percepción)",
+          "expected_evidence": "1905-1920"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 3,
+      "notes": "Tier media-fácil. La ventana del tranvía de Ipswich (1903-1926) acota la datación sola."
     }
   },
   {
@@ -281,18 +386,33 @@
     "waterh": 149,
     "dir": "nw",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Torre con aguja barroca al fondo, alineada con el eje de la calle",
+          "tool": "image_search",
+          "expected_evidence": "comparación con torres de Copenhague → torre Nikolaj"
+        },
+        {
+          "clue": "Hilera de casas danesas (fachadas planas, proporciones, buhardillas)",
+          "tool": "(percepción)",
+          "expected_evidence": "centro de Copenhague"
+        },
+        {
+          "clue": "El eje de Admiralgade apunta EXACTAMENTE a la torre Nikolaj — verificable en mapa",
+          "tool": "static_map + geocode",
+          "expected_evidence": "alineación calle→torre única en el barrio"
+        },
+        {
+          "clue": "Datación fina: la aguja actual de Nikolaj es de 1909-12; la de la foto es la PREVIA",
+          "tool": "web_search",
+          "expected_evidence": "historia de la torre → foto pre-1909"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 4,
+      "notes": "Tier media. Bonus: la historia de la aguja permite datación pre/post 1909 — test perfecto del eje temporal (un agente que solo mira 'estilo' no lo encuentra)."
     }
   },
   {
@@ -318,18 +438,28 @@
     "waterh": 16,
     "dir": "sw",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Torre de agua constructivista blanca sobre pilotes, tambor con ojos de buey — forma ÚNICA",
+          "tool": "image_search",
+          "expected_evidence": "'constructivist white water tower USSR' → Белая башня (Uralmash, arq. Reisher, 1929-31)"
+        },
+        {
+          "clue": "La torre SIGUE EN PIE (monumento protegido)",
+          "tool": "geocode + street_view",
+          "expected_evidence": "match directo con la torre actual en Ekaterimburgo"
+        },
+        {
+          "clue": "Datación: torre recién construida + abedules talados alrededor (obra reciente) + cerca provisoria",
+          "tool": "(percepción)",
+          "expected_evidence": "primera mitad de los 30s"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 3,
+      "notes": "Tier media: visualmente inconfundible UNA VEZ encontrada; el hop crítico es la búsqueda visual o conocer el constructivismo de asentamientos industriales del Ural."
     }
   },
   {
@@ -355,18 +485,33 @@
     "waterh": 20,
     "dir": "nw",
     "certification": {
-      "status": "pending",
-      "certified_by": null,
-      "date": null,
+      "status": "draft",
+      "certified_by": "Fable (draft — pendiente validacion user)",
+      "date": "2026-06-12",
       "chain": [
         {
-          "clue": "",
-          "tool": "",
-          "expected_evidence": ""
+          "clue": "Portal barroco con gran arco y estatuas cruzando la avenida",
+          "tool": "image_search",
+          "expected_evidence": "Iglesia católica de Santa Catalina, Nevsky Prospekt"
+        },
+        {
+          "clue": "Primer plano: parapeto/escalinata de granito masivo curvo",
+          "tool": "(percepción) + static_map",
+          "expected_evidence": "entorno de la Catedral de Kazán, cruce de Nevsky"
+        },
+        {
+          "clue": "Geometría del cruce + edificios persistentes",
+          "tool": "street_view",
+          "expected_evidence": "match con el cruce actual Nevsky/Malaya Konyushennaya"
+        },
+        {
+          "clue": "Datación: semáforo (instalados fines 30s) + calle vacía + nieve",
+          "tool": "crop_image + web_search",
+          "expected_evidence": "1938-1944; contexto sitio de Leningrado"
         }
       ],
-      "min_hops_estimate": null,
-      "notes": ""
+      "min_hops_estimate": 3,
+      "notes": "Tier media. El nombre de época del prospect (25 de Octubre, 1918-1944) NO es visible en la foto — la datación sale del semáforo + contexto."
     }
   }
 ]

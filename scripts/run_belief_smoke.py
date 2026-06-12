@@ -107,7 +107,15 @@ def main() -> None:
 
     EXP_DIR.mkdir(parents=True, exist_ok=True)
     out_path = EXP_DIR / f"smoke_{MODEL.replace('.', '_').replace('/', '_')}.json"
+    # Merge por cid: corridas previas de OTRAS fotos se preservan; re-corridas
+    # de la misma foto se reemplazan.
     results = []
+    if out_path.exists():
+        try:
+            results = [r for r in json.loads(out_path.read_text(encoding="utf-8"))
+                       if r.get("cid") not in cids]
+        except Exception:
+            results = []
 
     print("=" * 70)
     print("E016 BELIEF-MODE SMOKE TEST")

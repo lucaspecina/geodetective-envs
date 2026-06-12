@@ -158,6 +158,8 @@ Ver `src/geodetective/tools/` y `src/geodetective/agents/react.py`.
 │   ├── run_e010_iteration.py       # single-model debug con payload_to_model + min_steps
 │   ├── run_e012_min_steps.py       # ablation min_steps
 │   ├── detect_text_overlays.py     # VLM detector + blur archive_overlay (E011)
+│   ├── run_belief_smoke.py         # smoke belief-mode + scoring post-hoc (E016 #47)
+│   ├── build_belief_viewer.py      # ⭐ viewer trayectorias belief: timeline + mapa por step
 │   ├── build_iteration_viewer.py   # HTML viewer step-by-step de trazas
 │   ├── build_overlay_comparison.py # comparativo N modelos detector
 │   ├── build_corpus_viewer.py      # grid HTML del corpus

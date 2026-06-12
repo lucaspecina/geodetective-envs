@@ -141,6 +141,9 @@ Ver `src/geodetective/tools/` y `src/geodetective/agents/react.py`.
 │   │   ├── clean_image.py          # Paso 0: strip EXIF + crop watermark + RGBA→RGB (#22)
 │   │   └── blacklist.py            # blacklist runtime per-photo (#23)
 │   ├── llm_adapter.py              # rutea OpenAI-compatible vs Anthropic Foundry endpoint
+│   ├── eval/
+│   │   ├── metrics.py              # métricas post-hoc (distance/year/calibration)
+│   │   └── belief_scoring.py       # ⭐ proper scoring rules geodésicas (belief-state, E016 #47)
 │   ├── judge/                      # annotator CORRAL-adapted (process eval)
 │   ├── tools/                      # 12 tools del agente
 │   └── agents/

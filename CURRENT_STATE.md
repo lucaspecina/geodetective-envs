@@ -25,6 +25,9 @@ src/geodetective/
 │   ├── static_map.py            # Google Maps Static (roadmap/satellite/terrain/hybrid)
 │   └── street_view.py           # Google Street View Static
 ├── llm_adapter.py               # ⭐ Routea OpenAI vs Anthropic via MODEL_SPECS registry
+├── eval/
+│   ├── metrics.py               # Métricas post-hoc (distance/year/calibration)
+│   └── belief_scoring.py        # ⭐ Proper scoring rules geodésicas (belief-state, E016 #47)
 ├── judge/                       # ⭐ Process eval annotator (CORRAL adapted)
 │   ├── serialize_trace.py       # trace ReAct → texto [MSG N] consumible por judge
 │   ├── prompts.py               # STAGE1 (nodes) + STAGE2 (edges) prompts
@@ -203,6 +206,8 @@ results = json.load(open("experiments/E002_react_websearch/results.json"))
 - **E012 — ablation min_steps {0, 15, 30}**: implementado bloqueo `submit_answer` antes de step N. Vimos que forzar más steps revela **bug del scaffold**: con `min_steps≥15` el modelo acumula >50 imágenes en contexto → Azure rechaza. Hay que limpiar contexto.
 - **Process eval annotator** (`src/geodetective/judge/`): construido y aplicado a E005 v3. Pendiente correr sobre E009/E010.
 - **Paralelismo entre modelos** en E009 (commit `7bdc490`): rate limits por deployment, no agregados → 5 modelos en paralelo × 3 fotos cada uno = hasta 15 calls simultáneas. Speedup ~3-5×.
+
+**Junio 2026 — pivote belief-state en curso (E016, #47)**: el reward principal pasa de distancia puntual a **proper scoring rules sobre distribuciones de creencia** (mezcla vMF geodésica + reward denso por paso = ganancia de información verificada, sin LLM judge). Diseño completo en `research/synthesis/belief_state_redesign.md`. Implementado: scorer (`src/geodetective/eval/belief_scoring.py`) + tests sintéticos (`scripts/test_belief_scoring.py`, 9/9 OK — incluye properness por Monte Carlo y la divergencia log-score vs energy score ante el confiado-equivocado). Pendiente: tool `report_belief` en scaffold, `evidence_chain` auditable, budget, 10 fotos certificadas hindsight, corridas pilot.
 
 **Próximos pasos (priorizados)**:
 1. **Ejes experimentales documentados**: ver `research/synthesis/experiment_design.md`.

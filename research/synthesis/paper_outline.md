@@ -16,6 +16,21 @@
 
 El process eval de agentes está fragmentado y es descriptivo: CORRAL/AgentProcessBench/SeekBench anotan trazas con LLM-judges (costosos, hackeables si entran al training loop). CORRAL cierra: *"until reasoning itself becomes a training target..."*. Nosotros convertimos el juicio investigativo en señal **densa, mecánica e incentive-compatible**: el agente reporta distribuciones de creencia durante la investigación, puntuadas con proper scoring rules geodésicas contra ground truth. Sin judge. Testbed: geolocalización + datación de fotos históricas (dominio con anti-shortcut riguroso y eje temporal que nadie cubre).
 
+## La tesis filosófica (fijada con Lucas, 2026-06-12)
+
+**¿Qué tan bayesianamente se comporta un modelo cuando investiga?** No medimos "bayesianidad" literal (el posterior verdadero no es computable en open-world) — medimos algo más defendible: **el reward está construido de modo que el agente óptimo ES el bayesiano** (proper scoring rule → posterior honesto óptimo por teorema; budget + reward denso → max expected information gain como política óptima de testing). El benchmark mide cuánto le falta a cada modelo para ese óptimo, **descompuesto en violaciones específicas del ideal bayesiano**:
+
+| Failure mode | Violación bayesiana |
+|---|---|
+| Lock-in narrativo | No actualizar ante evidencia (prior/confirmación domina) |
+| Confidence inflada / submit prematuro | Mala calibración del posterior |
+| Investigación muerta (reports sin ganancia) | Tests sin valor de información (mal diseño experimental) |
+| Citas fabricadas / mis-citadas | Evidencia corrupta (likelihood inventada) |
+| Pivot dañino | Update sobre ruido / likelihood mal pesada |
+| Pivot productivo ⭐ | El update bayesiano sano — lo que separa investigadores (C3b) |
+
+La taxonomía cualitativa del paper se organiza por la columna derecha: una **anatomía de las desviaciones del razonador bayesiano** en investigación agéntica real. Cautela de positioning: la literatura "are LLMs Bayesian" usa puzzles de probabilidad — la novedad nuestra es medirlo mecánicamente en investigación open-world, secuencial, multimodal, con el óptimo bayesiano como punto fijo del reward.
+
 ## Venue target
 
 NeurIPS Datasets & Benchmarks o ICLR (benchmark + method). Decidir con resultados en mano.
@@ -38,6 +53,12 @@ NeurIPS Datasets & Benchmarks o ICLR (benchmark + method). Decidir con resultado
   - (b) **Investigación muerta medible**: % de belief reports con reward ≤ 0 (≈48% en datos parciales de mini).
   - (c) **Percepción >> búsqueda en información ganada**: el salto de nats del step 1 (pura percepción) domina la curva (+11.7 de +12.6 en Estocolmo; +12.7 de +20.5 en Montevideo).
 - **Estado**: 🟡 pilot completo + análisis. ESTE es el claim que el análisis cualitativo debe poblar con taxonomía de failure modes.
+
+### C3b — El PIVOTEO (belief revision ante evidencia/dead-ends) es la capacidad que separa investigadores — y la medimos mecánicamente ⭐ EJE CENTRAL
+- **Tesis (dirección fijada por Lucas, 2026-06-12)**: cambiar de hipótesis ante nueva evidencia o dead-ends es LO clave para que los modelos investiguen mejor. CORRAL lo midió con judge (refutation_driven_belief_revision, 26% de traces); nosotros lo medimos mecánico: cada switch del candidato top lleva un reward firmado → **pivot productivo** (hacia la verdad) vs **dañino** (lejos). `PROJECT.md` ya lo lista como presión evolutiva ("Pivoteo") — esto lo operacionaliza.
+- **Métricas implementadas**: switches/run, pivot_productive_rate; **pendientes para el análisis**: pivot latency (steps entre evidencia contradictoria y el switch), missed pivots (dead-end visible sin movimiento de creencia — cruza con dead-report rate), correlación pivoteo↔outcome dentro de modelo (no solo entre modelos).
+- **Evidencia interina (mini+sonnet, parcial)**: sonnet 3.2 switches/run con 59% productivos y mediana 1 km; mini 1.6 con 38% y mediana 477 km. El mejor investigador pivotea MÁS y MEJOR.
+- **Estado**: 🟡 métricas básicas corriendo; el análisis cualitativo debe poblar los triggers (¿QUÉ evidencia gatilla pivots buenos? ¿qué dead-ends se ignoran?).
 
 ### C4 — El benchmark discrimina modelos en dimensiones que la distancia no ve
 - **Evidencia esperada**: tabla cross-model (mini/sonnet/opus × on/off × N=3): lock-in rate, dead-report rate, calibración (reward total), switches, citas válidas — vs ranking por distancia.

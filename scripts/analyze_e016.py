@@ -122,6 +122,25 @@ def per_run_metrics(r: dict) -> dict:
     if len(tops) >= 2 and dist is not None:
         lockin = tops[0].get("name") == tops[-1].get("name") and dist > LOCKIN_DIST_KM
 
+    # PIVOT QUALITY: cada switch del top candidato, firmado por su reward.
+    # Un pivot es PRODUCTIVO si el report donde ocurre acerca la creencia a la
+    # verdad (reward > 0) — la versión mecánica de "refutation-driven belief
+    # revision" de CORRAL, sin judge. Requiere alinear reports con per_report
+    # del trajectory (mismo orden).
+    pivots_productive = 0
+    pivots_harmful = 0
+    if len(per_rep) == len(reports):
+        prev_name = None
+        for rep, scored in zip(reports, per_rep):
+            t = _top_of_report(rep)
+            name = t.get("name") if t else None
+            if prev_name is not None and name != prev_name:
+                if (scored.get("reward_vs_prev") or 0) > 0:
+                    pivots_productive += 1
+                else:
+                    pivots_harmful += 1
+            prev_name = name
+
     dead_steps = sum(1 for p in per_rep if (p.get("reward_vs_prev") or 0) <= 0)
 
     year_err = None
@@ -145,6 +164,8 @@ def per_run_metrics(r: dict) -> dict:
         "dead_reports": dead_steps,
         "n_reports_scored": len(per_rep),
         "switches": switches,
+        "pivots_productive": pivots_productive,
+        "pivots_harmful": pivots_harmful,
         "lockin": lockin,
         "ec_claims": ec["n_claims"] if ec else None,
         "ec_valid": ec["n_valid_citations"] if ec else None,
@@ -185,6 +206,9 @@ def aggregate(rows: list[dict]) -> dict:
     out["dead_report_rate"] = dead / scored if scored else None
     out["lockin_rate"] = sum(lock) / len(lock) if lock else None
     out["switches_avg"] = (sum(x["switches"] for x in rows) / len(rows)) if rows else None
+    piv_p = sum(x["pivots_productive"] for x in rows)
+    piv_h = sum(x["pivots_harmful"] for x in rows)
+    out["pivot_productive_rate"] = piv_p / (piv_p + piv_h) if (piv_p + piv_h) else None
     out["citation_valid_rate"] = ec_valid / ec_claims if ec_claims else None
     return out
 
@@ -206,7 +230,7 @@ def print_quant(per_runs: list[dict]) -> dict:
     print("\n=== QUANT por (modelo, arm) ===")
     hdr = (f"{'modelo':<22} {'arm':<4} {'n':>3} {'fail':>4} {'med_km':>8} {'<25km':>6} "
            f"{'>1000':>6} {'yMAE':>6} {'steps':>6} {'belfs':>6} {'reward':>7} "
-           f"{'dead%':>6} {'lockin':>7} {'sw':>4} {'cit_ok':>7}")
+           f"{'dead%':>6} {'lockin':>7} {'sw':>4} {'piv+%':>6} {'cit_ok':>7}")
     print(hdr)
     print("-" * len(hdr))
     for (model, arm), a in aggs.items():
@@ -216,6 +240,7 @@ def print_quant(per_runs: list[dict]) -> dict:
               f"{fmt(a['steps_avg']):>6} {fmt(a['beliefs_avg']):>6} "
               f"{fmt(a['reward_avg'], '+.1f'):>7} {fmt(a['dead_report_rate'], pct=True):>6} "
               f"{fmt(a['lockin_rate'], pct=True):>7} {fmt(a['switches_avg']):>4} "
+              f"{fmt(a['pivot_productive_rate'], pct=True):>6} "
               f"{fmt(a['citation_valid_rate'], pct=True):>7}")
     return {f"{m}|{a}": v for (m, a), v in aggs.items()}
 

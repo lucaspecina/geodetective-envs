@@ -579,7 +579,37 @@ def run_react_agent(
     if verbose and excluded_domains:
         print(f"[run_react_agent] excluded_domains per-photo: {excluded_domains}")
     image_path = Path(image_path)
-    img_b64 = base64.b64encode(image_path.read_bytes()).decode()
+    raw_bytes = image_path.read_bytes()
+    # Fix junio 2026: Anthropic rechaza imágenes >10MB (base64) — la foto 963644
+    # (10.9MB) crasheaba en step 1 SOLO en modelos Claude → comparación
+    # cross-provider injusta. Normalizamos el inline payload (re-encode/downscale
+    # progresivo) para TODOS los providers. Los crops siguen operando sobre el
+    # archivo original (las dims declaradas en el prompt son las originales).
+    MAX_INLINE_BYTES = 6_500_000  # raw; base64 agrega ~33% → queda bajo 10MB
+    if len(raw_bytes) > MAX_INLINE_BYTES:
+        try:
+            from PIL import Image as _PILImage
+            from io import BytesIO as _BytesIO
+            with _PILImage.open(image_path) as _im:
+                im = _im.convert("RGB")
+                # Cap inicial del lado largo + re-encode; si no alcanza, escala 0.8 iterativa
+                long_side = max(im.size)
+                if long_side > 3000:
+                    scale = 3000 / long_side
+                    im = im.resize((int(im.size[0] * scale), int(im.size[1] * scale)), _PILImage.LANCZOS)
+                for _ in range(6):
+                    buf = _BytesIO()
+                    im.save(buf, format="JPEG", quality=85)
+                    if buf.tell() <= MAX_INLINE_BYTES:
+                        break
+                    im = im.resize((int(im.size[0] * 0.8), int(im.size[1] * 0.8)), _PILImage.LANCZOS)
+                raw_bytes = buf.getvalue()
+                if verbose:
+                    print(f"[run_react_agent] foto target re-encodeada para inline: "
+                          f"{image_path.stat().st_size} -> {len(raw_bytes)} bytes")
+        except Exception:
+            pass  # si falla, mandamos el original y que el provider decida
+    img_b64 = base64.b64encode(raw_bytes).decode()
     data_url = f"data:image/jpeg;base64,{img_b64}"
     # Tamaño de la foto target (para que el modelo sepa coords máximas para crop_image)
     try:
@@ -626,6 +656,7 @@ def run_react_agent(
     result.budget_total = tool_budget
     target_path_str = str(image_path)  # para hash perceptual
     steps_since_belief = 0  # steps con tools sin report_belief (para el nudge)
+    empty_response_attempts = 0  # retry-once de turnos vacíos (glitch transitorio)
 
     for step in range(max_steps):
         # Sliding-window cleanup de imágenes acumuladas. Azure tiene un límite hard
@@ -726,13 +757,32 @@ def run_react_agent(
         if not content_str.strip() and not msg.tool_calls:
             finish = getattr(msg, "finish_reason", None) or getattr(response.choices[0], "finish_reason", None)
             n_thinking = len(getattr(msg, "thinking_blocks", []) or [])
-            result.error = f"Empty response. finish_reason={finish!r} thinking_blocks={n_thinking}"
-            result.terminal_state = "empty_response"
+            empty_response_attempts += 1
             result.trace.append({
                 "step": step + 1, "type": "empty_response_diagnosis",
                 "finish_reason": finish, "thinking_blocks_count": n_thinking,
+                "attempt": empty_response_attempts,
             })
-            break
+            # Fix junio 2026: antes abortábamos al PRIMER turno vacío. Visto en
+            # E016 pilot (sonnet, end_turn sin contenido en step 7/23): es un
+            # glitch transitorio recuperable — retry una vez, como hacemos con
+            # texto-sin-tool-call. Dos vacíos consecutivos sí abortan.
+            if empty_response_attempts >= 2:
+                result.error = f"Empty response x2. finish_reason={finish!r} thinking_blocks={n_thinking}"
+                result.terminal_state = "empty_response"
+                break
+            messages.append({
+                "role": "user",
+                "content": (
+                    "Tu última respuesta llegó VACÍA (sin texto ni tool calls). Continuá la "
+                    "investigación: invocá una tool, o si ya tenés tu hipótesis, llamá "
+                    "`submit_answer` con todos los campos."
+                ),
+            })
+            if verbose:
+                print("[corrective] empty response, retry")
+            continue
+        empty_response_attempts = 0
         messages.append(assistant_turn)
 
         # Bug #3 (Kimi-style): modelo emite intención como TEXTO en vez de tool_call.

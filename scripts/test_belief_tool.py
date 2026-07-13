@@ -91,9 +91,12 @@ def run_tests() -> int:
     ec_item = sb_props["evidence_chain"]["items"]
     failures += not _check("evidence_chain items requieren claim+step+tool",
                            set(ec_item["required"]) == {"claim", "step", "tool"})
+    failures += not _check("submit belief-mode tiene final_belief_top requerido (G4)",
+                           "final_belief_top" in sb_props
+                           and "final_belief_top" in submit_belief["function"]["parameters"]["required"])
     canon_props = SUBMIT_TOOL_SCHEMA["function"]["parameters"]["properties"]
-    failures += not _check("SUBMIT canónico NO mutado (sin evidence_chain)",
-                           "evidence_chain" not in canon_props,
+    failures += not _check("SUBMIT canónico NO mutado (sin evidence_chain ni snapshot)",
+                           "evidence_chain" not in canon_props and "final_belief_top" not in canon_props,
                            "el brazo OFF de la ablation debe quedar idéntico")
 
     print("\nT4 — budget económico")

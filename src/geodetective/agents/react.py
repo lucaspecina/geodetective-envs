@@ -196,8 +196,25 @@ Cuando el budget se agota, las tools pagas se bloquean — solo podés reportar 
 
 
 def _submit_schema_with_evidence_chain() -> dict:
-    """SUBMIT_TOOL_SCHEMA + campo evidence_chain auditable (belief mode only)."""
+    """SUBMIT_TOOL_SCHEMA + evidence_chain + belief snapshot (belief mode only)."""
     schema = copy.deepcopy(SUBMIT_TOOL_SCHEMA)
+    # G4 (codebook v1.2 §0.5.10): snapshot de belief OBLIGATORIO al submit —
+    # sin esto, B1 usa un q reportado N steps antes ("commit_after_recent_
+    # reported_confidence"). Con esto, la confianza AL PARAR es directa.
+    schema["function"]["parameters"]["properties"]["final_belief_top"] = {
+        "type": "object",
+        "properties": {
+            "name": {"type": "string"},
+            "lat": {"type": "number", "minimum": -90, "maximum": 90},
+            "lon": {"type": "number", "minimum": -180, "maximum": 180},
+            "weight": {"type": "number", "minimum": 0, "maximum": 1,
+                       "description": "Probabilidad que le asignás AHORA a tu candidato top (mismo criterio que report_belief)."},
+        },
+        "required": ["name", "lat", "lon", "weight"],
+        "description": "Snapshot de tu creencia top EN ESTE MOMENTO (al decidir parar). Obligatorio en belief-mode.",
+    }
+    schema["function"]["parameters"]["required"] = list(
+        schema["function"]["parameters"]["required"]) + ["final_belief_top"]
     schema["function"]["parameters"]["properties"]["evidence_chain"] = {
         "type": "array",
         "items": {

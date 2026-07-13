@@ -4,6 +4,8 @@
 >
 > **Base construida (mayo-junio 2026)**: agente investigador funcional, 12 tools end-to-end, corpus v2 (151 fotos balanceadas), harness robusto post-review (15+ bugs arreglados), instrumentación belief-state (`report_belief` + scorer geodésico + evidence chains + budget), pilot E016 (180 corridas, 3 modelos × 10 fotos × N=3 × {belief on/off}) con findings cualitativos.
 >
+> **Sesión autónoma 2026-07-13 (tarde)**: codebook v1.2 con sign-off de Codex (R5+R6: umbrales firmados, 6 predicciones preregistrables, *"la arquitectura conceptual ya no necesita otra ronda de rediseño"*) + **probe P1 IMPLEMENTADA y validada end-to-end** (`src/geodetective/probes.py` + wiring en react.py + 22 tests + smoke E017): canal `archive_bulletin` documentado desde step 0, report inmediato post-boletín forzado, contrato formal 55/45, refutación por disco explícito, placebos source-matched. Smoke R6 (mini × 4 fotos × {contradiction, placebo}): 8/8 endpoints capturados; certificado refutatorio → drop total de la hipótesis (residual 0.0) vs placebo → cero movimiento (retention 1.0); y primera instancia viva de la predicción H2 (mini overreacciona a fuente débil 55%: elasticidad +3.15, flag >3). Gates restantes pre-confirmatorio: G1 (audit de elegibilidad en corpus nuevo), G2 (potencia), G3 (serialización de prefijos), G5 (sign-off final + tag freeze). G4 ✅ (belief snapshot en submit).
+>
 > Para visión y norte: `PROJECT.md` · Para roadmap: [Project v2](https://github.com/users/lucaspecina/projects/6) · Para historial: `CHANGELOG.md`.
 
 ---

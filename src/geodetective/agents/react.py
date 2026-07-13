@@ -578,6 +578,7 @@ def run_react_agent(
     belief_nudge_after: int = 3,
     tool_budget: Optional[float] = None,
     tool_costs: Optional[dict[str, float]] = None,
+    probe_injector=None,
 ) -> ReActResult:
     """Correr el agente ReAct con todas las tools.
 
@@ -610,6 +611,12 @@ def run_react_agent(
     costs = tool_costs if tool_costs is not None else DEFAULT_TOOL_COSTS
     if tool_budget is not None:
         sys_prompt = sys_prompt + "\n\n" + _budget_prompt_section(tool_budget, costs)
+    # Vice probes (codebook v1.1): la doc de boletines entra al prompt desde el
+    # step 0 cuando hay injector — así el boletín nunca es una anomalía. En el
+    # confirmatorio la doc va en TODAS las corridas (probe o no).
+    if probe_injector is not None:
+        from ..probes import BULLETIN_DOC
+        sys_prompt = sys_prompt + "\n\n" + BULLETIN_DOC
     # LLM provider determinado por modelo (vía llm_adapter.MODEL_SPECS).
     # OpenAI-compatible → passthrough cliente openai; Anthropic → /anthropic/v1/messages.
     llm_provider = get_provider(model)
@@ -860,6 +867,7 @@ def run_react_agent(
         belief_reported_this_step = False
         step_charge = 0.0
         abort_episode = False  # terminación dura (ej: invalid_submit ×3)
+        pending_probe_bulletin: Optional[str] = None  # boletín de probe a entregar este step
 
         for tc in msg.tool_calls:
             fname = tc.function.name
@@ -1392,6 +1400,22 @@ def run_react_agent(
                         "content": f"belief_recorded ({n_loc} candidatos de ubicación, {n_yr} rangos de año).",
                     })
                     result.trace.append({"step": step + 1, "type": "report_belief", "belief": args})
+                    # Vice probe: chequear elegibilidad y disparar boletín (una vez por corrida).
+                    if probe_injector is not None:
+                        bulletin = probe_injector.maybe_fire(args, step + 1, max_steps)
+                        if bulletin:
+                            pending_probe_bulletin = bulletin
+                            result.trace.append({
+                                "step": step + 1, "type": "probe_injection",
+                                "arm": probe_injector.record.arm,
+                                "polarity": probe_injector.record.polarity,
+                                "pre_top": probe_injector.record.pre_top,
+                                "pre_mass": probe_injector.record.pre_mass,
+                                "bulletin": bulletin,
+                            })
+                            if verbose:
+                                print(f"     ⚡ PROBE fired: arm={probe_injector.record.arm} "
+                                      f"polarity={probe_injector.record.polarity}")
 
             elif fname == "submit_answer":
                 # min_steps: bloqueo "hard" — si el modelo intenta terminar antes
@@ -1459,6 +1483,11 @@ def run_react_agent(
         for label, parts in pending_image_injections:
             _clamp_injection_images(parts)
             messages.append({"role": "user", "content": parts})
+
+        # Entregar boletín de probe (después de los tool results, como cualquier
+        # otra entrega del sistema — mismo canal que las inyecciones de imágenes).
+        if pending_probe_bulletin:
+            messages.append({"role": "user", "content": pending_probe_bulletin})
 
         # Aviso de saldo después de cada step con gasto (budget mode).
         if tool_budget is not None and step_charge > 0 and not result.submit_called:

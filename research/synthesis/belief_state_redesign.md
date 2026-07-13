@@ -1,8 +1,14 @@
 # Belief-State Redesign — reward de proceso verificable sin judge
 
-> **Status**: DISEÑO v1, junio 2026. Propuesta de pivote aprobada en dirección general por el user (sesión 2026-06-12), con tres ajustes incorporados (ver §4). Pendiente: cruce con Codex + implementación E016.
+> **⚠️ STATUS (actualizado 2026-07-13): MAQUINARIA VIGENTE / CLAIMS TEÓRICOS RETIRADOS.**
+> Este doc describe el pivote belief-state de junio 2026. Tras la sesión de diseño adversarial con Codex (2026-07-13), la dirección del proyecto cambió a **auditoría de vicios investigativos** (ver `pivot_2026-07_censo_vicios.md` + `paper_outline.md`). De este documento:
+> - **SE CONSERVA (vigente)**: toda la maquinaria implementada — `report_belief`, el scorer geodésico (`eval/belief_scoring.py`) ahora entendido como **instrumento de medición proper-EN-SU-CLASE** (no como reward incentive-compatible), evidence chains, budget, viewers. Es la instrumentación del proceso que la auditoría usa.
+> - **SE RETIRA (NO es la tesis del paper)**: "medir qué tan bayesiano investiga un modelo" como tesis; la incentive-compatibility como argumento sobre modelos prompteados; el reward telescópico como contribución de process supervision (los reports intermedios se cancelan — crítica Codex R1 #1); los labels normativos por-evento ("pivot productivo", "investigación muerta") sin intervención controlada. Detalle en `paper_outline.md §"Qué se RETIRÓ"`.
+> - Lo interesante de "presentar evidencia para influenciar" (§ intervención) SOBREVIVIÓ y se volvió el motor confirmatorio (las probes) del nuevo framing.
 >
-> **Docs hermanos**: `process_eval_landscape.md` (por qué el campo no tiene esto), `findings_so_far.md` (las patologías E009/E010 que esto ataca), `experiment_design.md` (ejes previos, a actualizar si E016 valida).
+> Leer lo que sigue como el registro histórico del pivote de junio, no como la dirección actual.
+>
+> **Docs hermanos**: `pivot_2026-07_censo_vicios.md` (dirección VIGENTE), `paper_outline.md` (vista paper), `process_eval_landscape.md`, `findings_so_far.md`.
 
 ---
 

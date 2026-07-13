@@ -263,6 +263,46 @@ def _validate_belief(args: dict) -> tuple[bool, Optional[str]]:
     return True, None
 
 
+# Anthropic, en requests con muchas imágenes, rechaza cualquier imagen cuyo lado
+# exceda 2000px ("max allowed size for many-image requests"). Las tools inyectan
+# imágenes a su tamaño nativo (street_view, static_map, picks de image_search
+# pueden superarlo) → 400 mid-investigation en las corridas que más acumulan
+# (visto en E016: opus belief-on Montevideo, step 18-26). Cabuteamos TODA imagen
+# inyectada a ≤2000px antes de mandarla. (Fix junio 2026, harness review.)
+MAX_IMG_DIM = 2000
+
+
+def _clamp_data_url_b64(b64: str, max_dim: int = MAX_IMG_DIM) -> str:
+    """Devuelve un b64 JPEG con ambos lados ≤ max_dim (re-encode solo si excede)."""
+    try:
+        from PIL import Image as _PILImage
+        from io import BytesIO as _BytesIO
+        raw = base64.b64decode(b64)
+        with _PILImage.open(_BytesIO(raw)) as im:
+            if max(im.size) <= max_dim:
+                return b64
+            im = im.convert("RGB")
+            scale = max_dim / max(im.size)
+            im = im.resize((max(1, int(im.size[0] * scale)), max(1, int(im.size[1] * scale))), _PILImage.LANCZOS)
+            buf = _BytesIO()
+            im.save(buf, format="JPEG", quality=85)
+            return base64.b64encode(buf.getvalue()).decode()
+    except Exception:
+        return b64
+
+
+def _clamp_injection_images(parts: list[dict]) -> None:
+    """In-place: cabutea toda image_url (data:base64) de un bloque de inyección a ≤2000px."""
+    for p in parts:
+        if not isinstance(p, dict) or p.get("type") != "image_url":
+            continue
+        url = (p.get("image_url") or {}).get("url", "")
+        prefix = "data:image/jpeg;base64,"
+        if url.startswith(prefix):
+            clamped = _clamp_data_url_b64(url[len(prefix):])
+            p["image_url"]["url"] = prefix + clamped
+
+
 def _count_images_in_messages(messages: list[dict]) -> int:
     """Cuenta cuántas partes type='image_url' hay en messages (Azure 50 hard limit)."""
     count = 0
@@ -609,7 +649,7 @@ def run_react_agent(
                           f"{image_path.stat().st_size} -> {len(raw_bytes)} bytes")
         except Exception:
             pass  # si falla, mandamos el original y que el provider decida
-    img_b64 = base64.b64encode(raw_bytes).decode()
+    img_b64 = _clamp_data_url_b64(base64.b64encode(raw_bytes).decode())
     data_url = f"data:image/jpeg;base64,{img_b64}"
     # Tamaño de la foto target (para que el modelo sepa coords máximas para crop_image)
     try:
@@ -1414,8 +1454,10 @@ def run_react_agent(
             else:
                 messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"Unknown tool: {fname}"})
 
-        # After all tool results are appended, inject pending image messages
+        # After all tool results are appended, inject pending image messages.
+        # Clamp a ≤2000px por imagen (Anthropic many-image limit).
         for label, parts in pending_image_injections:
+            _clamp_injection_images(parts)
             messages.append({"role": "user", "content": parts})
 
         # Aviso de saldo después de cada step con gasto (budget mode).

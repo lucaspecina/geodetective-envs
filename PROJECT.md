@@ -6,7 +6,25 @@
 
 ---
 
-## ⚠️ Framing actual (mayo 2026): BENCHMARK primario, env como deuda futura
+## ⚠️⚠️ Framing VIGENTE (julio 2026): AUDITORÍA COMPORTAMENTAL DE VICIOS INVESTIGATIVOS
+
+**Este es el norte actual. Supersede en foco al framing de mayo (abajo), que sigue siendo cierto como base (es un benchmark) pero ya no captura el aporte.**
+
+El proyecto es un **benchmark detective geo+temporal** (esto se conserva entero: foto histórica → agente con tools → dónde y cuándo, reward geodésico, anti-shortcut) **usado como sustrato para auditar el PROCESO investigativo de los agentes, no solo su outcome**. El aporte del paper es mostrar que **outcome correcto y proceso investigativo auditable son dimensiones distintas**, y censar/descubrir los **vicios de investigación** de los agentes con tools.
+
+Tres capas: (1) benchmark + outcome contra GT; (2) estados de creencia reportados cada N pasos (instrumentación del proceso); (3) **presentación inteligente de evidencia** (probes: pistas, influencias, evidencia falsa con contrato de confiabilidad conocido) que vuelve mecánicamente medibles vicios que en trazas naturales exigirían un juez.
+
+**Doble motor** (no negociable): **confirmatorio** (probes diseñadas → tasas mecánicas de vicios conocidos) + **exploratorio** (ojo humano+AI sobre muchas trazas → descubrir vicios NUEVOS, aporte tipo-CORRAL). La lista de vicios NO está cerrada; encontrar otros es contribución central.
+
+**Qué se RETIRÓ** del intento belief-state de junio (crítica adversarial Codex, aceptada): la tesis "medir qué tan bayesiano investiga un modelo", el argumento de incentive-compatibility, el reward telescópico como process supervision, y los labels normativos por-evento. La MAQUINARIA (report_belief, scorer geodésico como instrumento, evidence chains, viewers, budget) se conserva al servicio de la auditoría.
+
+Doc canónico de la dirección: `research/synthesis/pivot_2026-07_censo_vicios.md`. Vista paper: `research/synthesis/paper_outline.md`. Registro de la decisión: sesión de diseño adversarial con Codex, 2026-07-13 (4 rondas).
+
+**LA PREGUNTA** (abajo, CLAUDE.md) sigue vigente como filtro de diseño del environment; el paper la responde por la vía negativa: mostrando *qué le falta al agente para investigar bien* (sus vicios), medido mecánicamente.
+
+---
+
+## ⚠️ Framing de mayo 2026 (base, ya no captura el aporte): BENCHMARK primario, env como deuda futura
 
 **Foco actual = benchmark de evaluación de agentes geo-investigativos.** El sistema no entrena policies — las **mide**. Un agente / modelo se conecta, se le presentan fotos del corpus, llama tools, y el sistema score su capacidad investigativa.
 

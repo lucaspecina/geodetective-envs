@@ -297,10 +297,15 @@ experiments/E014_diverse10/*
 !experiments/E014_diverse10/results_*.json
 
 # E016 belief-state pilot (#47)
+# Los results crudos llevan imágenes base64 en el trace (35-115 MB c/u, dos
+# superan el límite de 100 MB de GitHub). Commiteamos solo las versiones .slim
+# (sin base64, ~5 MB) generadas por scripts/slim_results.py. El viewer regenera
+# las imágenes on-demand desde el corpus.
 !experiments/E016_belief_pilot/
 experiments/E016_belief_pilot/*
 !experiments/E016_belief_pilot/pilot_photos.json
-!experiments/E016_belief_pilot/results_*.json
+!experiments/E016_belief_pilot/results_*.slim.json
+!experiments/E016_belief_pilot/digest.md
 
 # Métricas agregadas
 !experiments/metrics_summary.json

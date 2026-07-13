@@ -2,11 +2,14 @@
 
 ## START HERE — Read these docs first
 
-1. **README.md** — Entry point + navegación.
-2. **PROJECT.md** — Estrella polar: visión, LA PREGUNTA, invariantes.
-3. **CURRENT_STATE.md** — Qué corre HOY (honesto sobre gaps).
-4. **CHANGELOG.md** — Historial.
-5. **ARCHITECTURE.md** — Contratos entre módulos + storage-as-canon principle + schemas.
+> **📍 DIRECCIÓN VIGENTE (jul 2026): auditoría comportamental de VICIOS investigativos** sobre el benchmark detective geo+temporal. Doble motor (probes mecánicas + descubrimiento exploratorio). Doc canónico: **`research/synthesis/pivot_2026-07_censo_vicios.md`**; vista paper: `research/synthesis/paper_outline.md`. El intento belief-state de junio dejó la maquinaria vigente pero sus claims teóricos retirados.
+
+1. **`research/synthesis/pivot_2026-07_censo_vicios.md`** — ⭐ dirección vigente del paper (leer primero para entender hacia dónde va).
+2. **README.md** — Entry point + navegación.
+3. **PROJECT.md** — Estrella polar: visión, LA PREGUNTA, invariantes + framing vigente.
+4. **CURRENT_STATE.md** — Qué corre HOY (honesto sobre gaps).
+5. **CHANGELOG.md** — Historial.
+6. **ARCHITECTURE.md** — Contratos entre módulos + storage-as-canon principle + schemas.
 
 Para roadmap y trabajo pendiente: [Project v2 "GeoDetective Envs Roadmap"](https://github.com/users/lucaspecina/projects/6).
 

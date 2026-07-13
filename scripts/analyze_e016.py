@@ -41,12 +41,24 @@ LOCKIN_DIST_KM = 100.0  # top inicial == top final Y a más de esto del truth �
 # === Carga ===
 
 def load_all() -> list[dict]:
-    """Cargar todos los results_{model}_belief-{arm}.json → records con model/arm."""
+    """Cargar todos los results_{model}_belief-{arm}.json → records con model/arm.
+
+    Prefiere el crudo si existe (tiene imágenes para el viewer); si solo está el
+    .slim (lo que se commitea), usa ese — el análisis no necesita los base64.
+    """
     records = []
-    for p in sorted(EXP_DIR.glob("results_*_belief-*.json")):
-        m = re.match(r"results_(.+)_belief-(on|off)$", p.stem)
+    seen_stems = set()
+    # Crudos primero; los .slim solo si no está el crudo correspondiente.
+    candidates = sorted(EXP_DIR.glob("results_*_belief-*.json"),
+                        key=lambda p: p.name.endswith(".slim.json"))
+    for p in candidates:
+        stem = p.name.replace(".slim.json", "").replace(".json", "")
+        if stem in seen_stems:
+            continue
+        m = re.match(r"results_(.+)_belief-(on|off)$", stem)
         if not m:
             continue
+        seen_stems.add(stem)
         try:
             for r in json.loads(p.read_text(encoding="utf-8")):
                 rk = r.get("react") or {}

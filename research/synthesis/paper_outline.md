@@ -1,113 +1,105 @@
-# Paper outline — claims, evidencia y gaps
+# Paper outline — auditoría comportamental de vicios investigativos
 
-> **Status**: working draft, junio 2026. Esqueleto orientado a claims: cada afirmación del paper mapeada a la evidencia que la respalda y a lo que falta. Se actualiza a medida que E016 produce datos.
+> **Status**: REESCRITO 2026-07-13 tras la sesión de diseño adversarial con Codex (4 rondas) y la decisión de dirección de Lucas. Reemplaza por completo la versión anterior (belief-state con claims C1-C8), que quedó **RETIRADA** — ver §"Qué se retiró" y `pivot_2026-07_censo_vicios.md`.
 >
-> **Refs**: `belief_state_redesign.md` (mecanismo), `process_eval_landscape.md` (related work), `harness_review_post_belief.md` (fixes), `findings_so_far.md` (E001-E012).
+> **Doc canónico de la dirección**: `research/synthesis/pivot_2026-07_censo_vicios.md` (decisión + matriz de probes + estándares + veredictos Codex). Este outline es la vista "paper".
 
 ---
 
-## Working title
+## Working title (a iterar)
 
-**"Belief-State Geo-Forecasting: Judge-Free, Mechanically Verifiable Process Rewards for Investigative Agents"**
+**"Correct Answers, Bad Investigations? A Behavioral Audit of Multimodal Historical Geolocation Agents"**
 
-(alt: "Measuring Investigative Judgment Without a Judge: Proper Scoring Rules for Tool-Using Agents")
+(alt: "GeoDetective: Auditing Belief, Evidence, and Provenance in Tool-Using Multimodal Agents")
 
-## Posicionamiento (1 párrafo)
+## Tesis central (la oración que el paper defiende)
 
-El process eval de agentes está fragmentado y es descriptivo: CORRAL/AgentProcessBench/SeekBench anotan trazas con LLM-judges (costosos, hackeables si entran al training loop). CORRAL cierra: *"until reasoning itself becomes a training target..."*. Nosotros convertimos el juicio investigativo en señal **densa, mecánica e incentive-compatible**: el agente reporta distribuciones de creencia durante la investigación, puntuadas con proper scoring rules geodésicas contra ground truth. Sin judge. Testbed: geolocalización + datación de fotos históricas (dominio con anti-shortcut riguroso y eje temporal que nadie cubre).
+> **La accuracy final esconde sistemáticamente fallas distintas de regulación de creencias, de parada, y de procedencia de la evidencia; con estados de creencia explícitos, logs auditables y escenarios diseñados, revelamos qué modelos llegan a la respuesta correcta por razones defendibles y cuáles reconstruyen la justificación después — y descubrimos vicios investigativos que la literatura no había nombrado.**
 
-## La tesis filosófica (fijada con Lucas, 2026-06-12)
+Frase de una línea para abstract: *outcome correcto y proceso investigativo auditable son dimensiones distintas, y las medimos sin depender de un LLM-judge.*
 
-**¿Qué tan bayesianamente se comporta un modelo cuando investiga?** No medimos "bayesianidad" literal (el posterior verdadero no es computable en open-world) — medimos algo más defendible: **el reward está construido de modo que el agente óptimo ES el bayesiano** (proper scoring rule → posterior honesto óptimo por teorema; budget + reward denso → max expected information gain como política óptima de testing). El benchmark mide cuánto le falta a cada modelo para ese óptimo, **descompuesto en violaciones específicas del ideal bayesiano**:
+## Posicionamiento
 
-| Failure mode | Violación bayesiana |
-|---|---|
-| Lock-in narrativo | No actualizar ante evidencia (prior/confirmación domina) |
-| Confidence inflada / submit prematuro | Mala calibración del posterior |
-| Investigación muerta (reports sin ganancia) | Tests sin valor de información (mal diseño experimental) |
-| Citas fabricadas / mis-citadas | Evidencia corrupta (likelihood inventada) |
-| Pivot dañino | Update sobre ruido / likelihood mal pesada |
-| Pivot productivo ⭐ | El update bayesiano sano — lo que separa investigadores (C3b) |
+Precedente que valida el género: **CORRAL** (censo de patrones epistémicos en 25K runs con LLM-judge; "68% ignora evidencia"; cierra pidiendo que el razonamiento sea training target). Nuestros diferenciales reales (rankeados por valor, Codex R3):
+1. **Disociación outcome–procedencia**: una respuesta exacta puede tener cadena de evidencia inexistente/insostenible. El diferencial #1 si se verifica semánticamente.
+2. **Trayectorias probabilísticas contra GT continuo**: entrenchment, abandono de lo correcto, recuperación, deterioro, calibración — sin interpretar cada evento.
+3. **Doble eje ubicación–fecha**: spillover perjudicial entre dos creencias explícitas (vicio nuevo: narrative bundling).
+4. **Investigación multimodal open-web real** (no simulaciones): validez ecológica.
+5. **Escenarios diseñados (probes)**: convierten en mecánicos vicios que en trazas naturales exigirían juez humano.
 
-La taxonomía cualitativa del paper se organiza por la columna derecha: una **anatomía de las desviaciones del razonador bayesiano** en investigación agéntica real. Cautela de positioning: la literatura "are LLMs Bayesian" usa puzzles de probabilidad — la novedad nuestra es medirlo mecánicamente en investigación open-world, secuencial, multimodal, con el óptimo bayesiano como punto fijo del reward.
+Contra el riesgo "CORRAL ya lo hizo": menos categorías, observables explícitos, validación semántica, intervenciones que identifican lo que CORRAL solo podía anotar, y descubrimiento de vicios nuevos.
 
-## Venue target
+## Venue
 
-NeurIPS Datasets & Benchmarks o ICLR (benchmark + method). Decidir con resultados en mano.
+Codex R4 (con el diseño corregido): **7/10 en NeurIPS D&B, ACL/EMNLP main, e ICLR main**; 8/10 si las probes predicen fallos en siblings naturales Y hay provenance failure entre outcomes correctos. Decisión de venue según el titular final (artifact→D&B; taxonomía/provenance→ACL/EMNLP; método de probes→ICLR). Decidir con resultados.
 
 ---
 
-## Claims → evidencia → estado
+## El doble motor (la estructura del paper)
 
-### C1 — Las proper scoring rules geodésicas hacen optimizable la calibración investigativa (el mecanismo)
-- **Evidencia**: teoría (log-score estrictamente proper, telescopía del reward denso) + tests sintéticos (ordenamiento canónico, properness por Monte Carlo, divergencia log vs energy score ante el confiado-equivocado).
-- **Estado**: ✅ listo (commits `c86a8fd`). Sección Methods escribible hoy.
+**Confirmatorio (rigor sobre lo conocido)** + **Exploratorio (descubrimiento de lo desconocido)**. Detalle y guardrails en `pivot_2026-07_censo_vicios.md §1`. Descubrir ≠ confirmar, en particiones distintas.
 
-### C2 — Los modelos comerciales PUEDEN reportar creencias útiles sin colapsar (viabilidad de la elicitación)
-- **Evidencia**: smokes + pilot: report_belief espontáneo en step 1, hedging con masa "no sé", radios sensatos, 0 rechazos de validación estructural en N corridas.
-- **Estado**: 🟡 confirmado cualitativamente; cuantificar con pilot completo (180 runs).
+## Contribuciones (claims que el paper defiende)
 
-### C3 — La trayectoria de creencias revela lo que el outcome oculta (el argumento central)
-- **Sub-claims con evidencia ya observada (N chico, pendiente pilot completo)**:
-  - (a) **Lock-in narrativo cross-eje**: la misma evidencia web que arregla ubicación contamina datación (Estocolmo ×2: year belief w_truth 0.35 → 0.08 mientras location converge a 1.5 km). Outcome-only lo llama éxito.
-  - (b) **Investigación muerta medible**: % de belief reports con reward ≤ 0 (≈48% en datos parciales de mini).
-  - (c) **Percepción >> búsqueda en información ganada**: el salto de nats del step 1 (pura percepción) domina la curva (+11.7 de +12.6 en Estocolmo; +12.7 de +20.5 en Montevideo).
-- **Estado**: 🟡 pilot completo + análisis. ESTE es el claim que el análisis cualitativo debe poblar con taxonomía de failure modes.
+### K1 — Disociación outcome ↔ proceso (la headline)
+Modelos que resuelven la tarea (opus mediana ~0-1 km) igual exhiben fallas de proceso: citas sin sustento incluso acertando (pilot: run a 0.4 km con 0/5 citas válidas). **Evidencia**: benchmark outcome + tasas de procedencia. **Estado**: núcleo; requiere verificación semántica (probe P3 + puente natural).
 
-### C3b — El PIVOTEO (belief revision ante evidencia/dead-ends) es la capacidad que separa investigadores — y la medimos mecánicamente ⭐ EJE CENTRAL
-- **Tesis (dirección fijada por Lucas, 2026-06-12)**: cambiar de hipótesis ante nueva evidencia o dead-ends es LO clave para que los modelos investiguen mejor. CORRAL lo midió con judge (refutation_driven_belief_revision, 26% de traces); nosotros lo medimos mecánico: cada switch del candidato top lleva un reward firmado → **pivot productivo** (hacia la verdad) vs **dañino** (lejos). `PROJECT.md` ya lo lista como presión evolutiva ("Pivoteo") — esto lo operacionaliza.
-- **Métricas implementadas**: switches/run, pivot_productive_rate; **pendientes para el análisis**: pivot latency (steps entre evidencia contradictoria y el switch), missed pivots (dead-end visible sin movimiento de creencia — cruza con dead-report rate), correlación pivoteo↔outcome dentro de modelo (no solo entre modelos).
-- **Evidencia interina (mini+sonnet, parcial)**: sonnet 3.2 switches/run con 59% productivos y mediana 1 km; mini 1.6 con 38% y mediana 477 km. El mejor investigador pivotea MÁS y MEJOR.
-- **Estado**: 🟡 métricas básicas corriendo; el análisis cualitativo debe poblar los triggers (¿QUÉ evidencia gatilla pivots buenos? ¿qué dead-ends se ignoran?).
+### K2 — Batería de probes: medición mecánica de vicios sin LLM-judge
+Escenarios diseñados donde diagnosticidad/veracidad/dominancia se conocen por construcción → el label es mecánico. Familias: contradicción (P1), parada (P2), procedencia sembrada (P3), verificación (P4), spillover cross-eje (P5). **Principio no negociable** (Codex R4): la probe formaliza qué sabe EL AGENTE y qué decisión está dominada — "nosotros sabemos que era falso" no alcanza. **Estado**: diseñada, a implementar (spec en pivot doc §7b).
 
-### C4 — El benchmark discrimina modelos en dimensiones que la distancia no ve
-- **Evidencia esperada**: tabla cross-model (mini/sonnet/opus × on/off × N=3): lock-in rate, dead-report rate, calibración (reward total), switches, citas válidas — vs ranking por distancia.
-- **Estado**: 🔴 esperando pilot. Si los rankings por proceso ≠ rankings por distancia → claim fuerte. Réplica del hallazgo E009 ("tier comercial no predice") con la métrica nueva.
+### K3 — Regulación de creencias como par bipolar (el eje central de Lucas, operacionalizado)
+wrong entrenchment ↔ correct abandonment + recovery, medido por first-passage/survival sobre trayectorias probabilísticas y por P1. No "terquedad/credulidad" (intención no identificada) sino firmas conductuales. **Estado**: mecánico observacional + probe.
 
-### C5 — La fabricación/mis-citación de evidencia es medible mecánicamente y varía por modelo
-- **Evidencia**: evidence_chain con citas (step, tool) verificadas contra el log. Datos parciales: solo ~30% de citas estructuralmente válidas (mini). Verificador semántico (claim vs payload real) pendiente.
-- **Estado**: 🟡 estructural listo; semántico por construir (LLM compara claim vs payload registrado — es verificación contra log, no judge libre).
+### K4 — Integridad de procedencia (el diferencial #1)
+Coverage / citation fidelity / hallucinated pointer / correct-outcome provenance. Mecánico exhaustivo en evidencia natural (estructural) + semántico exacto en evidencia sembrada (P3) + puente humano de ~200 pares claim-fuente naturales. **Estado**: estructural hecho (pilot); semántico por construir.
 
-### C6 — La elicitación de creencias tiene un costo medible (honestidad metodológica)
-- **Evidencia**: brazo on vs off pareado por foto. Señal preliminar (N=1, harness viejo): on peor en mediana. Si se confirma: la medición perturba — se reporta como tradeoff del método con su magnitud, no se esconde.
-- **Estado**: 🔴 esperando pilot. CUALQUIER resultado es publicable (interfiere → tradeoff cuantificado; no interfiere → método gratis).
+### K5 — Verificación de paja (contribución conceptual)
+Distinguir `dominated test choice` (adquisición incompetente) de `straw verification` (declarar "verified" tras resultado no-diagnóstico — el vicio real). Probe P4 con dominancia formal + output estructurado. **Estado**: por construir; es el vicio que más pierde al pasar a probe → acompañar con observacional natural.
 
-### C7 — Anti-shortcut + certificación hindsight = corpus defendible
-- **Evidencia**: pipeline existente (blur, phash, blacklist, atacante) + certificación retrospectiva de resolubilidad (10 fotos piloto documentadas; protocolo definido).
-- **Estado**: 🟡 protocolo v1 listo; escalar post-E016. Responde al reviewer "¿cómo saben que las no resueltas son resolubles?".
+### K6 — Vicios NUEVOS descubiertos (contribución tipo-CORRAL, el aporte del motor exploratorio)
+narrative bundling / cross-axis binding failure (P5 diff-in-diff), provenance reconstruction (cita reconstruida), single-cue dominance — MÁS los que la revisión exploratoria a escala descubra. **Estado**: 3 candidatos del development; lista abierta por diseño.
 
-### C8 (secundario) — El harness importa: bugs de tools confunden conclusiones de behavior
-- **Evidencia**: harness review (13 bugs; pick muerto desde mayo, nearby jamás cableado) → la conclusión previa "tools visuales infrautilizadas" estaba parcialmente confundida. Comparación pre/post fix posible con E009 vs pilot.
-- **Estado**: ✅ documentado. Candidato a sección de lecciones / apéndice — honestidad metodológica que diferencia.
+### K7 — Perfiles por modelo + validez ecológica
+Qué modelo sufre qué vicio (el "consumer report" epistémico) + diseño sibling (¿la susceptibilidad en probe predice recovery/abandono/stopping/outcome en la rama natural del mismo prefijo?). **Estado**: por correr.
 
----
+## Qué se RETIRÓ (para que no reaparezca disfrazado de nuevo)
 
-## Estructura tentativa del paper
+De la versión belief-state de junio, RETIRADO por la crítica Codex R1 (aceptada):
+- "El óptimo del reward es el investigador bayesiano por construcción" / "medimos bayesianidad" como TESIS. (La geolocalización bayesiana queda como inspiración, no como claim.)
+- Incentive compatibility como argumento sobre modelos prompteados.
+- Reward telescópico como contribución de process supervision (los intermedios se cancelan).
+- Labels normativos por-evento sin intervención ("este pivot fue productivo", "esta búsqueda fue investigación muerta"): pasan a tasas poblacionales / probes / anclas cualitativas.
+- Switches count y "pivot productivo = reward>0" como métrica (matemáticamente acoplada al outcome).
+- Evidence-chain estructural como prueba de "fabricación" (es fallo de procedencia, no fabricación).
+- H1/H2/H3 como leyes causales de capacidad (quedan como observaciones + contrastes intra-familia).
+- Año como eje co-primario (secundario, resolución decadal).
+- Best-of-N / training demo (otro paper).
 
-1. **Intro** — el gap: process eval descriptivo y judge-dependiente; nuestra propuesta. (escribible ~hoy)
-2. **Related work** — landscape ya consolidado en `process_eval_landscape.md`. (escribible hoy)
-3. **Method** — belief elicitation + scoring rules + reward denso + evidence chains + budget + certificación hindsight. (escribible hoy, C1)
-4. **Benchmark setup** — corpus histórico, anti-shortcut, 12+2 tools, scaffold. (escribible hoy)
-5. **Experiments** — E016: cross-model × on/off × N=3. (bloqueado por datos)
-6. **Results quant** — C4 + C6 + C5. (bloqueado)
-7. **Qualitative analysis** ⭐ — taxonomía de failure modes con las curvas como evidencia mecánica: lock-in narrativo cross-eje, investigación muerta, fabricación de citas, percepción vs búsqueda. (bloqueado; protocolo: digest + viewer + autopsias sistemáticas)
-8. **Limitations** — interferencia de elicitación (C6), helper LLM en web_search (mitigado a extractivo), n=10 fotos pilot (escalar), un solo idioma de prompt, IAA pendiente si usamos annotator.
-9. **Lecciones de harness** (C8, opcional/apéndice).
+Lo que SE CONSERVA de junio: la MAQUINARIA (report_belief, scorer geodésico como instrumento de medición proper-en-la-clase, evidence chains, viewers, budget, annotator CORRAL para labels semánticos). Ver `belief_state_redesign.md` (marcado como maquinaria-vigente / claims-retirados).
 
----
+## Escala y método (Codex R3/R4)
+
+- **Corpus**: audit split 80 (representativo, para prevalencia) + challenge split 40 (difícil, para benchmark no-saturado). 120 fuerte, 80 floor. Las 10 fotos actuales = development.
+- **Modelos**: 6, ≥3 familias, ≥1 open-weight, escaleras intra-familia; N=3; intercalados temporalmente; tool outputs cacheados/versionados.
+- **Humano**: NO 300 dobles-anotadas. Sí: revisión de templates por 2 personas; spot-checks (30-100 por probe); ~200 pares claim-fuente naturales; "muchas" trazas para descubrimiento exploratorio; 12-30 case studies.
+- **Stats**: efectos mixtos por foto, survival/hazard para switches/parada, offset por tool-calls en conteos, leave-photo-out incremental, FDR por familia de vicios, split-half reliability de perfiles. Nada causal sin intervención.
+- **Artifact**: probes + payloads sembrados + prefijos congelados = redistribuible (la parte sintética resuelve el problema de licencias que la web viva no).
+
+## Riesgos (firmados por Codex, a mitigar)
+
+- **#1**: que "vicio" sea interpretación post-hoc de proxies (confundir persistencia con terquedad, cambio con credulidad, actividad con verificación, falta de soporte con fabricación). → nombres conductuales, observables explícitos, validación semántica.
+- **#2**: overlap CORRAL. → disociación como tesis, intervenciones, vicios nuevos.
+- Detección de la inyección / demand effects en las probes. → placebos mismo-formato, tools documentadas desde el inicio, manipulation check de indistinguibilidad.
+- Saturación. → challenge split.
+- Base rates: pocos checkpoints elegibles por saturación de opus. → cuotas de elegibilidad, sampling adaptativo, no publicar rate de celda <30.
 
 ## Plan de ejecución (orden)
 
-| # | Tarea | Bloqueado por | Quién |
-|---|---|---|---|
-| 1 | Pilot 180 runs | — (corriendo) | máquina |
-| 2 | Tablas quant + digest (`analyze_e016.py`) | 1 | Fable |
-| 3 | **Autopsias cualitativas sistemáticas** → taxonomía failure modes → `research/notes/E016_findings.md` | 2 | Fable + user (revisión) |
-| 4 | Decisión: ¿el mecanismo valida? (criterios de `belief_state_redesign.md` §6) | 3 | user |
-| 5 | Verificador semántico de claims (claim vs payload del log) | 2 | Fable |
-| 6 | Validación user de certificaciones + escalar corpus certificado (30-50 fotos) | 4 | user + Fable |
-| 7 | Main run del paper: +gpt-5.4, grok, kimi (la tabla cross-model headline) | 4, 6 | máquina |
-| 8 | Secciones 1-4 del paper (no bloqueadas) | — | Fable, en paralelo |
-| 9 | Results + qualitative + limitations | 7 | Fable + user |
+1. **Codebook v1**: spec por vicio (definición, inclusión/exclusión, contraejemplo, observable, nivel M/H/X) + spec de cada probe (contrato de información del agente, dominancia, controles). Congelar antes del confirmatorio. Usa E009/E010/E016 como development.
+2. **Implementar la batería de probes** en el scaffold + smoke test 1 modelo.
+3. **Motor exploratorio v1**: pasada humana+AI sobre el development set → refinar codebook + candidatos a vicios nuevos.
+4. **Corpus**: audit split + challenge split (certificación hindsight).
+5. **Main run** (natural + probes) + análisis + case studies + puente de procedencia.
+6. Redacción por venue.
 
-**Riesgos del plan**: (a) si C6 da interferencia grande, el framing cambia a "post-hoc scoring de trayectorias off-arm + belief arm como instrumento" — el mecanismo sobrevive, el protocolo se ajusta; (b) cuota Street View en el main run (correr en tandas); (c) n=10 fotos es chico para C4 con significancia — el main run necesita el corpus certificado escalado (paired bootstrap, pre-registrar hipótesis primaria, ver landscape §4).
+Docs vivos: este outline + `pivot_2026-07_censo_vicios.md` (canónico). Al cambiar la dirección otra vez, actualizar AMBOS y marcar lo superseded.

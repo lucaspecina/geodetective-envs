@@ -1,6 +1,8 @@
 # GeoDetective Envs — Estado Actual
 
-> **Mayo 2026**: agente investigador funcional con stack completo de 12 tools end-to-end. Concepto del benchmark **VALIDADO** sobre fotos de PastVu (sweet spot identificado, filtro adversarial v2 funcionando, mejora 300x con tools en el caso ideal). **Corpus v2 cerrado** (2026-05-22): 151 fotos finales balanceadas país×década post-selección manual, blacklist consolidada de 390 cids para futuros sampleos. Pivote framing benchmark primario activo (env como deuda futura) — ver disclaimer en `PROJECT.md`.
+> **DIRECCIÓN VIGENTE (julio 2026): AUDITORÍA COMPORTAMENTAL DE VICIOS INVESTIGATIVOS.** Tras la sesión de diseño adversarial con Codex (2026-07-13, 4 rondas), el paper es una **auditoría del proceso investigativo** de agentes con tools sobre el benchmark detective geo+temporal: no solo scores contra GT, sino **vicios de investigación** (regulación de creencias, parada, procedencia de evidencia, verificación de paja) — los conocidos y **los que descubramos**. Doble motor: probes diseñadas (medición mecánica) + revisión exploratoria humana+AI (descubrimiento). Tesis: *outcome correcto y proceso auditable son dimensiones distintas*. Doc canónico: `research/synthesis/pivot_2026-07_censo_vicios.md`; vista paper: `research/synthesis/paper_outline.md`. El pivote belief-state de junio quedó con la MAQUINARIA vigente pero los CLAIMS teóricos retirados (ver `belief_state_redesign.md`).
+>
+> **Base construida (mayo-junio 2026)**: agente investigador funcional, 12 tools end-to-end, corpus v2 (151 fotos balanceadas), harness robusto post-review (15+ bugs arreglados), instrumentación belief-state (`report_belief` + scorer geodésico + evidence chains + budget), pilot E016 (180 corridas, 3 modelos × 10 fotos × N=3 × {belief on/off}) con findings cualitativos.
 >
 > Para visión y norte: `PROJECT.md` · Para roadmap: [Project v2](https://github.com/users/lucaspecina/projects/6) · Para historial: `CHANGELOG.md`.
 

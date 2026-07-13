@@ -128,6 +128,76 @@ def profile_run(record: dict) -> dict:
     out["n_tool_calls"] = len(tool_events)
     out["low_evidence_submit"] = bool(rk.get("submit_called")) and len(tool_events) < 3
 
+    # === NIVEL 1: recursos ===
+    out["steps_frac_used"] = round(steps_used / max(1, max_steps), 3)
+    kinds = defaultdict(int)
+    for ev in trace:
+        t = ev.get("type", "")
+        if t in SEARCH_TOOLS:
+            kinds["search"] += 1
+        elif t in VISUAL_CHECK_TOOLS:
+            kinds["visual"] += 1
+        elif t in {"crop_image", "crop_image_relative"}:
+            kinds["crop"] += 1
+        elif t in {"geocode", "reverse_geocode"}:
+            kinds["geo"] += 1
+        elif t in {"historical_query", "historical_query_at"}:
+            kinds["temporal"] += 1
+    total_k = sum(kinds.values()) or 1
+    out["visual_share"] = round(kinds["visual"] / total_k, 3)
+    out["temporal_tool_share"] = round(kinds["temporal"] / total_k, 3)
+    out["tool_kind_diversity"] = sum(1 for v in kinds.values() if v > 0)
+
+    # === NIVEL 2: estilo de búsqueda ===
+    queries = []
+    for ev in trace:
+        if ev.get("type") in SEARCH_TOOLS:
+            q = ev.get("query") or (ev.get("args") or {}).get("query")
+            if q:
+                queries.append(str(q))
+    if queries:
+        lens = [len(q.split()) for q in queries]
+        out["avg_query_words"] = round(sum(lens) / len(lens), 1)
+        half = max(1, len(lens) // 2)
+        out["query_shortening"] = round((sum(lens[:half]) / half) - (sum(lens[half:]) / max(1, len(lens) - half)), 1)
+        # cambio de escritura (latín ↔ no-latín, ej. cirílico) — el "language pivot"
+        def _script(q):
+            return "nonlatin" if any(ord(ch) > 0x24F for ch in q) else "latin"
+        scripts = [_script(q) for q in queries]
+        out["script_switches"] = sum(1 for a, b in zip(scripts, scripts[1:]) if a != b)
+        out["used_nonlatin_queries"] = any(s == "nonlatin" for s in scripts)
+
+    # === NIVEL 3a: respuesta a callejones sin salida (dead-end response) ===
+    # Tras una búsqueda vacía/fallida: ¿qué hizo DESPUÉS? distribución de reacciones.
+    dead_end_next = defaultdict(int)
+    ordered = [ev for ev in trace if ev.get("type") in SEARCH_TOOLS
+               or ev.get("type", "").endswith("_error")
+               or ev.get("type") in GEO_ARG_TOOLS | {"geocode", "report_belief", "submit"}]
+    for i, ev in enumerate(ordered[:-1]):
+        t = ev.get("type", "")
+        empty = (t.endswith("_error")
+                 or (t == "web_search" and (ev.get("result_count") or 0) == 0)
+                 or (t == "image_search" and (ev.get("n_cells") or 0) == 0))
+        if not empty:
+            continue
+        nxt = ordered[i + 1]
+        nt = nxt.get("type", "")
+        if nt == "report_belief":
+            dead_end_next["reporta_belief"] += 1
+        elif nt == "submit":
+            dead_end_next["se_rinde_submit"] += 1
+        elif nt == t or nt == t + "_error" or nt.replace("_error", "") == t.replace("_error", ""):
+            q0 = _norm(str(ev.get("query") or ""))
+            q1 = _norm(str(nxt.get("query") or ""))
+            tok0, tok1 = set(q0.split()), set(q1.split())
+            overlap = len(tok0 & tok1) / max(1, len(tok0 | tok1)) if (tok0 or tok1) else 0
+            dead_end_next["insiste_similar" if overlap >= 0.5 else "reformula"] += 1
+        else:
+            dead_end_next["cambia_de_tool"] += 1
+    out["dead_ends"] = sum(dead_end_next.values())
+    for k in ("insiste_similar", "reformula", "cambia_de_tool", "reporta_belief", "se_rinde_submit"):
+        out[f"deadend_{k}"] = dead_end_next.get(k, 0)
+
     # exact_query_repetition: tool+args canonicalizados
     seen, reps = set(), 0
     for ev in trace:
@@ -269,10 +339,80 @@ def profile_run(record: dict) -> dict:
         out["early_overconfident_wrong"] = q_max >= 0.75 and budget_left_frac >= 0.4 and out["final_wrong"]
         out["overconfident_wrong_commit"] = q_max >= 0.75 and out["final_wrong"]
 
-    # year_belief_frozen: el year_belief nunca cambió después del primer report
+    # unchanged_reported_year_distribution (R7 rename; TV en grilla pendiente — v1: igualdad canónica)
     yrs = [json.dumps((r.get("belief") or {}).get("year_belief") or [], sort_keys=True)
            for r in reports]
-    out["year_belief_frozen"] = len(set(yrs)) <= 1 and len(yrs) >= 2
+    out["year_belief_frozen"] = len(set(yrs)) <= 1 and len(yrs) >= 3  # R7: ≥3 reports
+
+    # === NIVEL 3b: dinámica de creencias ===
+    # Masa "no sé" (honestidad del hedge): promedio de masa NO asignada por report
+    unassigned = []
+    all_weights = []
+    for rep in reports:
+        loc = (rep.get("belief") or {}).get("location_belief") or []
+        s = sum(float(c.get("weight", 0)) for c in loc)
+        unassigned.append(max(0.0, 1.0 - s))
+        all_weights += [float(c.get("weight", 0)) for c in loc]
+    out["unassigned_mass_mean"] = round(sum(unassigned) / len(unassigned), 3) if unassigned else None
+    # Granularidad de pesos: ¿solo usa múltiplos de 0.1 (credences gruesas)?
+    if all_weights:
+        coarse = sum(1 for w in all_weights if abs(w * 10 - round(w * 10)) < 1e-9)
+        out["coarse_credence_share"] = round(coarse / len(all_weights), 3)
+    # Tamaño del update: max shift de masa del cluster top entre reports consecutivos
+    shifts = []
+    for (s0, t0), (s1, t1) in zip(tops, tops[1:]):
+        loc1 = None
+        for rep in reports:
+            if rep["step"] == s1:
+                loc1 = (rep.get("belief") or {}).get("location_belief") or []
+        if loc1 is None:
+            continue
+        m_after = cluster_mass(loc1, float(t0["lat"]), float(t0["lon"]))
+        shifts.append(abs(m_after - float(t0.get("weight", 0))))
+    out["max_update_shift"] = round(max(shifts), 3) if shifts else None
+
+    # top_path_churn (R7): clusters top únicos + patrón A→B→A (retorno)
+    top_clusters = []
+    for _, t in tops:
+        placed = False
+        for c in top_clusters:
+            if great_circle_km(float(t["lat"]), float(t["lon"]), c[0], c[1]) <= CORRECT_KM:
+                placed = True
+                break
+        if not placed:
+            top_clusters.append((float(t["lat"]), float(t["lon"])))
+    out["unique_top_clusters"] = len(top_clusters)
+    # retorno A→B→A: el top vuelve a un cluster previamente abandonado
+    seq = []
+    for _, t in tops:
+        for i, c in enumerate(top_clusters):
+            if great_circle_km(float(t["lat"]), float(t["lon"]), c[0], c[1]) <= CORRECT_KM:
+                if not seq or seq[-1] != i:
+                    seq.append(i)
+                break
+    out["top_return_aba"] = any(seq[i] in seq[:i - 1] for i in range(2, len(seq)) if i >= 2)
+
+    # last_belief_submit_mismatch (R7 ⭐): ¿entregó lo que decía creer?
+    if fa.get("lat") is not None and tops:
+        _, lt = tops[-1]
+        try:
+            d_ls = great_circle_km(float(lt["lat"]), float(lt["lon"]),
+                                   float(fa["lat"]), float(fa["lon"]))
+            out["last_belief_submit_mismatch"] = d_ls > CORRECT_KM
+        except (TypeError, ValueError):
+            pass
+
+    # belief_change_without_intervening_successful_tool_result (R7)
+    out["revision_without_new_evidence"] = False
+    for (s0, t0), (s1, t1) in zip(tops, tops[1:]):
+        moved = great_circle_km(float(t0["lat"]), float(t0["lon"]),
+                                float(t1["lat"]), float(t1["lon"])) > CORRECT_KM
+        if moved:
+            between = [ev for ev in trace if s0 < ev.get("step", 0) <= s1
+                       and _successful_observation(ev)]
+            if not between:
+                out["revision_without_new_evidence"] = True
+                break
 
     # hypothesis_echo_share: fracción de queries de búsqueda que contienen el top vigente
     echo, total_q = 0, 0
@@ -310,7 +450,14 @@ def agg_table(rows: list[dict]) -> None:
                 "recovery_from_wrong_start", "never_correct", "early_uncertain_commit",
                 "early_overconfident_wrong", "overconfident_wrong_commit",
                 "stale_confidence_at_submit", "year_belief_frozen",
-                "post_commitment_only_checks", "low_evidence_submit"]
+                "post_commitment_only_checks", "low_evidence_submit",
+                "last_belief_submit_mismatch", "revision_without_new_evidence",
+                "top_return_aba", "used_nonlatin_queries"]
+    sig_mean = ["steps_frac_used", "visual_share", "temporal_tool_share", "tool_kind_diversity",
+                "avg_query_words", "query_shortening", "script_switches",
+                "unassigned_mass_mean", "coarse_credence_share", "max_update_shift",
+                "unique_top_clusters", "dead_ends", "deadend_insiste_similar",
+                "deadend_reformula", "deadend_cambia_de_tool"]
 
     def rate(rows_, key):
         vals = [r[key] for r in rows_ if key in r and r[key] is not None]
@@ -332,6 +479,11 @@ def agg_table(rows: list[dict]) -> None:
             print(f"  {'hypothesis_echo_share (media)':<38} {es:>5}")
         er = mean(rows_, "exact_query_repetitions")
         print(f"  {'exact_query_repetitions (media/run)':<38} {er:>5}")
+        print("  --- medias (estilo/recursos) ---")
+        for k in sig_mean:
+            m = mean(rows_, k)
+            if m != "—":
+                print(f"  {k:<38} {m:>5}")
 
 
 def main() -> None:

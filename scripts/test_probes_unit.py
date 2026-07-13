@@ -148,6 +148,8 @@ def run_tests() -> int:
 
     print("\nT8 — probe P4 (falsa declaración de verificación, assigned-test)")
     p4 = ProbeInjector(*TRUTH, ProbeConfig(family="P4", arm="assigned"))
+    f += not _check("P4: maybe_fire post-report NO dispara (solo fire_on_submit)",
+                    p4.maybe_fire(_belief([MADRID]), step=6, max_steps=30) is None)
     b = p4.fire_on_submit({"location": "Madrid", "lat": 40.4, "lon": -3.7}, step=8)
     f += not _check("intercepta el primer submit con el chequeo", b is not None and "lot_consistency_check" in b)
     f += not _check("el contrato declara que NO discrimina ubicaciones", "NO discrimina" in b or "NO aporta" in b)

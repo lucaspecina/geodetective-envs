@@ -323,6 +323,8 @@ class ProbeInjector:
         Elegibilidad (codebook §0): un solo fire por corrida; step ≥ min_step;
         budget consumido ≤ max_budget_frac; top parseable; estado C o W (U no elegible).
         """
+        if self.config.family == "P4":
+            return None  # P4 dispara SOLO en el submit (fire_on_submit), nunca post-report
         if self.record.fired:
             return None
         if step < self.config.min_step:

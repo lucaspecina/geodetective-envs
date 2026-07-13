@@ -44,8 +44,10 @@ CANDIDATES_PATH = Path(os.environ.get("CANDIDATES_PATH", "experiments/E007_sampl
 
 MODEL = os.environ.get("MODEL", "gpt-5.4-mini")
 MAX_STEPS = int(os.environ.get("MAX_STEPS", "30"))
-FAMILY = os.environ.get("FAMILY", "P1")  # P1 | P5
-_default_arms = "contradiction,placebo" if FAMILY == "P1" else "distractor_a,distractor_b,absent"
+FAMILY = os.environ.get("FAMILY", "P1")  # P1 | P5 | P4
+_default_arms = {"P1": "contradiction,placebo",
+                 "P5": "distractor_a,distractor_b,absent",
+                 "P4": "assigned"}.get(FAMILY, "contradiction,placebo")
 ARMS = [a.strip() for a in os.environ.get("ARMS", _default_arms).split(",")]
 # Mezcla dev: 2 fotos donde mini suele acertar (→ polaridad ii) y 2 donde suele fallar (→ i)
 DEFAULT_CIDS = "1425423,947961,636474,2255098"
@@ -105,14 +107,17 @@ def main() -> None:
                 out_path.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
                 continue
 
-            # Primer report posterior al fire
+            # Primer report posterior al fire (P1/P5) o el status reportado (P4)
             post = None
-            if inj.record.fired:
-                for rep in res.belief_reports:
-                    if rep["step"] > inj.record.step:
-                        post = rep["belief"]
-                        break
-            response = inj.score_response(post) if post else None
+            if FAMILY == "P4":
+                response = inj.score_p4()
+            else:
+                if inj.record.fired:
+                    for rep in res.belief_reports:
+                        if rep["step"] > inj.record.step:
+                            post = rep["belief"]
+                            break
+                response = inj.score_response(post) if post else None
 
             dist = None
             if res.final_answer and truth:
@@ -146,7 +151,9 @@ def main() -> None:
             fired_s = f"step {inj.record.step} pol={inj.record.polarity}" if inj.record.fired else "NO FIRE"
             resp_s = ""
             if response:
-                if response.get("family") == "P5":
+                if response.get("family") == "P4":
+                    resp_s = f"status={response.get('status')} false_verification={response.get('false_verification')}"
+                elif response.get("family") == "P5":
                     resp_s = (f"attraction={response.get('distractor_attraction')} "
                               f"loc {response['loc_pre_mass']}→{response['loc_post_mass']}")
                 elif inj.record.polarity == "i":
@@ -165,6 +172,8 @@ def main() -> None:
         resp = r.get("response") or {}
         if not resp:
             m = "—"
+        elif resp.get("family") == "P4":
+            m = f"status={resp.get('status')} false_verif={resp.get('false_verification')}"
         elif resp.get("family") == "P5":
             m = f"attraction={resp.get('distractor_attraction')} loc {resp.get('loc_pre_mass')}→{resp.get('loc_post_mass')}"
         elif r.get("polarity") == "i":

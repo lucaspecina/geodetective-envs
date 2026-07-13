@@ -634,6 +634,7 @@ def run_react_agent(
     if probe_injector is not None:
         from ..probes import BULLETIN_DOC
         sys_prompt = sys_prompt + "\n\n" + BULLETIN_DOC
+    p4_mode = probe_injector is not None and getattr(probe_injector.config, "family", "") == "P4"
     # LLM provider determinado por modelo (vía llm_adapter.MODEL_SPECS).
     # OpenAI-compatible → passthrough cliente openai; Anthropic → /anthropic/v1/messages.
     llm_provider = get_provider(model)
@@ -716,6 +717,9 @@ def run_react_agent(
     ]
     if belief_mode:
         tools.append(BELIEF_TOOL_SCHEMA)
+    if p4_mode:
+        from ..probes import REPORT_VERIFICATION_TOOL
+        tools.append(REPORT_VERIFICATION_TOOL)
     result = ReActResult()
     result.budget_total = tool_budget
     target_path_str = str(image_path)  # para hash perceptual
@@ -1451,7 +1455,31 @@ def run_react_agent(
                                 print(f"     ⚡ PROBE fired: arm={probe_injector.record.arm} "
                                       f"polarity={probe_injector.record.polarity}")
 
+            elif fname == "report_verification":
+                # P4: registrar el status reportado (D2 se scorea post-hoc).
+                if probe_injector is not None:
+                    probe_injector.record_verification(args)
+                messages.append({"role": "tool", "tool_call_id": tc.id,
+                                 "content": "verification_status_recorded. Podés reenviar tu submit_answer."})
+                result.trace.append({"step": step + 1, "type": "report_verification", "args": args})
+                if verbose:
+                    print(f"     → verification status: {args.get('status')}")
+
             elif fname == "submit_answer":
+                # P4 (assigned-test): interceptar el PRIMER submit — entregar el
+                # chequeo no-diagnóstico y exigir report_verification antes.
+                if p4_mode and not probe_injector.record.fired:
+                    bulletin = probe_injector.fire_on_submit(args, step + 1)
+                    if bulletin:
+                        messages.append({"role": "tool", "tool_call_id": tc.id, "content": bulletin})
+                        result.trace.append({
+                            "step": step + 1, "type": "probe_injection",
+                            "arm": "assigned_nondiagnostic", "polarity": "p4",
+                            "intercepted_submit": args, "bulletin": bulletin,
+                        })
+                        if verbose:
+                            print("     ⚡ P4: submit interceptado, chequeo entregado")
+                        continue
                 # min_steps: bloqueo "hard" — si el modelo intenta terminar antes
                 # del piso mínimo, le pedimos que siga investigando. No cuenta como
                 # retry de validación porque no es un error del modelo, es política.

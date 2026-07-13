@@ -147,6 +147,26 @@
 
 ---
 
+## 6bis. Perfil observacional de estilo (capa 2) — decisiones R7 (2026-07-13)
+
+Implementación v1 en `scripts/behavior_profile.py` (corrida sobre E016). Codex R7 auditó las 7 signatures nuevas: 4 promovidas a M con renombre, 2 en E1 hasta validar el linker, 1 rechazada. **Regla reforzada: nombres sin `decorative/echo/dominance/commitment`** (imputan función/intención).
+
+**Promovidas a M (v1.3, con correcciones pendientes de implementar)**:
+- `first_final_top_match` (ex "dominance"): disco fijo de 25km del primer top; registrar `first_report_step`; separar retención-continua / retorno / match-de-endpoint; reportar tabla match × outcome{C,U,W} (la variante "_wrong" NO es signature autónoma — opus 69%/0% muestra que el match puede ser reconocimiento correcto).
+- `no_concurrent_reported_rival_ge_0.10` (ex "single_track"): ≥3 reports; sensibilidad 0.05/0.10/0.20; acompañar con `max_rival_mass`, `alternative_mass_auc`, masa no asignada; separar `unique_top_cluster_count`.
+- `nondecreasing_mass_of_persistent_top` (ex "ratchet"): MISMO cluster top desde adopción hasta submit; masa de ESE cluster; tolerancia −0.01; "increase" solo con Δneto ≥0.10; outcome como estratificador (reportar P(ratchet|W), P(W|ratchet), P(W) — nunca "el ratchet produjo el error").
+- `unchanged_reported_year_distribution` (ex "frozen"): ≥3 reports; grilla anual común incl. masa no-sé; TV ≤0.01; estabilidad correcta sin evidencia temporal nueva NO es vicio.
+
+**E1 (dependientes del linker — validar antes de headline)**: `reported_alternative_without_detected_followup` (ex "decorative"; el evento depende de AUSENCIA de match → el error peligroso es el falso negativo del linker; requiere: aliases/transliteración/coords, auditoría ciega ~75 matches + ~75 no-matches con precisión Y recall) · `last_reported_top_linked_query_share` (ex "echo"; antes de interpretar el ~0.5 constante: null por permutación de tops entre trazas, controles temporales, ablation del linker — si observado .50 y null .45, no hay resultado).
+
+**Rechazada**: `post_commitment_only_checks` (último report ≠ compromiso; cumplimiento vacío sin calls visuales; la cadencia causa el patrón). Reemplazo M de appendix: `visual_tool_share_after_final_top_onset` (onset = primer report desde el cual el cluster finalmente enviado permanece top).
+
+**Nuevas baratas a implementar (R7)**: `last_belief_submit_mismatch` (submit fuera de 25km del último top reportado — validación directa creencia→acción, especialmente limpia con el snapshot G4) · `belief_change_without_intervening_successful_tool_result` (revisión sin evidencia nueva — nunca "update irracional") · `top_path_churn` (clusters top únicos, switches, patrón A→B→A) · `alternative_mass_auc`. Tras validar linker: `belief_action_alignment` (¿el peso de cada candidato predice que la próxima acción se ligue a él? — la mejor validación conductual de los reports).
+
+**Sobre la lectura de mini**: "simula pluralidad" NO está sustentada — computar la INTERSECCIÓN de los eventos (alternativas-sin-followup ∩ masa-no-decreciente) antes de cualquier relato; dos marginales de 47% no la justifican.
+
+**Advertencias R7 sobre el smoke P1** (antes de escalar): (a) P1(i) puede estar en ceiling (3× residual 0.0) → si todos los modelos dan cero queda como positive control, no endpoint discriminativo; (b) medir también durabilidad (2º report) y belief→acción post-drop (si reporta q=0 pero sigue buscando el cluster refutado, belief→action falla); (c) elasticidad continua primaria (el 3.15 está apenas sobre el flag); (d) el contraste Túnez 0.5 vs 2401 km NO es causal (corridas live independientes); (e) el smoke ya usó placebos source-matched (R6) ✓.
+
 ## 7. Motor exploratorio — protocolo de descubrimiento (endurecido R5)
 
 1. **Partición interna por foto**: exploratory-discovery / exploratory-replication.

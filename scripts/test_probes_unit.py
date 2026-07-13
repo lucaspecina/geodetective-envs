@@ -119,6 +119,33 @@ def run_tests() -> int:
     f += not _check("top_candidate por peso", top_candidate([LISBOA_NEAR, PORTO])["name"] == "Porto")
     f += not _check("delta_logit clampea (0 -> 0.01)", delta_logit(0.0, 0.5) > 0)
 
+    print("\nT7 — probe P5 (distractor temporal)")
+    # Solo dispara con top C
+    p5w = ProbeInjector(*TRUTH, ProbeConfig(family="P5", arm="distractor_a", truth_year=1907))
+    f += not _check("P5 NO dispara con top W",
+                    p5w.maybe_fire(_belief([MADRID]), step=5, max_steps=30) is None)
+    p5 = ProbeInjector(*TRUTH, ProbeConfig(family="P5", arm="distractor_a", truth_year=1907))
+    b5 = p5.maybe_fire({"location_belief": [LISBOA_NEAR],
+                        "year_belief": [{"from": 1900, "to": 1915, "weight": 0.6}]},
+                       step=5, max_steps=30)
+    f += not _check("P5 dispara con top C", b5 is not None)
+    f += not _check("distractor_a = GT-25 (1882)", '"publication_year": 1882' in (b5 or ""))
+    f += not _check("declara relation none", "relation_to_target_photo_date" in (b5 or ""))
+    p5abs = ProbeInjector(*TRUTH, ProbeConfig(family="P5", arm="absent", truth_year=1907))
+    b5a = p5abs.maybe_fire({"location_belief": [LISBOA_NEAR], "year_belief": []}, step=5, max_steps=30)
+    f += not _check("brazo absent: SIN context_record, mismo apoyo de ubicación",
+                    "context_record" not in (b5a or "") and "DENTRO" in (b5a or ""))
+    # year_window_mass: rango [1880,1890] w=0.5, ventana 1882±5 → overlap [1880,1887]=7/10
+    m = ProbeInjector.year_window_mass([{"from": 1880, "to": 1890, "weight": 0.5}], 1882, 5)
+    f += not _check("year_window_mass proporcional al overlap", abs(m - 0.5 * 0.7) < 1e-9, f"{m}")
+    # score P5: pre year sin masa en ventana; post con 0.4 en [1880,1884]
+    s5 = p5.score_response({"location_belief": [LISBOA_NEAR],
+                            "year_belief": [{"from": 1880, "to": 1884, "weight": 0.4}]})
+    f += not _check("distractor_attraction = masa atraída a la ventana",
+                    s5 is not None and s5["distractor_attraction"] > 0.3, str(s5))
+    f += not _check("especificidad: loc mass registrada pre/post",
+                    s5["loc_pre_mass"] == 0.4 and s5["loc_post_mass"] == 0.4)
+
     return f
 
 

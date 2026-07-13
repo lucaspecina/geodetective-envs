@@ -44,7 +44,9 @@ CANDIDATES_PATH = Path(os.environ.get("CANDIDATES_PATH", "experiments/E007_sampl
 
 MODEL = os.environ.get("MODEL", "gpt-5.4-mini")
 MAX_STEPS = int(os.environ.get("MAX_STEPS", "30"))
-ARMS = [a.strip() for a in os.environ.get("ARMS", "contradiction,placebo").split(",")]
+FAMILY = os.environ.get("FAMILY", "P1")  # P1 | P5
+_default_arms = "contradiction,placebo" if FAMILY == "P1" else "distractor_a,distractor_b,absent"
+ARMS = [a.strip() for a in os.environ.get("ARMS", _default_arms).split(",")]
 # Mezcla dev: 2 fotos donde mini suele acertar (→ polaridad ii) y 2 donde suele fallar (→ i)
 DEFAULT_CIDS = "1425423,947961,636474,2255098"
 
@@ -55,7 +57,8 @@ def main() -> None:
     cands = {c["cid"]: c for c in all_c if c["cid"] in set(cids)}
 
     EXP_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = EXP_DIR / f"results_{MODEL.replace('.', '_').replace('/', '_')}.json"
+    suffix = "" if FAMILY == "P1" else f"_{FAMILY.lower()}"
+    out_path = EXP_DIR / f"results_{MODEL.replace('.', '_').replace('/', '_')}{suffix}.json"
     results = []
     if out_path.exists():
         try:
@@ -82,7 +85,9 @@ def main() -> None:
             if (cid, arm) in done:
                 print(f"[SKIP done] cid={cid} arm={arm}")
                 continue
-            inj = ProbeInjector(truth[0], truth[1], ProbeConfig(arm=arm, seed=cid))
+            ty = float(cand["year"]) if cand.get("year") else None
+            inj = ProbeInjector(truth[0], truth[1],
+                                ProbeConfig(family=FAMILY, arm=arm, seed=cid, truth_year=ty))
             print(f"\n### cid={cid} arm={arm} | {cand.get('title','')[:50]}")
             t0 = time.time()
             try:
@@ -141,7 +146,10 @@ def main() -> None:
             fired_s = f"step {inj.record.step} pol={inj.record.polarity}" if inj.record.fired else "NO FIRE"
             resp_s = ""
             if response:
-                if inj.record.polarity == "i":
+                if response.get("family") == "P5":
+                    resp_s = (f"attraction={response.get('distractor_attraction')} "
+                              f"loc {response['loc_pre_mass']}→{response['loc_post_mass']}")
+                elif inj.record.polarity == "i":
                     resp_s = f"residual={response['residual_mass']} (pre={response['pre_mass']})"
                 else:
                     resp_s = f"elasticity={response['update_elasticity']} (Δlogit={response['delta_logit']})"
@@ -155,9 +163,14 @@ def main() -> None:
             print(f"{r['cid']:>8} {r['arm']:<13} ERROR: {r['error'][:60]}")
             continue
         resp = r.get("response") or {}
-        m = (f"residual={resp.get('residual_mass')} ret={resp.get('retention_ratio')}"
-             if r.get("polarity") == "i"
-             else f"elasticity={resp.get('update_elasticity')} Δlogit={resp.get('delta_logit')}") if resp else "—"
+        if not resp:
+            m = "—"
+        elif resp.get("family") == "P5":
+            m = f"attraction={resp.get('distractor_attraction')} loc {resp.get('loc_pre_mass')}→{resp.get('loc_post_mass')}"
+        elif r.get("polarity") == "i":
+            m = f"residual={resp.get('residual_mass')} ret={resp.get('retention_ratio')}"
+        else:
+            m = f"elasticity={resp.get('update_elasticity')} Δlogit={resp.get('delta_logit')}"
         d = f"{r['distance_km']}km" if r.get("distance_km") is not None else "NA"
         print(f"{r['cid']:>8} {r['arm']:<13} {str(r['probe_fired']):>5} {str(r.get('polarity') or '-'):>3} "
               f"{str(r.get('pre_mass') or '-'):>6} {m:<38} {d:>8}")

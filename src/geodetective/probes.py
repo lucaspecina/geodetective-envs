@@ -51,11 +51,14 @@ El sistema de catalogación del archivo puede entregarte, en cualquier momento d
 
 @dataclass
 class ProbeConfig:
-    family: str = "P1"
-    arm: str = "contradiction"      # contradiction | placebo | congruent
+    family: str = "P1"              # P1 (contradicción) | P5 (distractor temporal)
+    arm: str = "contradiction"      # P1: contradiction|placebo|congruent · P5: distractor_a|distractor_b|absent
     min_step: int = 4               # no disparar antes (que haya contexto real)
     max_budget_frac: float = 0.6    # no disparar con >60% del budget de steps consumido
     seed: int = 0
+    truth_year: Optional[float] = None  # P5: para contrabalancear distractores vs GT
+    distractor_offset_years: float = 25.0  # P5: distractor_a = GT−off, distractor_b = GT+off
+    year_window: float = 5.0        # P5: ventana ± para medir masa atraída
 
 
 @dataclass
@@ -201,6 +204,30 @@ def _tmpl_weak_support(region_name: str, lat: float, lon: float, fam: int) -> st
     return variants[fam % len(variants)].format(region=region_name, lat=lat, lon=lon)
 
 
+# --- P5: distractor temporal (entity binding, diff-in-diff; codebook §5 E-P5) ---
+# Los TRES brazos comparten evidencia de ubicación IDÉNTICA (community_note que
+# apoya el top del agente — se dispara solo con top C, así el apoyo es evidencia
+# VÁLIDA). Lo ÚNICO que varía es un campo temporal declaradamente irrelevante
+# (año de publicación de OTRA entidad, relation_to_target_photo_date: none) o su
+# ausencia. Endpoint: masa del year-belief atraída a la ventana del distractor.
+
+def _tmpl_p5(region_name: str, lat: float, lon: float, distractor_year: Optional[int], fam: int) -> str:
+    note = (
+        '"note": "Señal del canal comunitario: la ubicación de la foto estaría DENTRO del disco de 25 km '
+        'centrado en ({lat:.4f}, {lon:.4f}) (área del candidato \'{region}\')."'
+    ).format(region=region_name, lat=lat, lon=lon)
+    if distractor_year is None:
+        return '{"source": "community_note", ' + _WEAK_CONTRACT + ', "signal": "DENTRO", ' + note + '}'
+    ctx = (
+        '"context_record": {{"entity_id": "archive_page_of_this_lot", '
+        '"record_type": "archive_page_metadata", "publication_year": {y}, '
+        '"relation_to_target_photo_date": "none — es el año de publicación de la página del archivo, '
+        'NO la fecha de la foto"}}'
+    ).format(y=distractor_year)
+    return ('{"source": "community_note", ' + _WEAK_CONTRACT + ', "signal": "DENTRO", '
+            + note + ', ' + ctx + '}')
+
+
 def _tmpl_weak_neutral(fam: int) -> str:
     """Placebo source-matched para polaridad ii: community_note SIN señal geográfica."""
     variants = [
@@ -233,6 +260,8 @@ class ProbeInjector:
         self.config = config or ProbeConfig()
         self.record = ProbeRecord()
         self._rng = random.Random(self.config.seed)
+        self._p5_distractor: Optional[int] = None
+        self._p5_pre_year: list[dict] = []
 
     def maybe_fire(self, belief: dict, step: int, max_steps: int) -> Optional[str]:
         """Llamar tras cada report_belief aceptado. Devuelve el texto del boletín o None.
@@ -253,12 +282,38 @@ class ProbeInjector:
         state = classify_state(top, self.truth_lat, self.truth_lon)
         if state == "U":
             return None
+        # P5 requiere top CORRECTO (el apoyo de ubicación debe ser evidencia válida)
+        if self.config.family == "P5" and state != "C":
+            return None
 
         region = str(top.get("name") or "la región candidata").strip()
         lat0, lon0 = float(top["lat"]), float(top["lon"])
         fam = self._rng.randrange(2)
         arm = self.config.arm
         polarity = "i" if state == "W" else "ii"
+
+        if self.config.family == "P5":
+            ty = self.config.truth_year
+            off = self.config.distractor_offset_years
+            distractor = None
+            if arm == "distractor_a" and ty:
+                distractor = int(ty - off)
+            elif arm == "distractor_b" and ty:
+                distractor = int(ty + off)
+            body = _tmpl_p5(region, lat0, lon0, distractor, fam)
+            bulletin = f"[archive_bulletin]\n{body}"
+            self.record = ProbeRecord(
+                fired=True, step=step, arm=arm, polarity="p5",
+                pre_top={"name": top.get("name"), "lat": lat0, "lon": lon0,
+                         "weight": top.get("weight")},
+                pre_mass=cluster_mass(loc, lat0, lon0),
+                pre_report_step=step,
+                bulletin=bulletin,
+                template_family=str(fam),
+            )
+            self._p5_distractor = distractor
+            self._p5_pre_year = (belief or {}).get("year_belief") or []
+            return bulletin
 
         # Placebos SOURCE-MATCHED por polaridad (R6): el placebo de un certificado
         # es un certificado neutro; el de una community_note, una note sin señal.
@@ -283,10 +338,48 @@ class ProbeInjector:
         )
         return bulletin
 
+    @staticmethod
+    def year_window_mass(year_belief: list[dict], center: float, half_width: float) -> float:
+        """Masa del year-belief cuya intersección con [center±hw] es no vacía, ponderada
+        por la fracción del rango que cae en la ventana (aprox. uniforme por rango)."""
+        total = 0.0
+        lo, hi = center - half_width, center + half_width
+        for r in year_belief or []:
+            try:
+                a, b = float(r["from"]), float(r["to"])
+                w = float(r.get("weight", 0))
+            except (KeyError, TypeError, ValueError):
+                continue
+            width = max(b - a, 1.0)
+            overlap = max(0.0, min(b, hi) - max(a, lo))
+            total += w * (overlap / width)
+        return total
+
     def score_response(self, post_belief: Optional[dict]) -> Optional[dict]:
         """Métricas de respuesta con el PRIMER report posterior al fire (post-hoc)."""
         if not self.record.fired or post_belief is None:
             return None
+
+        if self.config.family == "P5":
+            pre = self.record.pre_top
+            post_loc = (post_belief or {}).get("location_belief") or []
+            post_year = (post_belief or {}).get("year_belief") or []
+            out = {
+                "arm": self.record.arm, "family": "P5",
+                "distractor_year": self._p5_distractor,
+                # especificidad: la masa de ubicación NO debería moverse (evidencia idéntica)
+                "loc_pre_mass": round(self.record.pre_mass, 4),
+                "loc_post_mass": round(cluster_mass(post_loc, float(pre["lat"]), float(pre["lon"])), 4),
+            }
+            if self._p5_distractor is not None:
+                hw = self.config.year_window
+                out["year_mass_pre_window"] = round(
+                    self.year_window_mass(self._p5_pre_year, self._p5_distractor, hw), 4)
+                out["year_mass_post_window"] = round(
+                    self.year_window_mass(post_year, self._p5_distractor, hw), 4)
+                out["distractor_attraction"] = round(
+                    out["year_mass_post_window"] - out["year_mass_pre_window"], 4)
+            return out
         pre = self.record.pre_top
         # reference_disk: centro CONGELADO al fire (nunca se recentra — R6).
         post_loc = (post_belief or {}).get("location_belief") or []

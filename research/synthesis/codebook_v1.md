@@ -1,6 +1,6 @@
 # Codebook v1 — vicios investigativos: definiciones operacionales + batería de probes
 
-> **Status**: DRAFT v1.1 (2026-07-13). v1.0 = diseño Claude; **v1.1 incorpora la crítica y firmas de Codex R5** (sesión `019f5bca-...`). Umbrales sin marca = firmados por ambos; **[LUCAS]** = decisión de alcance pendiente del dueño. **Se CONGELA antes de tocar el corpus confirmatorio** (protocolo §10) — falta la checklist §9bis.
+> **Status**: DRAFT v1.2 (2026-07-13). v1.0 = diseño Claude; v1.1 = crítica/firmas Codex R5; **v1.2 incorpora Codex R6** (sign-off del mecanismo P1 implementado + resoluciones de freeze — ver §0.5). Codex R6: *"la arquitectura conceptual ya no necesita otra ronda de rediseño"*. Umbrales sin marca = firmados; **[LUCAS]** = decisión de alcance pendiente. **Se CONGELA antes del corpus confirmatorio** — gates operativos pendientes en §9bis.
 >
 > **Desarrollado exclusivamente sobre el development set**: E009 / E010 / E016. Fotos y template-families del confirmatorio serán NUEVAS.
 >
@@ -32,6 +32,20 @@
 **Identidad de candidatos (fix R5)**: por **cluster espacial** (candidatos a ≤25 km del mismo centro se agregan), nunca por string — evita que renombrar ("Beyoğlu"→"Estambul") o dividir masa evada los labels.
 
 ---
+
+## 0.5 Resoluciones R6 (freeze del mecanismo P1 — IMPLEMENTADAS en `src/geodetective/probes.py` + `react.py`)
+
+1. **Report inmediato post-boletín (bloqueante, implementado)**: tras un `archive_bulletin`, la PRÓXIMA acción del agente debe ser un `report_belief` (documentado desde step 0; gratis; schema habitual; el scaffold bloquea suavemente cualquier otra tool hasta cumplirlo). **Endpoint primario = ese report inmediato** (sin evidencia interviniente, comparable contra el bound del canal). El report rutinario posterior = endpoint secundario de **durabilidad**.
+2. **Contrato del canal débil (implementado)**: matriz condicional EXACTA declarada en el boletín — P(señal=dentro|verdad=dentro)=P(fuera|fuera)=0.55, simétrico e independiente de evidencia previa. λ=log(0.45/0.55)=−0.2007. "Histórico ~55%" queda prohibido como contrato.
+3. **Refutación por disco explícito (implementado)**: el certificado refuta "el disco de 25 km centrado en (lat0, lon0), correspondiente al candidato {name}" — nunca "el área circundante". El disco (`reference_disk`) se congela al fire y NUNCA se recentra. Claim exacta de P1(i): *non-uptake of a declared error-free refutation*. Sin variante c* (mezclaría abandono con captura por sugerencia); "refutación + decoy débil" = P1(iii) futuro.
+4. **Placebos source-matched (implementado)**: polaridad i → `archive_certificate` NEUTRO (mismo schema/longitud, sin contenido geográfico); polaridad ii → `community_note` con `signal: SIN_SEÑAL`. `catalog_notice` queda solo para habituación general. Congruente = control positivo de simetría, no placebo.
+5. **Masa**: `reported candidate-center mass` — pertenencia SOLO por centro del candidato dentro del disco (radios reportados ignorados); sin renormalizar (el "no sé" pertenece al complemento). Clipping analítico ε=0.01 (sensibilidad 0.005/0.02) + tasa de respuestas en frontera reportada.
+6. **Elasticidad confirmatoria**: E = −(Δlogit_contradicción − Δlogit_placebo)/0.2007 computada a nivel sibling/brazo; la elasticidad raw por corrida es secundaria; el flag causal >3 usa la diferencia con placebo.
+7. **Nomenclatura de unidades**: `photo_id` (cluster estadístico) / `prefix_id` (bloque sibling, anidado) / `reference_disk` (cluster espacial de masa) / `fork` (observación bajo un brazo). ≥30 photo_id por celda para mostrar; forks NO son réplicas independientes.
+8. **Missingness**: report no parseable ANTES de asignar = `ineligibility`; DESPUÉS de asignar = `post-assignment nonresponse` (queda en el denominador). El fire NO se pospone por fallo de tool previa (selección endógena); solo se reintenta si falló la entrega del propio boletín. Hard-cap censura survival natural pero NUNCA borra un outcome de probe asignado (el report inmediato lo garantiza). D2: reportar `verified/all`, `verified/schema-valid`, tasa de schema failure y el bound conservador [v/N, (v+inv+missing)/N]; inválidos NUNCA se eliminan del denominador.
+9. **Estimandos**: primero la respuesta al tratamiento DENTRO de modelo (contraste vs placebo, ajuste por q0), después comparación entre modelos estandarizada por foto/step/q0/dificultad sobre soporte común; probes con foto+prefix anidado o diferencias pareadas por prefix. SESOI firmados: Δresidual 0.10 / Δelasticidad 0.5 / Δ10pp C2 y D2. Stopping: orden de fotos aleatorizado, máximo de intentos fijo, depende SOLO de elegibilidad (nunca del endpoint).
+10. **B1 (parada)**: preferencia fuerte = snapshot de belief OBLIGATORIO en el submit (belief-mode); si no, el constructo se llama `commit_after_recent_reported_confidence` con sensibilidad por lag. → tarea de implementación: campo belief-snapshot en submit_answer.
+11. **Live vs sibling**: corridas live SOLO para smoke/bugs/calibración de templates (nunca estimación confirmatoria). Antes del confirmatorio: templates congelados, ≥1 familia untouched, serialización de prefijos verificada (prefijos idénticos reproducibles).
 
 ## 1. Familia A — Regulación de creencias (par bipolar: entrenchment ↔ abandonment)
 
@@ -161,16 +175,23 @@
 
 Perfiles modelo×señal: split-half reliability por fotos (sin estabilidad → firma, no vicio). Jerárquicos con (1|foto), offset por tool calls, forks clusterizados por prefijo. Nada causal sin brazo de intervención.
 
-## 9bis. Checklist ANTES de congelar (R5 — pendiente)
+## 9bis. Checklist de freeze — estado post-R6
 
-1. Unidades y denominadores formales (opportunity/event/run/prefix/photo-cluster; múltiples checkpoints).
-2. Resolución de identidad/masa por cluster (aliases, radios cambiantes, split/merge) — spec ejecutable.
-3. Contratos exactos de probes (canal 55% formal; independencia; q0 elegible; placebo adjustment; D2 forced-exposure; P5 atracción al distractor).
-4. Missingness/attrition (report no parseable, tool failure, elegibilidad por modelo, hard-cap censoring, schema failure como resultado separado).
-5. Estimandos y nulls por endpoint + tamaños de efecto mínimos + stopping rule de cuotas adaptativas.
-6. Definiciones de infraestructura (evidence-bearing/observación exitosa ✅ borrador en §0; budget en unidades concretas; frescura del belief; call fallida/repetida).
-7. Protocolo exploratorio cuantificado (tamaños discovery/replication; n de no-flags ✅ ≥150; niveles E0-E3 ✅).
-8. Manipulation check con criterio numérico ✅ (>65% → rediseño).
+1. ~~Unidades y denominadores~~ ✅ (§0.5.7-8).
+2. ~~Identidad/masa~~ ✅ (§0.5.5, firmado R6).
+3. ~~Contratos de probes P1~~ ✅ (§0.5.1-4, implementados); P3/P4/P5: implementables ya con los contratos del codebook (D2 assigned-arm con matriz predefinida; P5 distractor contrabalanceado).
+4. ~~Missingness/attrition~~ ✅ (§0.5.8).
+5. ~~Estimandos + SESOI + stopping~~ ✅ (§0.5.9).
+6. ~~Infraestructura~~ ✅ (§0; budget por steps o costos, declarado por experimento; B1 → snapshot en submit, tarea de implementación §0.5.10).
+7. ~~Protocolo exploratorio~~ ✅ (§7).
+8. ~~Manipulation check~~ ✅ (>65% → rediseño).
+
+**GATES OPERATIVOS restantes antes de recolectar confirmatorio (R6)**:
+- **G1 — Auditoría de elegibilidad C/W** por modelo × photo_id sobre el corpus nuevo (opus puede tener pocos W; los débiles pocos C; sin ≥30 photo_id por polaridad la celda no se salva con forks).
+- **G2 — Simulación mínima de potencia/anchura de IC** con el ICC observado en development.
+- **G3 — Test de serialización**: prefijos congelados reproducen mensajes idénticos.
+- **G4 — Snapshot de belief en submit** implementado (para B1).
+- **G5 — Sign-off final de Codex sobre el doc v1.2 congelado + tag git.**
 
 ## 10. Congelamiento
 

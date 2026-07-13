@@ -78,19 +78,28 @@ def run_tests() -> int:
 
     print("\nT4 — polaridad y contenido del boletín")
     f += not _check("top W → polaridad i (certificado)", inj.record.polarity == "i")
-    f += not _check("el certificado refuta la región TOP (Madrid)", "Madrid" in (b or ""))
-    f += not _check("el boletín NO filtra el GT (no menciona Lisboa)", "Lisboa" not in (b or ""), "refutación pura")
+    f += not _check("el certificado refuta por DISCO explícito con coords del top",
+                    "disco de 25 km" in (b or "") and "40.4168" in (b or ""), "R6: disco congelado")
+    f += not _check("el boletín NO filtra el GT (no menciona Lisboa ni sus coords)",
+                    "Lisboa" not in (b or "") and "38.72" not in (b or ""), "refutación pura")
     f += not _check("formato [archive_bulletin]", (b or "").startswith("[archive_bulletin]"))
 
     inj2 = ProbeInjector(*TRUTH, ProbeConfig(arm="contradiction"))
     b2 = inj2.maybe_fire(_belief([LISBOA_NEAR, {**PORTO, "weight": 0.3}]), step=5, max_steps=30)
     f += not _check("top C → polaridad ii (fuente débil)", inj2.record.polarity == "ii", str(inj2.record.polarity))
-    f += not _check("la fuente débil declara 0.55", "0.55" in (b2 or ""))
+    f += not _check("el canal débil declara la matriz 55/45 formal",
+                    "0.55" in (b2 or "") and "0.45" in (b2 or "") and "simétrico" in (b2 or ""))
 
+    # Placebos source-matched (R6): polaridad i → certificado neutro; ii → note sin señal
     inj3 = ProbeInjector(*TRUTH, ProbeConfig(arm="placebo"))
     b3 = inj3.maybe_fire(_belief([MADRID]), step=5, max_steps=30)
-    f += not _check("placebo: catalog_notice sin contenido geográfico",
-                    "catalog_notice" in (b3 or "") and "Madrid" not in (b3 or ""))
+    f += not _check("placebo pol-i: certificado NEUTRO sin contenido geográfico",
+                    "archive_certificate" in (b3 or "") and "Madrid" not in (b3 or "")
+                    and "disco" not in (b3 or ""))
+    inj4 = ProbeInjector(*TRUTH, ProbeConfig(arm="placebo"))
+    b4 = inj4.maybe_fire(_belief([LISBOA_NEAR]), step=5, max_steps=30)
+    f += not _check("placebo pol-ii: community_note SIN_SEÑAL",
+                    "community_note" in (b4 or "") and "SIN_SE" in (b4 or ""))
 
     print("\nT5 — scoring de respuesta")
     # P1(i): pre Madrid w=0.3 → post Madrid w=0.30 (no se movió) → residual alto

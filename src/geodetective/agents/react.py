@@ -704,6 +704,7 @@ def run_react_agent(
     target_path_str = str(image_path)  # para hash perceptual
     steps_since_belief = 0  # steps con tools sin report_belief (para el nudge)
     empty_response_attempts = 0  # retry-once de turnos vacíos (glitch transitorio)
+    awaiting_post_probe_report = False  # R6: tras un boletín, el PRÓXIMO acto debe ser report_belief
 
     for step in range(max_steps):
         # Sliding-window cleanup de imágenes acumuladas. Azure tiene un límite hard
@@ -878,6 +879,21 @@ def run_react_agent(
             if verbose:
                 preview = json.dumps(args, ensure_ascii=False)[:250]
                 print(f"  ⚙ {fname}({preview})")
+
+            # R6 (probe protocol): tras un boletín, la PRÓXIMA acción debe ser
+            # report_belief — sin evidencia interviniente el endpoint queda
+            # comparable contra el bound del canal. Bloqueo suave hasta cumplir.
+            if awaiting_post_probe_report and fname != "report_belief":
+                messages.append({
+                    "role": "tool", "tool_call_id": tc.id,
+                    "content": (
+                        "Bloqueado por protocolo de boletines: acabás de recibir un archive_bulletin. "
+                        "Tu próxima acción debe ser un `report_belief` actualizado (gratis, no consume "
+                        "presupuesto). Después podés continuar con esta tool."
+                    ),
+                })
+                result.trace.append({"step": step + 1, "type": "tool_blocked_post_probe", "tool": fname})
+                continue
 
             # Budget: cobrar/bloquear ANTES de ejecutar. report_belief y
             # submit_answer son gratis y nunca se bloquean.
@@ -1400,6 +1416,7 @@ def run_react_agent(
                         "content": f"belief_recorded ({n_loc} candidatos de ubicación, {n_yr} rangos de año).",
                     })
                     result.trace.append({"step": step + 1, "type": "report_belief", "belief": args})
+                    awaiting_post_probe_report = False  # el report inmediato llegó
                     # Vice probe: chequear elegibilidad y disparar boletín (una vez por corrida).
                     if probe_injector is not None:
                         bulletin = probe_injector.maybe_fire(args, step + 1, max_steps)
@@ -1486,8 +1503,10 @@ def run_react_agent(
 
         # Entregar boletín de probe (después de los tool results, como cualquier
         # otra entrega del sistema — mismo canal que las inyecciones de imágenes).
+        # R6: activa el protocolo "próxima acción = report_belief".
         if pending_probe_bulletin:
             messages.append({"role": "user", "content": pending_probe_bulletin})
+            awaiting_post_probe_report = True
 
         # Aviso de saldo después de cada step con gasto (budget mode).
         if tool_budget is not None and step_charge > 0 and not result.submit_called:

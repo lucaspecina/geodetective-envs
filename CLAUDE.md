@@ -147,10 +147,11 @@ Ver `src/geodetective/tools/` y `src/geodetective/agents/react.py`.
 │   ├── eval/
 │   │   ├── metrics.py              # métricas post-hoc (distance/year/calibration)
 │   │   └── belief_scoring.py       # ⭐ proper scoring rules geodésicas (belief-state, E016 #47)
+│   ├── probes.py                   # ⭐ vice probes P1/P4/P5 (intervención controlada, codebook v1.2)
 │   ├── judge/                      # annotator CORRAL-adapted (process eval)
 │   ├── tools/                      # 12 tools del agente
 │   └── agents/
-│       └── react.py                # ReAct loop multi-paso (max_steps + min_steps + thinking)
+│       └── react.py                # ReAct loop (belief_mode + probe_injector + budget + thinking)
 ├── scripts/
 │   ├── download_pastvu_dump.py     # baja jsonl.zst 282MB de HF
 │   ├── download_corpus_photos.py   # bajada paralela + clean → corpus/photos/
@@ -162,7 +163,10 @@ Ver `src/geodetective/tools/` y `src/geodetective/agents/react.py`.
 │   ├── run_e012_min_steps.py       # ablation min_steps
 │   ├── detect_text_overlays.py     # VLM detector + blur archive_overlay (E011)
 │   ├── run_belief_smoke.py         # smoke belief-mode + scoring post-hoc (E016 #47)
-│   ├── build_belief_viewer.py      # ⭐ viewer trayectorias belief: timeline + mapa por step
+│   ├── build_dossier.py            # ⭐ dossier HTML: análisis + expedientes paso a paso con imágenes (doble click abre)
+│   ├── behavior_profile.py         # ⭐ perfil conductual capa-2 (~35 señales de vicios, sin intervención)
+│   ├── run_probe_smoke.py          # smoke de las probes P1/P4/P5 (intervención controlada)
+│   ├── build_belief_viewer.py      # viewer trayectorias belief: timeline + mapa por step
 │   ├── build_iteration_viewer.py   # HTML viewer step-by-step de trazas
 │   ├── build_overlay_comparison.py # comparativo N modelos detector
 │   ├── build_corpus_viewer.py      # grid HTML del corpus

@@ -62,6 +62,48 @@ python scripts/compute_metrics.py experiments/E010_iteration_pilot/results_*.jso
 # Devuelve: distance buckets, year accuracy, calibración, uso de tools
 ```
 
+## Dossier — visualizar todo (análisis + expedientes paso a paso)
+
+El **dossier** es un documento HTML navegable con dos vistas: (1) **📊 Análisis** — perfil conductual por modelo (heatmap de vicios investigativos por familia + estilo/recursos); (2) **🗂️ Expedientes** — cada investigación paso a paso, con la foto, los recortes que hizo el agente, los street views / mapas que miró, su razonamiento, sus creencias por paso, y el mapa de la trayectoria.
+
+```bash
+# Genera el dossier de un experimento (auto-split por modelo si hay varios)
+python scripts/build_dossier.py --dir experiments/E016_belief_pilot --title "Mi experimento"
+```
+
+**Cómo abrirlo**: los archivos quedan en el directorio del experimento. Son **HTML autocontenidos** (imágenes embebidas) — **doble click** los abre en tu navegador, sin servidor.
+
+- `dossier.html` — índice liviano: análisis comparativo global + links a los dossiers por modelo.
+- `dossier_<modelo>.html` — un dossier completo **con imágenes** por modelo (~130-190 MB c/u).
+
+Por qué se parte por modelo: un solo archivo con todas las corridas + imágenes pesa cientos de MB y cuelga el navegador. Cada dossier por modelo pesa lo mismo que un viewer normal.
+
+**Variantes**:
+
+```bash
+python scripts/build_dossier.py --dir <exp> --no-images       # UN dossier liviano (sin imágenes)
+python scripts/build_dossier.py --dir <exp> --split-by-model  # forzar split (aunque sea 1 modelo)
+```
+
+**Trabajás por SSH** (no podés abrir archivos locales)? Levantá un servidor y tunelizá el puerto:
+
+```bash
+python -m http.server 8016 --bind 127.0.0.1 --directory experiments/E016_belief_pilot
+# En VS Code: panel "Ports" → reenviar 8016 → abrir http://localhost:8016/dossier.html
+```
+
+### Perfil conductual solo (sin HTML)
+
+```bash
+python scripts/behavior_profile.py --dir experiments/E016_belief_pilot
+# Tabla por (modelo, arm): ~35 señales de estilo de investigación, todas mecánicas
+```
+
+### Otros viewers (una sola foto / trayectoria)
+
+- `build_belief_viewer.py <results.json>` — trayectorias belief con timeline + mapa por step.
+- `build_iteration_viewer.py <results.json>` — viewer step-by-step de una traza.
+
 ## Herramientas del agente
 
 El agente tiene acceso a 12 herramientas, cada una con un rol diferente:

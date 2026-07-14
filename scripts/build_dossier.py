@@ -19,6 +19,8 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import base64
+import hashlib
 import html
 import json
 import sys
@@ -27,14 +29,46 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from geodetective.eval.belief_scoring import Belief, great_circle_km, score_belief
+try:
+    from geodetective.corpus import CLEAN_VERSION
+    from geodetective.tools.crop_image import crop_image as _do_crop
+    _CROP_OK = True
+except Exception:
+    CLEAN_VERSION = 1
+    _CROP_OK = False
 
 # Reusar el perfilador
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from behavior_profile import profile_run  # noqa: E402
 
+PHOTOS_DIR = Path("corpus/photos")
+
 
 def esc(s) -> str:
     return html.escape(str(s) if s is not None else "")
+
+
+def img_b64(b64: str | None, label: str = "") -> str:
+    """Imagen embebida en el HTML (data URI) — autocontenido, abre con doble click."""
+    if not b64:
+        return ""
+    lab = f'<div class="il">{esc(label)}</div>' if label else ""
+    return f'<div class="ib">{lab}<img loading="lazy" src="data:image/jpeg;base64,{b64}"/></div>'
+
+
+def reconstruct_crop(cid, region: dict) -> str | None:
+    """Re-generar el crop desde la foto original (el trace slim no guarda el base64)."""
+    if not _CROP_OK or not region:
+        return None
+    p = PHOTOS_DIR / f"{cid}_clean_v{CLEAN_VERSION}.jpg"
+    if not p.exists():
+        return None
+    try:
+        cr = _do_crop(image_path=p, x=int(region.get("x", 0)), y=int(region.get("y", 0)),
+                      width=int(region.get("w", 0)), height=int(region.get("h", 0)))
+        return cr.base64_jpeg
+    except Exception:
+        return None
 
 
 # Señales booleanas agrupadas por familia (con etiqueta humana y polaridad:
@@ -140,7 +174,19 @@ def build_analysis(by_model_arm: dict) -> str:
 
 # === Timeline liviano (sin base64) ===
 
-def light_event(ev: dict) -> str:
+def render_event_light(ev: dict, cid=None) -> str:
+    """Variante sin imágenes (dossier liviano): sustituye la imagen por una nota."""
+    out = render_event(ev, cid, embed=False)
+    return out
+
+
+def render_event(ev: dict, cid, embed: bool = True) -> str:
+    """Evento del timeline CON imágenes embebidas (foto, crops, street, mapas, páginas).
+    Con embed=False, las imágenes se reemplazan por '[vio: ...]'."""
+    def _img(b64, label=""):
+        if not embed:
+            return f'<span class="muted">[vio: {esc(label) or "imagen"}]</span>' if (b64 or label) else ""
+        return img_b64(b64, label)
     t = ev.get("type", "")
     if t in ("thinking", "thinking_block"):
         return f'<div class="ev think"><pre>{esc(ev.get("content",""))}</pre></div>'
@@ -160,24 +206,49 @@ def light_event(ev: dict) -> str:
     if t == "report_verification":
         a = ev.get("args", {})
         return f'<div class="ev probe"><b>🔎 verificación reportada:</b> {esc(a.get("status"))} — {esc(a.get("reasoning",""))}</div>'
-    if t in ("submit",):
+    if t == "submit":
         a = ev.get("answer", {}) or {}
         return (f'<div class="ev submit"><b>✅ entrega</b> {esc(a.get("location"))} '
                 f'({a.get("lat")}, {a.get("lon")}) · año {esc(a.get("year"))} · conf {esc(a.get("confidence"))}'
                 f'<div class="rat">{esc(a.get("reasoning",""))}</div></div>')
     if t == "web_search":
-        tops = "".join(f'<li>{esc((r.get("title") or "")[:80])}</li>' for r in (ev.get("top_results") or [])[:3])
+        tops = "".join(f'<li><a href="{esc(r.get("url"))}" target="_blank">{esc((r.get("title") or "")[:90])}</a>'
+                       f'<div class="snip">{esc((r.get("snippet") or "")[:220])}</div></li>'
+                       for r in (ev.get("top_results") or [])[:3])
         return (f'<div class="ev tool">🔎 <b>web_search</b> <code>{esc(ev.get("query"))}</code> '
-                f'<span class="muted">{ev.get("result_count")} res</span><ul>{tops}</ul></div>')
-    if t in ("image_search", "image_search_pick"):
-        return f'<div class="ev tool">🖼️ <b>image_search</b> <code>{esc(ev.get("query"))}</code> <span class="muted">{ev.get("n_cells","")} celdas</span></div>'
+                f'<span class="muted">{ev.get("result_count")} res, {ev.get("blocked",0)} bloq</span><ul>{tops}</ul></div>')
+    if t == "image_search":
+        cells = "".join(f'<div class="cm">#{c.get("cell")} {esc((c.get("alt_text") or "")[:70])}</div>'
+                        for c in (ev.get("cells_metadata") or [])[:16])
+        grid = _img(ev.get("grid_image_b64"), "grilla de resultados")
+        return (f'<div class="ev tool">🖼️ <b>image_search</b> <code>{esc(ev.get("query"))}</code> '
+                f'<span class="muted">{ev.get("n_cells","")} celdas</span>{grid}{cells}</div>')
+    if t == "image_search_pick":
+        picks = "".join(_img(p.get("image_b64"), f'celda #{p.get("cell")}: {esc((p.get("alt_text") or "")[:60])}')
+                        for p in (ev.get("picks") or []))
+        return f'<div class="ev tool">🖼️ <b>image_search pick</b><div class="imgrow">{picks}</div></div>'
     if t in ("geocode", "reverse_geocode"):
-        return f'<div class="ev tool">📍 <b>{t}</b> <code>{esc(json.dumps(ev.get("args",{}),ensure_ascii=False))[:80]}</code></div>'
-    if t in ("static_map", "street_view"):
-        icon = "🗺️" if t == "static_map" else "👁️"
-        return f'<div class="ev tool">{icon} <b>{t}</b> <code>{esc(json.dumps(ev.get("args",{}),ensure_ascii=False))[:80]}</code> <span class="muted">[vio imagen]</span></div>'
+        tops = "".join(f'<li>({r.get("lat")}, {r.get("lon")}) — {esc((r.get("display_name") or "")[:80])}</li>'
+                       for r in (ev.get("top_results") or [])[:3])
+        return (f'<div class="ev tool">📍 <b>{t}</b> <code>{esc(json.dumps(ev.get("args",{}),ensure_ascii=False))[:80]}</code>'
+                f'<ul>{tops}</ul></div>')
+    if t == "static_map":
+        pois = ", ".join(f'{esc(p.get("name"))}({p.get("distance_m",0):.0f}m)' for p in (ev.get("nearby_pois") or [])[:3])
+        return (f'<div class="ev tool">🗺️ <b>static_map</b> <code>{esc(json.dumps(ev.get("args",{}),ensure_ascii=False))[:70]}</code>'
+                f'<div class="muted">{pois}</div>{_img(ev.get("base64_jpeg"), "mapa que vio")}</div>')
+    if t == "street_view":
+        imgs = "".join(_img(im.get("base64_jpeg"), f'heading {im.get("heading")}') for im in (ev.get("images") or []))
+        return (f'<div class="ev tool">👁️ <b>street_view</b> <code>{esc(json.dumps(ev.get("args",{}),ensure_ascii=False))[:70]}</code>'
+                f' <span class="muted">pano {esc(ev.get("pano_date"))}</span><div class="imgrow">{imgs}</div></div>')
     if t in ("crop_image", "crop_image_relative"):
-        return f'<div class="ev tool">✂️ <b>crop</b> {esc(json.dumps(ev.get("region",{})))} <span class="muted">[vio recorte]</span></div>'
+        b64 = ev.get("base64_jpeg") or (reconstruct_crop(cid, ev.get("region") or {}) if embed else None)
+        return (f'<div class="ev tool">✂️ <b>crop</b> {esc(json.dumps(ev.get("region",{})))}'
+                f'{_img(b64, "recorte que vio")}</div>')
+    if t in ("fetch_url", "fetch_url_with_images"):
+        imgs = "".join(_img(im.get("base64_jpeg"), (im.get("url") or "")[:60])
+                       for im in (ev.get("visible_images") or []) if im.get("base64_jpeg"))
+        return (f'<div class="ev tool">📄 <b>{t}</b> <span class="muted">{esc((ev.get("title") or "")[:70])}</span>'
+                f'<div class="snip">{esc((ev.get("text_snippet") or "")[:250])}</div><div class="imgrow">{imgs}</div></div>')
     if t in ("historical_query", "historical_query_at"):
         return f'<div class="ev tool">🏛️ <b>{t}</b> <span class="muted">{ev.get("n_features","")} features</span></div>'
     if t == "belief_nudge":
@@ -187,7 +258,7 @@ def light_event(ev: dict) -> str:
     return ""
 
 
-def build_dossier_run(record: dict, idx: int) -> tuple[dict, str, dict]:
+def build_dossier_run(record: dict, idx: int, with_images: bool = True) -> tuple[dict, str, dict]:
     """Devuelve (meta, timeline_html, mapdata) para una corrida."""
     rk = record.get("react") or {}
     prof = profile_run(record)
@@ -196,14 +267,24 @@ def build_dossier_run(record: dict, idx: int) -> tuple[dict, str, dict]:
     trace = rk.get("trace") or []
     fa = rk.get("final_answer") or {}
 
+    cid = record.get("cid")
+    # foto target embebida al inicio del expediente
+    photo_html = ""
+    if with_images:
+        pp = PHOTOS_DIR / f"{cid}_clean_v{CLEAN_VERSION}.jpg"
+        if pp.exists():
+            b64 = base64.b64encode(pp.read_bytes()).decode()
+            photo_html = f'<div class="targetphoto">{img_b64(b64, "📷 FOTO A INVESTIGAR")}</div>'
+
     # timeline por step
     by_step = defaultdict(list)
     for ev in trace:
         by_step[int(ev.get("step", 0))].append(ev)
     steps_used = rk.get("steps_used") or max(by_step.keys() or [1])
-    cards = []
+    cards = [photo_html] if photo_html else []
+    render = render_event if with_images else render_event_light
     for s in range(1, steps_used + 1):
-        evs = "".join(light_event(ev) for ev in by_step.get(s, []))
+        evs = "".join(render(ev, cid) for ev in by_step.get(s, []))
         if evs:
             cards.append(f'<div class="stepcard"><div class="sh">paso {s}</div>{evs}</div>')
     timeline = "\n".join(cards)
@@ -295,7 +376,16 @@ PAGE = """<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"/>
  .ev table{{border-collapse:collapse;font-size:11.5px}} .ev td{{border:1px solid #333;padding:1px 6px}}
  .ev ul{{margin:3px 0 2px 16px;padding:0;font-size:11.5px;color:#aaa}}
  .rat{{color:#9fb0c8;font-size:11.5px;margin-top:3px}}
+ .snip{{color:#8a8a8a;font-size:11px;margin:2px 0}}
+ .cm{{font-size:11px;color:#999}}
+ .ib{{display:inline-block;margin:4px 6px 4px 0;vertical-align:top}}
+ .ib img{{max-height:210px;max-width:100%;border-radius:5px;display:block}}
+ .il{{font-size:10.5px;color:#888;margin-bottom:2px}}
+ .imgrow{{display:flex;flex-wrap:wrap}}
+ .targetphoto{{margin-bottom:10px;padding:8px;background:#17171a;border:1px solid #333;border-radius:8px}}
+ .targetphoto img{{max-height:340px}}
  .runhead{{font-size:14px;margin-bottom:8px}} .badge{{background:#242428;border-radius:5px;padding:2px 8px;font-size:11.5px;margin-right:4px}}
+ ul.idx{{font-size:14px;line-height:1.9}} ul.idx a{{color:#7aa7e8;text-decoration:none}} ul.idx a:hover{{text-decoration:underline}}
 </style></head><body>
 <header>
  <h1>🗂️ Dossier — {title}</h1>
@@ -386,14 +476,37 @@ RUNS.forEach((r,i)=>{{
 </body></html>"""
 
 
+def write_dossier(records: list[dict], out: Path, title: str, analysis: str,
+                  subtitle: str, with_images: bool) -> float:
+    on_records = [r for r in records if (r.get("react") or {}).get("belief_reports")]
+    on_records.sort(key=lambda r: ((r.get("react") or {}).get("model") or "", r.get("cid") or 0,
+                                   r.get("run_idx") or 0))
+    runs_json, maps_json = [], []
+    for i, rec in enumerate(on_records):
+        meta, timeline, mapdata = build_dossier_run(rec, i, with_images=with_images)
+        runs_json.append({
+            "idx": i, "cid": meta["cid"], "model": meta["model"], "arm": meta["arm"],
+            "title": meta["title"], "bucket": meta["bucket"], "dist": meta["dist"],
+            "year_truth": meta["year_truth"], "year_pred": meta["year_pred"],
+            "ficha": render_ficha(meta["prof"]), "timeline": timeline,
+        })
+        maps_json.append(mapdata)
+    page = PAGE.format(title=esc(title), subtitle=esc(subtitle), analysis=analysis,
+                       runs_json=json.dumps(runs_json, ensure_ascii=False),
+                       maps_json=json.dumps(maps_json, ensure_ascii=False))
+    out.write_text(page, encoding="utf-8")
+    return out.stat().st_size / 1e6
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dir", type=Path, default=Path("experiments/E016_belief_pilot"))
     ap.add_argument("--title", default=None)
-    ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--split-by-model", action="store_true",
+                    help="un dossier CON imágenes por modelo (recomendado si hay muchas corridas)")
+    ap.add_argument("--no-images", action="store_true", help="dossier único liviano sin imágenes")
     args = ap.parse_args()
 
-    # cargar
     records = []
     for p in sorted(args.dir.glob("results_*_belief-*.json")):
         if ".slim" in p.name and (args.dir / p.name.replace(".slim", "")).exists():
@@ -407,43 +520,54 @@ def main() -> None:
     if not records:
         raise SystemExit(f"sin corridas en {args.dir}")
 
-    # perfiles para el análisis
     by_ma = defaultdict(list)
     for rec in records:
         prof = profile_run(rec)
         by_ma[(prof.get("model"), prof.get("arm"))].append(prof)
-
     analysis = build_analysis(by_ma)
-
-    # expedientes: belief-on primero, ordenados por modelo/foto
-    on_records = [r for r in records if (r.get("react") or {}).get("belief_reports")]
-    on_records.sort(key=lambda r: ((r.get("react") or {}).get("model") or "", r.get("cid") or 0,
-                                   r.get("run_idx") or 0))
-    runs_json, maps_json = [], []
-    for i, rec in enumerate(on_records):
-        meta, timeline, mapdata = build_dossier_run(rec, i)
-        runs_json.append({
-            "idx": i, "cid": meta["cid"], "model": meta["model"], "arm": meta["arm"],
-            "title": meta["title"], "bucket": meta["bucket"], "dist": meta["dist"],
-            "year_truth": meta["year_truth"], "year_pred": meta["year_pred"],
-            "ficha": render_ficha(meta["prof"]),
-            "timeline": timeline,
-        })
-        maps_json.append(mapdata)
-
-    title = args.title or args.dir.name
     n_models = len({m for m, a in by_ma})
     n_runs = sum(len(v) for v in by_ma.values())
-    subtitle = (f"{n_models} modelos · {len(set(r.get('cid') for r in records))} fotos · "
-                f"{n_runs} corridas · {len(on_records)} expedientes con creencias")
+    n_fotos = len(set(r.get("cid") for r in records))
+    base_title = args.title or args.dir.name
 
-    page = PAGE.format(title=esc(title), subtitle=esc(subtitle), analysis=analysis,
-                       runs_json=json.dumps(runs_json, ensure_ascii=False),
-                       maps_json=json.dumps(maps_json, ensure_ascii=False))
-    out = args.out or args.dir / "dossier.html"
-    out.write_text(page, encoding="utf-8")
-    mb = out.stat().st_size / 1e6
-    print(f"OK: {out} ({mb:.1f} MB) — {len(on_records)} expedientes, {n_models} modelos")
+    # Auto-split: si hay >1 modelo y no se pidió --no-images, partir por modelo
+    # (un dossier con las 89 corridas + imágenes pesa ~500MB y cuelga el browser).
+    do_split = args.split_by_model or (n_models > 1 and not args.no_images)
+
+    if not do_split:
+        sub = f"{n_models} modelos · {n_fotos} fotos · {n_runs} corridas"
+        mb = write_dossier(records, args.dir / "dossier.html", base_title, analysis, sub,
+                           with_images=not args.no_images)
+        print(f"OK: {args.dir/'dossier.html'} ({mb:.0f} MB)")
+        return
+
+    # Un dossier CON imágenes por modelo + índice
+    print(f"Partiendo por modelo ({n_models} modelos, imágenes embebidas)...")
+    links = []
+    for model in sorted({m for m, a in by_ma}):
+        recs_m = [r for r in records if (r.get("react") or {}).get("model") == model]
+        by_ma_m = {k: v for k, v in by_ma.items() if k[0] == model}
+        an_m = build_analysis(by_ma_m)
+        n_on = sum(1 for r in recs_m if (r.get("react") or {}).get("belief_reports"))
+        sub = f"{model} · {n_fotos} fotos · {len(recs_m)} corridas · {n_on} expedientes"
+        fname = f"dossier_{model.replace('.', '_').replace('/', '_')}.html"
+        mb = write_dossier(recs_m, args.dir / fname, f"{base_title} — {model}", an_m, sub, with_images=True)
+        print(f"  {fname} ({mb:.0f} MB)")
+        links.append((model, fname, n_on, mb))
+
+    # índice liviano con el análisis global comparativo + links
+    linkhtml = "".join(
+        f'<li><a href="{esc(f)}"><b>{esc(m)}</b></a> — {n} expedientes con imágenes ({mb:.0f} MB)</li>'
+        for m, f, n, mb in links)
+    idx_page = PAGE.format(
+        title=esc(base_title), analysis=(
+            f'<h2>Dossier por modelo</h2><p class="muted">Cada uno con la foto, los recortes y '
+            f'todas las imágenes que vio el modelo. Abrilos con doble click.</p><ul class="idx">{linkhtml}</ul>'
+            f'<hr style="border-color:#333;margin:18px 0">{analysis}'),
+        subtitle=esc(f"{n_models} modelos · {n_fotos} fotos · {n_runs} corridas"),
+        runs_json="[]", maps_json="[]")
+    (args.dir / "dossier.html").write_text(idx_page, encoding="utf-8")
+    print(f"OK: índice {args.dir/'dossier.html'} + {len(links)} dossiers por modelo")
 
 
 if __name__ == "__main__":

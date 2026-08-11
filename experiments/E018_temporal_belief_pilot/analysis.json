@@ -1,0 +1,3599 @@
+{
+  "schema_version": 2,
+  "analysis_kind": "descriptive_temporal_belief_audit",
+  "normative_claims": false,
+  "source_experiment": "E016_belief_pilot",
+  "generated_by": "scripts/analyze_temporal_beliefs.py",
+  "inputs": [
+    {
+      "path": "experiments/E016_belief_pilot/results_claude-opus-4-6_belief-off.slim.json",
+      "sha256": "3a252ce899e97467fc0b46de46b6bfaad9ee4b706a32a0755200a8c39d5df305",
+      "n_records": 30
+    },
+    {
+      "path": "experiments/E016_belief_pilot/results_claude-opus-4-6_belief-on.slim.json",
+      "sha256": "c0bbeae1f026a94f4cd9c915a5ccc78b957b3fc4199b1dd4475f4df8ef1c4aeb",
+      "n_records": 29
+    },
+    {
+      "path": "experiments/E016_belief_pilot/results_claude-sonnet-4-6_belief-off.slim.json",
+      "sha256": "99092d6bd73b31dad448bb4eeef2c210cfcfc60da967ae05e959673e5ebad99e",
+      "n_records": 30
+    },
+    {
+      "path": "experiments/E016_belief_pilot/results_claude-sonnet-4-6_belief-on.slim.json",
+      "sha256": "a872763cc4906297cce379f3b34d51ceb51f1536578c7db0341886c3a7fd2a37",
+      "n_records": 30
+    },
+    {
+      "path": "experiments/E016_belief_pilot/results_gpt-5_4-mini_belief-off.slim.json",
+      "sha256": "be8352606fac6681f6b4e18707d524d04e202e74992c8b19442f6cdae554298d",
+      "n_records": 30
+    },
+    {
+      "path": "experiments/E016_belief_pilot/results_gpt-5_4-mini_belief-on.slim.json",
+      "sha256": "ced850b36913e35f068bcaf7e8daa7978ce0c5cecd27e596fcdbe999245c349e",
+      "n_records": 30
+    }
+  ],
+  "metric_definitions": {
+    "phases": "early <= 1/3, middle <= 2/3, late > 2/3 de step/steps_used",
+    "location_entropy": "Shannon sobre pesos explícitos más un bin residual: nats y normalización primaria por soporte fijo log(6). H/log(K no-cero) queda sólo diagnóstico.",
+    "region_mass": "Suma de pesos de candidatos cuyo centro cae dentro del umbral.",
+    "exact_disk_mass": "Suma de pesos de candidatos cuya esfera declarada contiene la verdad.",
+    "year_truth_overlap_mass": "Suma de pesos de intervalos que solapan [year, year2]; no corrige por ancho.",
+    "first_consideration": "Primer checkpoint elicitado con masa regional explícita positiva.",
+    "absent_at_last_observed_report": "Masa positiva alguna vez y cero en el último checkpoint; proxy de abandono.",
+    "next_action": "Set multi-label de acciones del primer turn sustantivo estrictamente posterior, separado según exista o no una tool coemitida entre belief y ese turn."
+  },
+  "inventory": {
+    "total_runs": 179,
+    "belief_on_runs": 89,
+    "belief_off_runs": 90,
+    "accepted_reports": 371,
+    "rejected_report_attempts": 2,
+    "tool_error_events": 23,
+    "tool_error_events_by_arm": {
+      "off": 15,
+      "on": 8
+    },
+    "by_model_arm": [
+      {
+        "model": "claude-opus-4-6",
+        "arm": "off",
+        "n_runs": 30,
+        "n_submitted": 30,
+        "n_errors": 0,
+        "steps": {
+          "n": 30,
+          "mean": 18.266667,
+          "median": 21.0,
+          "min": 3.0,
+          "max": 28.0
+        },
+        "accepted_reports": 0,
+        "reports_per_run": {
+          "n": 30,
+          "mean": 0.0,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        }
+      },
+      {
+        "model": "claude-opus-4-6",
+        "arm": "on",
+        "n_runs": 29,
+        "n_submitted": 29,
+        "n_errors": 0,
+        "steps": {
+          "n": 29,
+          "mean": 20.241379,
+          "median": 22.0,
+          "min": 3.0,
+          "max": 30.0
+        },
+        "accepted_reports": 134,
+        "reports_per_run": {
+          "n": 29,
+          "mean": 4.62069,
+          "median": 5.0,
+          "min": 1.0,
+          "max": 7.0
+        }
+      },
+      {
+        "model": "claude-sonnet-4-6",
+        "arm": "off",
+        "n_runs": 30,
+        "n_submitted": 30,
+        "n_errors": 0,
+        "steps": {
+          "n": 30,
+          "mean": 20.066667,
+          "median": 22.0,
+          "min": 6.0,
+          "max": 30.0
+        },
+        "accepted_reports": 0,
+        "reports_per_run": {
+          "n": 30,
+          "mean": 0.0,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        }
+      },
+      {
+        "model": "claude-sonnet-4-6",
+        "arm": "on",
+        "n_runs": 30,
+        "n_submitted": 30,
+        "n_errors": 0,
+        "steps": {
+          "n": 30,
+          "mean": 22.2,
+          "median": 25.5,
+          "min": 6.0,
+          "max": 30.0
+        },
+        "accepted_reports": 146,
+        "reports_per_run": {
+          "n": 30,
+          "mean": 4.866667,
+          "median": 5.5,
+          "min": 1.0,
+          "max": 7.0
+        }
+      },
+      {
+        "model": "gpt-5.4-mini",
+        "arm": "off",
+        "n_runs": 30,
+        "n_submitted": 30,
+        "n_errors": 0,
+        "steps": {
+          "n": 30,
+          "mean": 7.266667,
+          "median": 6.5,
+          "min": 5.0,
+          "max": 15.0
+        },
+        "accepted_reports": 0,
+        "reports_per_run": {
+          "n": 30,
+          "mean": 0.0,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        }
+      },
+      {
+        "model": "gpt-5.4-mini",
+        "arm": "on",
+        "n_runs": 30,
+        "n_submitted": 30,
+        "n_errors": 0,
+        "steps": {
+          "n": 30,
+          "mean": 10.6,
+          "median": 11.0,
+          "min": 4.0,
+          "max": 17.0
+        },
+        "accepted_reports": 91,
+        "reports_per_run": {
+          "n": 30,
+          "mean": 3.033333,
+          "median": 3.0,
+          "min": 1.0,
+          "max": 6.0
+        }
+      }
+    ],
+    "missing_cells_against_observed_grid": [
+      {
+        "model": "claude-opus-4-6",
+        "arm": "on",
+        "cid": 963644,
+        "run_idx": 1
+      }
+    ],
+    "checkpoint_timing": {
+      "first_report_step_by_model": {
+        "claude-opus-4-6": {
+          "2": 3,
+          "3": 9,
+          "4": 15,
+          "7": 2
+        },
+        "claude-sonnet-4-6": {
+          "3": 4,
+          "4": 17,
+          "5": 4,
+          "6": 2,
+          "7": 3
+        },
+        "gpt-5.4-mini": {
+          "1": 20,
+          "2": 4,
+          "3": 3,
+          "4": 3
+        }
+      },
+      "inter_report_gap_all": {
+        "2": 21,
+        "3": 15,
+        "4": 226,
+        "5": 11,
+        "6": 3,
+        "7": 6
+      },
+      "inter_report_gap_by_model": {
+        "claude-opus-4-6": {
+          "2": 3,
+          "3": 4,
+          "4": 90,
+          "5": 4,
+          "7": 4
+        },
+        "claude-sonnet-4-6": {
+          "2": 2,
+          "3": 4,
+          "4": 98,
+          "5": 7,
+          "6": 3,
+          "7": 2
+        },
+        "gpt-5.4-mini": {
+          "2": 16,
+          "3": 7,
+          "4": 38
+        }
+      },
+      "submit_step_minus_last_report_step": {
+        "0": 1,
+        "1": 36,
+        "2": 20,
+        "3": 28,
+        "4": 4
+      },
+      "reports_with_substantive_tool_coemitted_same_turn": 179
+    },
+    "quality_checks": {
+      "report_count_alignment_ok": true,
+      "issues": [],
+      "certification_status_by_cid": {
+        "1220722": "draft",
+        "2255098": "draft",
+        "1425423": "draft",
+        "2063941": "draft",
+        "963644": "draft",
+        "636474": "draft",
+        "947961": "draft",
+        "1134072": "draft",
+        "1862569": "draft",
+        "1336113": "draft"
+      },
+      "raw_result_files_present": [],
+      "viewer_html_present": []
+    }
+  },
+  "phase_metrics": {
+    "phase_definition": "early: step/steps_used <= 1/3; middle: <= 2/3; late: > 2/3",
+    "aggregation": "Cada métrica se promedia primero dentro de corrida-fase. Las medias y medianas reportadas después usan esas unidades corrida-fase.",
+    "sensitivity_excluding_submit_turn": {
+      "n_reports_changing_phase": 21,
+      "transition_counts": {
+        "early->middle": 3,
+        "middle->late": 18
+      },
+      "by_model": {
+        "claude-opus-4-6": {
+          "middle->late": 5
+        },
+        "claude-sonnet-4-6": {
+          "early->middle": 2,
+          "middle->late": 6
+        },
+        "gpt-5.4-mini": {
+          "early->middle": 1,
+          "middle->late": 7
+        }
+      }
+    },
+    "by_model": {
+      "claude-opus-4-6": {
+        "early": {
+          "n_runs": 24,
+          "n_reports": 33,
+          "metrics": {
+            "top_weight": {
+              "n": 24,
+              "mean": 0.638333,
+              "median": 0.675,
+              "min": 0.3,
+              "max": 0.95
+            },
+            "location_entropy_nats": {
+              "n": 24,
+              "mean": 0.785367,
+              "median": 0.693814,
+              "min": 0.198515,
+              "max": 1.407981
+            },
+            "location_entropy_fixed_normalized": {
+              "n": 24,
+              "mean": 0.438321,
+              "median": 0.387225,
+              "min": 0.110793,
+              "max": 0.785809
+            },
+            "location_entropy_current_support_normalized": {
+              "n": 24,
+              "mean": 0.771301,
+              "median": 0.832069,
+              "min": 0.286397,
+              "max": 0.991159
+            },
+            "top_distance_km": {
+              "n": 24,
+              "mean": 287.794471,
+              "median": 1.337314,
+              "min": 0.018879,
+              "max": 4109.030196
+            },
+            "top_radius_km": {
+              "n": 24,
+              "mean": 72.172917,
+              "median": 2.0,
+              "min": 0.5,
+              "max": 600.0
+            },
+            "exact_disk_mass": {
+              "n": 24,
+              "mean": 0.506042,
+              "median": 0.575,
+              "min": 0.0,
+              "max": 0.95
+            },
+            "region_mass_25km": {
+              "n": 24,
+              "mean": 0.514375,
+              "median": 0.7375,
+              "min": 0.0,
+              "max": 0.95
+            },
+            "region_mass_100km": {
+              "n": 24,
+              "mean": 0.555,
+              "median": 0.75,
+              "min": 0.0,
+              "max": 0.95
+            },
+            "region_mass_250km": {
+              "n": 24,
+              "mean": 0.628958,
+              "median": 0.75,
+              "min": 0.0,
+              "max": 0.95
+            },
+            "region_mass_500km": {
+              "n": 24,
+              "mean": 0.685208,
+              "median": 0.7625,
+              "min": 0.0,
+              "max": 0.95
+            },
+            "region_mass_1000km": {
+              "n": 24,
+              "mean": 0.787292,
+              "median": 0.8,
+              "min": 0.575,
+              "max": 0.95
+            },
+            "year_top_weight": {
+              "n": 24,
+              "mean": 0.591667,
+              "median": 0.6,
+              "min": 0.4,
+              "max": 0.85
+            },
+            "year_entropy_nats": {
+              "n": 24,
+              "mean": 0.939468,
+              "median": 0.950271,
+              "min": 0.518186,
+              "max": 1.288349
+            },
+            "year_entropy_fixed_normalized": {
+              "n": 24,
+              "mean": 0.583724,
+              "median": 0.590436,
+              "min": 0.321967,
+              "max": 0.800496
+            },
+            "year_entropy_current_support_normalized": {
+              "n": 24,
+              "mean": 0.831521,
+              "median": 0.864974,
+              "min": 0.471673,
+              "max": 0.96023
+            },
+            "year_top_width": {
+              "n": 24,
+              "mean": 18.104167,
+              "median": 15.0,
+              "min": 0.0,
+              "max": 42.5
+            },
+            "year_truth_overlap_mass": {
+              "n": 24,
+              "mean": 0.616667,
+              "median": 0.6,
+              "min": 0.3,
+              "max": 0.9
+            }
+          }
+        },
+        "middle": {
+          "n_runs": 29,
+          "n_reports": 52,
+          "metrics": {
+            "top_weight": {
+              "n": 29,
+              "mean": 0.682241,
+              "median": 0.7,
+              "min": 0.266667,
+              "max": 0.97
+            },
+            "location_entropy_nats": {
+              "n": 29,
+              "mean": 0.745248,
+              "median": 0.756303,
+              "min": 0.134742,
+              "max": 1.538163
+            },
+            "location_entropy_fixed_normalized": {
+              "n": 29,
+              "mean": 0.415931,
+              "median": 0.422101,
+              "min": 0.075201,
+              "max": 0.858465
+            },
+            "location_entropy_current_support_normalized": {
+              "n": 29,
+              "mean": 0.664033,
+              "median": 0.71091,
+              "min": 0.194392,
+              "max": 0.973184
+            },
+            "top_distance_km": {
+              "n": 29,
+              "mean": 197.436212,
+              "median": 1.235728,
+              "min": 0.018879,
+              "max": 4154.701212
+            },
+            "top_radius_km": {
+              "n": 29,
+              "mean": 34.615517,
+              "median": 1.0,
+              "min": 0.1,
+              "max": 400.0
+            },
+            "exact_disk_mass": {
+              "n": 29,
+              "mean": 0.381897,
+              "median": 0.283333,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_25km": {
+              "n": 29,
+              "mean": 0.673333,
+              "median": 0.85,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_100km": {
+              "n": 29,
+              "mean": 0.692299,
+              "median": 0.85,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_250km": {
+              "n": 29,
+              "mean": 0.729368,
+              "median": 0.85,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_500km": {
+              "n": 29,
+              "mean": 0.799195,
+              "median": 0.85,
+              "min": 0.35,
+              "max": 0.97
+            },
+            "region_mass_1000km": {
+              "n": 29,
+              "mean": 0.83023,
+              "median": 0.85,
+              "min": 0.35,
+              "max": 0.97
+            },
+            "year_top_weight": {
+              "n": 29,
+              "mean": 0.624138,
+              "median": 0.616667,
+              "min": 0.4,
+              "max": 0.875
+            },
+            "year_entropy_nats": {
+              "n": 29,
+              "mean": 0.909344,
+              "median": 0.950271,
+              "min": 0.421635,
+              "max": 1.296844
+            },
+            "year_entropy_fixed_normalized": {
+              "n": 29,
+              "mean": 0.565007,
+              "median": 0.590436,
+              "min": 0.261976,
+              "max": 0.805775
+            },
+            "year_entropy_current_support_normalized": {
+              "n": 29,
+              "mean": 0.772358,
+              "median": 0.835934,
+              "min": 0.470335,
+              "max": 0.937549
+            },
+            "year_top_width": {
+              "n": 29,
+              "mean": 11.816092,
+              "median": 9.5,
+              "min": 0.0,
+              "max": 45.0
+            },
+            "year_truth_overlap_mass": {
+              "n": 29,
+              "mean": 0.524713,
+              "median": 0.583333,
+              "min": 0.0,
+              "max": 0.9
+            }
+          }
+        },
+        "late": {
+          "n_runs": 26,
+          "n_reports": 49,
+          "metrics": {
+            "top_weight": {
+              "n": 26,
+              "mean": 0.732051,
+              "median": 0.7625,
+              "min": 0.35,
+              "max": 0.97
+            },
+            "location_entropy_nats": {
+              "n": 26,
+              "mean": 0.650954,
+              "median": 0.571117,
+              "min": 0.134742,
+              "max": 1.391038
+            },
+            "location_entropy_fixed_normalized": {
+              "n": 26,
+              "mean": 0.363304,
+              "median": 0.318746,
+              "min": 0.075201,
+              "max": 0.776353
+            },
+            "location_entropy_current_support_normalized": {
+              "n": 26,
+              "mean": 0.639275,
+              "median": 0.732283,
+              "min": 0.194392,
+              "max": 0.969426
+            },
+            "top_distance_km": {
+              "n": 26,
+              "mean": 62.422662,
+              "median": 0.52702,
+              "min": 0.003875,
+              "max": 556.805962
+            },
+            "top_radius_km": {
+              "n": 26,
+              "mean": 15.289679,
+              "median": 0.25,
+              "min": 0.04,
+              "max": 202.5
+            },
+            "exact_disk_mass": {
+              "n": 26,
+              "mean": 0.333526,
+              "median": 0.05,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_25km": {
+              "n": 26,
+              "mean": 0.694551,
+              "median": 0.8625,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_100km": {
+              "n": 26,
+              "mean": 0.704167,
+              "median": 0.8625,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_250km": {
+              "n": 26,
+              "mean": 0.748397,
+              "median": 0.8625,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_500km": {
+              "n": 26,
+              "mean": 0.8375,
+              "median": 0.8625,
+              "min": 0.366667,
+              "max": 0.97
+            },
+            "region_mass_1000km": {
+              "n": 26,
+              "mean": 0.845833,
+              "median": 0.8625,
+              "min": 0.566667,
+              "max": 0.97
+            },
+            "year_top_weight": {
+              "n": 26,
+              "mean": 0.62609,
+              "median": 0.5875,
+              "min": 0.4,
+              "max": 0.92
+            },
+            "year_entropy_nats": {
+              "n": 26,
+              "mean": 0.904732,
+              "median": 0.981866,
+              "min": 0.278769,
+              "max": 1.296844
+            },
+            "year_entropy_fixed_normalized": {
+              "n": 26,
+              "mean": 0.562142,
+              "median": 0.610068,
+              "min": 0.173209,
+              "max": 0.805775
+            },
+            "year_entropy_current_support_normalized": {
+              "n": 26,
+              "mean": 0.760839,
+              "median": 0.785921,
+              "min": 0.402179,
+              "max": 0.937231
+            },
+            "year_top_width": {
+              "n": 26,
+              "mean": 11.589744,
+              "median": 9.5,
+              "min": 0.0,
+              "max": 45.0
+            },
+            "year_truth_overlap_mass": {
+              "n": 26,
+              "mean": 0.584295,
+              "median": 0.675,
+              "min": 0.0,
+              "max": 0.9
+            }
+          }
+        }
+      },
+      "claude-sonnet-4-6": {
+        "early": {
+          "n_runs": 27,
+          "n_reports": 37,
+          "metrics": {
+            "top_weight": {
+              "n": 27,
+              "mean": 0.695741,
+              "median": 0.75,
+              "min": 0.35,
+              "max": 0.93
+            },
+            "location_entropy_nats": {
+              "n": 27,
+              "mean": 0.683671,
+              "median": 0.562335,
+              "min": 0.253639,
+              "max": 1.526039
+            },
+            "location_entropy_fixed_normalized": {
+              "n": 27,
+              "mean": 0.381564,
+              "median": 0.313845,
+              "min": 0.141559,
+              "max": 0.851699
+            },
+            "location_entropy_current_support_normalized": {
+              "n": 27,
+              "mean": 0.743664,
+              "median": 0.811278,
+              "min": 0.365924,
+              "max": 0.974498
+            },
+            "top_distance_km": {
+              "n": 27,
+              "mean": 294.022298,
+              "median": 1.427587,
+              "min": 0.083375,
+              "max": 3164.862056
+            },
+            "top_radius_km": {
+              "n": 27,
+              "mean": 268.788889,
+              "median": 2.0,
+              "min": 0.4,
+              "max": 3000.0
+            },
+            "exact_disk_mass": {
+              "n": 27,
+              "mean": 0.531852,
+              "median": 0.6,
+              "min": 0.0,
+              "max": 0.92
+            },
+            "region_mass_25km": {
+              "n": 27,
+              "mean": 0.509815,
+              "median": 0.75,
+              "min": 0.0,
+              "max": 0.93
+            },
+            "region_mass_100km": {
+              "n": 27,
+              "mean": 0.541296,
+              "median": 0.75,
+              "min": 0.0,
+              "max": 0.93
+            },
+            "region_mass_250km": {
+              "n": 27,
+              "mean": 0.627037,
+              "median": 0.75,
+              "min": 0.0,
+              "max": 0.93
+            },
+            "region_mass_500km": {
+              "n": 27,
+              "mean": 0.636296,
+              "median": 0.75,
+              "min": 0.0,
+              "max": 0.93
+            },
+            "region_mass_1000km": {
+              "n": 27,
+              "mean": 0.737963,
+              "median": 0.8,
+              "min": 0.0,
+              "max": 0.93
+            },
+            "year_top_weight": {
+              "n": 27,
+              "mean": 0.712037,
+              "median": 0.7,
+              "min": 0.5,
+              "max": 0.85
+            },
+            "year_entropy_nats": {
+              "n": 27,
+              "mean": 0.746403,
+              "median": 0.801819,
+              "min": 0.422709,
+              "max": 1.14212
+            },
+            "year_entropy_fixed_normalized": {
+              "n": 27,
+              "mean": 0.463766,
+              "median": 0.498198,
+              "min": 0.262644,
+              "max": 0.709639
+            },
+            "year_entropy_current_support_normalized": {
+              "n": 27,
+              "mean": 0.701168,
+              "median": 0.729847,
+              "min": 0.471673,
+              "max": 0.937231
+            },
+            "year_top_width": {
+              "n": 27,
+              "mean": 20.481481,
+              "median": 20.0,
+              "min": 2.5,
+              "max": 40.0
+            },
+            "year_truth_overlap_mass": {
+              "n": 27,
+              "mean": 0.648148,
+              "median": 0.725,
+              "min": 0.0,
+              "max": 0.95
+            }
+          }
+        },
+        "middle": {
+          "n_runs": 30,
+          "n_reports": 54,
+          "metrics": {
+            "top_weight": {
+              "n": 30,
+              "mean": 0.696722,
+              "median": 0.7625,
+              "min": 0.325,
+              "max": 0.97
+            },
+            "location_entropy_nats": {
+              "n": 30,
+              "mean": 0.73471,
+              "median": 0.657408,
+              "min": 0.134742,
+              "max": 1.604174
+            },
+            "location_entropy_fixed_normalized": {
+              "n": 30,
+              "mean": 0.410049,
+              "median": 0.366906,
+              "min": 0.075201,
+              "max": 0.895307
+            },
+            "location_entropy_current_support_normalized": {
+              "n": 30,
+              "mean": 0.672308,
+              "median": 0.715148,
+              "min": 0.194392,
+              "max": 0.977806
+            },
+            "top_distance_km": {
+              "n": 30,
+              "mean": 253.714593,
+              "median": 1.03772,
+              "min": 0.027857,
+              "max": 3928.946801
+            },
+            "top_radius_km": {
+              "n": 30,
+              "mean": 39.410278,
+              "median": 1.0,
+              "min": 0.1,
+              "max": 402.5
+            },
+            "exact_disk_mass": {
+              "n": 30,
+              "mean": 0.463778,
+              "median": 0.4125,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_25km": {
+              "n": 30,
+              "mean": 0.578611,
+              "median": 0.775,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_100km": {
+              "n": 30,
+              "mean": 0.626667,
+              "median": 0.8,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_250km": {
+              "n": 30,
+              "mean": 0.705556,
+              "median": 0.853333,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_500km": {
+              "n": 30,
+              "mean": 0.719722,
+              "median": 0.853333,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_1000km": {
+              "n": 30,
+              "mean": 0.837889,
+              "median": 0.865833,
+              "min": 0.45,
+              "max": 0.97
+            },
+            "year_top_weight": {
+              "n": 30,
+              "mean": 0.699333,
+              "median": 0.658333,
+              "min": 0.5,
+              "max": 0.88
+            },
+            "year_entropy_nats": {
+              "n": 30,
+              "mean": 0.77932,
+              "median": 0.847671,
+              "min": 0.422709,
+              "max": 1.168282
+            },
+            "year_entropy_fixed_normalized": {
+              "n": 30,
+              "mean": 0.484218,
+              "median": 0.526687,
+              "min": 0.262644,
+              "max": 0.725895
+            },
+            "year_entropy_current_support_normalized": {
+              "n": 30,
+              "mean": 0.704233,
+              "median": 0.771583,
+              "min": 0.403515,
+              "max": 0.852219
+            },
+            "year_top_width": {
+              "n": 30,
+              "mean": 15.933333,
+              "median": 17.833333,
+              "min": 0.5,
+              "max": 32.0
+            },
+            "year_truth_overlap_mass": {
+              "n": 30,
+              "mean": 0.638833,
+              "median": 0.7375,
+              "min": 0.0,
+              "max": 0.96
+            }
+          }
+        },
+        "late": {
+          "n_runs": 29,
+          "n_reports": 55,
+          "metrics": {
+            "top_weight": {
+              "n": 29,
+              "mean": 0.757644,
+              "median": 0.776667,
+              "min": 0.375,
+              "max": 0.98
+            },
+            "location_entropy_nats": {
+              "n": 29,
+              "mean": 0.621357,
+              "median": 0.562527,
+              "min": 0.098039,
+              "max": 1.303284
+            },
+            "location_entropy_fixed_normalized": {
+              "n": 29,
+              "mean": 0.346786,
+              "median": 0.313952,
+              "min": 0.054717,
+              "max": 0.727376
+            },
+            "location_entropy_current_support_normalized": {
+              "n": 29,
+              "mean": 0.617052,
+              "median": 0.683362,
+              "min": 0.141441,
+              "max": 0.941813
+            },
+            "top_distance_km": {
+              "n": 29,
+              "mean": 128.981156,
+              "median": 0.557269,
+              "min": 0.029613,
+              "max": 898.442017
+            },
+            "top_radius_km": {
+              "n": 29,
+              "mean": 1.83908,
+              "median": 0.433333,
+              "min": 0.05,
+              "max": 15.0
+            },
+            "exact_disk_mass": {
+              "n": 29,
+              "mean": 0.436092,
+              "median": 0.3,
+              "min": 0.0,
+              "max": 0.98
+            },
+            "region_mass_25km": {
+              "n": 29,
+              "mean": 0.588506,
+              "median": 0.816667,
+              "min": 0.0,
+              "max": 0.98
+            },
+            "region_mass_100km": {
+              "n": 29,
+              "mean": 0.623851,
+              "median": 0.85,
+              "min": 0.0,
+              "max": 0.98
+            },
+            "region_mass_250km": {
+              "n": 29,
+              "mean": 0.702011,
+              "median": 0.875,
+              "min": 0.0,
+              "max": 0.98
+            },
+            "region_mass_500km": {
+              "n": 29,
+              "mean": 0.739943,
+              "median": 0.875,
+              "min": 0.0,
+              "max": 0.98
+            },
+            "region_mass_1000km": {
+              "n": 29,
+              "mean": 0.858218,
+              "median": 0.88,
+              "min": 0.5,
+              "max": 0.98
+            },
+            "year_top_weight": {
+              "n": 29,
+              "mean": 0.683046,
+              "median": 0.675,
+              "min": 0.45,
+              "max": 0.88
+            },
+            "year_entropy_nats": {
+              "n": 29,
+              "mean": 0.803757,
+              "median": 0.851859,
+              "min": 0.422709,
+              "max": 1.187283
+            },
+            "year_entropy_fixed_normalized": {
+              "n": 29,
+              "mean": 0.499402,
+              "median": 0.52929,
+              "min": 0.262644,
+              "max": 0.737701
+            },
+            "year_entropy_current_support_normalized": {
+              "n": 29,
+              "mean": 0.707189,
+              "median": 0.776103,
+              "min": 0.405846,
+              "max": 0.908946
+            },
+            "year_top_width": {
+              "n": 29,
+              "mean": 12.390805,
+              "median": 12.5,
+              "min": 0.5,
+              "max": 25.0
+            },
+            "year_truth_overlap_mass": {
+              "n": 29,
+              "mean": 0.586034,
+              "median": 0.65,
+              "min": 0.0,
+              "max": 0.95
+            }
+          }
+        }
+      },
+      "gpt-5.4-mini": {
+        "early": {
+          "n_runs": 28,
+          "n_reports": 35,
+          "metrics": {
+            "top_weight": {
+              "n": 28,
+              "mean": 0.398214,
+              "median": 0.35,
+              "min": 0.25,
+              "max": 0.7
+            },
+            "location_entropy_nats": {
+              "n": 28,
+              "mean": 1.34128,
+              "median": 1.32086,
+              "min": 0.914286,
+              "max": 1.608883
+            },
+            "location_entropy_fixed_normalized": {
+              "n": 28,
+              "mean": 0.748583,
+              "median": 0.737186,
+              "min": 0.510272,
+              "max": 0.897935
+            },
+            "location_entropy_current_support_normalized": {
+              "n": 28,
+              "mean": 0.897459,
+              "median": 0.919876,
+              "min": 0.659518,
+              "max": 0.970323
+            },
+            "top_distance_km": {
+              "n": 28,
+              "mean": 1929.12428,
+              "median": 1229.16557,
+              "min": 0.284492,
+              "max": 9880.950588
+            },
+            "top_radius_km": {
+              "n": 28,
+              "mean": 457.160714,
+              "median": 22.5,
+              "min": 3.0,
+              "max": 2000.0
+            },
+            "exact_disk_mass": {
+              "n": 28,
+              "mean": 0.232321,
+              "median": 0.175,
+              "min": 0.0,
+              "max": 0.8
+            },
+            "region_mass_25km": {
+              "n": 28,
+              "mean": 0.114464,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.6
+            },
+            "region_mass_100km": {
+              "n": 28,
+              "mean": 0.118036,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.6
+            },
+            "region_mass_250km": {
+              "n": 28,
+              "mean": 0.219286,
+              "median": 0.1625,
+              "min": 0.0,
+              "max": 0.85
+            },
+            "region_mass_500km": {
+              "n": 28,
+              "mean": 0.270714,
+              "median": 0.1875,
+              "min": 0.0,
+              "max": 0.95
+            },
+            "region_mass_1000km": {
+              "n": 28,
+              "mean": 0.360357,
+              "median": 0.2375,
+              "min": 0.0,
+              "max": 0.95
+            },
+            "year_top_weight": {
+              "n": 28,
+              "mean": 0.558929,
+              "median": 0.5875,
+              "min": 0.25,
+              "max": 0.8
+            },
+            "year_entropy_nats": {
+              "n": 28,
+              "mean": 0.986488,
+              "median": 0.985921,
+              "min": 0.612869,
+              "max": 1.335085
+            },
+            "year_entropy_fixed_normalized": {
+              "n": 28,
+              "mean": 0.61294,
+              "median": 0.612587,
+              "min": 0.380797,
+              "max": 0.829535
+            },
+            "year_entropy_current_support_normalized": {
+              "n": 28,
+              "mean": 0.831095,
+              "median": 0.852846,
+              "min": 0.557858,
+              "max": 0.971311
+            },
+            "year_top_width": {
+              "n": 28,
+              "mean": 24.285714,
+              "median": 25.0,
+              "min": 3.0,
+              "max": 55.0
+            },
+            "year_truth_overlap_mass": {
+              "n": 28,
+              "mean": 0.434821,
+              "median": 0.4625,
+              "min": 0.0,
+              "max": 0.8
+            }
+          }
+        },
+        "middle": {
+          "n_runs": 25,
+          "n_reports": 30,
+          "metrics": {
+            "top_weight": {
+              "n": 25,
+              "mean": 0.5516,
+              "median": 0.55,
+              "min": 0.225,
+              "max": 0.82
+            },
+            "location_entropy_nats": {
+              "n": 25,
+              "mean": 1.183468,
+              "median": 1.235347,
+              "min": 0.647972,
+              "max": 1.579079
+            },
+            "location_entropy_fixed_normalized": {
+              "n": 25,
+              "mean": 0.660506,
+              "median": 0.68946,
+              "min": 0.36164,
+              "max": 0.881301
+            },
+            "location_entropy_current_support_normalized": {
+              "n": 25,
+              "mean": 0.77004,
+              "median": 0.810632,
+              "min": 0.467413,
+              "max": 0.981137
+            },
+            "top_distance_km": {
+              "n": 25,
+              "mean": 1246.287217,
+              "median": 447.648109,
+              "min": 0.048914,
+              "max": 7019.100289
+            },
+            "top_radius_km": {
+              "n": 25,
+              "mean": 149.866,
+              "median": 8.0,
+              "min": 0.5,
+              "max": 1000.0
+            },
+            "exact_disk_mass": {
+              "n": 25,
+              "mean": 0.2956,
+              "median": 0.15,
+              "min": 0.0,
+              "max": 0.95
+            },
+            "region_mass_25km": {
+              "n": 25,
+              "mean": 0.2564,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_100km": {
+              "n": 25,
+              "mean": 0.2564,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_250km": {
+              "n": 25,
+              "mean": 0.3354,
+              "median": 0.12,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_500km": {
+              "n": 25,
+              "mean": 0.4462,
+              "median": 0.55,
+              "min": 0.0,
+              "max": 0.97
+            },
+            "region_mass_1000km": {
+              "n": 25,
+              "mean": 0.5416,
+              "median": 0.73,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "year_top_weight": {
+              "n": 25,
+              "mean": 0.5844,
+              "median": 0.6,
+              "min": 0.35,
+              "max": 0.9
+            },
+            "year_entropy_nats": {
+              "n": 25,
+              "mean": 0.986942,
+              "median": 1.002112,
+              "min": 0.394398,
+              "max": 1.345153
+            },
+            "year_entropy_fixed_normalized": {
+              "n": 25,
+              "mean": 0.613222,
+              "median": 0.622647,
+              "min": 0.245053,
+              "max": 0.835791
+            },
+            "year_entropy_current_support_normalized": {
+              "n": 25,
+              "mean": 0.777137,
+              "median": 0.77993,
+              "min": 0.358996,
+              "max": 0.970323
+            },
+            "year_top_width": {
+              "n": 25,
+              "mean": 16.92,
+              "median": 17.0,
+              "min": 1.0,
+              "max": 35.0
+            },
+            "year_truth_overlap_mass": {
+              "n": 25,
+              "mean": 0.3222,
+              "median": 0.35,
+              "min": 0.0,
+              "max": 0.7
+            }
+          }
+        },
+        "late": {
+          "n_runs": 23,
+          "n_reports": 26,
+          "metrics": {
+            "top_weight": {
+              "n": 23,
+              "mean": 0.604565,
+              "median": 0.55,
+              "min": 0.3,
+              "max": 0.92
+            },
+            "location_entropy_nats": {
+              "n": 23,
+              "mean": 1.088757,
+              "median": 1.19734,
+              "min": 0.331694,
+              "max": 1.536309
+            },
+            "location_entropy_fixed_normalized": {
+              "n": 23,
+              "mean": 0.607647,
+              "median": 0.668248,
+              "min": 0.185122,
+              "max": 0.857431
+            },
+            "location_entropy_current_support_normalized": {
+              "n": 23,
+              "mean": 0.713188,
+              "median": 0.783504,
+              "min": 0.301921,
+              "max": 0.954563
+            },
+            "top_distance_km": {
+              "n": 23,
+              "mean": 1628.266467,
+              "median": 629.995916,
+              "min": 0.053739,
+              "max": 7019.134252
+            },
+            "top_radius_km": {
+              "n": 23,
+              "mean": 79.380435,
+              "median": 2.0,
+              "min": 0.2,
+              "max": 700.0
+            },
+            "exact_disk_mass": {
+              "n": 23,
+              "mean": 0.240435,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.96
+            },
+            "region_mass_25km": {
+              "n": 23,
+              "mean": 0.191739,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.96
+            },
+            "region_mass_100km": {
+              "n": 23,
+              "mean": 0.191739,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.96
+            },
+            "region_mass_250km": {
+              "n": 23,
+              "mean": 0.273478,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.96
+            },
+            "region_mass_500km": {
+              "n": 23,
+              "mean": 0.401087,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.96
+            },
+            "region_mass_1000km": {
+              "n": 23,
+              "mean": 0.506739,
+              "median": 0.85,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "year_top_weight": {
+              "n": 23,
+              "mean": 0.548043,
+              "median": 0.5,
+              "min": 0.3,
+              "max": 0.9
+            },
+            "year_entropy_nats": {
+              "n": 23,
+              "mean": 1.074113,
+              "median": 1.161121,
+              "min": 0.386169,
+              "max": 1.353525
+            },
+            "year_entropy_fixed_normalized": {
+              "n": 23,
+              "mean": 0.667384,
+              "median": 0.721445,
+              "min": 0.239941,
+              "max": 0.840993
+            },
+            "year_entropy_current_support_normalized": {
+              "n": 23,
+              "mean": 0.799688,
+              "median": 0.837572,
+              "min": 0.351507,
+              "max": 0.976362
+            },
+            "year_top_width": {
+              "n": 23,
+              "mean": 17.217391,
+              "median": 17.5,
+              "min": 1.0,
+              "max": 35.0
+            },
+            "year_truth_overlap_mass": {
+              "n": 23,
+              "mean": 0.283043,
+              "median": 0.18,
+              "min": 0.0,
+              "max": 0.72
+            }
+          }
+        }
+      }
+    }
+  },
+  "paired_early_late": {
+    "definition": "Sólo corridas con al menos un checkpoint early y uno late. Se promedia cada métrica dentro de fase y luego se calcula late−early por corrida. Las medias y medianas agregan esos deltas pareados; no se hace inferencia estadística.",
+    "by_model": {
+      "claude-opus-4-6": {
+        "n_paired_runs": 24,
+        "delta_late_minus_early": {
+          "top_weight": {
+            "n": 24,
+            "mean": 0.079722,
+            "median": 0.08,
+            "min": -0.25,
+            "max": 0.425
+          },
+          "region_mass_500km": {
+            "n": 24,
+            "mean": 0.147083,
+            "median": 0.075,
+            "min": -0.208333,
+            "max": 0.883333
+          },
+          "year_truth_overlap_mass": {
+            "n": 24,
+            "mean": -0.019097,
+            "median": 0.0,
+            "min": -0.45,
+            "max": 0.25
+          },
+          "location_entropy_fixed_normalized": {
+            "n": 24,
+            "mean": -0.059188,
+            "median": -0.085438,
+            "min": -0.448563,
+            "max": 0.309828
+          }
+        },
+        "run_keys": [
+          "claude-opus-4-6|on|1220722|0",
+          "claude-opus-4-6|on|1220722|1",
+          "claude-opus-4-6|on|1220722|2",
+          "claude-opus-4-6|on|2255098|0",
+          "claude-opus-4-6|on|2255098|2",
+          "claude-opus-4-6|on|2255098|1",
+          "claude-opus-4-6|on|1425423|0",
+          "claude-opus-4-6|on|2063941|1",
+          "claude-opus-4-6|on|2063941|0",
+          "claude-opus-4-6|on|1425423|1",
+          "claude-opus-4-6|on|636474|2",
+          "claude-opus-4-6|on|636474|0",
+          "claude-opus-4-6|on|636474|1",
+          "claude-opus-4-6|on|947961|1",
+          "claude-opus-4-6|on|1862569|0",
+          "claude-opus-4-6|on|1862569|1",
+          "claude-opus-4-6|on|947961|0",
+          "claude-opus-4-6|on|1862569|2",
+          "claude-opus-4-6|on|947961|2",
+          "claude-opus-4-6|on|1336113|1",
+          "claude-opus-4-6|on|1336113|0",
+          "claude-opus-4-6|on|1336113|2",
+          "claude-opus-4-6|on|963644|2",
+          "claude-opus-4-6|on|963644|0"
+        ]
+      },
+      "claude-sonnet-4-6": {
+        "n_paired_runs": 27,
+        "delta_late_minus_early": {
+          "top_weight": {
+            "n": 27,
+            "mean": 0.047284,
+            "median": 0.02,
+            "min": -0.2,
+            "max": 0.425
+          },
+          "region_mass_500km": {
+            "n": 27,
+            "mean": 0.087716,
+            "median": 0.055,
+            "min": -0.1,
+            "max": 0.425
+          },
+          "year_truth_overlap_mass": {
+            "n": 27,
+            "mean": -0.052778,
+            "median": 0.0,
+            "min": -0.458333,
+            "max": 0.3
+          },
+          "location_entropy_fixed_normalized": {
+            "n": 27,
+            "mean": -0.01636,
+            "median": 0.010208,
+            "min": -0.45196,
+            "max": 0.23654
+          }
+        },
+        "run_keys": [
+          "claude-sonnet-4-6|on|1220722|1",
+          "claude-sonnet-4-6|on|1220722|2",
+          "claude-sonnet-4-6|on|1425423|0",
+          "claude-sonnet-4-6|on|2255098|2",
+          "claude-sonnet-4-6|on|1425423|1",
+          "claude-sonnet-4-6|on|2063941|1",
+          "claude-sonnet-4-6|on|2063941|2",
+          "claude-sonnet-4-6|on|2063941|0",
+          "claude-sonnet-4-6|on|1425423|2",
+          "claude-sonnet-4-6|on|2255098|1",
+          "claude-sonnet-4-6|on|2255098|0",
+          "claude-sonnet-4-6|on|636474|0",
+          "claude-sonnet-4-6|on|963644|0",
+          "claude-sonnet-4-6|on|636474|1",
+          "claude-sonnet-4-6|on|963644|1",
+          "claude-sonnet-4-6|on|963644|2",
+          "claude-sonnet-4-6|on|636474|2",
+          "claude-sonnet-4-6|on|1862569|0",
+          "claude-sonnet-4-6|on|1862569|1",
+          "claude-sonnet-4-6|on|1134072|0",
+          "claude-sonnet-4-6|on|1862569|2",
+          "claude-sonnet-4-6|on|947961|2",
+          "claude-sonnet-4-6|on|1336113|0",
+          "claude-sonnet-4-6|on|947961|1",
+          "claude-sonnet-4-6|on|947961|0",
+          "claude-sonnet-4-6|on|1336113|2",
+          "claude-sonnet-4-6|on|1336113|1"
+        ]
+      },
+      "gpt-5.4-mini": {
+        "n_paired_runs": 22,
+        "delta_late_minus_early": {
+          "top_weight": {
+            "n": 22,
+            "mean": 0.200227,
+            "median": 0.175,
+            "min": -0.15,
+            "max": 0.53
+          },
+          "region_mass_500km": {
+            "n": 22,
+            "mean": 0.105227,
+            "median": 0.0,
+            "min": -0.35,
+            "max": 0.96
+          },
+          "year_truth_overlap_mass": {
+            "n": 22,
+            "mean": -0.171136,
+            "median": -0.125,
+            "min": -0.7,
+            "max": 0.2
+          },
+          "location_entropy_fixed_normalized": {
+            "n": 22,
+            "mean": -0.145924,
+            "median": -0.135376,
+            "min": -0.517008,
+            "max": 0.193506
+          }
+        },
+        "run_keys": [
+          "gpt-5.4-mini|on|1220722|0",
+          "gpt-5.4-mini|on|2255098|0",
+          "gpt-5.4-mini|on|636474|0",
+          "gpt-5.4-mini|on|1336113|0",
+          "gpt-5.4-mini|on|1134072|0",
+          "gpt-5.4-mini|on|2255098|1",
+          "gpt-5.4-mini|on|2255098|2",
+          "gpt-5.4-mini|on|1425423|1",
+          "gpt-5.4-mini|on|2063941|1",
+          "gpt-5.4-mini|on|2063941|2",
+          "gpt-5.4-mini|on|636474|2",
+          "gpt-5.4-mini|on|963644|2",
+          "gpt-5.4-mini|on|1862569|2",
+          "gpt-5.4-mini|on|963644|1",
+          "gpt-5.4-mini|on|963644|0",
+          "gpt-5.4-mini|on|1862569|1",
+          "gpt-5.4-mini|on|1134072|1",
+          "gpt-5.4-mini|on|947961|2",
+          "gpt-5.4-mini|on|1336113|1",
+          "gpt-5.4-mini|on|947961|1",
+          "gpt-5.4-mini|on|1336113|2",
+          "gpt-5.4-mini|on|1134072|2"
+        ]
+      }
+    }
+  },
+  "transition_metrics": {
+    "transition_definition": "Cambio entre reportes consecutivos de una misma corrida; phase es la del reporte destino.",
+    "large_switch_threshold_km": 100.0,
+    "by_model": {
+      "claude-opus-4-6": {
+        "all": {
+          "n_transitions": 105,
+          "top_jump_km": {
+            "n": 105,
+            "mean": 181.664717,
+            "median": 0.113961,
+            "min": 0.0,
+            "max": 7484.006228,
+            "q75": 16.085694,
+            "q90": 152.163797
+          },
+          "abs_delta_top_weight": {
+            "n": 105,
+            "mean": 0.108095,
+            "median": 0.07,
+            "min": 0.0,
+            "max": 0.42
+          },
+          "abs_delta_entropy_fixed_normalized": {
+            "n": 105,
+            "mean": 0.109687,
+            "median": 0.071752,
+            "min": 0.0,
+            "max": 0.518599
+          },
+          "large_switch_gt_100km": {
+            "n": 16,
+            "rate": 0.152381
+          },
+          "confidence_increased_rate": 0.514286,
+          "entropy_fixed_support_decreased_rate": 0.52381,
+          "entropy_current_support_decreased_rate": 0.561905,
+          "moved_closer_gt_100km_rate": 0.057143,
+          "moved_farther_gt_100km_rate": 0.047619
+        },
+        "by_destination_phase": {
+          "early": {
+            "n_transitions": 9,
+            "top_jump_km": {
+              "n": 9,
+              "mean": 882.461095,
+              "median": 64.451683,
+              "min": 0.0,
+              "max": 7415.414192,
+              "q75": 152.338049,
+              "q90": 1609.400228
+            },
+            "abs_delta_top_weight": {
+              "n": 9,
+              "mean": 0.122222,
+              "median": 0.15,
+              "min": 0.0,
+              "max": 0.2
+            },
+            "abs_delta_entropy_fixed_normalized": {
+              "n": 9,
+              "mean": 0.15457,
+              "median": 0.170465,
+              "min": 0.0,
+              "max": 0.239349
+            },
+            "large_switch_gt_100km": {
+              "n": 4,
+              "rate": 0.444444
+            },
+            "confidence_increased_rate": 0.0,
+            "entropy_fixed_support_decreased_rate": 0.0,
+            "entropy_current_support_decreased_rate": 0.222222,
+            "moved_closer_gt_100km_rate": 0.111111,
+            "moved_farther_gt_100km_rate": 0.111111
+          },
+          "middle": {
+            "n_transitions": 47,
+            "top_jump_km": {
+              "n": 47,
+              "mean": 210.274969,
+              "median": 0.177972,
+              "min": 0.0,
+              "max": 7484.006228,
+              "q75": 21.494673,
+              "q90": 180.844396
+            },
+            "abs_delta_top_weight": {
+              "n": 47,
+              "mean": 0.132553,
+              "median": 0.1,
+              "min": 0.0,
+              "max": 0.4
+            },
+            "abs_delta_entropy_fixed_normalized": {
+              "n": 47,
+              "mean": 0.122943,
+              "median": 0.094634,
+              "min": 0.0,
+              "max": 0.393228
+            },
+            "large_switch_gt_100km": {
+              "n": 8,
+              "rate": 0.170213
+            },
+            "confidence_increased_rate": 0.531915,
+            "entropy_fixed_support_decreased_rate": 0.574468,
+            "entropy_current_support_decreased_rate": 0.595745,
+            "moved_closer_gt_100km_rate": 0.106383,
+            "moved_farther_gt_100km_rate": 0.021277
+          },
+          "late": {
+            "n_transitions": 49,
+            "top_jump_km": {
+              "n": 49,
+              "mean": 25.504528,
+              "median": 0.094225,
+              "min": 0.0,
+              "max": 516.740737,
+              "q75": 0.654101,
+              "q90": 71.66475
+            },
+            "abs_delta_top_weight": {
+              "n": 49,
+              "mean": 0.082041,
+              "median": 0.05,
+              "min": 0.0,
+              "max": 0.42
+            },
+            "abs_delta_entropy_fixed_normalized": {
+              "n": 49,
+              "mean": 0.088729,
+              "median": 0.047242,
+              "min": 0.0,
+              "max": 0.518599
+            },
+            "large_switch_gt_100km": {
+              "n": 4,
+              "rate": 0.081633
+            },
+            "confidence_increased_rate": 0.591837,
+            "entropy_fixed_support_decreased_rate": 0.571429,
+            "entropy_current_support_decreased_rate": 0.591837,
+            "moved_closer_gt_100km_rate": 0.0,
+            "moved_farther_gt_100km_rate": 0.061224
+          }
+        }
+      },
+      "claude-sonnet-4-6": {
+        "all": {
+          "n_transitions": 116,
+          "top_jump_km": {
+            "n": 116,
+            "mean": 221.633515,
+            "median": 0.074325,
+            "min": 0.0,
+            "max": 7018.783157,
+            "q75": 1.120661,
+            "q90": 216.092429
+          },
+          "abs_delta_top_weight": {
+            "n": 116,
+            "mean": 0.079914,
+            "median": 0.05,
+            "min": 0.0,
+            "max": 0.4
+          },
+          "abs_delta_entropy_fixed_normalized": {
+            "n": 116,
+            "mean": 0.094936,
+            "median": 0.055076,
+            "min": 0.0,
+            "max": 0.602431
+          },
+          "large_switch_gt_100km": {
+            "n": 16,
+            "rate": 0.137931
+          },
+          "confidence_increased_rate": 0.491379,
+          "entropy_fixed_support_decreased_rate": 0.491379,
+          "entropy_current_support_decreased_rate": 0.568966,
+          "moved_closer_gt_100km_rate": 0.086207,
+          "moved_farther_gt_100km_rate": 0.051724
+        },
+        "by_destination_phase": {
+          "early": {
+            "n_transitions": 10,
+            "top_jump_km": {
+              "n": 10,
+              "mean": 669.517545,
+              "median": 1.490481,
+              "min": 0.0,
+              "max": 6327.768309,
+              "q75": 53.393212,
+              "q90": 868.449368
+            },
+            "abs_delta_top_weight": {
+              "n": 10,
+              "mean": 0.085,
+              "median": 0.05,
+              "min": 0.05,
+              "max": 0.35
+            },
+            "abs_delta_entropy_fixed_normalized": {
+              "n": 10,
+              "mean": 0.183822,
+              "median": 0.120277,
+              "min": 0.020417,
+              "max": 0.602431
+            },
+            "large_switch_gt_100km": {
+              "n": 2,
+              "rate": 0.2
+            },
+            "confidence_increased_rate": 0.4,
+            "entropy_fixed_support_decreased_rate": 0.2,
+            "entropy_current_support_decreased_rate": 0.6,
+            "moved_closer_gt_100km_rate": 0.2,
+            "moved_farther_gt_100km_rate": 0.0
+          },
+          "middle": {
+            "n_transitions": 51,
+            "top_jump_km": {
+              "n": 51,
+              "mean": 331.92326,
+              "median": 0.125867,
+              "min": 0.0,
+              "max": 7018.783157,
+              "q75": 15.338667,
+              "q90": 287.738973
+            },
+            "abs_delta_top_weight": {
+              "n": 51,
+              "mean": 0.090392,
+              "median": 0.05,
+              "min": 0.0,
+              "max": 0.3
+            },
+            "abs_delta_entropy_fixed_normalized": {
+              "n": 51,
+              "mean": 0.107472,
+              "median": 0.100253,
+              "min": 0.0,
+              "max": 0.438657
+            },
+            "large_switch_gt_100km": {
+              "n": 10,
+              "rate": 0.196078
+            },
+            "confidence_increased_rate": 0.431373,
+            "entropy_fixed_support_decreased_rate": 0.411765,
+            "entropy_current_support_decreased_rate": 0.529412,
+            "moved_closer_gt_100km_rate": 0.098039,
+            "moved_farther_gt_100km_rate": 0.098039
+          },
+          "late": {
+            "n_transitions": 55,
+            "top_jump_km": {
+              "n": 55,
+              "mean": 37.931383,
+              "median": 0.024187,
+              "min": 0.0,
+              "max": 691.608657,
+              "q75": 0.653685,
+              "q90": 2.022887
+            },
+            "abs_delta_top_weight": {
+              "n": 55,
+              "mean": 0.069273,
+              "median": 0.05,
+              "min": 0.0,
+              "max": 0.4
+            },
+            "abs_delta_entropy_fixed_normalized": {
+              "n": 55,
+              "mean": 0.067152,
+              "median": 0.034565,
+              "min": 0.0,
+              "max": 0.351718
+            },
+            "large_switch_gt_100km": {
+              "n": 4,
+              "rate": 0.072727
+            },
+            "confidence_increased_rate": 0.563636,
+            "entropy_fixed_support_decreased_rate": 0.618182,
+            "entropy_current_support_decreased_rate": 0.6,
+            "moved_closer_gt_100km_rate": 0.054545,
+            "moved_farther_gt_100km_rate": 0.018182
+          }
+        }
+      },
+      "gpt-5.4-mini": {
+        "all": {
+          "n_transitions": 61,
+          "top_jump_km": {
+            "n": 61,
+            "mean": 547.113796,
+            "median": 1.356347,
+            "min": 0.0,
+            "max": 9227.240234,
+            "q75": 193.179917,
+            "q90": 1231.120166
+          },
+          "abs_delta_top_weight": {
+            "n": 61,
+            "mean": 0.137541,
+            "median": 0.1,
+            "min": 0.02,
+            "max": 0.43
+          },
+          "abs_delta_entropy_fixed_normalized": {
+            "n": 61,
+            "mean": 0.10325,
+            "median": 0.082532,
+            "min": 0.014283,
+            "max": 0.353569
+          },
+          "large_switch_gt_100km": {
+            "n": 19,
+            "rate": 0.311475
+          },
+          "confidence_increased_rate": 0.803279,
+          "entropy_fixed_support_decreased_rate": 0.754098,
+          "entropy_current_support_decreased_rate": 0.803279,
+          "moved_closer_gt_100km_rate": 0.131148,
+          "moved_farther_gt_100km_rate": 0.131148
+        },
+        "by_destination_phase": {
+          "early": {
+            "n_transitions": 7,
+            "top_jump_km": {
+              "n": 7,
+              "mean": 3015.702646,
+              "median": 677.193875,
+              "min": 0.0,
+              "max": 9227.240234,
+              "q75": 5601.122675,
+              "q90": 8143.751995
+            },
+            "abs_delta_top_weight": {
+              "n": 7,
+              "mean": 0.134286,
+              "median": 0.15,
+              "min": 0.05,
+              "max": 0.2
+            },
+            "abs_delta_entropy_fixed_normalized": {
+              "n": 7,
+              "mean": 0.10479,
+              "median": 0.097028,
+              "min": 0.035268,
+              "max": 0.163206
+            },
+            "large_switch_gt_100km": {
+              "n": 4,
+              "rate": 0.571429
+            },
+            "confidence_increased_rate": 0.857143,
+            "entropy_fixed_support_decreased_rate": 0.571429,
+            "entropy_current_support_decreased_rate": 0.857143,
+            "moved_closer_gt_100km_rate": 0.142857,
+            "moved_farther_gt_100km_rate": 0.285714
+          },
+          "middle": {
+            "n_transitions": 28,
+            "top_jump_km": {
+              "n": 28,
+              "mean": 316.401079,
+              "median": 2.304576,
+              "min": 0.0,
+              "max": 2202.615551,
+              "q75": 243.359827,
+              "q90": 1115.071706
+            },
+            "abs_delta_top_weight": {
+              "n": 28,
+              "mean": 0.155714,
+              "median": 0.115,
+              "min": 0.05,
+              "max": 0.43
+            },
+            "abs_delta_entropy_fixed_normalized": {
+              "n": 28,
+              "mean": 0.108641,
+              "median": 0.074948,
+              "min": 0.019574,
+              "max": 0.353569
+            },
+            "large_switch_gt_100km": {
+              "n": 11,
+              "rate": 0.392857
+            },
+            "confidence_increased_rate": 0.75,
+            "entropy_fixed_support_decreased_rate": 0.714286,
+            "entropy_current_support_decreased_rate": 0.75,
+            "moved_closer_gt_100km_rate": 0.178571,
+            "moved_farther_gt_100km_rate": 0.178571
+          },
+          "late": {
+            "n_transitions": 26,
+            "top_jump_km": {
+              "n": 26,
+              "mean": 130.95357,
+              "median": 0.664803,
+              "min": 0.0,
+              "max": 2403.10249,
+              "q75": 4.584385,
+              "q90": 158.585538
+            },
+            "abs_delta_top_weight": {
+              "n": 26,
+              "mean": 0.118846,
+              "median": 0.1,
+              "min": 0.02,
+              "max": 0.3
+            },
+            "abs_delta_entropy_fixed_normalized": {
+              "n": 26,
+              "mean": 0.097028,
+              "median": 0.074037,
+              "min": 0.014283,
+              "max": 0.32515
+            },
+            "large_switch_gt_100km": {
+              "n": 4,
+              "rate": 0.153846
+            },
+            "confidence_increased_rate": 0.846154,
+            "entropy_fixed_support_decreased_rate": 0.846154,
+            "entropy_current_support_decreased_rate": 0.846154,
+            "moved_closer_gt_100km_rate": 0.076923,
+            "moved_farther_gt_100km_rate": 0.038462
+          }
+        }
+      }
+    }
+  },
+  "consideration": {
+    "definition": "Apareció una región en un checkpoint si recibió peso explícito en un candidato cuyo centro cae dentro del umbral. 'Never' significa que no apareció en ningún checkpoint elicitado. 'Absent at last observed report' es un proxy operativo de abandono, no una medición de la creencia exacta al submit.",
+    "by_model": {
+      "claude-opus-4-6": {
+        "location_by_threshold_km": {
+          "25": {
+            "n_runs": 29,
+            "ever": 25,
+            "already_first": 23,
+            "introduced_later": 2,
+            "never": 4,
+            "absent_at_last_observed_report": 1,
+            "absent_at_last_observed_report_rate_among_ever": 0.04,
+            "first_consideration_report_index_counts": {
+              "0": 23,
+              "1": 1,
+              "2": 1
+            },
+            "first_consideration_step": {
+              "n": 25,
+              "mean": 4.24,
+              "median": 4.0,
+              "min": 2.0,
+              "max": 14.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 19,
+              "middle": 6
+            },
+            "case_ids": {
+              "introduced_later": [
+                "claude-opus-4-6|on|2255098|0",
+                "claude-opus-4-6|on|1862569|0"
+              ],
+              "never": [
+                "claude-opus-4-6|on|636474|2",
+                "claude-opus-4-6|on|636474|0",
+                "claude-opus-4-6|on|636474|1",
+                "claude-opus-4-6|on|963644|2"
+              ],
+              "absent_at_last_observed_report": [
+                "claude-opus-4-6|on|963644|0"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "claude-opus-4-6|on|2255098|0",
+                "report_index": 2,
+                "step": 14,
+                "phase": "middle"
+              },
+              {
+                "run_key": "claude-opus-4-6|on|1862569|0",
+                "report_index": 1,
+                "step": 8,
+                "phase": "early"
+              }
+            ]
+          },
+          "100": {
+            "n_runs": 29,
+            "ever": 27,
+            "already_first": 25,
+            "introduced_later": 2,
+            "never": 2,
+            "absent_at_last_observed_report": 3,
+            "absent_at_last_observed_report_rate_among_ever": 0.111111,
+            "first_consideration_report_index_counts": {
+              "0": 25,
+              "1": 1,
+              "2": 1
+            },
+            "first_consideration_step": {
+              "n": 27,
+              "mean": 4.222222,
+              "median": 4.0,
+              "min": 2.0,
+              "max": 14.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 21,
+              "middle": 6
+            },
+            "case_ids": {
+              "introduced_later": [
+                "claude-opus-4-6|on|2255098|0",
+                "claude-opus-4-6|on|1862569|0"
+              ],
+              "never": [
+                "claude-opus-4-6|on|636474|0",
+                "claude-opus-4-6|on|636474|1"
+              ],
+              "absent_at_last_observed_report": [
+                "claude-opus-4-6|on|636474|2",
+                "claude-opus-4-6|on|963644|2",
+                "claude-opus-4-6|on|963644|0"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "claude-opus-4-6|on|2255098|0",
+                "report_index": 2,
+                "step": 14,
+                "phase": "middle"
+              },
+              {
+                "run_key": "claude-opus-4-6|on|1862569|0",
+                "report_index": 1,
+                "step": 8,
+                "phase": "early"
+              }
+            ]
+          },
+          "250": {
+            "n_runs": 29,
+            "ever": 29,
+            "already_first": 28,
+            "introduced_later": 1,
+            "never": 0,
+            "absent_at_last_observed_report": 2,
+            "absent_at_last_observed_report_rate_among_ever": 0.068966,
+            "first_consideration_report_index_counts": {
+              "0": 28,
+              "2": 1
+            },
+            "first_consideration_step": {
+              "n": 29,
+              "mean": 4.068966,
+              "median": 4.0,
+              "min": 2.0,
+              "max": 14.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 23,
+              "middle": 6
+            },
+            "case_ids": {
+              "introduced_later": [
+                "claude-opus-4-6|on|2255098|0"
+              ],
+              "never": [],
+              "absent_at_last_observed_report": [
+                "claude-opus-4-6|on|636474|2",
+                "claude-opus-4-6|on|963644|2"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "claude-opus-4-6|on|2255098|0",
+                "report_index": 2,
+                "step": 14,
+                "phase": "middle"
+              }
+            ]
+          },
+          "500": {
+            "n_runs": 29,
+            "ever": 29,
+            "already_first": 28,
+            "introduced_later": 1,
+            "never": 0,
+            "absent_at_last_observed_report": 1,
+            "absent_at_last_observed_report_rate_among_ever": 0.034483,
+            "first_consideration_report_index_counts": {
+              "0": 28,
+              "2": 1
+            },
+            "first_consideration_step": {
+              "n": 29,
+              "mean": 4.068966,
+              "median": 4.0,
+              "min": 2.0,
+              "max": 14.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 23,
+              "middle": 6
+            },
+            "case_ids": {
+              "introduced_later": [
+                "claude-opus-4-6|on|2255098|0"
+              ],
+              "never": [],
+              "absent_at_last_observed_report": [
+                "claude-opus-4-6|on|963644|2"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "claude-opus-4-6|on|2255098|0",
+                "report_index": 2,
+                "step": 14,
+                "phase": "middle"
+              }
+            ]
+          },
+          "1000": {
+            "n_runs": 29,
+            "ever": 29,
+            "already_first": 29,
+            "introduced_later": 0,
+            "never": 0,
+            "absent_at_last_observed_report": 0,
+            "absent_at_last_observed_report_rate_among_ever": 0.0,
+            "first_consideration_report_index_counts": {
+              "0": 29
+            },
+            "first_consideration_step": {
+              "n": 29,
+              "mean": 3.689655,
+              "median": 4.0,
+              "min": 2.0,
+              "max": 7.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 24,
+              "middle": 5
+            },
+            "case_ids": {
+              "introduced_later": [],
+              "never": [],
+              "absent_at_last_observed_report": []
+            },
+            "introduced_later_case_details": []
+          }
+        },
+        "date_interval_overlap": {
+          "n_runs": 29,
+          "ever": 28,
+          "already_first": 28,
+          "introduced_later": 0,
+          "never": 1,
+          "absent_at_last_observed_report": 2,
+          "absent_at_last_observed_report_rate_among_ever": 0.071429
+        }
+      },
+      "claude-sonnet-4-6": {
+        "location_by_threshold_km": {
+          "25": {
+            "n_runs": 30,
+            "ever": 25,
+            "already_first": 22,
+            "introduced_later": 3,
+            "never": 5,
+            "absent_at_last_observed_report": 4,
+            "absent_at_last_observed_report_rate_among_ever": 0.16,
+            "first_consideration_report_index_counts": {
+              "0": 22,
+              "1": 2,
+              "3": 1
+            },
+            "first_consideration_step": {
+              "n": 25,
+              "mean": 5.28,
+              "median": 4.0,
+              "min": 3.0,
+              "max": 19.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 20,
+              "middle": 5
+            },
+            "case_ids": {
+              "introduced_later": [
+                "claude-sonnet-4-6|on|963644|1",
+                "claude-sonnet-4-6|on|1862569|0",
+                "claude-sonnet-4-6|on|1862569|2"
+              ],
+              "never": [
+                "claude-sonnet-4-6|on|2255098|1",
+                "claude-sonnet-4-6|on|2255098|0",
+                "claude-sonnet-4-6|on|636474|0",
+                "claude-sonnet-4-6|on|636474|1",
+                "claude-sonnet-4-6|on|963644|2"
+              ],
+              "absent_at_last_observed_report": [
+                "claude-sonnet-4-6|on|2255098|2",
+                "claude-sonnet-4-6|on|963644|0",
+                "claude-sonnet-4-6|on|963644|1",
+                "claude-sonnet-4-6|on|636474|2"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "claude-sonnet-4-6|on|963644|1",
+                "report_index": 1,
+                "step": 9,
+                "phase": "early"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|1862569|0",
+                "report_index": 1,
+                "step": 11,
+                "phase": "middle"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|1862569|2",
+                "report_index": 3,
+                "step": 19,
+                "phase": "middle"
+              }
+            ]
+          },
+          "100": {
+            "n_runs": 30,
+            "ever": 27,
+            "already_first": 22,
+            "introduced_later": 5,
+            "never": 3,
+            "absent_at_last_observed_report": 3,
+            "absent_at_last_observed_report_rate_among_ever": 0.111111,
+            "first_consideration_report_index_counts": {
+              "0": 22,
+              "1": 4,
+              "2": 1
+            },
+            "first_consideration_step": {
+              "n": 27,
+              "mean": 5.333333,
+              "median": 4.0,
+              "min": 3.0,
+              "max": 15.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 22,
+              "middle": 5
+            },
+            "case_ids": {
+              "introduced_later": [
+                "claude-sonnet-4-6|on|636474|0",
+                "claude-sonnet-4-6|on|636474|1",
+                "claude-sonnet-4-6|on|963644|1",
+                "claude-sonnet-4-6|on|1862569|0",
+                "claude-sonnet-4-6|on|1862569|2"
+              ],
+              "never": [
+                "claude-sonnet-4-6|on|2255098|1",
+                "claude-sonnet-4-6|on|2255098|0",
+                "claude-sonnet-4-6|on|963644|2"
+              ],
+              "absent_at_last_observed_report": [
+                "claude-sonnet-4-6|on|2255098|2",
+                "claude-sonnet-4-6|on|963644|0",
+                "claude-sonnet-4-6|on|963644|1"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "claude-sonnet-4-6|on|636474|0",
+                "report_index": 1,
+                "step": 9,
+                "phase": "early"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|636474|1",
+                "report_index": 1,
+                "step": 7,
+                "phase": "early"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|963644|1",
+                "report_index": 1,
+                "step": 9,
+                "phase": "early"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|1862569|0",
+                "report_index": 1,
+                "step": 11,
+                "phase": "middle"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|1862569|2",
+                "report_index": 2,
+                "step": 15,
+                "phase": "middle"
+              }
+            ]
+          },
+          "250": {
+            "n_runs": 30,
+            "ever": 28,
+            "already_first": 25,
+            "introduced_later": 3,
+            "never": 2,
+            "absent_at_last_observed_report": 4,
+            "absent_at_last_observed_report_rate_among_ever": 0.142857,
+            "first_consideration_report_index_counts": {
+              "0": 25,
+              "1": 3
+            },
+            "first_consideration_step": {
+              "n": 28,
+              "mean": 4.892857,
+              "median": 4.0,
+              "min": 3.0,
+              "max": 10.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 24,
+              "middle": 4
+            },
+            "case_ids": {
+              "introduced_later": [
+                "claude-sonnet-4-6|on|636474|1",
+                "claude-sonnet-4-6|on|963644|1",
+                "claude-sonnet-4-6|on|963644|2"
+              ],
+              "never": [
+                "claude-sonnet-4-6|on|2255098|1",
+                "claude-sonnet-4-6|on|2255098|0"
+              ],
+              "absent_at_last_observed_report": [
+                "claude-sonnet-4-6|on|2255098|2",
+                "claude-sonnet-4-6|on|963644|0",
+                "claude-sonnet-4-6|on|963644|1",
+                "claude-sonnet-4-6|on|963644|2"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "claude-sonnet-4-6|on|636474|1",
+                "report_index": 1,
+                "step": 7,
+                "phase": "early"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|963644|1",
+                "report_index": 1,
+                "step": 9,
+                "phase": "early"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|963644|2",
+                "report_index": 1,
+                "step": 10,
+                "phase": "middle"
+              }
+            ]
+          },
+          "500": {
+            "n_runs": 30,
+            "ever": 28,
+            "already_first": 26,
+            "introduced_later": 2,
+            "never": 2,
+            "absent_at_last_observed_report": 2,
+            "absent_at_last_observed_report_rate_among_ever": 0.071429,
+            "first_consideration_report_index_counts": {
+              "0": 26,
+              "1": 2
+            },
+            "first_consideration_step": {
+              "n": 28,
+              "mean": 4.75,
+              "median": 4.0,
+              "min": 3.0,
+              "max": 10.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 24,
+              "middle": 4
+            },
+            "case_ids": {
+              "introduced_later": [
+                "claude-sonnet-4-6|on|963644|1",
+                "claude-sonnet-4-6|on|963644|2"
+              ],
+              "never": [
+                "claude-sonnet-4-6|on|2255098|1",
+                "claude-sonnet-4-6|on|2255098|0"
+              ],
+              "absent_at_last_observed_report": [
+                "claude-sonnet-4-6|on|2255098|2",
+                "claude-sonnet-4-6|on|963644|2"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "claude-sonnet-4-6|on|963644|1",
+                "report_index": 1,
+                "step": 9,
+                "phase": "early"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|963644|2",
+                "report_index": 1,
+                "step": 10,
+                "phase": "middle"
+              }
+            ]
+          },
+          "1000": {
+            "n_runs": 30,
+            "ever": 30,
+            "already_first": 28,
+            "introduced_later": 2,
+            "never": 0,
+            "absent_at_last_observed_report": 0,
+            "absent_at_last_observed_report_rate_among_ever": 0.0,
+            "first_consideration_report_index_counts": {
+              "0": 28,
+              "1": 2
+            },
+            "first_consideration_step": {
+              "n": 30,
+              "mean": 4.7,
+              "median": 4.0,
+              "min": 3.0,
+              "max": 10.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 26,
+              "middle": 4
+            },
+            "case_ids": {
+              "introduced_later": [
+                "claude-sonnet-4-6|on|963644|1",
+                "claude-sonnet-4-6|on|963644|2"
+              ],
+              "never": [],
+              "absent_at_last_observed_report": []
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "claude-sonnet-4-6|on|963644|1",
+                "report_index": 1,
+                "step": 9,
+                "phase": "early"
+              },
+              {
+                "run_key": "claude-sonnet-4-6|on|963644|2",
+                "report_index": 1,
+                "step": 10,
+                "phase": "middle"
+              }
+            ]
+          }
+        },
+        "date_interval_overlap": {
+          "n_runs": 30,
+          "ever": 29,
+          "already_first": 28,
+          "introduced_later": 1,
+          "never": 1,
+          "absent_at_last_observed_report": 3,
+          "absent_at_last_observed_report_rate_among_ever": 0.103448
+        }
+      },
+      "gpt-5.4-mini": {
+        "location_by_threshold_km": {
+          "25": {
+            "n_runs": 30,
+            "ever": 17,
+            "already_first": 12,
+            "introduced_later": 5,
+            "never": 13,
+            "absent_at_last_observed_report": 7,
+            "absent_at_last_observed_report_rate_among_ever": 0.411765,
+            "first_consideration_report_index_counts": {
+              "0": 12,
+              "1": 4,
+              "3": 1
+            },
+            "first_consideration_step": {
+              "n": 17,
+              "mean": 2.529412,
+              "median": 1.0,
+              "min": 1.0,
+              "max": 7.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 13,
+              "middle": 4
+            },
+            "case_ids": {
+              "introduced_later": [
+                "gpt-5.4-mini|on|1425423|1",
+                "gpt-5.4-mini|on|1425423|2",
+                "gpt-5.4-mini|on|2063941|2",
+                "gpt-5.4-mini|on|963644|0",
+                "gpt-5.4-mini|on|1134072|1"
+              ],
+              "never": [
+                "gpt-5.4-mini|on|1220722|0",
+                "gpt-5.4-mini|on|636474|0",
+                "gpt-5.4-mini|on|1862569|0",
+                "gpt-5.4-mini|on|1336113|0",
+                "gpt-5.4-mini|on|1134072|0",
+                "gpt-5.4-mini|on|1220722|2",
+                "gpt-5.4-mini|on|2255098|1",
+                "gpt-5.4-mini|on|636474|2",
+                "gpt-5.4-mini|on|963644|2",
+                "gpt-5.4-mini|on|1862569|2",
+                "gpt-5.4-mini|on|1862569|1",
+                "gpt-5.4-mini|on|947961|2",
+                "gpt-5.4-mini|on|1134072|2"
+              ],
+              "absent_at_last_observed_report": [
+                "gpt-5.4-mini|on|2063941|1",
+                "gpt-5.4-mini|on|636474|1",
+                "gpt-5.4-mini|on|2063941|2",
+                "gpt-5.4-mini|on|963644|1",
+                "gpt-5.4-mini|on|963644|0",
+                "gpt-5.4-mini|on|1134072|1",
+                "gpt-5.4-mini|on|1336113|2"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "gpt-5.4-mini|on|1425423|1",
+                "report_index": 1,
+                "step": 6,
+                "phase": "middle"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|1425423|2",
+                "report_index": 1,
+                "step": 5,
+                "phase": "middle"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|2063941|2",
+                "report_index": 1,
+                "step": 4,
+                "phase": "early"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|963644|0",
+                "report_index": 1,
+                "step": 4,
+                "phase": "early"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|1134072|1",
+                "report_index": 3,
+                "step": 7,
+                "phase": "middle"
+              }
+            ]
+          },
+          "100": {
+            "n_runs": 30,
+            "ever": 17,
+            "already_first": 13,
+            "introduced_later": 4,
+            "never": 13,
+            "absent_at_last_observed_report": 7,
+            "absent_at_last_observed_report_rate_among_ever": 0.411765,
+            "first_consideration_report_index_counts": {
+              "0": 13,
+              "1": 3,
+              "3": 1
+            },
+            "first_consideration_step": {
+              "n": 17,
+              "mean": 2.352941,
+              "median": 1.0,
+              "min": 1.0,
+              "max": 7.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 13,
+              "middle": 4
+            },
+            "case_ids": {
+              "introduced_later": [
+                "gpt-5.4-mini|on|1425423|1",
+                "gpt-5.4-mini|on|1425423|2",
+                "gpt-5.4-mini|on|2063941|2",
+                "gpt-5.4-mini|on|1134072|1"
+              ],
+              "never": [
+                "gpt-5.4-mini|on|1220722|0",
+                "gpt-5.4-mini|on|636474|0",
+                "gpt-5.4-mini|on|1862569|0",
+                "gpt-5.4-mini|on|1336113|0",
+                "gpt-5.4-mini|on|1134072|0",
+                "gpt-5.4-mini|on|1220722|2",
+                "gpt-5.4-mini|on|2255098|1",
+                "gpt-5.4-mini|on|636474|2",
+                "gpt-5.4-mini|on|963644|2",
+                "gpt-5.4-mini|on|1862569|2",
+                "gpt-5.4-mini|on|1862569|1",
+                "gpt-5.4-mini|on|947961|2",
+                "gpt-5.4-mini|on|1134072|2"
+              ],
+              "absent_at_last_observed_report": [
+                "gpt-5.4-mini|on|2063941|1",
+                "gpt-5.4-mini|on|636474|1",
+                "gpt-5.4-mini|on|2063941|2",
+                "gpt-5.4-mini|on|963644|1",
+                "gpt-5.4-mini|on|963644|0",
+                "gpt-5.4-mini|on|1134072|1",
+                "gpt-5.4-mini|on|1336113|2"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "gpt-5.4-mini|on|1425423|1",
+                "report_index": 1,
+                "step": 6,
+                "phase": "middle"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|1425423|2",
+                "report_index": 1,
+                "step": 5,
+                "phase": "middle"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|2063941|2",
+                "report_index": 1,
+                "step": 4,
+                "phase": "early"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|1134072|1",
+                "report_index": 3,
+                "step": 7,
+                "phase": "middle"
+              }
+            ]
+          },
+          "250": {
+            "n_runs": 30,
+            "ever": 22,
+            "already_first": 18,
+            "introduced_later": 4,
+            "never": 8,
+            "absent_at_last_observed_report": 8,
+            "absent_at_last_observed_report_rate_among_ever": 0.363636,
+            "first_consideration_report_index_counts": {
+              "0": 18,
+              "1": 3,
+              "3": 1
+            },
+            "first_consideration_step": {
+              "n": 22,
+              "mean": 2.454545,
+              "median": 1.5,
+              "min": 1.0,
+              "max": 7.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 17,
+              "middle": 5
+            },
+            "case_ids": {
+              "introduced_later": [
+                "gpt-5.4-mini|on|1425423|1",
+                "gpt-5.4-mini|on|1425423|2",
+                "gpt-5.4-mini|on|2063941|2",
+                "gpt-5.4-mini|on|1134072|1"
+              ],
+              "never": [
+                "gpt-5.4-mini|on|1220722|0",
+                "gpt-5.4-mini|on|1336113|0",
+                "gpt-5.4-mini|on|1134072|0",
+                "gpt-5.4-mini|on|1220722|2",
+                "gpt-5.4-mini|on|2255098|1",
+                "gpt-5.4-mini|on|963644|2",
+                "gpt-5.4-mini|on|947961|2",
+                "gpt-5.4-mini|on|1134072|2"
+              ],
+              "absent_at_last_observed_report": [
+                "gpt-5.4-mini|on|636474|0",
+                "gpt-5.4-mini|on|636474|1",
+                "gpt-5.4-mini|on|2063941|2",
+                "gpt-5.4-mini|on|636474|2",
+                "gpt-5.4-mini|on|963644|1",
+                "gpt-5.4-mini|on|963644|0",
+                "gpt-5.4-mini|on|1134072|1",
+                "gpt-5.4-mini|on|1336113|2"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "gpt-5.4-mini|on|1425423|1",
+                "report_index": 1,
+                "step": 6,
+                "phase": "middle"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|1425423|2",
+                "report_index": 1,
+                "step": 5,
+                "phase": "middle"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|2063941|2",
+                "report_index": 1,
+                "step": 4,
+                "phase": "early"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|1134072|1",
+                "report_index": 3,
+                "step": 7,
+                "phase": "middle"
+              }
+            ]
+          },
+          "500": {
+            "n_runs": 30,
+            "ever": 23,
+            "already_first": 20,
+            "introduced_later": 3,
+            "never": 7,
+            "absent_at_last_observed_report": 6,
+            "absent_at_last_observed_report_rate_among_ever": 0.26087,
+            "first_consideration_report_index_counts": {
+              "0": 20,
+              "1": 2,
+              "3": 1
+            },
+            "first_consideration_step": {
+              "n": 23,
+              "mean": 2.347826,
+              "median": 1.0,
+              "min": 1.0,
+              "max": 7.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 18,
+              "middle": 5
+            },
+            "case_ids": {
+              "introduced_later": [
+                "gpt-5.4-mini|on|1425423|1",
+                "gpt-5.4-mini|on|1425423|2",
+                "gpt-5.4-mini|on|1134072|1"
+              ],
+              "never": [
+                "gpt-5.4-mini|on|1220722|0",
+                "gpt-5.4-mini|on|1336113|0",
+                "gpt-5.4-mini|on|1134072|0",
+                "gpt-5.4-mini|on|1220722|2",
+                "gpt-5.4-mini|on|2255098|1",
+                "gpt-5.4-mini|on|963644|2",
+                "gpt-5.4-mini|on|1134072|2"
+              ],
+              "absent_at_last_observed_report": [
+                "gpt-5.4-mini|on|2063941|2",
+                "gpt-5.4-mini|on|636474|2",
+                "gpt-5.4-mini|on|963644|1",
+                "gpt-5.4-mini|on|963644|0",
+                "gpt-5.4-mini|on|1134072|1",
+                "gpt-5.4-mini|on|1336113|2"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "gpt-5.4-mini|on|1425423|1",
+                "report_index": 1,
+                "step": 6,
+                "phase": "middle"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|1425423|2",
+                "report_index": 1,
+                "step": 5,
+                "phase": "middle"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|1134072|1",
+                "report_index": 3,
+                "step": 7,
+                "phase": "middle"
+              }
+            ]
+          },
+          "1000": {
+            "n_runs": 30,
+            "ever": 23,
+            "already_first": 21,
+            "introduced_later": 2,
+            "never": 7,
+            "absent_at_last_observed_report": 4,
+            "absent_at_last_observed_report_rate_among_ever": 0.173913,
+            "first_consideration_report_index_counts": {
+              "0": 21,
+              "1": 1,
+              "3": 1
+            },
+            "first_consideration_step": {
+              "n": 23,
+              "mean": 2.173913,
+              "median": 1.0,
+              "min": 1.0,
+              "max": 7.0
+            },
+            "first_consideration_phase_counts": {
+              "early": 19,
+              "middle": 4
+            },
+            "case_ids": {
+              "introduced_later": [
+                "gpt-5.4-mini|on|1425423|1",
+                "gpt-5.4-mini|on|1134072|1"
+              ],
+              "never": [
+                "gpt-5.4-mini|on|1220722|0",
+                "gpt-5.4-mini|on|1336113|0",
+                "gpt-5.4-mini|on|1134072|0",
+                "gpt-5.4-mini|on|1220722|2",
+                "gpt-5.4-mini|on|2255098|1",
+                "gpt-5.4-mini|on|963644|2",
+                "gpt-5.4-mini|on|1134072|2"
+              ],
+              "absent_at_last_observed_report": [
+                "gpt-5.4-mini|on|2063941|2",
+                "gpt-5.4-mini|on|963644|1",
+                "gpt-5.4-mini|on|963644|0",
+                "gpt-5.4-mini|on|1134072|1"
+              ]
+            },
+            "introduced_later_case_details": [
+              {
+                "run_key": "gpt-5.4-mini|on|1425423|1",
+                "report_index": 1,
+                "step": 6,
+                "phase": "middle"
+              },
+              {
+                "run_key": "gpt-5.4-mini|on|1134072|1",
+                "report_index": 3,
+                "step": 7,
+                "phase": "middle"
+              }
+            ]
+          }
+        },
+        "date_interval_overlap": {
+          "n_runs": 30,
+          "ever": 28,
+          "already_first": 28,
+          "introduced_later": 0,
+          "never": 2,
+          "absent_at_last_observed_report": 6,
+          "absent_at_last_observed_report_rate_among_ever": 0.214286
+        }
+      }
+    }
+  },
+  "next_action_coupling": {
+    "definition": "Set completo de acciones del primer turn sustantivo con event.step estrictamente mayor al step del report. Las categorías no son excluyentes porque puede haber tool calls paralelas. web=web_search/fetch; visual=image_search/pick/crop; map_history=geocode/map/Street View/historical; submit=submit. Los intentos fallidos conservan su categoría y se cuentan además por separado. Report-only no tiene una tool informativa/de investigación coemitida (submit no cuenta); coemitted-tool sí recibe su resultado entre belief y siguiente turn, por lo que allí no se atribuye acoplamiento directo.",
+    "n_reports": 371,
+    "n_with_next_action": 370,
+    "by_checkpoint_kind": {
+      "report_only": {
+        "n_reports": 192,
+        "by_model_phase": {
+          "claude-opus-4-6": {
+            "early": {
+              "n_reports": 17,
+              "n_action_events": 33,
+              "counts": {
+                "web": 14,
+                "visual": 10,
+                "map_history": 3,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "middle": {
+              "n_reports": 26,
+              "n_action_events": 49,
+              "counts": {
+                "web": 19,
+                "visual": 11,
+                "map_history": 10,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "late": {
+              "n_reports": 33,
+              "n_action_events": 45,
+              "counts": {
+                "web": 10,
+                "visual": 7,
+                "map_history": 11,
+                "submit": 10,
+                "missing": 1
+              }
+            }
+          },
+          "claude-sonnet-4-6": {
+            "early": {
+              "n_reports": 4,
+              "n_action_events": 8,
+              "counts": {
+                "web": 4,
+                "visual": 1,
+                "map_history": 2,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "middle": {
+              "n_reports": 6,
+              "n_action_events": 11,
+              "counts": {
+                "web": 5,
+                "visual": 3,
+                "map_history": 3,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "late": {
+              "n_reports": 17,
+              "n_action_events": 25,
+              "counts": {
+                "web": 6,
+                "visual": 3,
+                "map_history": 4,
+                "submit": 8,
+                "missing": 0
+              }
+            }
+          },
+          "gpt-5.4-mini": {
+            "early": {
+              "n_reports": 34,
+              "n_action_events": 75,
+              "counts": {
+                "web": 20,
+                "visual": 17,
+                "map_history": 0,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "middle": {
+              "n_reports": 30,
+              "n_action_events": 77,
+              "counts": {
+                "web": 24,
+                "visual": 4,
+                "map_history": 10,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "late": {
+              "n_reports": 25,
+              "n_action_events": 39,
+              "counts": {
+                "web": 10,
+                "visual": 0,
+                "map_history": 7,
+                "submit": 10,
+                "missing": 0
+              }
+            }
+          }
+        },
+        "n_with_next_action": 191,
+        "n_next_turns_with_multiple_action_events": 113,
+        "n_next_turns_mixing_action_categories": 54,
+        "failed_action_attempts_in_next_turn": {
+          "n": 3,
+          "type_counts": {
+            "fetch_url_with_images_error": 1,
+            "image_search_error": 1,
+            "web_search_error": 1
+          }
+        }
+      },
+      "coemitted_tool": {
+        "n_reports": 179,
+        "by_model_phase": {
+          "claude-opus-4-6": {
+            "early": {
+              "n_reports": 16,
+              "n_action_events": 32,
+              "counts": {
+                "web": 12,
+                "visual": 9,
+                "map_history": 4,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "middle": {
+              "n_reports": 26,
+              "n_action_events": 45,
+              "counts": {
+                "web": 13,
+                "visual": 11,
+                "map_history": 9,
+                "submit": 2,
+                "missing": 0
+              }
+            },
+            "late": {
+              "n_reports": 16,
+              "n_action_events": 24,
+              "counts": {
+                "web": 8,
+                "visual": 3,
+                "map_history": 7,
+                "submit": 1,
+                "missing": 0
+              }
+            }
+          },
+          "claude-sonnet-4-6": {
+            "early": {
+              "n_reports": 33,
+              "n_action_events": 63,
+              "counts": {
+                "web": 25,
+                "visual": 16,
+                "map_history": 10,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "middle": {
+              "n_reports": 48,
+              "n_action_events": 87,
+              "counts": {
+                "web": 37,
+                "visual": 13,
+                "map_history": 15,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "late": {
+              "n_reports": 38,
+              "n_action_events": 54,
+              "counts": {
+                "web": 20,
+                "visual": 6,
+                "map_history": 14,
+                "submit": 5,
+                "missing": 0
+              }
+            }
+          },
+          "gpt-5.4-mini": {
+            "early": {
+              "n_reports": 1,
+              "n_action_events": 4,
+              "counts": {
+                "web": 1,
+                "visual": 0,
+                "map_history": 0,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "middle": {
+              "n_reports": 0,
+              "n_action_events": 0,
+              "counts": {
+                "web": 0,
+                "visual": 0,
+                "map_history": 0,
+                "submit": 0,
+                "missing": 0
+              }
+            },
+            "late": {
+              "n_reports": 1,
+              "n_action_events": 4,
+              "counts": {
+                "web": 1,
+                "visual": 0,
+                "map_history": 1,
+                "submit": 0,
+                "missing": 0
+              }
+            }
+          }
+        },
+        "n_with_next_action": 179,
+        "n_next_turns_with_multiple_action_events": 130,
+        "n_next_turns_mixing_action_categories": 64,
+        "failed_action_attempts_in_next_turn": {
+          "n": 0,
+          "type_counts": {}
+        }
+      }
+    },
+    "late_submit_association_by_checkpoint_kind_and_model": {
+      "report_only": {
+        "claude-opus-4-6": {
+          "high_top_weight_ge_0_8": {
+            "n": 15,
+            "submit_next": 7,
+            "submit_next_rate": 0.466667
+          },
+          "lower_top_weight": {
+            "n": 17,
+            "submit_next": 3,
+            "submit_next_rate": 0.176471
+          },
+          "correct_region_mass_500km_positive": {
+            "n": 31,
+            "submit_next": 9,
+            "submit_next_rate": 0.290323
+          },
+          "no_correct_region_mass_500km": {
+            "n": 1,
+            "submit_next": 1,
+            "submit_next_rate": 1.0
+          }
+        },
+        "claude-sonnet-4-6": {
+          "high_top_weight_ge_0_8": {
+            "n": 12,
+            "submit_next": 6,
+            "submit_next_rate": 0.5
+          },
+          "lower_top_weight": {
+            "n": 5,
+            "submit_next": 2,
+            "submit_next_rate": 0.4
+          },
+          "correct_region_mass_500km_positive": {
+            "n": 16,
+            "submit_next": 8,
+            "submit_next_rate": 0.5
+          },
+          "no_correct_region_mass_500km": {
+            "n": 1,
+            "submit_next": 0,
+            "submit_next_rate": 0.0
+          }
+        },
+        "gpt-5.4-mini": {
+          "high_top_weight_ge_0_8": {
+            "n": 5,
+            "submit_next": 4,
+            "submit_next_rate": 0.8
+          },
+          "lower_top_weight": {
+            "n": 20,
+            "submit_next": 6,
+            "submit_next_rate": 0.3
+          },
+          "correct_region_mass_500km_positive": {
+            "n": 12,
+            "submit_next": 6,
+            "submit_next_rate": 0.5
+          },
+          "no_correct_region_mass_500km": {
+            "n": 13,
+            "submit_next": 4,
+            "submit_next_rate": 0.307692
+          }
+        }
+      },
+      "coemitted_tool": {
+        "claude-opus-4-6": {
+          "high_top_weight_ge_0_8": {
+            "n": 6,
+            "submit_next": 1,
+            "submit_next_rate": 0.166667
+          },
+          "lower_top_weight": {
+            "n": 10,
+            "submit_next": 0,
+            "submit_next_rate": 0.0
+          },
+          "correct_region_mass_500km_positive": {
+            "n": 16,
+            "submit_next": 1,
+            "submit_next_rate": 0.0625
+          },
+          "no_correct_region_mass_500km": {
+            "n": 0,
+            "submit_next": 0,
+            "submit_next_rate": null
+          }
+        },
+        "claude-sonnet-4-6": {
+          "high_top_weight_ge_0_8": {
+            "n": 11,
+            "submit_next": 3,
+            "submit_next_rate": 0.272727
+          },
+          "lower_top_weight": {
+            "n": 27,
+            "submit_next": 2,
+            "submit_next_rate": 0.074074
+          },
+          "correct_region_mass_500km_positive": {
+            "n": 31,
+            "submit_next": 4,
+            "submit_next_rate": 0.129032
+          },
+          "no_correct_region_mass_500km": {
+            "n": 7,
+            "submit_next": 1,
+            "submit_next_rate": 0.142857
+          }
+        },
+        "gpt-5.4-mini": {
+          "high_top_weight_ge_0_8": {
+            "n": 0,
+            "submit_next": 0,
+            "submit_next_rate": null
+          },
+          "lower_top_weight": {
+            "n": 1,
+            "submit_next": 0,
+            "submit_next_rate": 0.0
+          },
+          "correct_region_mass_500km_positive": {
+            "n": 1,
+            "submit_next": 0,
+            "submit_next_rate": 0.0
+          },
+          "no_correct_region_mass_500km": {
+            "n": 0,
+            "submit_next": 0,
+            "submit_next_rate": null
+          }
+        }
+      }
+    },
+    "after_top_switch_by_checkpoint_kind": {
+      "report_only": {
+        "large_switch_gt_100km": {
+          "n": 28,
+          "submit_next": 1,
+          "submit_next_rate": 0.035714,
+          "next_turn_category_counts_nonexclusive": {
+            "web": 26,
+            "visual": 7,
+            "map_history": 4,
+            "submit": 1
+          }
+        },
+        "stable_le_100km": {
+          "n": 115,
+          "submit_next": 27,
+          "submit_next_rate": 0.234783,
+          "next_turn_category_counts_nonexclusive": {
+            "web": 53,
+            "visual": 24,
+            "map_history": 39,
+            "submit": 27
+          }
+        },
+        "late_large_switch_gt_100km": {
+          "n": 6,
+          "submit_next": 1,
+          "submit_next_rate": 0.166667,
+          "next_turn_category_counts_nonexclusive": {
+            "web": 5,
+            "visual": 1,
+            "map_history": 0,
+            "submit": 1
+          }
+        },
+        "late_stable_le_100km": {
+          "n": 68,
+          "submit_next": 27,
+          "submit_next_rate": 0.397059,
+          "next_turn_category_counts_nonexclusive": {
+            "web": 21,
+            "visual": 9,
+            "map_history": 22,
+            "submit": 27
+          }
+        }
+      },
+      "coemitted_tool": {
+        "large_switch_gt_100km": {
+          "n": 23,
+          "submit_next": 0,
+          "submit_next_rate": 0.0,
+          "next_turn_category_counts_nonexclusive": {
+            "web": 15,
+            "visual": 15,
+            "map_history": 3,
+            "submit": 0
+          }
+        },
+        "stable_le_100km": {
+          "n": 115,
+          "submit_next": 6,
+          "submit_next_rate": 0.052174,
+          "next_turn_category_counts_nonexclusive": {
+            "web": 74,
+            "visual": 25,
+            "map_history": 42,
+            "submit": 6
+          }
+        },
+        "late_large_switch_gt_100km": {
+          "n": 6,
+          "submit_next": 0,
+          "submit_next_rate": 0.0,
+          "next_turn_category_counts_nonexclusive": {
+            "web": 3,
+            "visual": 4,
+            "map_history": 3,
+            "submit": 0
+          }
+        },
+        "late_stable_le_100km": {
+          "n": 49,
+          "submit_next": 6,
+          "submit_next_rate": 0.122449,
+          "next_turn_category_counts_nonexclusive": {
+            "web": 26,
+            "visual": 5,
+            "map_history": 19,
+            "submit": 6
+          }
+        }
+      }
+    },
+    "coordinate_bearing_map_history_actions_by_checkpoint_kind": {
+      "report_only": {
+        "n_events": 50,
+        "n_reports": 36,
+        "distance_to_reported_top_km": {
+          "n": 50,
+          "mean": 0.078415,
+          "median": 0.013585,
+          "min": 0.0,
+          "max": 0.676166
+        },
+        "within_100km": 50,
+        "within_max_radius_or_25km": 50,
+        "following_reported_top_while_top_gt_500km_from_truth": 10,
+        "following_wrong_top_action_type_counts": {
+          "historical_query_at": 2,
+          "static_map": 3,
+          "street_view": 5
+        }
+      },
+      "coemitted_tool": {
+        "n_events": 35,
+        "n_reports": 31,
+        "distance_to_reported_top_km": {
+          "n": 35,
+          "mean": 0.258901,
+          "median": 0.062697,
+          "min": 0.0,
+          "max": 1.417964
+        },
+        "within_100km": 35,
+        "within_max_radius_or_25km": 35,
+        "following_reported_top_while_top_gt_500km_from_truth": 3,
+        "following_wrong_top_action_type_counts": {
+          "static_map": 1,
+          "street_view": 2
+        }
+      }
+    }
+  },
+  "limitations": [
+    "E016 contiene sólo diez fotos y tres réplicas por celda; reportes y transiciones de una misma corrida no son observaciones independientes.",
+    "Los checkpoints son autoelegidos y los modelos tienen distinta longitud de corrida; early/middle/late normaliza por steps_used, pero no iguala exposición a evidencia.",
+    "La fase usa la duración final de una corrida endógena a la decisión de parar e incluye el turn de submit; se reporta cuántos reportes cambiarían al excluir ese turn.",
+    "El contraste early-late está condicionado a corridas que tienen checkpoints en ambas fases. Es pareado y descriptivo, pero no representa todas las corridas ni autoriza inferencia con estos tamaños muestrales.",
+    "El nudge para reportar creencias es una intervención. El brazo off no contiene una trayectoria latente comparable.",
+    "La entropía discreta ignora radios geográficos y trata la masa no asignada como un único bin. La serie primaria usa Shannon en nats y normalización de soporte fijo; la normalización por soporte no nulo se conserva sólo como diagnóstico porque K cambia.",
+    "La masa regional suma candidatos por distancia de su centro; 500 km es un umbral operativo arbitrario, por eso se reporta sensibilidad entre 25 y 1000 km.",
+    "La masa temporal cuenta intervalos que solapan la verdad y por lo tanto favorece intervalos amplios; no es una densidad temporal ni una proper scoring rule.",
+    "El último reporte no coincide con la creencia al submit en 88/89 corridas y una tool coemitida en el mismo turn todavía no había devuelto su resultado al agente. Por eso 'ausente al final' significa ausente en el último checkpoint observado.",
+    "En checkpoints coemitidos, el resultado de la tool media entre belief y siguiente turn; no se interpreta como acoplamiento directo. En report-only la adyacencia es más limpia, pero sigue siendo observacional y no prueba causalidad ni valor informativo.",
+    "Los slim preservan texto y metadata, pero no los píxeles base64 devueltos por crops, mapas y Street View; esos estímulos no pueden reauditarse bit a bit aquí.",
+    "Las certificaciones de las diez fotos del piloto siguen en estado draft.",
+    "Este análisis no modela likelihoods ni la fuerza normativa de evidencia web; no califica una actualización como correcta o incorrecta dado lo observado."
+  ]
+}

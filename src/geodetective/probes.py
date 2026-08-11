@@ -59,6 +59,11 @@ class ProbeConfig:
     truth_year: Optional[float] = None  # P5: para contrabalancear distractores vs GT
     distractor_offset_years: float = 25.0  # P5: distractor_a = GT−off, distractor_b = GT+off
     year_window: float = 5.0        # P5: ventana ± para medir masa atraída
+    # La evidencia habla de un disco de 25 km y cluster_mass asigna el peso
+    # completo del candidato a ese evento. Un candidato más ancho no representa
+    # la misma proposición (p.ej. "Australia", radio 1200 km), así que no es
+    # elegible para una medición normativa de ubicación.
+    max_top_radius_km: float = CLUSTER_KM
 
 
 @dataclass
@@ -321,7 +326,8 @@ class ProbeInjector:
         """Llamar tras cada report_belief aceptado. Devuelve el texto del boletín o None.
 
         Elegibilidad (codebook §0): un solo fire por corrida; step ≥ min_step;
-        budget consumido ≤ max_budget_frac; top parseable; estado C o W (U no elegible).
+        budget consumido ≤ max_budget_frac; top parseable y no más ancho que el
+        disco intervenido; estado C o W (U no elegible).
         """
         if self.config.family == "P4":
             return None  # P4 dispara SOLO en el submit (fire_on_submit), nunca post-report
@@ -334,6 +340,12 @@ class ProbeInjector:
         loc = (belief or {}).get("location_belief") or []
         top = top_candidate(loc)
         if top is None:
+            return None
+        try:
+            top_radius_km = float(top["radius_km"])
+        except (KeyError, TypeError, ValueError):
+            return None
+        if top_radius_km > self.config.max_top_radius_km:
             return None
         state = classify_state(top, self.truth_lat, self.truth_lon)
         if state == "U":
@@ -361,7 +373,7 @@ class ProbeInjector:
             self.record = ProbeRecord(
                 fired=True, step=step, arm=arm, polarity="p5",
                 pre_top={"name": top.get("name"), "lat": lat0, "lon": lon0,
-                         "weight": top.get("weight")},
+                         "weight": top.get("weight"), "radius_km": top_radius_km},
                 pre_mass=cluster_mass(loc, lat0, lon0),
                 pre_report_step=step,
                 bulletin=bulletin,
@@ -386,7 +398,7 @@ class ProbeInjector:
         self.record = ProbeRecord(
             fired=True, step=step, arm=arm, polarity=polarity,
             pre_top={"name": top.get("name"), "lat": lat0, "lon": lon0,
-                     "weight": top.get("weight")},
+                     "weight": top.get("weight"), "radius_km": top_radius_km},
             pre_mass=cluster_mass(loc, lat0, lon0),
             pre_report_step=step,
             bulletin=bulletin,

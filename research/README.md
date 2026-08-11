@@ -24,6 +24,7 @@ Una idea entra por `notes/`. Si se decanta y vale la pena consolidar → pasa a 
 
 ### `notes/`
 - `genesis-intro.md` — semilla del proyecto, idea original con motivación, datasets, infraestructura, related work.
+- `2026-08-11_belief_updates_and_investigative_vices.md` — nota exploratoria de discusión: degradación temporal de actualización, cadena evidencia→creencia→acción→parada, vicios, interventions/forks y conexión con WAGER. No registra decisiones.
 - `geobenchx_deep_dive.md` — análisis del repo Solirinai/GeoBenchX. Veredicto: apalancar parcialmente (4 archivos como base, no clonar entero).
 - `osm_mcp_deep_dive.md` — análisis del repo jagan-shanmugam/open-streetmap-mcp. Veredicto: replicar el patrón FastMCP + lifespan + tools tipadas, no apalancar como dependencia.
 - `pastvu_deep_dive.md` — dataset principal. Veredicto: apalancar con asterisco (solo training, nunca held-out; requiere filtrado adversarial agresivo + balanceo multi-fuente por sesgo a Rusia).

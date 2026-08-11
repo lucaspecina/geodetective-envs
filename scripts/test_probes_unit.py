@@ -71,6 +71,9 @@ def run_tests() -> int:
                     inj.maybe_fire(_belief([u_cand]), step=5, max_steps=30) is None)
     f += not _check("no dispara con budget consumido >60%",
                     inj.maybe_fire(_belief([MADRID]), step=25, max_steps=30) is None)
+    wide_madrid = {**MADRID, "name": "España amplia", "radius_km": 500}
+    f += not _check("no dispara si el top es más ancho que el disco intervenido",
+                    inj.maybe_fire(_belief([wide_madrid]), step=5, max_steps=30) is None)
     b = inj.maybe_fire(_belief([MADRID]), step=5, max_steps=30)
     f += not _check("dispara en checkpoint elegible", b is not None)
     f += not _check("NO dispara dos veces",

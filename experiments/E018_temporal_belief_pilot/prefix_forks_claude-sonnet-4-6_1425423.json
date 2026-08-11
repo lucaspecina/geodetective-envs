@@ -1,0 +1,2081 @@
+{
+  "status": "exploratory_not_confirmatory",
+  "design": "same-prefix contradiction/placebo one-step forks",
+  "limitations": [
+    "beliefs are prompt-elicited reports",
+    "checkpoints are selected from one natural base trajectory",
+    "eligibility conditions on a correct top hypothesis",
+    "the post-report next action is sampled but not executed",
+    "no temporal claim is supported without replication across photos and models"
+  ],
+  "model": "claude-sonnet-4-6",
+  "cid": 1425423,
+  "candidate": {
+    "title": "Auckland. Queen Street",
+    "geo": [
+      -36.843864,
+      174.766873
+    ],
+    "year": 1895,
+    "provider": "pastvu"
+  },
+  "config": {
+    "max_steps": 26,
+    "min_steps": 0,
+    "belief_nudge_after": 3,
+    "max_forks": 3,
+    "fork_reps": 1
+  },
+  "base": {
+    "steps_used": 22,
+    "terminal_state": "submitted",
+    "error": null,
+    "elapsed_s": 887.9,
+    "final_answer": {
+      "location": "Queen Street en la intersección con Customs Street East, Auckland, Nueva Zelanda - mirando hacia el norte desde cerca de Customs Street, con el Waverley Hotel a la izquierda",
+      "lat": -36.8448,
+      "lon": 174.767,
+      "year": "1902-1908",
+      "reasoning": "La fotografía es una postal coloreada de Lower Queen Street, Auckland, Nueva Zelanda. Los elementos clave identificados son: (1) el \"WAVERLEY HOTEL\" claramente visible a la izquierda, confirmado en múltiples archivos históricos como ubicado en la esquina de Lower Queen Street y Customs Street East, Auckland; (2) el cartel \"T.H. HALL\" (visible como \"THNALL\") a la derecha, negocio confirmado en Queen Street en registros de 1905; (3) tranvía eléctrico rojo (los tranvías eléctricos de Auckland se inauguraron el 17 de noviembre de 1902); (4) la perspectiva mirando hacia el norte por Queen Street desde cerca de Customs Street; (5) comparación visual con postales del período \"Corner of Customs and Queen Streets, About 1903\" del Fairfax Archives que muestra la misma intersección y arquitectura. El año se estima entre 1902 (inicio tranvías eléctricos) y 1908.",
+      "confidence": "alta",
+      "visual_clues": [
+        "Hotel Waverley claramente visible a la izquierda (lado este de Queen Street)",
+        "Cartel T.H. HALL visible a la derecha del edificio",
+        "Tranvía eléctrico rojo de época victoriana tardía",
+        "Postal coloreada estilo Edwardiano",
+        "Texto parcial 'Looki...' en la parte superior (Looking North)",
+        "Edificio con cúpula al fondo (posible General Post Office o Customs House)",
+        "Arquitectura victoriana de ladrillo característica de Auckland 1900s",
+        "Carruajes tirados por caballos junto a los tranvías eléctricos"
+      ],
+      "external_evidence": [
+        "https://digitalnz.org/records/43805261 - Waverley Hotel at the junction of Lower Queen Street and Customs Street East, Auckland Central",
+        "https://digitalnz.org/records/30048132 - 1905: 'T H Hall' visible en Queen Street Auckland mirando hacia el sur desde los muelles",
+        "https://timespanner.blogspot.com/2009/05/17-november-1902-inauguration-of.html - Inauguración tranvías eléctricos Auckland en Queen Street y Customs Street, 17 Nov 1902",
+        "https://thefairfaxarchives.co.nz/100-years-of-queen-street-in-auckland-1840s-1940s - 'Corner of Customs and Queen Streets, About 1903' muestra misma intersección y arquitectura"
+      ],
+      "rejected_alternatives": [
+        "Australia (descartado - el Waverley Hotel confirmado en Auckland NZ, no en ninguna ciudad australiana)",
+        "Sydney (descartado - arquitectura y negocios no coinciden)",
+        "Looking South desde Quay Street (descartado - el Waverley Hotel aparece a la izquierda cuando se mira hacia el norte, confirmado por registros que dicen hotel estaba en lado este de Queen St)"
+      ],
+      "verification_checks": [
+        "DigitalNZ confirma Waverley Hotel en esquina Lower Queen Street y Customs Street East",
+        "Registros de 1905 de DigitalNZ mencionan T.H. Hall en Queen Street Auckland mirando desde los muelles",
+        "Inauguración tranvías eléctricos Auckland 1902 confirma fecha post-quem",
+        "Fairfax Archives muestra foto de 'Corner of Customs and Queen Streets, About 1903' con arquitectura idéntica"
+      ],
+      "final_belief_top": {
+        "name": "Queen Street en Customs Street East, Auckland, Nueva Zelanda",
+        "lat": -36.8448,
+        "lon": 174.767,
+        "weight": 0.92
+      }
+    },
+    "belief_reports": [
+      {
+        "step": 4,
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Australia/Nueva Zelanda - ciudad con tranvía victoriano",
+              "lat": -33.0,
+              "lon": 151.0,
+              "weight": 0.6,
+              "radius_km": 2000
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1895,
+              "to": 1910,
+              "weight": 0.8
+            }
+          ],
+          "rationale": "Waverley Hotel identificado claramente, arquitectura victoriana, tranvía rojo de época, carteles en inglés, estilo postal coloreada de principios del siglo XX."
+        }
+      },
+      {
+        "step": 8,
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Queen Street, Auckland, Nueva Zelanda (cerca del Waverley Hotel)",
+              "lat": -36.844,
+              "lon": 174.767,
+              "weight": 0.9,
+              "radius_km": 1
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1900,
+              "to": 1910,
+              "weight": 0.75
+            },
+            {
+              "from": 1910,
+              "to": 1920,
+              "weight": 0.2
+            }
+          ],
+          "rationale": "La celda 3 muestra \"WAVERLEY HOTEL, AUCKLAND\" con tranvías idénticos al de nuestra foto. El Waverley Hotel estaba en Queen Street, Auckland. La foto parece ser una postal de Lower Queen Street mirando hacia el sur desde cerca de Customs Street."
+        }
+      },
+      {
+        "step": 12,
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Lower Queen Street, Auckland, NZ - cerca de Customs Street East (Waverley Hotel)",
+              "lat": -36.8439,
+              "lon": 174.767,
+              "weight": 0.9,
+              "radius_km": 0.3
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1900,
+              "to": 1910,
+              "weight": 0.75
+            },
+            {
+              "from": 1910,
+              "to": 1920,
+              "weight": 0.2
+            }
+          ],
+          "rationale": "Waverley Hotel confirmado en Auckland, en la esquina de Lower Queen Street y Customs Street East. La foto muestra Queen Street mirando hacia el sur con el hotel a la izquierda."
+        }
+      },
+      {
+        "step": 16,
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Queen Street cerca de Quay Street, Auckland, NZ (mirando sur)",
+              "lat": -36.8435,
+              "lon": 174.7669,
+              "weight": 0.88,
+              "radius_km": 0.2
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1900,
+              "to": 1910,
+              "weight": 0.75
+            },
+            {
+              "from": 1910,
+              "to": 1920,
+              "weight": 0.2
+            }
+          ],
+          "rationale": "Street View confirma la alineación de Queen Street desde Quay St mirando al sur. El Waverley Hotel estaba en la esquina oeste de Queen St y Customs St East."
+        }
+      },
+      {
+        "step": 20,
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Queen Street cerca de Customs Street East, Auckland, Nueva Zelanda",
+              "lat": -36.8448,
+              "lon": 174.767,
+              "weight": 0.92,
+              "radius_km": 0.15
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1902,
+              "to": 1908,
+              "weight": 0.7
+            },
+            {
+              "from": 1908,
+              "to": 1915,
+              "weight": 0.25
+            }
+          ],
+          "rationale": "T.H. Hall Company confirmado en Queen Street lado oeste c.1905, Waverley Hotel lado este, tranvías eléctricos desde 1902. La postal coloreada es típica de 1900-1910."
+        }
+      }
+    ],
+    "trace": [
+      {
+        "step": 1,
+        "type": "thinking",
+        "content": "Voy a analizar esta fotografía histórica. Veo una tarjeta postal coloreada con una calle urbana, un tranvía rojo, arquitectura victoriana/eduardiana, y algunos textos visibles. Hay un hotel \"Waverley\" en la izquierda y lo que parece \"THNALL\" o similar a la derecha. La palabra \"Looki\" en la parte superior sugiere que es una postal que dice \"Looking [north/south/east/west]\". Parece una ciudad anglófona del hemisferio sur (posiblemente Australia o Nueva Zelanda) dado el estilo arquitectónico y el tranvía de esa época."
+      },
+      {
+        "step": 1,
+        "type": "crop_image_relative",
+        "region": {
+          "x": 0,
+          "y": 0,
+          "w": 398,
+          "h": 247
+        },
+        "base64_jpeg": "<stripped:169676 chars>",
+        "payload_to_model": "{\"width\": 1024, \"height\": 635, \"region\": {\"x\": 0, \"y\": 0, \"w\": 398, \"h\": 247}, \"note\": \"Cropped from original 1194x743, displayed at 1024x635.\"}",
+        "image_inject_kind": "crop"
+      },
+      {
+        "step": 1,
+        "type": "crop_image_relative",
+        "region": {
+          "x": 796,
+          "y": 0,
+          "w": 398,
+          "h": 247
+        },
+        "base64_jpeg": "<stripped:196980 chars>",
+        "payload_to_model": "{\"width\": 1024, \"height\": 635, \"region\": {\"x\": 796, \"y\": 0, \"w\": 398, \"h\": 247}, \"note\": \"Cropped from original 1194x743, displayed at 1024x635.\"}",
+        "image_inject_kind": "crop"
+      },
+      {
+        "step": 2,
+        "type": "thinking",
+        "content": "Puedo ver \"THNALL\" o similar en el lado derecho. Voy a hacer zoom en el centro y lados para leer más detalles de los carteles y el tranvía."
+      },
+      {
+        "step": 2,
+        "type": "crop_image",
+        "region": {
+          "x": 250,
+          "y": 260,
+          "w": 350,
+          "h": 200
+        },
+        "base64_jpeg": "<stripped:192816 chars>",
+        "payload_to_model": "{\"width\": 1024, \"height\": 585, \"region\": {\"x\": 250, \"y\": 260, \"w\": 350, \"h\": 200}, \"note\": \"Cropped from original 1194x743, displayed at 1024x585.\"}",
+        "image_inject_kind": "crop"
+      },
+      {
+        "step": 2,
+        "type": "crop_image",
+        "region": {
+          "x": 850,
+          "y": 200,
+          "w": 344,
+          "h": 300
+        },
+        "base64_jpeg": "<stripped:359600 chars>",
+        "payload_to_model": "{\"width\": 1024, \"height\": 893, \"region\": {\"x\": 850, \"y\": 200, \"w\": 344, \"h\": 300}, \"note\": \"Cropped from original 1194x743, displayed at 1024x893.\"}",
+        "image_inject_kind": "crop"
+      },
+      {
+        "step": 3,
+        "type": "thinking",
+        "content": "Puedo ver \"TNCALL\" o \"TNCALI\" en el edificio de la derecha, y también \"JABCOS\" o similar abajo. También hay un edificio con cúpula al fondo. El tranvía tiene un letrero amarillo. Voy a leer el Hotel Waverley y el cartel del tranvía con más detalle."
+      },
+      {
+        "step": 3,
+        "type": "crop_image",
+        "region": {
+          "x": 0,
+          "y": 280,
+          "w": 300,
+          "h": 150
+        },
+        "base64_jpeg": "<stripped:191392 chars>",
+        "payload_to_model": "{\"width\": 1024, \"height\": 512, \"region\": {\"x\": 0, \"y\": 280, \"w\": 300, \"h\": 150}, \"note\": \"Cropped from original 1194x743, displayed at 1024x512.\"}",
+        "image_inject_kind": "crop"
+      },
+      {
+        "step": 3,
+        "type": "crop_image",
+        "region": {
+          "x": 300,
+          "y": 430,
+          "w": 300,
+          "h": 100
+        },
+        "base64_jpeg": "<stripped:135912 chars>",
+        "payload_to_model": "{\"width\": 1024, \"height\": 341, \"region\": {\"x\": 300, \"y\": 430, \"w\": 300, \"h\": 100}, \"note\": \"Cropped from original 1194x743, displayed at 1024x341.\"}",
+        "image_inject_kind": "crop"
+      },
+      {
+        "step": 4,
+        "type": "belief_nudge",
+        "steps_since_belief": 3
+      },
+      {
+        "step": 4,
+        "type": "thinking",
+        "content": "Confirmo \"WAVERLEY HOTEL\" claramente. El cartel del tranvía parece decir algo como \"CHRONICAL\" o similar. Hay un edificio con cúpula al fondo. Esto es Australia o Nueva Zelanda, ciudad con tranvía eléctrico de época victoriana tardía."
+      },
+      {
+        "step": 4,
+        "type": "report_belief",
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Australia/Nueva Zelanda - ciudad con tranvía victoriano",
+              "lat": -33.0,
+              "lon": 151.0,
+              "weight": 0.6,
+              "radius_km": 2000
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1895,
+              "to": 1910,
+              "weight": 0.8
+            }
+          ],
+          "rationale": "Waverley Hotel identificado claramente, arquitectura victoriana, tranvía rojo de época, carteles en inglés, estilo postal coloreada de principios del siglo XX."
+        }
+      },
+      {
+        "step": 5,
+        "type": "thinking",
+        "content": "Ahora busco el \"Waverley Hotel\" combinado con Australia/NZ y tranvía para identificar la ciudad."
+      },
+      {
+        "step": 5,
+        "type": "web_search",
+        "query": "Waverley Hotel historical street tram Australia postcard Victorian era",
+        "result_count": 8,
+        "blocked": 3,
+        "top_results": [
+          {
+            "title": "The Waverley Hotel, Perth, Perthshire Vintage Postcard G47",
+            "url": "https://www.ebay.com.au/itm/198534863219",
+            "snippet": "Find many great new & used options and get the best deals for The Waverley Hotel, Perth, Perthshire Vintage Postcard G47 at the best online prices at eBay Australia!"
+          },
+          {
+            "title": "Victorian Collections - Your gateway to Victoria’s cultural history",
+            "url": "https://victoriancollections.net.au/",
+            "snippet": "Victorian Collections is a digital archive where you can search thousands of items held by galleries, museums, libraries, archives, historical societies and cultural collections across the state of Victoria, Australia. Postcard shows cable trams, horse drawn carriages and pedestrians in Swanston St looking towards the Town Hall. Before the telephone, postcards were often used to send brief persona"
+          },
+          {
+            "title": "Rare vintage postcard of WAVERLEY HOTEL PERTH Perthshire Scotland - eBay",
+            "url": "https://www.ebay.com.au/itm/358796559273",
+            "snippet": "Find many great new & used options and get the best deals for Rare vintage postcard of WAVERLEY HOTEL PERTH Perthshire Scotland at the best online prices at eBay Australia!"
+          }
+        ],
+        "payload_to_model": "{\"query\": \"Waverley Hotel historical street tram Australia postcard Victorian era\", \"results\": [{\"title\": \"The Waverley Hotel, Perth, Perthshire Vintage Postcard G47\", \"url\": \"https://www.ebay.com.au/itm/198534863219\", \"content\": \"Find many great new & used options and get the best deals for The Waverley Hotel, Perth, Perthshire Vintage Postcard G47 at the best online prices at eBay Australia!\", \"site_name\": \"eBay Australia\", \"language\": \"en\", \"source_type\": \"other\"}, {\"title\": \"Victorian Collections - Your gateway to Victoria’s cultural history\", \"url\": \"https://victoriancollections.net.au/\", \"content\": \"Victorian Collections is a digital archive where you can search thousands of items held by galleries, museums, libraries, archives, historical societies and cultural collections across the state of Victoria, Australia. Postcard shows cable trams, horse drawn carriages and pedestrians in Swanston St looking towards the Town Hall. Before the telephone, postcards were often used to send brief personal or business messages to others in Melbourne or further afield.\", \"site_name\": \"Victorian Collections\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Rare vintage postcard of WAVERLEY HOTEL PERTH Perthshire Scotland - eBay\", \"url\": \"https://www.ebay.com.au/itm/358796559273\", \"content\": \"Find many great new & used options and get the best deals for Rare vintage postcard of WAVERLEY HOTEL PERTH Perthshire Scotland at the best online prices at eBay Australia!\", \"site_name\": \"eBay Australia\", \"language\": \"en\", \"source_type\": \"other\"}, {\"title\": \"Postcard - 'Swanston St east side from Morrells Hotel, V S M Series ...\", \"url\": \"https://victoriancollections.net.au/items/6a77dbd45d64ec962b96e012\", \"content\": \"Postcard shows cable trams, horse drawn carriages and pedestrians in Swanston St looking towards the Town Hall. From the collection of Melbourne Tram Museum. Historical information Postcard shows cable trams, horse drawn carriages and pedestrians in Swanston St, and was produced in the 1910s. Physical description Black and white postcard with title and detailed personal message on front; on rear are postcard markings, stamp and handwritten delivery address.\", \"site_name\": \"Victorian Collections\", \"date_published\": \"1910s\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Australia Historical Postcards - Ancestry\", \"url\": \"https://www.ancestry.com.au/search/collections/1707\", \"content\": \"This database contains over 400 historical postcards with photos of places in Australia. Each postcard caption has been indexed and may be searched by keyword or location. This database is primarily useful for obtaining a photograph or picture of a specific place in time. Original data: Mary Martin Postcards (www.MaryLMartin.com), Perryville, MD, USA.\", \"site_name\": \"Ancestry\", \"date_published\": \"2010\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Historical Photo-Maps - Land.Vic\", \"url\": \"https://mapshare.vic.gov.au/webmap/historical-photomaps/\", \"content\": \"Historical Photo-Maps + − Vicmap Basemap Services © 2026 State Government of Victoria | Copyright and Disclaimer 100 km Vicmap Basemap - Cartographic Vicmap Basemap - Overlay Vicmap Basemap - Aerial\", \"site_name\": \"Land.Vic\", \"date_published\": \"2026\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Australian themed postcards - price guide and values - Carter's\", \"url\": \"https://www.carters.com.au/index.cfm/index/1744-postcards-australian-views-and-themes/\", \"content\": \"Australian themed postcards The birth of the postcard can be traced back to the mid-19th century... The late 19th and early 20th centuries marked the Golden Age of Postcards, with advances in printing technology...During World War I and World War II, postcards served as means of communication, propaganda tools. In recent years, resurgence of interest in postcards as collectible artifacts.\", \"site_name\": \"Carter's Collector's Guide\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"Photographic collections | PROV\", \"url\": \"https://prov.vic.gov.au/explore-collection/photographic-collections\", \"content\": \"Public Record Office Victoria holds a wide variety of photographic images showcasing the magnificent history of our State including historical buildings, trams and street scenes which may include places like the Waverley Hotel and street tram scenes from the Victorian era.\", \"site_name\": \"Public Record Office Victoria\", \"language\": \"en\", \"source_type\": \"archive\"}], \"blocked_count\": 3, \"total_raw\": 11}",
+        "payload_full_len": 4519
+      },
+      {
+        "step": 5,
+        "type": "web_search",
+        "query": "\"Waverley Hotel\" tram street historical photo Australia New Zealand",
+        "result_count": 10,
+        "blocked": 1,
+        "top_results": [
+          {
+            "title": "Waverley Hotel, Auckland Central | Record | DigitalNZ",
+            "url": "https://digitalnz.org/records/53297470",
+            "snippet": "Waverley Hotel, Auckland Central About this item Title Waverley Hotel, Auckland Central Content partner Auckland Libraries Collection Kura Heritage Collections Online Description The Waverley Hotel on the corner of Queen Street (left to right foreground) and Customs Street East (centre to right). Onehunga tram number 209 passing by. Format Image Date created 1956 URL https://kura.aucklandlibraries"
+          },
+          {
+            "title": "THE WAVERLEY HOTEL. - Observer - 25 April 1885",
+            "url": "https://paperspast.natlib.govt.nz/newspapers/TO18850425.2.80",
+            "snippet": "THE WAVERLEY HOTEL. \"ViSiTORS to Auckland are surprised at the Solidity and magnificence of her public buildings. Even George Augustus Sala was amazed that any Harbour Board at the Antipodes could boast such palatial offices as those recently erected on the reclaimed land. From a wilderness of ti-tree and fern and a scattered village of raupo or rude wooden hovels, Auckland has grown in a generati"
+          },
+          {
+            "title": "More Tram Images of a Journey through Australia and New Zealand",
+            "url": "https://arhsnsw.com.au/product/more-tram-images/",
+            "snippet": "More Tram Images of a Journey through Australia and New Zealand $45.00 $29.95 inc. GST A beautifully illustrated tram photo book featuring over 140 pages of tram images from Australia and New Zealand, plus a bonus multimedia CD. In stock More Tram Images of a Journey through Australia and New Zealand quantity Add to cart SKU: 9780909459260 Categories: Books - Australia & New Zealand, Tramways Desc"
+          }
+        ],
+        "payload_to_model": "{\"query\": \"\\\"Waverley Hotel\\\" tram street historical photo Australia New Zealand\", \"results\": [{\"title\": \"Waverley Hotel, Auckland Central | Record | DigitalNZ\", \"url\": \"https://digitalnz.org/records/53297470\", \"content\": \"Waverley Hotel, Auckland Central About this item Title Waverley Hotel, Auckland Central Content partner Auckland Libraries Collection Kura Heritage Collections Online Description The Waverley Hotel on the corner of Queen Street (left to right foreground) and Customs Street East (centre to right). Onehunga tram number 209 passing by. Format Image Date created 1956 URL https://kura.aucklandlibraries.govt.nz/digital/collection/photos/id/315335 Related subjects Trams / Buses / Queen Street (Auckland) / Waverley Hotel (Auckland) / Hotels - Auckland / Customs Street East (Auckland) DigitalNZ brings together more than 30 million items from institutions so that they are easy to find and use. This information is the best information we could find on this item. This item was added on 05 December 2023, and updated 08 October 2025. Learn more about how we work. What is the copyright status of this item? Share, Modify, Use commercially See below for specifics about how you may use this item. More Information Auckland Libraries has this to say about the rights status of this item: Creative Commons Licence: Attribution CC BY What can I do with this item? You must always check with Auckland Libraries to confirm the specific terms of use, but this is our understanding: Non-infringing use NZ Copyright law does not prevent every use of a copyright work. You should consider what you can and cannot do with a copyright work. Share it This item is suitable for copying and sharing with others, without further permission. Modify it This item is suitable for modifying, remixing and building upon, without further permission. Use it commercially This item is suitable for commercial use, without further permission. View original item Add to a story What can I do with this item? Check copyright status and what you can do with this item Check information Report this item If you believe this item breaches our terms of use please report this item Report this item DigitalNZ brings together more than 30 million items from institutions so that they are easy to find and use. This information is the best information we could find on this item. This item was added on 05 December 2023, and updated 08 October 2025. Learn more about how we work. Share Loading... The Waverley Hotel on the corner of Queen Street (left to right foreground) and Customs Street East (centre to right). Onehunga tram number 209 passing by.\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1956\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"THE WAVERLEY HOTEL. - Observer - 25 April 1885\", \"url\": \"https://paperspast.natlib.govt.nz/newspapers/TO18850425.2.80\", \"content\": \"THE WAVERLEY HOTEL. \\\"ViSiTORS to Auckland are surprised at the Solidity and magnificence of her public buildings. Even George Augustus Sala was amazed that any Harbour Board at the Antipodes could boast such palatial offices as those recently erected on the reclaimed land. From a wilderness of ti-tree and fern and a scattered village of raupo or rude wooden hovels, Auckland has grown in a generation to a busy, flourishing city, with fine buildings, museums of art, repositories of literature, seminaries of learning, and most of the institutions of the ripened culture and civilisation of the old world. The city has doubled its dimensions and population in a decade. Ten years hence it will take rank as one of the foremost cities in the Southern Hemisphere, the entrepot of Polynesian commerce, the world's sanitorium, an example to the nations in social and political reform and progress, a model of industry and productiveness. The signs of that great future are around us, and may be read by all who have eyes to see. Climate and soil, geographical situation, and abundant resources are moulding Auckland's future. Her people are borne along irresistibly by their circumstances and environments. It is their destiny to become great and prosperous. One of the most remarkable signs of material progress is to be seen in the large number and magnificence of the hotels recently erected. The standing stigma on Auckland used to be an absence of superior hotel accommodation. Travellers accustomed to the luxurious hotels of London, New York, San Francisco and Melbourne, spoke contemptuously of the discomfort and of Auckland hotels. But that stigma no longer exists. In proportion to its population and the requirements of the travelling public, the city is quite abreast, if not ahead of most colonial metropolises, and the work of improvement still goes on. If we could quote figures showing the amount invested in hotel property in Auckland during the past two or three years, our readers would be astonished at its magnitude. This much at least we may thank the temperance agitation for, that it has given us a Superior class of hotels, and has perhaps rendered the trade of the Licensed Victualler more respectable than it was. The most recent of the new class of hotels is the Waverley, which stands on the reclaimed land in close proximity to the new central railway station, now rapidly approaching completion.\", \"site_name\": \"Papers Past / National Library of New Zealand\", \"date_published\": \"1885-04-25\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"More Tram Images of a Journey through Australia and New Zealand\", \"url\": \"https://arhsnsw.com.au/product/more-tram-images/\", \"content\": \"More Tram Images of a Journey through Australia and New Zealand $45.00 $29.95 inc. GST A beautifully illustrated tram photo book featuring over 140 pages of tram images from Australia and New Zealand, plus a bonus multimedia CD. In stock More Tram Images of a Journey through Australia and New Zealand quantity Add to cart SKU: 9780909459260 Categories: Books - Australia & New Zealand, Tramways Description Additional information Description Step aboard a visual journey through Australasia’s rich rail-based transit history with More Tram Images of a Journey through Australia & New Zealand, the beautifully curated sequel by noted tram historian Hugh Ballment. This compelling volume showcases more than 140 pages of high-quality tram images from Australia and New Zealand, including both colour and black-and-white photographs that capture the iconic charm, urban settings, and historical evolution of tram systems across two nations. From the wide boulevards of Melbourne to the hills of Wellington, each image reflects a piece of transit history rarely seen elsewhere. Enhancing the experience is a bonus multimedia CD, tucked into the back of the book, featuring additional archival content that complements the printed visuals—an exclusive extra for readers eager to dive even deeper into Australian and New Zealand tram history. Whether you’re a seasoned transit historian, a railway enthusiast, or a casual admirer of vintage street scenes, this tram photo book delivers inspiration, education, and nostalgia in equal measure. Key Features: Over 140 pages of vivid historic tram photographs from Australia and New Zealand Covers multiple cities and tramway systems across both countries Includes colour and black-and-white imagery, curated with historical insight Bonus CD featuring supplementary multimedia content Authored by Hugh Ballment, known for his authoritative work on tram systems Softcover format – perfect for display, gifting, or personal collection Explore the story of trams that connected communities, powered cities, and helped shape the modern streets of Australasia. With tram images Australia New Zealand fans will cherish, this volume is a timeless tribute to the golden age of electric street transit.\", \"site_name\": \"Australian Railway Historical Society NSW\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"Photographic Archive - National Library of New Zeal",
+        "payload_full_len": 8000
+      },
+      {
+        "step": 6,
+        "type": "thinking",
+        "content": "Excelente - el \"Waverley Hotel\" en Auckland, Nueva Zelanda está en la esquina de Queen Street y Customs Street East. Eso coincide con la descripción de 1885 mencionando que estaba cerca de la estación central. Ahora busco específicamente postcards históricas de Queen Street Auckland con tranvía."
+      },
+      {
+        "step": 6,
+        "type": "web_search",
+        "query": "Auckland Queen Street historical postcard tram \"Waverley Hotel\" early 1900s",
+        "result_count": 6,
+        "blocked": 5,
+        "top_results": [
+          {
+            "title": "Queen Street, Auckland | National Library of New Zealand",
+            "url": "https://natlib.govt.nz/records/22806344",
+            "snippet": "View looking up Queen Street taken from a high vantage point to the right of the General Post Office and the Waverley Hotel in lower Queen Street. The Thames Hotel can be seen in the foreground on the left and Sandford Ltd on the right. Identifiable buildings further up Queen Street are the Waitemata Hotel, Smeeton's Building, New Zealand Insurance Co Ltd, and JCL (John Court Ltd). Partington's Wi"
+          },
+          {
+            "title": "Queen Street and Customs Street, Auckland Central | DigitalNZ",
+            "url": "https://digitalnz.org/records/40608024",
+            "snippet": "Looking north east from the corner of Queen Street and Customs Street, with Customs Street West (left), Lower Queen Street and Quay Street (centre left), Customs Street East (centre right), the Waverley Hotel (centre) and the Thames Hotel on the corner of Customs Street East and Queen Street (right), showing trams and horse-drawn carriages. Date created 1900-1909. ..."
+          },
+          {
+            "title": "Queen Street, Auckland | DigitalNZ",
+            "url": "https://digitalnz.org/records/22806344",
+            "snippet": "View looking up Queen Street taken from a high vantage point to the right of the General Post Office and the Waverley Hotel in lower Queen Street. The Thames Hotel can be seen in the foreground on the left and Sandford Ltd on the right. Identifiable buildings further up Queen Street are the Waitemata Hotel, Smeeton's Building, New Zealand Insurance Co Ltd, and JCL (John Court Ltd). Partington's Wi"
+          }
+        ],
+        "payload_to_model": "{\"query\": \"Auckland Queen Street historical postcard tram \\\"Waverley Hotel\\\" early 1900s\", \"results\": [{\"title\": \"Queen Street, Auckland | National Library of New Zealand\", \"url\": \"https://natlib.govt.nz/records/22806344\", \"content\": \"View looking up Queen Street taken from a high vantage point to the right of the General Post Office and the Waverley Hotel in lower Queen Street. The Thames Hotel can be seen in the foreground on the left and Sandford Ltd on the right. Identifiable buildings further up Queen Street are the Waitemata Hotel, Smeeton's Building, New Zealand Insurance Co Ltd, and JCL (John Court Ltd). Partington's Windmill can be seen on the horizon. A large number of people and trams are in the immediate foreground near to the Thames Hotel and Post Office. Taken by William A Price in the early 1900s. Inscriptions: Photographer's title on negative - bottom left - Queen St. Auckland. No 3765A Quantity: 1 b&w original negative (s). Physical Description: Dry plate glass negative 4.5 x 6.5 inches ...\", \"site_name\": \"National Library of New Zealand\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Queen Street and Customs Street, Auckland Central | DigitalNZ\", \"url\": \"https://digitalnz.org/records/40608024\", \"content\": \"Looking north east from the corner of Queen Street and Customs Street, with Customs Street West (left), Lower Queen Street and Quay Street (centre left), Customs Street East (centre right), the Waverley Hotel (centre) and the Thames Hotel on the corner of Customs Street East and Queen Street (right), showing trams and horse-drawn carriages. Date created 1900-1909. ...\", \"site_name\": \"DigitalNZ\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Queen Street, Auckland | DigitalNZ\", \"url\": \"https://digitalnz.org/records/22806344\", \"content\": \"View looking up Queen Street taken from a high vantage point to the right of the General Post Office and the Waverley Hotel in lower Queen Street. The Thames Hotel can be seen in the foreground on the left and Sandford Ltd on the right. Identifiable buildings further up Queen Street are the Waitemata Hotel, Smeeton's Building, New Zealand Insurance Co Ltd, and JCL (John Court Ltd). Partington's Windmill can be seen on the horizon. A large number of people and trams are in the immediate foreground near to the Thames Hotel and Post Office. Taken by William A Price in the early 1900s.\", \"site_name\": \"DigitalNZ\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"\", \"url\": \"https://www.ebay.com.au/itm/158084727012\", \"content\": \"\"}, {\"title\": \"\", \"url\": \"https://natlib.govt.nz/records/22806344?search%5Bi%5D%5Bsubject%5D=Waverley+Hotel+%28Auckland%2C+N.Z.%29&search%5Bil%5D%5Bsubject%5D=Thames+Hotel+%28Auckland%2C+N.Z.%29&search%5Bpath%5D=items\", \"content\": \"\"}, {\"title\": \"\", \"url\": \"https://www.ebay.it/itm/385492160362\", \"content\": \"\"}], \"blocked_count\": 5, \"total_raw\": 11}",
+        "payload_full_len": 2896
+      },
+      {
+        "step": 6,
+        "type": "image_search",
+        "query": "Auckland Queen Street tram Waverley Hotel historical postcard 1900s",
+        "search_id": "fe800a94f0fd",
+        "page": 1,
+        "n_pages_total": 2,
+        "has_next_page": true,
+        "n_cells": 16,
+        "cells_range": [
+          1,
+          16
+        ],
+        "target_match_count": 0,
+        "suspicious_count": 0,
+        "cells_metadata": [
+          {
+            "cell": 1,
+            "width": 800,
+            "height": 567,
+            "alt_text": "Queen St, trams and pedestrians. Waverley Hotel, 12-14 Queen St ..."
+          },
+          {
+            "cell": 2,
+            "width": 1093,
+            "height": 690,
+            "alt_text": "transpress nz: Auckland lower Queen Street trams and wharves circa 1908"
+          },
+          {
+            "cell": 3,
+            "width": 968,
+            "height": 566,
+            "alt_text": "transpress nz: trams outside the Waverley Hotel, Auckland, circa 1920"
+          },
+          {
+            "cell": 4,
+            "width": 220,
+            "height": 138,
+            "alt_text": "Auckland 1949"
+          },
+          {
+            "cell": 5,
+            "width": 1600,
+            "height": 1012,
+            "alt_text": "transpress nz: Auckland tram to Kingsland in Upper Queen Street, circa 1910"
+          },
+          {
+            "cell": 6,
+            "width": 952,
+            "height": 597,
+            "alt_text": "transpress nz: trams in lower Queen Street, Auckland, 1940s"
+          },
+          {
+            "cell": 7,
+            "width": 400,
+            "height": 239,
+            "alt_text": "transpress nz: Auckland electric trams in Wellesley Street, late 1900s"
+          },
+          {
+            "cell": 8,
+            "width": 500,
+            "height": 640,
+            "alt_text": "HONG KONG HOTEL, Alexandra Building, YMCA TRAM Tramway Street Scene Old ..."
+          },
+          {
+            "cell": 9,
+            "width": 942,
+            "height": 675,
+            "alt_text": "transpress nz: trams at the bottom of Queen Street, Auckland, 1919"
+          },
+          {
+            "cell": 10,
+            "width": 657,
+            "height": 996,
+            "alt_text": "transpress nz: tram in Lower Queen Street, Auckland, circa 1908"
+          },
+          {
+            "cell": 11,
+            "width": 1000,
+            "height": 616,
+            "alt_text": "transpress nz: tram in Queen Street, Onehunga, Auckland, late 1900s"
+          },
+          {
+            "cell": 12,
+            "width": 800,
+            "height": 520,
+            "alt_text": "NEW ZEALAND: AUCKLAND EXHIBITION POSTAL CARD - ONE PENNY RED with VIEW ..."
+          },
+          {
+            "cell": 13,
+            "width": 700,
+            "height": 439,
+            "alt_text": "transpress nz: tram in Upper Queen Street, Auckland, 1900s"
+          },
+          {
+            "cell": 14,
+            "width": 816,
+            "height": 513,
+            "alt_text": "transpress nz: tram and cars in Queen Street, Auckland, 1940s"
+          },
+          {
+            "cell": 15,
+            "width": 1400,
+            "height": 874,
+            "alt_text": "transpress nz: Queen Street tram, Auckland, 1940s"
+          },
+          {
+            "cell": 16,
+            "width": 926,
+            "height": 528,
+            "alt_text": "transpress nz: trams and perambulator at Queen and Wellesley, Auckland ..."
+          }
+        ],
+        "payload_to_model": "{\"search_id\": \"fe800a94f0fd\", \"query\": \"Auckland Queen Street tram Waverley Hotel historical postcard 1900s\", \"n_cells\": 16, \"page\": 1, \"n_pages_total\": 2, \"has_next_page\": true, \"cells_range\": [1, 16], \"cells_metadata\": [{\"cell\": 1, \"width\": 800, \"height\": 567, \"alt_text\": \"Queen St, trams and pedestrians. Waverley Hotel, 12-14 Queen St ...\"}, {\"cell\": 2, \"width\": 1093, \"height\": 690, \"alt_text\": \"transpress nz: Auckland lower Queen Street trams and wharves circa 1908\"}, {\"cell\": 3, \"width\": 968, \"height\": 566, \"alt_text\": \"transpress nz: trams outside the Waverley Hotel, Auckland, circa 1920\"}, {\"cell\": 4, \"width\": 220, \"height\": 138, \"alt_text\": \"Auckland 1949\"}, {\"cell\": 5, \"width\": 1600, \"height\": 1012, \"alt_text\": \"transpress nz: Auckland tram to Kingsland in Upper Queen Street, circa 1910\"}, {\"cell\": 6, \"width\": 952, \"height\": 597, \"alt_text\": \"transpress nz: trams in lower Queen Street, Auckland, 1940s\"}, {\"cell\": 7, \"width\": 400, \"height\": 239, \"alt_text\": \"transpress nz: Auckland electric trams in Wellesley Street, late 1900s\"}, {\"cell\": 8, \"width\": 500, \"height\": 640, \"alt_text\": \"HONG KONG HOTEL, Alexandra Building, YMCA TRAM Tramway Street Scene Old ...\"}, {\"cell\": 9, \"width\": 942, \"height\": 675, \"alt_text\": \"transpress nz: trams at the bottom of Queen Street, Auckland, 1919\"}, {\"cell\": 10, \"width\": 657, \"height\": 996, \"alt_text\": \"transpress nz: tram in Lower Queen Street, Auckland, circa 1908\"}, {\"cell\": 11, \"width\": 1000, \"height\": 616, \"alt_text\": \"transpress nz: tram in Queen Street, Onehunga, Auckland, late 1900s\"}, {\"cell\": 12, \"width\": 800, \"height\": 520, \"alt_text\": \"NEW ZEALAND: AUCKLAND EXHIBITION POSTAL CARD - ONE PENNY RED with VIEW ...\"}, {\"cell\": 13, \"width\": 700, \"height\": 439, \"alt_text\": \"transpress nz: tram in Upper Queen Street, Auckland, 1900s\"}, {\"cell\": 14, \"width\": 816, \"height\": 513, \"alt_text\": \"transpress nz: tram and cars in Queen Street, Auckland, 1940s\"}, {\"cell\": 15, \"width\": 1400, \"height\": 874, \"alt_text\": \"transpress nz: Queen Street tram, Auckland, 1940s\"}, {\"cell\": 16, \"width\": 926, \"height\": 528, \"alt_text\": \"transpress nz: trams and perambulator at Queen and Wellesley, Auckland ...\"}], \"blocked_domain_count\": 10, \"target_match_count\": 0, \"suspicious_count\": 0, \"note\": \"Página 1/2. Celdas 1-16. Hay más páginas: image_search(query, page=2, search_id='fe800a94f0fd'). Para zoom en celdas: image_search(query, pick=[N,M], search_id='fe800a94f0fd'). Max 3 picks/call, 2 rondas total.\"}",
+        "image_inject_kind": "image_search_grid"
+      },
+      {
+        "step": 7,
+        "type": "thinking",
+        "content": "Excelente! Veo en la celda 3 \"WAVERLEY HOTEL, AUCKLAND\" claramente, y en la celda 2 hay una postal coloreada de Lower Queen Street con tranvías que parece muy similar a nuestra foto. También la celda 13 \"Upper Queen St. Auckland\" con tranvía rojo coloreado parece similar. Voy a hacer zoom en las celdas más prometedoras."
+      },
+      {
+        "step": 7,
+        "type": "image_search_pick",
+        "search_id": "fe800a94f0fd",
+        "picks": [
+          {
+            "cell": 2,
+            "url": "https://1.bp.blogspot.com/-3w_p_gFdQz8/UThGXTE0JyI/AAAAAAAAuZU/vFJroMuYT48/s1600/Auckland+lower+Queen+Street+tram+1908.JPG",
+            "alt_text": "transpress nz: Auckland lower Queen Street trams and wharves circa 1908"
+          },
+          {
+            "cell": 3,
+            "url": "https://1.bp.blogspot.com/-BU_ISfjlvfU/UuMKZnYBQdI/AAAAAAAA6EA/vEjeFQq7KVE/s1600/Akl+waverly.JPG",
+            "alt_text": "transpress nz: trams outside the Waverley Hotel, Auckland, circa 1920"
+          },
+          {
+            "cell": 13,
+            "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLQBkYCjvM8CnBwlnlNBng-McZloD4Ir00BZNqSBpoIGz2RTV0Yhlsy3Jtb3lAL3iNpXjmmceeoT2huC5_Dz-Yy22ysya_65qBo8r8Wo0cBFfuyHJ3pQe0eqRtxKn47Xadragt4IwMNj0/s1600/Upper+Queen+Street+tram+1900s.jpg",
+            "alt_text": "transpress nz: tram in Upper Queen Street, Auckland, 1900s"
+          }
+        ],
+        "not_picked_cells": [
+          1,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          14,
+          15,
+          16
+        ],
+        "rounds_used": 1,
+        "payload_to_model": "{\"search_id\": \"fe800a94f0fd\", \"query\": \"Auckland Queen Street tram Waverley Hotel historical postcard 1900s\", \"picks_metadata\": [{\"cell\": 2, \"url\": \"https://1.bp.blogspot.com/-3w_p_gFdQz8/UThGXTE0JyI/AAAAAAAAuZU/vFJroMuYT48/s1600/Auckland+lower+Queen+Street+tram+1908.JPG\", \"alt_text\": \"transpress nz: Auckland lower Queen Street trams and wharves circa 1908\"}, {\"cell\": 3, \"url\": \"https://1.bp.blogspot.com/-BU_ISfjlvfU/UuMKZnYBQdI/AAAAAAAA6EA/vEjeFQq7KVE/s1600/Akl+waverly.JPG\", \"alt_text\": \"transpress nz: trams outside the Waverley Hotel, Auckland, circa 1920\"}, {\"cell\": 13, \"url\": \"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLQBkYCjvM8CnBwlnlNBng-McZloD4Ir00BZNqSBpoIGz2RTV0Yhlsy3Jtb3lAL3iNpXjmmceeoT2huC5_Dz-Yy22ysya_65qBo8r8Wo0cBFfuyHJ3pQe0eqRtxKn47Xadragt4IwMNj0/s1600/Upper+Queen+Street+tram+1900s.jpg\", \"alt_text\": \"transpress nz: tram in Upper Queen Street, Auckland, 1900s\"}], \"not_picked_cells\": [1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16], \"rounds_used\": 1, \"rounds_remaining\": 1, \"note\": \"\"}",
+        "image_inject_kind": "image_search_pick"
+      },
+      {
+        "step": 8,
+        "type": "belief_nudge",
+        "steps_since_belief": 3
+      },
+      {
+        "step": 8,
+        "type": "thinking",
+        "content": "Excelente confirmación. La celda 3 muestra claramente el \"WAVERLEY HOTEL, AUCKLAND\" con tranvías, y la arquitectura coincide muy bien con nuestra foto target. La celda 2 muestra Lower Queen Street & Wharves, Auckland. La foto target parece ser de Queen Street mirando hacia el norte (hacia los muelles), con el Waverley Hotel a la izquierda.\n\nAhora necesito identificar la dirección exacta. El Waverley Hotel estaba en Queen Street esquina Customs Street. El texto parcial de la postal dice \"Looki...\" que podría ser \"Looking North\" o \"Looking South\"."
+      },
+      {
+        "step": 8,
+        "type": "report_belief",
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Queen Street, Auckland, Nueva Zelanda (cerca del Waverley Hotel)",
+              "lat": -36.844,
+              "lon": 174.767,
+              "weight": 0.9,
+              "radius_km": 1
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1900,
+              "to": 1910,
+              "weight": 0.75
+            },
+            {
+              "from": 1910,
+              "to": 1920,
+              "weight": 0.2
+            }
+          ],
+          "rationale": "La celda 3 muestra \"WAVERLEY HOTEL, AUCKLAND\" con tranvías idénticos al de nuestra foto. El Waverley Hotel estaba en Queen Street, Auckland. La foto parece ser una postal de Lower Queen Street mirando hacia el sur desde cerca de Customs Street."
+        }
+      },
+      {
+        "step": 9,
+        "type": "web_search",
+        "query": "Waverley Hotel Auckland Queen Street corner location address historical",
+        "result_count": 10,
+        "blocked": 1,
+        "top_results": [
+          {
+            "title": "Waverley Hotel (Auckland, N.Z.) - National Library of New Zealand",
+            "url": "https://natlib.govt.nz/records/22510553",
+            "snippet": "Waverley Hotel (Auckland, N.Z.) | Items | National Library of New Zealand | National Library of New Zealand Waverley Hotel (Auckland, N.Z.) Favourite Lower Queen Street Auckland ca 1899. Situated next to the Chief Post Office building. Demolished in the 1960s to make way for the South Pacific Hotel. There are 19 related items to this topic See all related items Online Image Construction site of Wa"
+          },
+          {
+            "title": "Waverley Hotel, Customs Street, Auckland Central, 1963",
+            "url": "https://digitalnz.org/records/43805261",
+            "snippet": "The Waverley Hotel at the junction of Lower Queen Street (left) and Customs Street East, Auckland Central. The Waverley Hotel was demolished in May and June of 1964."
+          },
+          {
+            "title": "Waverley Hotel, Auckland Central | Record | DigitalNZ",
+            "url": "https://digitalnz.org/records/53297470",
+            "snippet": "The Waverley Hotel on the corner of Queen Street (left to right foreground) and Customs Street East (centre to right). Onehunga tram number 209 passing by."
+          }
+        ],
+        "payload_to_model": "{\"query\": \"Waverley Hotel Auckland Queen Street corner location address historical\", \"results\": [{\"title\": \"Waverley Hotel (Auckland, N.Z.) - National Library of New Zealand\", \"url\": \"https://natlib.govt.nz/records/22510553\", \"content\": \"Waverley Hotel (Auckland, N.Z.) | Items | National Library of New Zealand | National Library of New Zealand Waverley Hotel (Auckland, N.Z.) Favourite Lower Queen Street Auckland ca 1899. Situated next to the Chief Post Office building. Demolished in the 1960s to make way for the South Pacific Hotel. There are 19 related items to this topic See all related items Online Image Construction site of Waverley Hotel, Auckland Date: 4 Mar 1965 From: Whites Aviation Ltd: Photographs Reference: WA-63709e-F Description: Photograph taken by Whites Aviation. Quantity: 1 b&w original negative (s). Physical Description: Cellulosic film negative Add to cart Favourite Online Image Site of the Waverley Hotel, Auckland Date: 5 Nov 1964 From: Whites Aviation Ltd: Photographs Reference: WA-63071-F Description: Photograph taken by Whites Aviation. Quantity: 1 b&w original negative (s). Physical Description: Cellulosic film negative, 1/2 plate Add to cart Favourite Online Image Site of Waverley Hotel, Auckland Date: 5 Nov 1964 From: Whites Aviation Ltd: Photographs Reference: WA-63073-F Description: Photograph taken by Whites Aviation. Quantity: 1 b&w original negative (s). Physical Description: Cellulosic film negative, 1/2 plate Add to cart Favourite Online Image Construction site of Waverley Hotel, Auckland Date: 4 Mar 1965 From: Whites Aviation Ltd: Photographs Reference: WA-63709c-F Description: Photograph taken by Whites Aviation. Quantity: 1 b&w original negative (s). Physical Description: Cellulosic film negative Add to cart Favourite Image Creator of Collection Unknown : Photographs of Auckland by the Burton Brothers Date: ca 1880s-1890s By: Burton Brothers (Dunedin, N.Z.) Reference: PAColl-7466 Description: Spargo's Gladstone Coffee Palace next to the Harbour Board offices with a ferry at the wharf; looking up Queen Street from the wharf with Spargo's Gladstone Coffee Palace on the right, Waverley Hotel on the left and a horse drawn tram on the wharf; view of shops on Queen Street with an ironmongers on the right; the Supreme Court building; and a man mowing the lawn in front of Government House. The photographer was Burton Brothers. Quantity: 3 b&w original negative (s). 2 b&w original photographic print (s). Favourite Online Image Lower Queen Street, Auckland Date: [ca 1912-1918] From: Price, William Archer, 1866-1948 :Collection of post card negatives Reference: 1/2-001198-G Description: View looking up Queen Street taken from a high vantage point near the General Post Office and the Queen Street Railway Station in lower Queen Street. The Waverley Hotel next door to the Post Office and Thames Hotel at the intersection with Customs Street can be seen. On the righthandside opposite the Post Office is Sandford Ltd. Identifiable buildings further up Queen Street are the Waitemata Hotel, Smeeton's Building, and New Zealand Insurance Co Ltd. A number of cars, carts, trucks and trams can be seen in lower Queen Street. Taken by William A Price ca 1912-1918 Inscrip...\", \"site_name\": \"National Library of New Zealand\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Waverley Hotel, Customs Street, Auckland Central, 1963\", \"url\": \"https://digitalnz.org/records/43805261\", \"content\": \"The Waverley Hotel at the junction of Lower Queen Street (left) and Customs Street East, Auckland Central. The Waverley Hotel was demolished in May and June of 1964.\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1963-04-28\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Waverley Hotel, Auckland Central | Record | DigitalNZ\", \"url\": \"https://digitalnz.org/records/53297470\", \"content\": \"The Waverley Hotel on the corner of Queen Street (left to right foreground) and Customs Street East (centre to right). Onehunga tram number 209 passing by.\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1956\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Auckland / Photography - Historical | MAD on New Zealand\", \"url\": \"https://madonnewzealand.com/collectables/nostalgic-new-zealand/new-zealand-the-way-we-were/auckland/1496270-photography-historical\", \"content\": \"New Zealand - Auckland - Demolition of the Waverley Hotel - The Waverley Hotel on the corner of Queen Street (foreground) and Customs Street East (distance) in the course of demolition - 1964 - Bolton, Robert Philip photo. Waverley Hotel (Auckland, N.Z.) - Lower Queen Street Auckland - Situated next to the Chief Post Office building. Demolished in the 1960s to make way for the South...\", \"site_name\": \"MAD on New Zealand\", \"date_published\": \"1964\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"Lower Queen Street, Auckland | National Library of New Zealand\", \"url\": \"https://natlib.govt.nz/records/23200573\", \"content\": \"View looking up Queen Street taken from a high vantage point near the General Post Office and the Queen Street Railway Station in lower Queen Street. The Waverley Hotel next door to the Post Office and Thames Hotel at the intersection with Customs Street can be seen. On the righthandside opposite the Post Office is Sandford Ltd. Identifiable buildings further up Queen Street are the Waitemata Hotel, Smeeton's Building, and New Zealand Insurance Co Ltd. A number of cars, carts, trucks and trams can be seen in lower Queen Street. Taken by William A Price ca 1912-1918.\", \"site_name\": \"National Library of New Zealand\", \"date_published\": \"ca 1912-1918\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Observer | 25 April 1885 | THE WAVERLEY HOTEL. - Papers Past\", \"url\": \"https://paperspast.natlib.govt.nz/newspapers/TO18850425.2.80\", \"content\": \"\\\"ViSiTORS to Auckland are surprised at the Solidity and magnificence of her public buildings. Even George Augustus Sala was amazed that any Harbour Board at the Antipodes could boast such palatial offices as those recently erected on the reclaimed land. From a wilderness of ti-tree and fern and scattered village of raupo or rude wooden hovels, Auckland has grown in a generation to a busy, flourishing city, with fine buildings, museums of 'art, repositories of literature, seminaries of learning, and most of the institutions of the ripened culture and civilisation of the old world. The city has doubled its dimensions and population in a decade... One of the most remarkable signs of material progress is to be seen in the large number and magnificence of the hotels recently erected. The standing stigma on Auckland used to be an absence of superior hotel accommodation... The most recent of the new class of hotels is the Waverley, which stands on the reclaimed land in close proximity to the new central railway station, now rapidly approaching completion...\\\"\", \"site_name\": \"Papers Past | National Library of New Zealand\", \"date_published\": \"1885-04-25\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"Waverley Hotel (1933-34) - Puke Ariki\", \"url\": \"https://terangiaoaonunui.pukeariki.com/story-collections/waverley-buildings/waverley-hotel-1933-34\", \"content\": \"The contactors were Walpole and Patterson of Whanganui and the architects, Piper and Brooker of Auckland. It appears likely the first licence was granted to Ernest de Tourret. The Patea Mail noted on 10 September 1934 that the Patea Licensing Committee had granted the transfer of the license from Tourret to T. Mckenzie. In July 1935 it was reported that McKenzie had disposed of his interest in the hotel and was moving on. This corner (Weraroa and Bear Streets) site was where the first hotel in Waverley was built. Known originally as Palmer's Hotel, rebuilt in 1870 as a two-story building with seven bedrooms and renamed Commercial Hotel. Destroyed in a blaze in 1909, rebuilt and again burnt down on 1 May 1933. Listed in Waverley Heritage Inventory (2003).\", \"site_name\": ",
+        "payload_full_len": 8000
+      },
+      {
+        "step": 9,
+        "type": "web_search",
+        "query": "Auckland Queen Street \"looking south\" OR \"looking north\" postcard tram 1900s \"Waverley Hotel\"",
+        "result_count": 8,
+        "blocked": 3,
+        "top_results": [
+          {
+            "title": "Lower Queen Street, Auckland. Looking south towards Customs Street.",
+            "url": "https://collections.tepapa.govt.nz/object/1292499",
+            "snippet": "Lower Queen Street, Auckland. Looking south towards Customs Street. | Collections Online - Museum of New Zealand Te Papa Tongarewa [...] Name Lower Queen Street, Auckland. Looking south towards Customs Street. Production Muir & Moodie; publisher; circa 1900 Burton Brothers; photography studio Classification photographic postcards [...] Commercial streets Stores & shops Cable railways Pedestrians C"
+          },
+          {
+            "title": "Queen Street, Auckland Central, 1921 | Record | DigitalNZ",
+            "url": "https://digitalnz.org/records/30056615",
+            "snippet": "Queen Street, Auckland Central, 1921 About this item Title Queen Street, Auckland Central, 1921 Content partner Auckland Libraries Collection Kura Heritage Collections Online Description Looking south from the corner of Victoria Street West up Queen Street, showing the AMP Society Building (left), premises of Thomas Peacock, optician, A J Harding, bookseller and stationer, Hallenstein Brothers Lim"
+          },
+          {
+            "title": "Queen Street’s Nine Lives - Auckland History Initiative",
+            "url": "https://ahi.auckland.ac.nz/2022/06/05/queen-streets-nine-lives/",
+            "snippet": "Queen Street’s Nine Lives | Auckland History Initiative June 5, 2022 [...] Queen Street, looking north from above the Plaza Cinema (right) – Auckland Libraries Heritage Collections 1528-00005 [...] Queen Street is a \" street of shame.\" Queen Street is \"apocalyptic.\" More positively, Queen Street \"should not be a thoroughfare, but a destination unto itself.\" [...] Queen Street, we’re told, is a “ g"
+          }
+        ],
+        "payload_to_model": "{\"query\": \"Auckland Queen Street \\\"looking south\\\" OR \\\"looking north\\\" postcard tram 1900s \\\"Waverley Hotel\\\"\", \"results\": [{\"title\": \"Lower Queen Street, Auckland. Looking south towards Customs Street.\", \"url\": \"https://collections.tepapa.govt.nz/object/1292499\", \"content\": \"Lower Queen Street, Auckland. Looking south towards Customs Street. | Collections Online - Museum of New Zealand Te Papa Tongarewa [...] Name Lower Queen Street, Auckland. Looking south towards Customs Street. Production Muir & Moodie; publisher; circa 1900 Burton Brothers; photography studio Classification photographic postcards [...] Commercial streets Stores & shops Cable railways Pedestrians Carts & wagons Horses Auckland (New Zealand) Muir & Moodie Burton Brothers Details about Lower Queen Street, Auckland. Looking south towards Customs Street.\", \"site_name\": \"Museum of New Zealand Te Papa Tongarewa\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Queen Street, Auckland Central, 1921 | Record | DigitalNZ\", \"url\": \"https://digitalnz.org/records/30056615\", \"content\": \"Queen Street, Auckland Central, 1921 About this item Title Queen Street, Auckland Central, 1921 Content partner Auckland Libraries Collection Kura Heritage Collections Online Description Looking south from the corner of Victoria Street West up Queen Street, showing the AMP Society Building (left), premises of Thomas Peacock, optician, A J Harding, bookseller and stationer, Hallenstein Brothers Limited, outfitters, Princess Buildings, others to the Auckland Savings Bank, with a tram and van (foreground) Format Image Date created 1921-01-28 Creator Winkelmann, Henry, 1860-1931 URL https://kura.aucklandlibraries.govt.nz/digital/collection/photos/id/276698 Related subjects Trams / Cars / Clothing and dress / Pedestrians / Shops / Opticians / Dentists / Queen Street (Auckland) / Victoria Street (Auckland) / AMP Building (Auckland) / Thomas Peacock (Firm) / Hallenstein Brothers Limited / Auckland Savings Bank / J. R. Self Limited\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1921-01-28\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Queen Street’s Nine Lives - Auckland History Initiative\", \"url\": \"https://ahi.auckland.ac.nz/2022/06/05/queen-streets-nine-lives/\", \"content\": \"Queen Street’s Nine Lives | Auckland History Initiative June 5, 2022 [...] Queen Street, looking north from above the Plaza Cinema (right) – Auckland Libraries Heritage Collections 1528-00005 [...] Queen Street is a \\\" street of shame.\\\" Queen Street is \\\"apocalyptic.\\\" More positively, Queen Street \\\"should not be a thoroughfare, but a destination unto itself.\\\" [...] Queen Street, we’re told, is a “ ghost town, slum, skid row.” [...] Carved originally by the Wai Horotiu, the street cascades from the Karangahape Ridge to the Waitematā. [...] It wasn’t even meant to be our city’s main street. The High Street-Shortland Street crescent had that crown until a fire in 1858, after which Queen Street ascended the throne.\", \"site_name\": \"Auckland History Initiative\", \"date_published\": \"2022-06-05\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"Photographic Archive - National Library of New Zealand\", \"url\": \"https://natlib.govt.nz/collections/a-z/photographic-archive\", \"content\": \"Photographic Archive | National Library of New Zealand [...] The Photographic Archive was started in the late 1930s and forms part of the Alexander Turnbull Library collections. [...] It contains around 1,600,000 items from the 1840s to the present, including: prints negatives albums transparencies digital photographs, and other photographic formats. [...] The Photographic Archive holds photographs taken by professional photographers as well as the work of ordinary New Zealanders who have documented their lives, families and communities.\", \"site_name\": \"National Library of New Zealand\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Photographs - He Whakaahua - Kura - Auckland Libraries\", \"url\": \"https://kura.aucklandlibraries.govt.nz/digital/collection/photos\", \"content\": \"Photographs - He Whakaahua - Kura Photographs, illustrations and works of art from the 1800s to the present day. Browse the Photographs collection on Kura We are currently moving records from the former Heritage Images database to Kura. Records that have not yet been moved can be found on DigitalNZ: Click here to search Auckland Libraries content on DigitalNZ.\", \"site_name\": \"Auckland Libraries\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Lower Queen Street - Blogger\", \"url\": \"https://heritageetal.blogspot.com/2016/09/lower-queen-street.html\", \"content\": \"The post office closed in 1992 and was purchased by Auckland City Council in 1995. In 1995 the space began to be discussed as being used for a transport hub. Rail was put into the CPO building and an underground walkway created which connected pedestrians to the other side of the Lower Queen Street and to the remaining piece of Queen Elizabeth Square nestled against the Downtown Shopping ...\", \"site_name\": \"heritageetal.blogspot.com\", \"language\": \"en\", \"source_type\": \"blog\"}, {\"title\": \"Home - Archives New Zealand\", \"url\": \"https://www.archives.govt.nz/\", \"content\": \"Archives New Zealand works to ensure effective, trusted government information for the benefit of all New Zealanders, preserve and protect more than seven million official records from 19th century to 21st century.\", \"site_name\": \"Archives New Zealand\", \"language\": \"en\", \"source_type\": \"other\"}, {\"title\": \"\", \"url\": \"https://kura.aucklandlibraries.govt.nz/digital/\", \"content\": \"\"}], \"blocked_count\": 3, \"total_raw\": 11}",
+        "payload_full_len": 5630
+      },
+      {
+        "step": 10,
+        "type": "thinking",
+        "content": "Confirmo que el Waverley Hotel estaba en la esquina de Lower Queen Street y Customs Street East, Auckland. La foto del Te Papa dice \"Looking south towards Customs Street\" - que coincidiría con nuestra foto. Pero en nuestra foto el Waverley Hotel está a la IZQUIERDA y la perspectiva va hacia el sur (desde los muelles hacia la ciudad). Voy a buscar las coordenadas exactas y verificar con street view."
+      },
+      {
+        "step": 10,
+        "type": "geocode",
+        "args": {
+          "query": "Waverley Hotel Auckland Queen Street Customs Street East"
+        },
+        "n_results": 0,
+        "top_results": [],
+        "payload_to_model": "[]",
+        "payload_full_len": 2
+      },
+      {
+        "step": 10,
+        "type": "fetch_url_with_images",
+        "url": "https://collections.tepapa.govt.nz/object/1292499",
+        "n_images": 1,
+        "target_match": 0,
+        "title": "Lower Queen Street, Auckland. Looking south towards Customs Street. | Collections Online - Museum of New Zealand Te Papa Tongarewa",
+        "text_snippet": "With images\nWith downloadable images\nSearch tips\nDownload tips\nitem\ndetails\nName\nLower Queen Street, Auckland. Looking south towards Customs Street.\nProduction\nMuir & Moodie; publisher; circa 1900\nBurton Brothers; photography studio\nClassification\nphotographic postcards\nMaterials Summary\nphotographic postcard\nDimensions\noverall: 139mm (width), 87mm (height)\nRegistration Number\nPS.003245\nLower Queen Street, Auckland. Looking south towards Customs Street. | Collections Online - Museum of New Zeala",
+        "visible_images": [
+          {
+            "url": "https://media.tepapa.govt.nz/collection/422946/preview",
+            "hamming_distance": 36,
+            "base64_jpeg": "<stripped:45468 chars>"
+          }
+        ],
+        "payload_to_model": "{\"url\": \"https://collections.tepapa.govt.nz/object/1292499\", \"status_code\": 200, \"title\": \"Lower Queen Street, Auckland. Looking south towards Customs Street. | Collections Online - Museum of New Zealand Te Papa Tongarewa\", \"text\": \"With images\\nWith downloadable images\\nSearch tips\\nDownload tips\\nitem\\ndetails\\nName\\nLower Queen Street, Auckland. Looking south towards Customs Street.\\nProduction\\nMuir & Moodie; publisher; circa 1900\\nBurton Brothers; photography studio\\nClassification\\nphotographic postcards\\nMaterials Summary\\nphotographic postcard\\nDimensions\\noverall: 139mm (width), 87mm (height)\\nRegistration Number\\nPS.003245\\nLower Queen Street, Auckland. Looking south towards Customs Street. | Collections Online - Museum of New Zealand Te Papa Tongarewa\", \"text_truncated\": false, \"error\": null, \"images\": [{\"url\": \"https://media.tepapa.govt.nz/collection/422946/preview\", \"hamming_distance\": 36}]}",
+        "payload_full_len": 917
+      },
+      {
+        "step": 11,
+        "type": "thinking",
+        "content": "Esta imagen del Te Papa muestra Lower Queen Street mirando hacia el sur - pero la perspectiva es opuesta a nuestra foto. En nuestra foto el Waverley Hotel está a la IZQUIERDA y se mira hacia el SUR (hacia la ciudad). Esto es consistente con estar en Lower Queen Street mirando hacia el sur, desde cerca de los muelles/Quay Street.\n\nNecesito las coordenadas del Waverley Hotel en Auckland. Estaba en el lado oeste de Queen Street, en la esquina con Customs Street East."
+      },
+      {
+        "step": 11,
+        "type": "geocode",
+        "args": {
+          "query": "Lower Queen Street Auckland New Zealand"
+        },
+        "n_results": 1,
+        "top_results": [
+          {
+            "lat": -36.843934,
+            "lon": 174.766982,
+            "display_name": "Te Komititanga, Britomart, City Centre, Auckland, Waitematā, Auckland, New Zealand",
+            "type": "square"
+          }
+        ],
+        "payload_to_model": "[{\"display_name\": \"Te Komititanga, Britomart, City Centre, Auckland, Waitematā, Auckland, New Zealand\", \"lat\": -36.843934, \"lon\": 174.766982, \"type\": \"square\", \"importance\": 0.06674151750972762, \"bbox\": [-36.8446296, -36.8432689, 174.7664958, 174.7674897], \"address\": {\"square\": \"Te Komititanga\", \"neighbourhood\": \"Britomart\", \"suburb\": \"City Centre\", \"city\": \"Auckland\", \"state\": \"Auckland\", \"ISO3166-2-lvl4\": \"NZ-AUK\", \"country\": \"New Zealand\", \"country_code\": \"nz\"}}]",
+        "payload_full_len": 470
+      },
+      {
+        "step": 11,
+        "type": "web_search",
+        "query": "Waverley Hotel Auckland \"12 Queen Street\" OR \"14 Queen Street\" OR \"Customs Street\" historical location coordinates",
+        "result_count": 8,
+        "blocked": 3,
+        "top_results": [
+          {
+            "title": "Old maps of Auckland | OldMapsOnline",
+            "url": "https://www.oldmapsonline.org/en/Auckland_Region",
+            "snippet": "Old maps of Auckland including historical maps from 1773, 1841, 1858, 1862, 1880, 1891, and more. Maps show river Thames, Mercury Bay, Wai-temata Harbour, Kaipara Harbour, and early Auckland city with its districts and surrounding areas."
+          },
+          {
+            "title": "Home - Archives New Zealand",
+            "url": "https://www.archives.govt.nz/",
+            "snippet": "Archives New Zealand holds records including historic maps, documents, and photographs related to Auckland and wider New Zealand. Researchers can find information about historical locations, government records, and archival collections relevant to Auckland's development."
+          },
+          {
+            "title": "Queen Street - Aucklandnz.com",
+            "url": "https://www.aucklandnz.com/explore/queen-street",
+            "snippet": "Queen Street is the main street in Auckland city centre with numerous shops, restaurants, and entertainment venues. Located near Waitematā station and Te Komititanga, the street is a cultural and commercial hub in Auckland CBD."
+          }
+        ],
+        "payload_to_model": "{\"query\": \"Waverley Hotel Auckland \\\"12 Queen Street\\\" OR \\\"14 Queen Street\\\" OR \\\"Customs Street\\\" historical location coordinates\", \"results\": [{\"title\": \"Old maps of Auckland | OldMapsOnline\", \"url\": \"https://www.oldmapsonline.org/en/Auckland_Region\", \"content\": \"Old maps of Auckland including historical maps from 1773, 1841, 1858, 1862, 1880, 1891, and more. Maps show river Thames, Mercury Bay, Wai-temata Harbour, Kaipara Harbour, and early Auckland city with its districts and surrounding areas.\", \"site_name\": \"OldMapsOnline\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Home - Archives New Zealand\", \"url\": \"https://www.archives.govt.nz/\", \"content\": \"Archives New Zealand holds records including historic maps, documents, and photographs related to Auckland and wider New Zealand. Researchers can find information about historical locations, government records, and archival collections relevant to Auckland's development.\", \"site_name\": \"Archives New Zealand\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Queen Street - Aucklandnz.com\", \"url\": \"https://www.aucklandnz.com/explore/queen-street\", \"content\": \"Queen Street is the main street in Auckland city centre with numerous shops, restaurants, and entertainment venues. Located near Waitematā station and Te Komititanga, the street is a cultural and commercial hub in Auckland CBD.\", \"site_name\": \"Aucklandnz.com\", \"date_published\": \"2026-08-11\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"“Yours Disgustedly”: Public Reactions to the Queen Street Mall Project\", \"url\": \"https://ahi.auckland.ac.nz/2020/02/18/yours-disgustedly-public-reactions-to-the-queen-street-mall-project/\", \"content\": \"Public reactions to the pedestrianisation project for Queen Street in Auckland in the 1970s are documented with letters to the mayor and archives. Some letters referenced architecture and urban planning with regard to Queen Street and its development.\", \"site_name\": \"Auckland History Initiative\", \"date_published\": \"2020-02-18\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"VR Queen Street Hotel | VR Group\", \"url\": \"https://vrhotels.co.nz/vr-queen-street/\", \"content\": \"VR Queen Street Hotel offers a convenient location in the heart of Auckland CBD on Queen Street.\", \"site_name\": \"VR Group\", \"language\": \"en\", \"source_type\": \"other\"}, {\"title\": \"\", \"url\": \"https://www.google.com/maps/search/?query_place_id=ChIJDalXWsw0K4gRD0DJC9JJjqM\", \"content\": \"\"}, {\"title\": \"\", \"url\": \"https://www.google.com/maps/search/?query_place_id=ChIJTUlS0S4FdkgRAGTHjEn0wF4\", \"content\": \"\"}, {\"title\": \"\", \"url\": \"https://www.google.com/maps/search/Queen%20st\", \"content\": \"\"}], \"blocked_count\": 3, \"total_raw\": 11}",
+        "payload_full_len": 2706
+      },
+      {
+        "step": 12,
+        "type": "belief_nudge",
+        "steps_since_belief": 3
+      },
+      {
+        "step": 12,
+        "type": "thinking",
+        "content": "El Waverley Hotel estaba en la esquina de Lower Queen Street y Customs Street East. Según DigitalNZ, estaba \"at the junction of Lower Queen Street (left) and Customs Street East\". La foto muestra Queen Street mirando hacia el sur desde cerca de Quay Street/los muelles. Voy a verificar visualmente las coordenadas."
+      },
+      {
+        "step": 12,
+        "type": "report_belief",
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Lower Queen Street, Auckland, NZ - cerca de Customs Street East (Waverley Hotel)",
+              "lat": -36.8439,
+              "lon": 174.767,
+              "weight": 0.9,
+              "radius_km": 0.3
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1900,
+              "to": 1910,
+              "weight": 0.75
+            },
+            {
+              "from": 1910,
+              "to": 1920,
+              "weight": 0.2
+            }
+          ],
+          "rationale": "Waverley Hotel confirmado en Auckland, en la esquina de Lower Queen Street y Customs Street East. La foto muestra Queen Street mirando hacia el sur con el hotel a la izquierda."
+        }
+      },
+      {
+        "step": 13,
+        "type": "static_map",
+        "args": {
+          "lat": -36.8439,
+          "lon": 174.767,
+          "zoom": 17,
+          "map_type": "hybrid"
+        },
+        "map_type": "hybrid",
+        "lat": -36.8439,
+        "lon": 174.767,
+        "zoom": 17,
+        "base64_jpeg": "<stripped:205092 chars>",
+        "nearby_pois": [
+          {
+            "name": "Ferry Building",
+            "type": "historical_landmark",
+            "distance_m": 102.4
+          },
+          {
+            "name": "Waitematā Train Station",
+            "type": "train_station",
+            "distance_m": 157.1
+          },
+          {
+            "name": "Commercial Bay",
+            "type": "shopping_mall",
+            "distance_m": 77.4
+          },
+          {
+            "name": "Ahi.",
+            "type": "restaurant",
+            "distance_m": 61.5
+          },
+          {
+            "name": "Queens Rooftop & Wineshop",
+            "type": "bar",
+            "distance_m": 42.3
+          }
+        ],
+        "elevation": {
+          "elevation_m": 3.5,
+          "terrain_category": "rolling",
+          "samples_summary": {
+            "min_m": 0.0,
+            "max_m": 37.6,
+            "mean_m": 12.5,
+            "std_m": 16.1
+          }
+        },
+        "composite_views": [],
+        "payload_to_model": "{\"lat\": -36.8439, \"lon\": 174.767, \"zoom\": 17, \"type\": \"hybrid\", \"size\": [640, 640], \"note\": \"Altitud central: 3m. Terreno: rolling. POIs cercanos top-3: Ferry Building (102m), Waitematā Train Station (157m), Commercial Bay (77m).\", \"nearby_pois\": [{\"name\": \"Ferry Building\", \"type\": \"historical_landmark\", \"distance_m\": 102.4}, {\"name\": \"Waitematā Train Station\", \"type\": \"train_station\", \"distance_m\": 157.1}, {\"name\": \"Commercial Bay\", \"type\": \"shopping_mall\", \"distance_m\": 77.4}, {\"name\": \"Ahi.\", \"type\": \"restaurant\", \"distance_m\": 61.5}, {\"name\": \"Queens Rooftop & Wineshop\", \"type\": \"bar\", \"distance_m\": 42.3}], \"elevation\": {\"elevation_m\": 3.5, \"terrain_category\": \"rolling\", \"samples_summary\": {\"min_m\": 0.0, \"max_m\": 37.6, \"mean_m\": 12.5, \"std_m\": 16.1}}, \"composite_views\": []}",
+        "image_inject_kind": "static_map"
+      },
+      {
+        "step": 13,
+        "type": "geocode",
+        "args": {
+          "query": "Customs Street East Queen Street Auckland New Zealand"
+        },
+        "n_results": 0,
+        "top_results": [],
+        "payload_to_model": "[]",
+        "payload_full_len": 2
+      },
+      {
+        "step": 14,
+        "type": "thinking",
+        "content": "Veo claramente el mapa. Queen Street corre de norte a sur, y Customs Street East corre en diagonal. El Waverley Hotel estaba en la esquina de Queen Street y Customs Street East. La foto muestra Queen Street mirando hacia el sur desde cerca de Quay Street. Voy a verificar con Street View en el punto donde el Waverley Hotel estuvo (esquina Queen St y Customs St E)."
+      },
+      {
+        "step": 14,
+        "type": "street_view",
+        "args": {
+          "lat": -36.8444,
+          "lon": 174.7669,
+          "heading": 180,
+          "contact_sheet": true
+        },
+        "n_images": 4,
+        "panorama_id": "CAoSFkNJSE0wb2dLRUlDQWdJQ24tX1dRR1E.",
+        "pano_date": "2024-09",
+        "actual_lat": -36.84439815821506,
+        "actual_lon": 174.7669032117488,
+        "distance_to_pano_m": 0.35160091984253095,
+        "images": [
+          {
+            "heading": 0.0,
+            "pitch": 0.0,
+            "fov": 90,
+            "base64_jpeg": "<stripped:130456 chars>"
+          },
+          {
+            "heading": 90.0,
+            "pitch": 0.0,
+            "fov": 90,
+            "base64_jpeg": "<stripped:78188 chars>"
+          },
+          {
+            "heading": 180.0,
+            "pitch": 0.0,
+            "fov": 90,
+            "base64_jpeg": "<stripped:121964 chars>"
+          },
+          {
+            "heading": 270.0,
+            "pitch": 0.0,
+            "fov": 90,
+            "base64_jpeg": "<stripped:101572 chars>"
+          }
+        ],
+        "payload_to_model": "{\"lat\": -36.8444, \"lon\": 174.7669, \"n_images\": 4, \"headings\": [0.0, 90.0, 180.0, 270.0], \"panorama_id\": \"CAoSFkNJSE0wb2dLRUlDQWdJQ24tX1dRR1E.\", \"pano_date\": \"2024-09\", \"actual_lat\": -36.84439815821506, \"actual_lon\": 174.7669032117488, \"distance_to_pano_m\": 0.35160091984253095, \"n_nearby_panoramas\": 0, \"note\": \"Panorama capturado en 2024-09. Contact sheet: 4 imágenes (N/E/S/W). POIs cercanos (radio 30m): First post office in Auckland(18m), vision nz眼镜之语(26m), Custom Lane(22m).\"}",
+        "image_inject_kind": "street_view"
+      },
+      {
+        "step": 15,
+        "type": "thinking",
+        "content": "Estoy dentro de un hotel moderno - no es útil para verificación visual. Necesito tomar Street View desde la calle Queen Street mirando hacia el sur, para comparar la perspectiva con nuestra foto histórica. El punto de la foto debería ser desde cerca de Quay Street/los muelles mirando hacia el sur por Queen Street."
+      },
+      {
+        "step": 15,
+        "type": "street_view",
+        "args": {
+          "lat": -36.8432,
+          "lon": 174.7669,
+          "heading": 180,
+          "fov": 90
+        },
+        "n_images": 1,
+        "panorama_id": "Sx--73cEBElrMvv1d7w0qQ",
+        "pano_date": "2024-05",
+        "actual_lat": -36.84323388106521,
+        "actual_lon": 174.7669220118933,
+        "distance_to_pano_m": 4.2461878351252285,
+        "images": [
+          {
+            "heading": 180.0,
+            "pitch": 0.0,
+            "fov": 90,
+            "base64_jpeg": "<stripped:188196 chars>"
+          }
+        ],
+        "payload_to_model": "{\"lat\": -36.8432, \"lon\": 174.7669, \"n_images\": 1, \"headings\": [180.0], \"panorama_id\": \"Sx--73cEBElrMvv1d7w0qQ\", \"pano_date\": \"2024-05\", \"actual_lat\": -36.84323388106521, \"actual_lon\": 174.7669220118933, \"distance_to_pano_m\": 4.2461878351252285, \"n_nearby_panoramas\": 0, \"note\": \"Panorama capturado en 2024-05. POIs cercanos (radio 30m): Maori Chieftain Statue(23m), Ferry Building(24m), The Shucker Brothers(18m).\"}",
+        "image_inject_kind": "street_view"
+      },
+      {
+        "step": 16,
+        "type": "belief_nudge",
+        "steps_since_belief": 3
+      },
+      {
+        "step": 16,
+        "type": "thinking",
+        "content": "Veo Queen Street desde cerca de Quay Street mirando hacia el sur. La zona está muy transformada pero se puede reconocer la alineación de la calle. Ahora debo determinar el punto exacto desde donde fue tomada la foto - probablemente desde la intersección con Quay Street mirando hacia el sur, con el Waverley Hotel a la izquierda (lado oeste de Queen St).\n\nLa foto muestra que el fotógrafo estaba en Queen Street cerca de Quay Street mirando hacia el sur. El Waverley Hotel (a la izquierda) estaba en el lado oeste de Queen Street. Necesito verificar la dirección exacta buscando más información sobre esta postal específica."
+      },
+      {
+        "step": 16,
+        "type": "report_belief",
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Queen Street cerca de Quay Street, Auckland, NZ (mirando sur)",
+              "lat": -36.8435,
+              "lon": 174.7669,
+              "weight": 0.88,
+              "radius_km": 0.2
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1900,
+              "to": 1910,
+              "weight": 0.75
+            },
+            {
+              "from": 1910,
+              "to": 1920,
+              "weight": 0.2
+            }
+          ],
+          "rationale": "Street View confirma la alineación de Queen Street desde Quay St mirando al sur. El Waverley Hotel estaba en la esquina oeste de Queen St y Customs St East."
+        }
+      },
+      {
+        "step": 17,
+        "type": "thinking",
+        "content": "Ahora busco la postal específica para confirmar el año y el punto exacto de la foto."
+      },
+      {
+        "step": 17,
+        "type": "web_search",
+        "query": "Auckland \"Queen Street\" postcard \"looking south\" tram \"Waverley Hotel\" 1905 1906 1907 1908",
+        "result_count": 9,
+        "blocked": 2,
+        "top_results": [
+          {
+            "title": "Auckland waterfront from Queen Street Wharf, 1905",
+            "url": "https://digitalnz.org/records/30048132",
+            "snippet": "Looking south from the masthead of the barque Piri, showing part of Queen Street Wharf, Devonport Steam Ferry Company jetty (left), G Kronfeld, Waverley Hotel and Thames Hotel, T H Hall, Gladstone Buildings, Customs Building and Auckland Harbour Board offices (right), lower Queen Street (centre), with Prince Albert College, Queen Street, Baptist Tabernacle, Pitt Street Church, St Matthews Church a"
+          },
+          {
+            "title": "Auckland waterfront from Queen Street Wharf, 1905",
+            "url": "https://digitalnz.org/records/30048133",
+            "snippet": "Looking south from the masthead of the barque Piri across the city to Pitt Street Methodist Church showing Queen Street Wharf, the premises of the Devonport Steam Ferry Company, G Kronfeld and the Waverley Hotel (left), Gladstone Buildings, Auckland Harbour Board offices, Auckland Sailors Home and Graving Dock on Quay Street West, the Customhouse and New Zealand Loan and Mercantile Agency on Custo"
+          },
+          {
+            "title": "View of Queen Street Auckland, looking south with flags flying for the ...",
+            "url": "https://digitalnz.org/records/30088448",
+            "snippet": "Looking south along Queen Street, Auckland showing flags flying for the relief of Pretoria, South Africa, the Waverley Hotel (left), horse drawn trams."
+          }
+        ],
+        "payload_to_model": "{\"query\": \"Auckland \\\"Queen Street\\\" postcard \\\"looking south\\\" tram \\\"Waverley Hotel\\\" 1905 1906 1907 1908\", \"results\": [{\"title\": \"Auckland waterfront from Queen Street Wharf, 1905\", \"url\": \"https://digitalnz.org/records/30048132\", \"content\": \"Looking south from the masthead of the barque Piri, showing part of Queen Street Wharf, Devonport Steam Ferry Company jetty (left), G Kronfeld, Waverley Hotel and Thames Hotel, T H Hall, Gladstone Buildings, Customs Building and Auckland Harbour Board offices (right), lower Queen Street (centre), with Prince Albert College, Queen Street, Baptist Tabernacle, Pitt Street Church, St Matthews Church and St Patricks Cathedral (left to right, distance)... No known copyright restrictions\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1905-01-26\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Auckland waterfront from Queen Street Wharf, 1905\", \"url\": \"https://digitalnz.org/records/30048133\", \"content\": \"Looking south from the masthead of the barque Piri across the city to Pitt Street Methodist Church showing Queen Street Wharf, the premises of the Devonport Steam Ferry Company, G Kronfeld and the Waverley Hotel (left), Gladstone Buildings, Auckland Harbour Board offices, Auckland Sailors Home and Graving Dock on Quay Street West, the Customhouse and New Zealand Loan and Mercantile Agency on Customs Street West, with St Matthews Church and St Patricks Cathedral (distance)... No known copyright restrictions\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1905-01-26\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"View of Queen Street Auckland, looking south with flags flying for the ...\", \"url\": \"https://digitalnz.org/records/30088448\", \"content\": \"Looking south along Queen Street, Auckland showing flags flying for the relief of Pretoria, South Africa, the Waverley Hotel (left), horse drawn trams.\", \"site_name\": \"DigitalNZ\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Queen Street, Auckland Central, 1903\", \"url\": \"https://digitalnz.org/records/30048973\", \"content\": \"Looking south down Queen Street from the Gladstone Coffee Palace to the intersection with Customs Street, with the Waverley Hotel and the Thames Hotel on the east side and premises of Ross and Ansenne, ship chandlers and Wingate and Company Limited on the west side, Prince Albert College can be seen (centre right, distance)... Hotels / Ship Chandlers / Sailmakers / Hardware stores / Trams / Tramways / Prince Albert College / Queen Street (Auckland) / Waverley Hotel (Auckland) / Thames Hotel (Auckland)... No known copyright restrictions\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1903-04-02\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Auckland wharves and waterfront, 1908\", \"url\": \"https://digitalnz.org/records/30048797\", \"content\": \"Looking south from the masthead of the Jessie Craig at the Queen Street Wharf over the city towards Mount Eden, showing the Ferry Wharf (foreground), Quay Street West along the foreshore, Endeans buildings, Waverley Hotel, Queen Street, Gladstone Coffee Palace (left of centre), Little Queen Street (centre), Auckland Harbour Board offices (right of centre), Albert Street (right), Sailors Home and New Zealand Loan and Mercantile Agency Company Limited... No known copyright restrictions\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1908-06-26\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Auckland Panoramic - Old Photos NZ\", \"url\": \"https://oldphotos.co.nz/nz-north-island/auckland-panoramic/\", \"content\": \"Auckland Panoramic This is a combination of 6 individual images from postcards dating back to 1912... Looking south from Ferry Building over city showing part of Post Office (foreground) and the Waverley Hotel in Queen Street, Tyrone Buildings... Looking south from Ferry Building over city to Mount Eden (left background), showing buildings in Queen Street (left of centre), premises of Thames Hotel...\", \"site_name\": \"Old Photos NZ\", \"language\": \"en\", \"source_type\": \"other\"}, {\"title\": \"queen street auckland - PICRYL - Public Domain Media Search Engine\", \"url\": \"https://picryl.com/topics/queen+street+auckland\", \"content\": \"Download Images of - Free for commercial use, no attribution required. From: Queen Street looking south from Customs Street, 1925, to Base of Sir George Grey's statue when it was situated in Queen Street Auckland about 25 years ago, 1096867. Find images dated from 1860 to 2024.\", \"site_name\": \"PICRYL\", \"language\": \"en\", \"source_type\": \"other\"}, {\"title\": \"Queen street auckland Images — Public Domain Photos & Prints\", \"url\": \"https://jenikirbyhistory.getarchive.net/topics/queen%20street%20auckland\", \"content\": \"Download Images of Queen street auckland - Free for commercial use, no attribution required. From: Sir George Grey statue, upper Queen Street Auckland - Muir & Moodie, to Base of Sir George Grey's statue when it was situated in Queen Street Auckland about 25 years ago, 1096867. Find Queen street auckland images dated from 1860 to 2024.\", \"site_name\": \"GetArchive\", \"language\": \"en\", \"source_type\": \"other\"}, {\"title\": \"31 Queen street auckland, Auckland Images: PICRYL - Public Domain Media ...\", \"url\": \"https://jenikirbyhistory.getarchive.net/topics/queen+street+auckland/auckland\", \"content\": \"Download Images of - Free for commercial use, no attribution required. From: Sir George Grey statue, upper Queen Street Auckland - Muir & Moodie, to Base of Sir George Grey's statue when it was situated in Queen Street Auckland about 25 years ago, 1096867. Find images dated from 1880 to 2024.\", \"site_name\": \"GetArchive\", \"language\": \"en\", \"source_type\": \"other\"}], \"blocked_count\": 2, \"total_raw\": 11}",
+        "payload_full_len": 5693
+      },
+      {
+        "step": 17,
+        "type": "web_search",
+        "query": "Auckland lower Queen Street postcard colorized tram 1900s \"THNALL\" OR \"Chronicle\" building",
+        "result_count": 8,
+        "blocked": 3,
+        "top_results": [
+          {
+            "title": "Home - Archives New Zealand",
+            "url": "https://www.archives.govt.nz/",
+            "snippet": "Home - Archives New Zealand Skip to main content Archives New Zealand National Library History Explorer He Tohu Records we hold Records This website Website Search Contact us Kāinga Home Ngā aratohu rangahau Research guidance Ngā aratohu rangahau Research guidance Find out what kinds of archive we hold, get research advice or use our guides to discover how to find records on your topic. Visit this"
+          },
+          {
+            "title": "Papers Past | Newspapers Home",
+            "url": "https://paperspast.natlib.govt.nz/newspapers",
+            "snippet": "Papers Past | Newspapers Home Ngā Niupepa Newspapers Historic New Zealand and Pacific newspapers from the 19th and 20th centuries, including Māori niupepa in both te reo Māori and English. Search Newspapers Choose a search typeKōwhiria he momo rapu All of these wordsĒnei kupu katoa Any of these wordsTētahi o ēnei kupu This exact phraseTēnei kupu tonu Choose betweenKōwhiria tētahi o All content (de"
+          },
+          {
+            "title": "/ Old Chronicle Building, San Francisco, 1898 - Calisphere",
+            "url": "https://calisphere.org/item/ark:/21198/zz002hrvdf/",
+            "snippet": "Access to this collection is generously supported by Arcadia funds.Old Chronicle Building. There is a clock tower at the top, and a flag flies from the roof. The word \"Chronicle\" is visible on two sides of the clock tower. There are wires and utility poles throughout. People walk on the sidewalks and across the street. There are other buildings throughout. A streetcar is at the intersection ..."
+          }
+        ],
+        "payload_to_model": "{\"query\": \"Auckland lower Queen Street postcard colorized tram 1900s \\\"THNALL\\\" OR \\\"Chronicle\\\" building\", \"results\": [{\"title\": \"Home - Archives New Zealand\", \"url\": \"https://www.archives.govt.nz/\", \"content\": \"Home - Archives New Zealand Skip to main content Archives New Zealand National Library History Explorer He Tohu Records we hold Records This website Website Search Contact us Kāinga Home Ngā aratohu rangahau Research guidance Ngā aratohu rangahau Research guidance Find out what kinds of archive we hold, get research advice or use our guides to discover how to find records on your topic. Visit this section He aha kei a mātou What we have Pātai mai Ask an archivist Me pēhea te rangahau i ngā pūranga kōrero How to research archives Ngā whakamāramatanga o ngā kupu pūranga kōrero Definitions of archival terms Ngā aratohu rangahau Research guides Ngā whakatiki urunga Access restrictions Te tārua me te whakahua pūranga Copying and citing archives Haere ki ō mātou rūma pānui Visit our reading rooms Me pēhea te whakamahi i te rapu Kohinga How to use Collections search Kimihia he pūkete Find a record Kimihia he pūkete Find a record Advice to help you find personal records like your divorce or immigration files, or records from school or care – plus, tips on researching some popular topics. Visit this section Ngā kōnae tokorau Divorce files Ngā pūkete hekenga Immigration records Ngā pūkete whaiaro Personal records Ngā āwhina rapu whakapapa Whakapapa search tips Ngā kōnae whaiaro hōia World War One service records Pātai mai Ask an archivist Whakahaere mōhiohio Manage information Whakahaere mōhiohio Manage information Find advice about managing government records. Give feedback on intentions to dispose of records by government organisations. Visit this section Me pēhea te whakahaere i ō mōhiohio How to manage your information Rārangi aratohu A-Z A–Z list of guidance He pēhea tā mātau whakarite How we regulate Te whakamāramatanga i ngā mahi tiaki pūranga The care records definition and framework Ngā whakamārama mā ngā kaiwhakahaere mōhiohio Information management updates Tono rauemi kāwanatanga Government loans He tauira Case studies Whakawhitiwhiti ngātahi me te rāngai Sector engagement Ā mātou kōrero Discover our stories Ā mātou kōrero Discover our stories Read articles about our work. Learn about some interesting archives we have in our collections. Visit this section He 80 tau o te Pokapū Kiriata ā-Motu. 80 years of the National Film Unit Te Petihana Reo Māori The Māori Language Petition Te Tira Pūoro o Aotearoa (NZSO) The New Zealand Symphony Orchestra (NZSO) He Whakaputanga o te Rangatiratanga o Nu Tireni The Declaration of the Independence of New Zealand Te Petihana Whakamana Pōti Wāhine The Women's Suffrage Petition Te Tiriti o Waitangi The Treaty of Waitangi Ngā Toi a Tū War art Mō mātou About us Mō mātou About us Learn about the purpose, structure and role of Te Rua Mahara o te Kāwanatanga Archives New Zealand – plus, read our recent news and publications. Visit this section Whakapā mai ki a mātou Contact us Te Kahu heritage campus Haere ki ō mātou rūma pānui Visit our reading rooms He aha kei a mātou What we have Ko wai mātou Who we are Ā mātou rato...\", \"site_name\": \"Archives New Zealand\", \"language\": \"en\", \"source_type\": \"other\"}, {\"title\": \"Papers Past | Newspapers Home\", \"url\": \"https://paperspast.natlib.govt.nz/newspapers\", \"content\": \"Papers Past | Newspapers Home Ngā Niupepa Newspapers Historic New Zealand and Pacific newspapers from the 19th and 20th centuries, including Māori niupepa in both te reo Māori and English. Search Newspapers Choose a search typeKōwhiria he momo rapu All of these wordsĒnei kupu katoa Any of these wordsTētahi o ēnei kupu This exact phraseTēnei kupu tonu Choose betweenKōwhiria tētahi o All content (default)Ngā rārangi take katoa (taunoa)All Ngā Tānga Reo Māori content (default)Ngā momo rārangi take katoa o Ngā Tānga Reo Māori (taunoa) Only most-recently added contentNgā momo rārangi take i tāpiritia inakuanei tonu anake Did you know you can exclude words from your search?I mōhio rānei koe ka taea e koe te aukati i ētahi kupu i tō rapu? Papers Past has a range of other search techniques you can useArā anō te huhua o ngā tikanga rapu a Papers Past, ka taea e koe te whakamahi - Learn more hereĀkona ētahi atu mea ki konei All content Ngā rārangi take katoa Ngā Tānga Reo Māori only Ngā Tānga Reo Māori anake What is Ngā Tānga Reo Māori? He aha Ngā Tānga Reo Māori? Filter Between dates All dates Pick the start date and end dates for your searchKōwhiria te rā tīmatanga me te rā whakamutunga mō tō rapunga FromMai i: Please enter date in format DD-MM-YYYY ToTae noa ki: Please enter date in format DD-MM-YYYY Title All titles, all regions Pick the publications for your searchKōwhiria ngā whakaputanga mō tō rapunga Select allTīpako i te katoa Content types All types of content Filter by Content TypesMe tātari mā ngā momo rārangi take Grey numbers indicate matches for eachHei waitohu ngā nama kiwikiwi i ngā ritenga mō ia Select allTīpako i te katoa Tuhinga AdvertisementPānuitanga IllustrationWhakaahua Clear search Whakawāteatia te rapunga Explore by title Tūhuratia ā-taitara Explore by region Tūhuratia ā-rohe Explore by year Tūhuratia ā-tau Text corrections Ngā whakatika kuputuhi You can correct text and help improve search results on Papers Past. Learn more A total of 1,492,683 lines have been corrected by 1,048 Papers Past users. See latest corrections What's new? Latest additions to Newspapers (June 2026): Hawera Star (1936-1950) View newspaper Hutt News (1949-1960) View newspaper Matamata County Mail (1953-1965) View newspaper Matamata Record (1951, 1953-June 1954) View newspaper Matiere Gazette (1920-1921, 1924-October 1936) View newspaper Ohura Mail (July 1917-1921, 1924-October 1936) View newspaper Waikato Times (1946-1950) View newspaper Wairarapa Times-Age (July 1944-1950) View newspaper Wanganui Herald (1921-1927) View newspaper   1 January 1839   0:001:002:003:004:005:006:007:008:009:0010:0011:0012:0013:0014:0015:0016:0017:0018:0019:0020:0021:0022:0023:00 Today Historic New Zealand and Pacific newspapers from the 19th and 20th centuries, including Māori niupepa in both te reo Māori and English.\", \"site_name\": \"Papers Past\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"/ Old Chronicle Building, San Francisco, 1898 - Calisphere\", \"url\": \"https://calisphere.org/item/ark:/21198/zz002hrvdf/\", \"content\": \"Access to this collection is generously supported by Arcadia funds.Old Chronicle Building. There is a clock tower at the top, and a flag flies from the roof. The word \\\"Chronicle\\\" is visible on two sides of the clock tower. There are wires and utility poles throughout. People walk on the sidewalks and across the street. There are other buildings throughout. A streetcar is at the intersection ...\", \"site_name\": \"Calisphere\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"A brief history of San Francisco's absurd, extravagant and ... - SFGATE\", \"url\": \"https://www.sfgate.com/sfhistory/article/sf-newspaper-row-call-examiner-chronicle-buildings-15237480.php\", \"content\": \"The Chronicle Building was “the first and at present the only truly modern building in San Francisco,” the paper declared, praising the structure's lack of pretension while also bragging about ...\", \"site_name\": \"SFGATE\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"Early Skyscraper Being Restored - San Francisco City Guides\", \"url\": \"https://sfcityguides.org/tour-tale/early-skyscraper-being-restored/\", \"content\": \"Early Skyscraper Being Restored - San Francisco City Guides San Francisco Tour Tales Home > San Francisco Tour Tales > Early Skyscraper Being Restored Early Skyscraper Being Restored by Jason Cohen San Francisco’s first skyscraper, whose original façade has been hidden for more than 40 years, is presently undergoing restoration. Located at 690 Market Street at the corner of Kearny and 3rd Streets, the structure w",
+        "payload_full_len": 8000
+      },
+      {
+        "step": 18,
+        "type": "thinking",
+        "content": "Muy útil. El resultado de DigitalNZ de 1905 menciona \"T H Hall\" como un negocio visible desde el muelle. Y en la foto veo \"THNALL\" en el edificio a la derecha - que podría ser \"T.H. HALL\"! También confirmo que el Waverley Hotel estaba en el lado ESTE de Queen Street (no el oeste como pensé antes). Según el registro de 1905: \"G Kronfeld, Waverley Hotel y Thames Hotel\" estaban a la izquierda cuando se miraba desde el muelle. Esto significa que cuando se mira desde los muelles hacia el sur, el Waverley Hotel está a la IZQUIERDA (lado este).\n\nAhora veo que \"THNALL\" es probablemente \"T H HALL\" - un negocio que estaba en el lado oeste de Queen Street mirando hacia el sur."
+      },
+      {
+        "step": 18,
+        "type": "web_search",
+        "query": "\"T H Hall\" Auckland Queen Street historical business 1900s",
+        "result_count": 9,
+        "blocked": 2,
+        "top_results": [
+          {
+            "title": "Queen Street and Quay Street, Auckland Central, 1905",
+            "url": "https://digitalnz.org/records/47889147",
+            "snippet": "From Auckland Libraries: Looking south west from the mast of the barque Anglo-Norman showing Quay Street (foreground), Little Queen Street (distance), Queen Street (across centre) with premises (from right to left), of Robert Rew, Gladstone Coffee Palace, Shipping Bakery, E McKeown, S Whitley, J W Coleman, Ah Chee, Peter Franchi, Fish and Oyster Saloon, Imperial Bakery, T H Hall and Company ..."
+          },
+          {
+            "title": "100 Years of Queen Street in Auckland,1840’s-1940’s",
+            "url": "https://thefairfaxarchives.co.nz/100-years-of-queen-street-in-auckland-1840s-1940s",
+            "snippet": "100 Years of Queen Street in Auckland, 1840’s-1940’s — TheFairfaxArchives.co.nz 100 Years of Queen Street in Auckland,1840’s-1940’s Queen Street is the major commercial thoroughfare in the Auckland CBD, Auckland, New Zealand's main population centre. The northern end is at Queens Wharf on the Auckland waterfront, adjacent to the Britomart Transport Centre and the Downtown Ferry Terminal. Named aft"
+          },
+          {
+            "title": "Queen Street, Auckland | National Library of New Zealand",
+            "url": "https://natlib.govt.nz/records/22806344",
+            "snippet": "Queen Street, Auckland | Items | National Library of New Zealand | National Library of New Zealand IMAGE Queen Street, Auckland Free Date [ca 1912-1918] Reference 1/2-001008-G Description View looking up Queen Street taken from a high vantage point to the right of the General Post Office and the Waverley Hotel in lower Queen Street. The Thames Hotel can be seen in the foreground on the left and Sa"
+          }
+        ],
+        "payload_to_model": "{\"query\": \"\\\"T H Hall\\\" Auckland Queen Street historical business 1900s\", \"results\": [{\"title\": \"Queen Street and Quay Street, Auckland Central, 1905\", \"url\": \"https://digitalnz.org/records/47889147\", \"content\": \"From Auckland Libraries: Looking south west from the mast of the barque Anglo-Norman showing Quay Street (foreground), Little Queen Street (distance), Queen Street (across centre) with premises (from right to left), of Robert Rew, Gladstone Coffee Palace, Shipping Bakery, E McKeown, S Whitley, J W Coleman, Ah Chee, Peter Franchi, Fish and Oyster Saloon, Imperial Bakery, T H Hall and Company ...\", \"site_name\": \"DigitalNZ\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"100 Years of Queen Street in Auckland,1840’s-1940’s\", \"url\": \"https://thefairfaxarchives.co.nz/100-years-of-queen-street-in-auckland-1840s-1940s\", \"content\": \"100 Years of Queen Street in Auckland, 1840’s-1940’s — TheFairfaxArchives.co.nz 100 Years of Queen Street in Auckland,1840’s-1940’s Queen Street is the major commercial thoroughfare in the Auckland CBD, Auckland, New Zealand's main population centre. The northern end is at Queens Wharf on the Auckland waterfront, adjacent to the Britomart Transport Centre and the Downtown Ferry Terminal. Named after Queen Victoria, Queen Street was an early development in Auckland. In the 1880s, the first horse-drawn buses began connecting Queen Street with areas such as Ponsonby Road and Remuera. In 1900, the first motorcar was seen on the street, and in 1902 the street was finally asphalted, the first street in New Zealand. The same year the first electric trams also arrived, to provide services until 1956. Limited time discount - free shipping (or local pickup in Auckland) for all after sale photographs purchased. Intersection of Customs and Queen Streets (ANZ001-002) Queen Street, Auckland (ANZ001-005) East Side of Queen Street from Victoria Street (ANZ001-009) Queen Street from Victoria Arcade Tower (ANZ001-016) View from the Grand Hotel (ANZ001-017) Queen Street, Auckland (ANZ001-019) Bank of New South Wales, Queen Street (ANZ001-020) Upper Queen Street, Auckland (ANZ001-024) Old St. Benedict's Church, Queen Street (ANZ001-025) The intersection of Quay and Queen Streets (ANZ001-028) Looking North from Victoria Street (ANZ001-030) Looking Toward the New Zealand Herald Office, Queen Street ( ANZ001-035) Queen Street (ANZ001-044) Queen Street from the Gillett Motors Building (ANZ001-047) Power Board Building, Queen Street (ANZ001-050) Queen Street (ANZ001-055) Queen Street is the major commercial thoroughfare in the Auckland CBD, Auckland, New Zealand's main population centre. The northern end is at Queens Wharf on the Auckland waterfront, adjacent to the Britomart Transport Centre and the Downtown Ferry Terminal. Named after Queen Victoria, Queen Street was an early development in Auckland. In the 1880s, the first horse-drawn buses began connecting Queen Street with areas such as Ponsonby Road and Remuera. In 1900, the first motorcar was seen on the street, and in 1902 the street was finally asphalted, the first street in New Zealand. The same year the first electric trams also arrived, to provide services until 1956.\", \"site_name\": \"The Fairfax Archives\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Queen Street, Auckland | National Library of New Zealand\", \"url\": \"https://natlib.govt.nz/records/22806344\", \"content\": \"Queen Street, Auckland | Items | National Library of New Zealand | National Library of New Zealand IMAGE Queen Street, Auckland Free Date [ca 1912-1918] Reference 1/2-001008-G Description View looking up Queen Street taken from a high vantage point to the right of the General Post Office and the Waverley Hotel in lower Queen Street. The Thames Hotel can be seen in the foreground on the left and Sandford Ltd on the right. Identifiable buildings further up Queen Street are the Waitemata Hotel, Smeeton's Building, New Zealand Insurance Co Ltd, and JCL (John Court Ltd). Partington's Windmill can be seen on the horizon. A large number of people and trams are in the immediate foreground near to the Thames Hotel and Post Office. Taken by William A Price in the early 1900s. Inscriptions: Photographer's title on negative - bottom left - Queen St. Auckland. No 3765A Quantity: 1 b&w original negative (s). Physical Description: Dry plate glass negative 4.5 x 6.5 inches Access restrictions Partly restricted - Please use surrogate in place of original Part of Price, William Archer, 1866-1948 :Collection of post card negatives Format 1 b&w original negative (s), Negatives, Dry plate glass negative 4.5 x 6.5 inches, Orientation: Horizontal image See original record Click to request to view this item, access digital version (if available), and see more information. Usage Downloading this item This item is available as a high resolution download. No further permissions are required for use of this image, however full citations and acknowledgements should be included wherever the images are used. If this item has multiple pages, or is several items attached to a single record, you can use this form to order your copy. Using this Item You can copy this item, share it, and post it on a blog or website. It can be modified, remixed and built upon. It can be used commercially. If reproducing this item, it is helpful to include the following credit: Queen Street, Auckland. Price, William Archer, 1866-1948 :Collection of post card negatives. Ref: 1/2-001008-G. Alexander Turnbull Library, Wellington, New Zealand. /records/22806344 More information can be found in our terms of use. Back to top View looking up Queen Street taken from a high vantage point to the right of the General Post Office and the Waverley Hotel in lower Queen Street. ...\", \"site_name\": \"National Library of New Zealand\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"The Auckland Town Hall, Queen Street, 1925 | Record | DigitalNZ\", \"url\": \"https://digitalnz.org/records/45749202\", \"content\": \"About this item Title The Auckland Town Hall, Queen Street, 1925 Content partner Auckland Libraries Collection Kura Heritage Collections Online Description Looking south up Queen Street from Wakefield Street corner, showing the Auckland Town Hall and premises above, and part of Greys Avenue (right) Format Image Date created 1925-01-03 Creator Winkelmann, Henry, 1860-1931 URL https://kura ...\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1925-01-03\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Heritage New Zealand - Auckland Town Hall\", \"url\": \"https://www.heritage.org.nz/list-details/0549/Auckland_Town_Hall\", \"content\": \"The Town Hall is a prominent civic landmark in the heart of commercial Auckland. It was constructed in 1909-1911 to a design by J. J. and E. J. Clark of Melbourne. Its grand architectural style is Imperial Baroque, the exterior combining stone and early reinforced concrete. The building has a distinctive clock tower, and is unusual in that it occupies a triangular site. Before the construction of the Town Hall, council business in Auckland was carried out in a succession of other buildings, including the city library. Monumental town halls as an emblem of local government were common in nineteenth-century Europe, and were adopted in colonial New Zealand. The Auckland Town Hall was partly modelled on overseas examples, including Lambeth Town Hall in London and, like them, combined council administration and public entertainment. It was divided internally between offices - including the council debating chamber - at the front of the building, and two large public halls at the rear. Although council offices were moved into a separate building in the 1960s, the Town Hall has remained at the heart of political developments in the city with its ongoing use for debates. It is also still used as a public meeting place, having been the venue for a variety of gatherings from the reception of Gallipoli survivors in 1915 to boxing matches and",
+        "payload_full_len": 8000
+      },
+      {
+        "step": 18,
+        "type": "fetch_url_with_images",
+        "url": "https://digitalnz.org/records/30048132",
+        "n_images": 0,
+        "target_match": 0,
+        "title": "",
+        "text_snippet": "",
+        "visible_images": [],
+        "payload_to_model": "{\"url\": \"https://digitalnz.org/records/30048132\", \"status_code\": 202, \"title\": \"\", \"text\": \"\", \"text_truncated\": false, \"error\": \"http_202\"}",
+        "payload_full_len": 140
+      },
+      {
+        "step": 19,
+        "type": "thinking",
+        "content": "Excelente confirmación. \"T H Hall and Company\" estaba en Queen Street, lado oeste (cuando se miraba hacia el sur desde Quay Street). Esto confirma que \"THNALL\" en nuestra foto es \"T.H. HALL\" - un negocio en la parte derecha de Queen Street cuando se mira hacia el norte desde el sur.\n\nAdemás, la primera electric tram en Auckland fue en 1902. Y la foto muestra tranvías eléctricos. El Auckland Town Hall fue construido en 1909-1911 - el edificio con cúpula que se ve al fondo podría ser el Post Office (1912) o la Custom House.\n\nLa foto fue tomada desde Queen Street mirando hacia el NORTE (hacia los muelles), con el Waverley Hotel a la IZQUIERDA. El texto \"Looki...\" sería \"Looking North\". Esto coincide con el ángulo de la foto.\n\nLas coordenadas del punto de toma deben estar en Queen Street, cerca de Customs Street, mirando hacia el norte."
+      },
+      {
+        "step": 19,
+        "type": "street_view",
+        "args": {
+          "lat": -36.8448,
+          "lon": 174.767,
+          "heading": 0,
+          "fov": 90
+        },
+        "n_images": 1,
+        "panorama_id": "6YkIpVJKK6er8plW-wuPag",
+        "pano_date": "2026-04",
+        "actual_lat": -36.84476202374343,
+        "actual_lon": 174.7669929903495,
+        "distance_to_pano_m": 4.268586649205755,
+        "images": [
+          {
+            "heading": 0.0,
+            "pitch": 0.0,
+            "fov": 90,
+            "base64_jpeg": "<stripped:150260 chars>"
+          }
+        ],
+        "payload_to_model": "{\"lat\": -36.8448, \"lon\": 174.767, \"n_images\": 1, \"headings\": [0.0], \"panorama_id\": \"6YkIpVJKK6er8plW-wuPag\", \"pano_date\": \"2026-04\", \"actual_lat\": -36.84476202374343, \"actual_lon\": 174.7669929903495, \"distance_to_pano_m\": 4.268586649205755, \"n_nearby_panoramas\": 0, \"note\": \"Panorama capturado en 2026-04. POIs cercanos (radio 30m): Currency Exchange Auckland | Prosegur Change(18m), Britomart Queens Arcade(18m), Phi massage - Customs st(18m).\"}",
+        "image_inject_kind": "street_view"
+      },
+      {
+        "step": 20,
+        "type": "belief_nudge",
+        "steps_since_belief": 3
+      },
+      {
+        "step": 20,
+        "type": "thinking",
+        "content": "La zona está completamente transformada por edificios modernos. La ubicación es correcta (Queen Street en Customs Street, Auckland), pero el paisaje histórico es irrecuperable visualmente. Tengo suficiente evidencia para confirmar la ubicación. Ahora debo refinar el año. La foto muestra tranvías eléctricos (desde 1902 en Auckland) y el tranvía rojo parece un modelo temprano. Busco el año específico de esta postal."
+      },
+      {
+        "step": 20,
+        "type": "report_belief",
+        "belief": {
+          "location_belief": [
+            {
+              "name": "Queen Street cerca de Customs Street East, Auckland, Nueva Zelanda",
+              "lat": -36.8448,
+              "lon": 174.767,
+              "weight": 0.92,
+              "radius_km": 0.15
+            }
+          ],
+          "year_belief": [
+            {
+              "from": 1902,
+              "to": 1908,
+              "weight": 0.7
+            },
+            {
+              "from": 1908,
+              "to": 1915,
+              "weight": 0.25
+            }
+          ],
+          "rationale": "T.H. Hall Company confirmado en Queen Street lado oeste c.1905, Waverley Hotel lado este, tranvías eléctricos desde 1902. La postal coloreada es típica de 1900-1910."
+        }
+      },
+      {
+        "step": 21,
+        "type": "web_search",
+        "query": "Auckland Queen Street postcard colorized \"looking north\" tram electric 1902 1903 1904 1905 early",
+        "result_count": 7,
+        "blocked": 4,
+        "top_results": [
+          {
+            "title": "Inauguration of the Auckland Electric Tramway, 1902",
+            "url": "https://digitalnz.org/records/43508418",
+            "snippet": "A double-decker Auckland Electric Tramways Company tram surrounded by crowds in Queen Street. From the album: Inauguration of the Auckland Electric Tramways, subtitled, \"See Auckland and live for ever\". Date created 1902-11-24. Subjects: Auckland Electric Tramways Company / Tramways - Auckland / Queen Street (Auckland) / Crowds / Trams - Auckland."
+          },
+          {
+            "title": "Inauguration of the Auckland Electric Tramway, 1902",
+            "url": "https://digitalnz.org/records/43508451",
+            "snippet": "Crowds in Queen Street, Auckland, from the intersection with Customs Street, with the first electric tram having its trolley pole put back on the wire after dewiring; and showing (on right) the business premises of R.C.Carr (Robert Charles) - auctioneer and land agent (#63); Salmon and Company - butchers (#67); H.M.Smeeton Limited - grocers (#83-85); New Zealand Insurance Company building (with cl"
+          },
+          {
+            "title": "Queen Street, Auckland | National Library of New Zealand",
+            "url": "https://natlib.govt.nz/records/23142144",
+            "snippet": "Stereoscopic photograph of Queen Street, Auckland, showing a tram, motor cars and a group of men standing at the corner, taken by Isaac Henry Bowen Jeffares ca 1900-1922. Presented to The Alexander Turnbull Library by E D N Miller, 1978. Quantity: 1 b&w original photographic print."
+          }
+        ],
+        "payload_to_model": "{\"query\": \"Auckland Queen Street postcard colorized \\\"looking north\\\" tram electric 1902 1903 1904 1905 early\", \"results\": [{\"title\": \"Inauguration of the Auckland Electric Tramway, 1902\", \"url\": \"https://digitalnz.org/records/43508418\", \"content\": \"A double-decker Auckland Electric Tramways Company tram surrounded by crowds in Queen Street. From the album: Inauguration of the Auckland Electric Tramways, subtitled, \\\"See Auckland and live for ever\\\". Date created 1902-11-24. Subjects: Auckland Electric Tramways Company / Tramways - Auckland / Queen Street (Auckland) / Crowds / Trams - Auckland.\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1902-11-24\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Inauguration of the Auckland Electric Tramway, 1902\", \"url\": \"https://digitalnz.org/records/43508451\", \"content\": \"Crowds in Queen Street, Auckland, from the intersection with Customs Street, with the first electric tram having its trolley pole put back on the wire after dewiring; and showing (on right) the business premises of R.C.Carr (Robert Charles) - auctioneer and land agent (#63); Salmon and Company - butchers (#67); H.M.Smeeton Limited - grocers (#83-85); New Zealand Insurance Company building (with clock tower). Date created 1902-11-17.\", \"site_name\": \"DigitalNZ\", \"date_published\": \"1902-11-17\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"Queen Street, Auckland | National Library of New Zealand\", \"url\": \"https://natlib.govt.nz/records/23142144\", \"content\": \"Stereoscopic photograph of Queen Street, Auckland, showing a tram, motor cars and a group of men standing at the corner, taken by Isaac Henry Bowen Jeffares ca 1900-1922. Presented to The Alexander Turnbull Library by E D N Miller, 1978. Quantity: 1 b&w original photographic print.\", \"site_name\": \"National Library of New Zealand\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"17 November 1902 – Inauguration of Auckland’s electric tramways\", \"url\": \"https://timespanner.blogspot.com/2009/05/17-november-1902-inauguration-of.html\", \"content\": \"On Monday 17 November 1902 the Mayor of Auckland, Alfred Kidd started the generators at the lower Hobson Street power station, thus inaugurating the era of electric traction to Auckland. A short time later, at the junction of Queen and Custom Streets, 85-year-old Sir John Logan Campbell was presented with a motorman’s licence, and drove the first electric tram along Queen Street.\", \"site_name\": \"Timespanner Blog\", \"language\": \"en\", \"source_type\": \"blog\"}, {\"title\": \"The good old trams - Auckland History Initiative\", \"url\": \"https://ahi.auckland.ac.nz/2023/05/25/the-good-old-trams/\", \"content\": \"From 1902 (the date of their electrification) onwards, Auckland’s tramways had formed the backbone of its public transport network. Replacing horse-drawn and steam-powered alternatives, these trams were fast, smooth and capable of running an incredibly frequent schedule. Aucklanders loved them, and patronage boomed. In 1903, the first full year of electric tram service, Aucklanders boarded their trams 13 million times.\", \"site_name\": \"Auckland History Initiative\", \"date_published\": \"2023-05-25\", \"language\": \"en\", \"source_type\": \"article\"}, {\"title\": \"Queen Street | 1902-2022 and 2024 - donovanimages.co.nz\", \"url\": \"https://donovanimages.co.nz/media/then-and-now/heritage-images/Queen-St-tramway-crowds-1902/Tramway-inauguration-1902-2022.html\", \"content\": \"Inauguration of the Auckland Electric Tramway 1902 (unknown photographer). Looking south from Lower Queen Street, 1902 and 2024. Image sourced from Auckland Libraries Heritage Collections 755-ALB39-11.\", \"site_name\": \"Donovan Images\", \"language\": \"en\", \"source_type\": \"archive\"}, {\"title\": \"\", \"url\": \"https://www.ebay.com.au/itm/306323327517\", \"content\": \"\"}], \"blocked_count\": 4, \"total_raw\": 11}",
+        "payload_full_len": 3828
+      },
+      {
+        "step": 21,
+        "type": "fetch_url_with_images",
+        "url": "https://thefairfaxarchives.co.nz/100-years-of-queen-street-in-auckland-1840s-1940s",
+        "n_images": 10,
+        "target_match": 0,
+        "title": "100 Years of Queen Street in Auckland, 1840’s-1940’s &mdash; TheFairfaxArchives.co.nz",
+        "text_snippet": "100 Years of Queen Street in Auckland, 1840’s-1940’s — TheFairfaxArchives.co.nz\n0\n100 Years of Queen Street in Auckland,1840’s-1940’s\nQueen Street is the major commercial thoroughfare in the Auckland CBD, Auckland, New Zealand's main population centre. The northern end is at Queens Wharf on the Auckland waterfront, adjacent to the Britomart Transport Centre and the Downtown Ferry Terminal. Named after Queen Victoria, Queen Street was an early development in Auckland.\nIn the 1880s, the first hors",
+        "visible_images": [
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/a32bef45-82f5-45a3-85eb-f61c144c0997/logo-01.jpg?format=1500w",
+            "hamming_distance": 30,
+            "base64_jpeg": "<stripped:35832 chars>"
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608485650-Z9JIZHTLS4LEQCA0B0N5/LOT+2-ANZ10016-010.png",
+            "hamming_distance": 38,
+            "base64_jpeg": "<stripped:52068 chars>"
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608485836-HLFE54S5KPU9JR7EYRP9/LOT+2-ANZ10016-010b.png",
+            "hamming_distance": 30,
+            "base64_jpeg": "<stripped:16888 chars>"
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608407909-DP03M6V1NN3T54N7XM9J/LOT+5-ANZ10016-045.png",
+            "hamming_distance": 34,
+            "base64_jpeg": "<stripped:64556 chars>"
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608408235-BJ9NIH8DEDG6YND6KNAC/LOT+5-ANZ10016-045b.png",
+            "hamming_distance": 32,
+            "base64_jpeg": "<stripped:27696 chars>"
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608339244-7HWW1Q9U7NQA9TS2R8GS/LOT+9-ANZ10016-032.png",
+            "hamming_distance": 30,
+            "base64_jpeg": "<stripped:37204 chars>"
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608339396-FHGHJAFP8EJB0MN9LXHN/LOT+9-ANZ10016-032b.png",
+            "hamming_distance": 26,
+            "base64_jpeg": "<stripped:25088 chars>"
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608274477-RMC6NL87IDWOP7YWTZO4/LOT+16-ANZ10016-053.png",
+            "hamming_distance": 40,
+            "base64_jpeg": "<stripped:70160 chars>"
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608274426-S838GG5PM1FYAS7YNGYY/LOT+16-ANZ10016-053b.png",
+            "hamming_distance": 24,
+            "base64_jpeg": "<stripped:15980 chars>"
+          },
+          {
+            "url": "https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608199208-N8U6QRH5VXZW1GJWCJX6/LOT+17-ANZ10016-054.png",
+            "hamming_distance": 36,
+            "base64_jpeg": "<stripped:68172 chars>"
+          }
+        ],
+        "payload_to_model": "{\"url\": \"https://thefairfaxarchives.co.nz/100-years-of-queen-street-in-auckland-1840s-1940s\", \"status_code\": 200, \"title\": \"100 Years of Queen Street in Auckland, 1840’s-1940’s &mdash; TheFairfaxArchives.co.nz\", \"text\": \"100 Years of Queen Street in Auckland, 1840’s-1940’s — TheFairfaxArchives.co.nz\\n0\\n100 Years of Queen Street in Auckland,1840’s-1940’s\\nQueen Street is the major commercial thoroughfare in the Auckland CBD, Auckland, New Zealand's main population centre. The northern end is at Queens Wharf on the Auckland waterfront, adjacent to the Britomart Transport Centre and the Downtown Ferry Terminal. Named after Queen Victoria, Queen Street was an early development in Auckland.\\nIn the 1880s, the first horse-drawn buses began connecting Queen Street with areas such as Ponsonby Road and Remuera. In 1900, the first motorcar was seen on the street, and in 1902 the street was finally asphalted, the first street in New Zealand. The same year the first electric trams also arrived, to provide services until 1956.\\nLimited time discount - free shipping (or local pickup in Auckland) for all after sale photographs purchased.\\n100 Years of Queen Street in Auckland, 1840’s-1940’s\\nClear\\nFilters\\nFilter\\nClear\\nFilter\\nIntersection of Customs and Queen Streets (ANZ001-002)\\nNZ$200.00\\nSold out\\nQueen Street, Auckland (ANZ001-005)\\nNZ$200.00\\nSold out\\nEast Side of Queen Street from Victoria Street (ANZ001-009)\\nNZ$200.00\\nSold out\\nQueen Street from Victoria Arcade Tower (ANZ001-016)\\nNZ$200.00\\nView from the Grand Hotel (ANZ001-017)\\nNZ$200.00\\nQueen Street, Auckland (ANZ001-019)\\nNZ$200.00\\nSold out\\nBank of New South Wales, Queen Street (ANZ001-020)\\nNZ$200.00\\nUpper Queen Street, Auckland (ANZ001-024)\\nNZ$200.00\\nOld St. Benedict's Church, Queen Street (ANZ001-025)\\nNZ$200.00\\nThe intersection of Quay and Queen Streets (ANZ001-028)\\nNZ$200.00\\nLooking North from Victoria Street (ANZ001-030)\\nNZ$200.00\\nLooking Toward the New Zealand Herald Office, Queen Street ( ANZ001-035)\\nNZ$200.00\\nQueen Street (ANZ001-044)\\nNZ$200.00\\nQueen Street from the Gillett Motors Building (ANZ001-047)\\nNZ$200.00\\nPower Board Building, Queen Street (ANZ001-050)\\nNZ$200.00\\nSold out\\nQueen Street (ANZ001-055)\\nNZ$200.00\\nNo results found\\nNo results match your search. Try removing a few filters.\", \"text_truncated\": false, \"error\": null, \"images\": [{\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/a32bef45-82f5-45a3-85eb-f61c144c0997/logo-01.jpg?format=1500w\", \"hamming_distance\": 30}, {\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608485650-Z9JIZHTLS4LEQCA0B0N5/LOT+2-ANZ10016-010.png\", \"hamming_distance\": 38}, {\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608485836-HLFE54S5KPU9JR7EYRP9/LOT+2-ANZ10016-010b.png\", \"hamming_distance\": 30}, {\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608407909-DP03M6V1NN3T54N7XM9J/LOT+5-ANZ10016-045.png\", \"hamming_distance\": 34}, {\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608408235-BJ9NIH8DEDG6YND6KNAC/LOT+5-ANZ10016-045b.png\", \"hamming_distance\": 32}, {\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608339244-7HWW1Q9U7NQA9TS2R8GS/LOT+9-ANZ10016-032.png\", \"hamming_distance\": 30}, {\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608339396-FHGHJAFP8EJB0MN9LXHN/LOT+9-ANZ10016-032b.png\", \"hamming_distance\": 26}, {\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608274477-RMC6NL87IDWOP7YWTZO4/LOT+16-ANZ10016-053.png\", \"hamming_distance\": 40}, {\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608274426-S838GG5PM1FYAS7YNGYY/LOT+16-ANZ10016-053b.png\", \"hamming_distance\": 24}, {\"url\": \"https://images.squarespace-cdn.com/content/v1/634f8c1614460e3f618ebbe6/1674608199208-N8U6QRH5VXZW1GJWCJX6/LOT+17-ANZ10016-054.png\", \"hamming_distance\": 36}]}",
+        "payload_full_len": 4029
+      },
+      {
+        "step": 22,
+        "type": "thinking",
+        "content": "Tengo evidencia muy sólida. La foto muestra \"Intersection of Customs and Queen Streets, About 1903\" que corresponde exactamente con lo que veo en nuestra foto target. Tengo suficiente evidencia para submitir:\n\n1. **Waverley Hotel** claramente visible en la foto, confirmado en la esquina de Lower Queen Street y Customs Street East, Auckland\n2. **T.H. Hall** visible a la derecha, confirmado en Queen Street, Auckland, c.1905\n3. **Tranvía eléctrico** iniciado en Auckland en noviembre 1902\n4. **Postal coloreada** típica del período 1902-1910\n5. El archivo de Fairfax muestra \"Corner of Customs & Queen St, About 1903\" con la misma arquitectura"
+      },
+      {
+        "step": 22,
+        "type": "submit",
+        "answer": {
+          "location": "Queen Street en la intersección con Customs Street East, Auckland, Nueva Zelanda - mirando hacia el norte desde cerca de Customs Street, con el Waverley Hotel a la izquierda",
+          "lat": -36.8448,
+          "lon": 174.767,
+          "year": "1902-1908",
+          "reasoning": "La fotografía es una postal coloreada de Lower Queen Street, Auckland, Nueva Zelanda. Los elementos clave identificados son: (1) el \"WAVERLEY HOTEL\" claramente visible a la izquierda, confirmado en múltiples archivos históricos como ubicado en la esquina de Lower Queen Street y Customs Street East, Auckland; (2) el cartel \"T.H. HALL\" (visible como \"THNALL\") a la derecha, negocio confirmado en Queen Street en registros de 1905; (3) tranvía eléctrico rojo (los tranvías eléctricos de Auckland se inauguraron el 17 de noviembre de 1902); (4) la perspectiva mirando hacia el norte por Queen Street desde cerca de Customs Street; (5) comparación visual con postales del período \"Corner of Customs and Queen Streets, About 1903\" del Fairfax Archives que muestra la misma intersección y arquitectura. El año se estima entre 1902 (inicio tranvías eléctricos) y 1908.",
+          "confidence": "alta",
+          "visual_clues": [
+            "Hotel Waverley claramente visible a la izquierda (lado este de Queen Street)",
+            "Cartel T.H. HALL visible a la derecha del edificio",
+            "Tranvía eléctrico rojo de época victoriana tardía",
+            "Postal coloreada estilo Edwardiano",
+            "Texto parcial 'Looki...' en la parte superior (Looking North)",
+            "Edificio con cúpula al fondo (posible General Post Office o Customs House)",
+            "Arquitectura victoriana de ladrillo característica de Auckland 1900s",
+            "Carruajes tirados por caballos junto a los tranvías eléctricos"
+          ],
+          "external_evidence": [
+            "https://digitalnz.org/records/43805261 - Waverley Hotel at the junction of Lower Queen Street and Customs Street East, Auckland Central",
+            "https://digitalnz.org/records/30048132 - 1905: 'T H Hall' visible en Queen Street Auckland mirando hacia el sur desde los muelles",
+            "https://timespanner.blogspot.com/2009/05/17-november-1902-inauguration-of.html - Inauguración tranvías eléctricos Auckland en Queen Street y Customs Street, 17 Nov 1902",
+            "https://thefairfaxarchives.co.nz/100-years-of-queen-street-in-auckland-1840s-1940s - 'Corner of Customs and Queen Streets, About 1903' muestra misma intersección y arquitectura"
+          ],
+          "rejected_alternatives": [
+            "Australia (descartado - el Waverley Hotel confirmado en Auckland NZ, no en ninguna ciudad australiana)",
+            "Sydney (descartado - arquitectura y negocios no coinciden)",
+            "Looking South desde Quay Street (descartado - el Waverley Hotel aparece a la izquierda cuando se mira hacia el norte, confirmado por registros que dicen hotel estaba en lado este de Queen St)"
+          ],
+          "verification_checks": [
+            "DigitalNZ confirma Waverley Hotel en esquina Lower Queen Street y Customs Street East",
+            "Registros de 1905 de DigitalNZ mencionan T.H. Hall en Queen Street Auckland mirando desde los muelles",
+            "Inauguración tranvías eléctricos Auckland 1902 confirma fecha post-quem",
+            "Fairfax Archives muestra foto de 'Corner of Customs and Queen Streets, About 1903' con arquitectura idéntica"
+          ],
+          "final_belief_top": {
+            "name": "Queen Street en Customs Street East, Auckland, Nueva Zelanda",
+            "lat": -36.8448,
+            "lon": 174.767,
+            "weight": 0.92
+          }
+        }
+      }
+    ]
+  },
+  "checkpoint_inventory": [
+    {
+      "step": 4,
+      "checkpoint_hash": "66ce50368464bc6015d045e82d6c085749ed7039ac22beb45e247c1e07fbb584",
+      "coemitted_tools": [],
+      "context": {
+        "n_messages": 20,
+        "n_tool_results": 7,
+        "n_images": 7,
+        "textualized_chars": 20260
+      },
+      "belief": {
+        "location_belief": [
+          {
+            "name": "Australia/Nueva Zelanda - ciudad con tranvía victoriano",
+            "lat": -33.0,
+            "lon": 151.0,
+            "weight": 0.6,
+            "radius_km": 2000
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1895,
+            "to": 1910,
+            "weight": 0.8
+          }
+        ],
+        "rationale": "Waverley Hotel identificado claramente, arquitectura victoriana, tranvía rojo de época, carteles en inglés, estilo postal coloreada de principios del siglo XX."
+      }
+    },
+    {
+      "step": 8,
+      "checkpoint_hash": "f71d1ecfd5905d71332051749e905453c4158f84be898507d37369b616ae9e35",
+      "coemitted_tools": [],
+      "context": {
+        "n_messages": 33,
+        "n_tool_results": 13,
+        "n_images": 12,
+        "textualized_chars": 45571
+      },
+      "belief": {
+        "location_belief": [
+          {
+            "name": "Queen Street, Auckland, Nueva Zelanda (cerca del Waverley Hotel)",
+            "lat": -36.844,
+            "lon": 174.767,
+            "weight": 0.9,
+            "radius_km": 1
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1900,
+            "to": 1910,
+            "weight": 0.75
+          },
+          {
+            "from": 1910,
+            "to": 1920,
+            "weight": 0.2
+          }
+        ],
+        "rationale": "La celda 3 muestra \"WAVERLEY HOTEL, AUCKLAND\" con tranvías idénticos al de nuestra foto. El Waverley Hotel estaba en Queen Street, Auckland. La foto parece ser una postal de Lower Queen Street mirando hacia el sur desde cerca de Customs Street."
+      }
+    },
+    {
+      "step": 12,
+      "checkpoint_hash": "96a8dc4a6233a893100b3441d92e2e01f61e58beb9670957d6eb32eb44c9f7e2",
+      "coemitted_tools": [],
+      "context": {
+        "n_messages": 46,
+        "n_tool_results": 20,
+        "n_images": 13,
+        "textualized_chars": 68764
+      },
+      "belief": {
+        "location_belief": [
+          {
+            "name": "Lower Queen Street, Auckland, NZ - cerca de Customs Street East (Waverley Hotel)",
+            "lat": -36.8439,
+            "lon": 174.767,
+            "weight": 0.9,
+            "radius_km": 0.3
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1900,
+            "to": 1910,
+            "weight": 0.75
+          },
+          {
+            "from": 1910,
+            "to": 1920,
+            "weight": 0.2
+          }
+        ],
+        "rationale": "Waverley Hotel confirmado en Auckland, en la esquina de Lower Queen Street y Customs Street East. La foto muestra Queen Street mirando hacia el sur con el hotel a la izquierda."
+      }
+    },
+    {
+      "step": 16,
+      "checkpoint_hash": "e8b5299da8bb59738ab1dd888e94d3aa48aa85f53fce24c0043217a1402db45d",
+      "coemitted_tools": [],
+      "context": {
+        "n_messages": 59,
+        "n_tool_results": 25,
+        "n_images": 19,
+        "textualized_chars": 75726
+      },
+      "belief": {
+        "location_belief": [
+          {
+            "name": "Queen Street cerca de Quay Street, Auckland, NZ (mirando sur)",
+            "lat": -36.8435,
+            "lon": 174.7669,
+            "weight": 0.88,
+            "radius_km": 0.2
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1900,
+            "to": 1910,
+            "weight": 0.75
+          },
+          {
+            "from": 1910,
+            "to": 1920,
+            "weight": 0.2
+          }
+        ],
+        "rationale": "Street View confirma la alineación de Queen Street desde Quay St mirando al sur. El Waverley Hotel estaba en la esquina oeste de Queen St y Customs St East."
+      }
+    },
+    {
+      "step": 20,
+      "checkpoint_hash": "234547096f975d7b6f1385d2d228678b6490948303559282ff709f8af425e433",
+      "coemitted_tools": [],
+      "context": {
+        "n_messages": 71,
+        "n_tool_results": 31,
+        "n_images": 20,
+        "textualized_chars": 103671
+      },
+      "belief": {
+        "location_belief": [
+          {
+            "name": "Queen Street cerca de Customs Street East, Auckland, Nueva Zelanda",
+            "lat": -36.8448,
+            "lon": 174.767,
+            "weight": 0.92,
+            "radius_km": 0.15
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1902,
+            "to": 1908,
+            "weight": 0.7
+          },
+          {
+            "from": 1908,
+            "to": 1915,
+            "weight": 0.25
+          }
+        ],
+        "rationale": "T.H. Hall Company confirmado en Queen Street lado oeste c.1905, Waverley Hotel lado este, tranvías eléctricos desde 1902. La postal coloreada es típica de 1900-1910."
+      }
+    }
+  ],
+  "branches": [
+    {
+      "stage": "early",
+      "arm": "contradiction",
+      "rep": 0,
+      "checkpoint_step": 8,
+      "checkpoint_hash": "f71d1ecfd5905d71332051749e905453c4158f84be898507d37369b616ae9e35",
+      "context": {
+        "n_messages": 33,
+        "n_tool_results": 13,
+        "n_images": 12,
+        "textualized_chars": 45571
+      },
+      "pre_top": {
+        "name": "Queen Street, Auckland, Nueva Zelanda (cerca del Waverley Hotel)",
+        "lat": -36.844,
+        "lon": 174.767,
+        "weight": 0.9
+      },
+      "pre_mass": 0.9,
+      "normative_post_mass": 0.880435,
+      "bulletin": "[archive_bulletin]\n{\"source\": \"community_note\", \"channel_contract\": \"canal calibrado conocido: P(señal=dentro | verdad=dentro) = P(señal=fuera | verdad=fuera) = 0.55; P(error) = 0.45; simétrico e independiente de la evidencia previa\", \"signal\": \"FUERA\", \"note\": \"Nota del canal: un catalogador marcó la toma como NO perteneciente al disco de 25 km alrededor de (-36.8440, 174.7670) ('Queen Street, Auckland, Nueva Zelanda (cerca del Waverley Hotel)').\"}",
+      "post_tool_calls": [
+        "report_belief"
+      ],
+      "post_content": "Recibo un boletín comunitario que señala que la foto NO pertenece al radio de 25 km alrededor de Queen Street Auckland. Dado que es una community_note con P=0.55, debo actualizarlo pero con peso moderado. La evidencia visual del Waverley Hotel es fuerte, pero podría haber un Waverley Hotel en otra ciudad.",
+      "protocol_ok": true,
+      "report_valid": true,
+      "report_error": null,
+      "post_belief": {
+        "location_belief": [
+          {
+            "name": "Queen Street, Auckland, Nueva Zelanda (cerca del Waverley Hotel)",
+            "lat": -36.844,
+            "lon": 174.767,
+            "weight": 0.55,
+            "radius_km": 1
+          },
+          {
+            "name": "Otra ciudad australiana/NZ con Waverley Hotel y tranvía",
+            "lat": -33.87,
+            "lon": 151.21,
+            "weight": 0.25,
+            "radius_km": 2000
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1900,
+            "to": 1910,
+            "weight": 0.75
+          },
+          {
+            "from": 1910,
+            "to": 1920,
+            "weight": 0.2
+          }
+        ],
+        "rationale": "Community note (P=0.55) señala que la foto está FUERA del radio de 25km de Auckland. Reduzco la confianza en Auckland pero no descarto - la evidencia visual del Waverley Hotel es fuerte. Considero alternativas en Australia."
+      },
+      "response": {
+        "arm": "contradiction",
+        "polarity": "ii",
+        "pre_mass": 0.9,
+        "post_mass": 0.55,
+        "delta_logit": -1.9966,
+        "at_boundary": false,
+        "update_elasticity": 9.9494,
+        "flag_overreaction_gt3": true
+      },
+      "next_tool_calls": [
+        "web_search",
+        "crop_image"
+      ],
+      "next_tool_args": [
+        {
+          "name": "web_search",
+          "args": {
+            "query": "\"Waverley Hotel\" tram postcard historical \"looking\" street Australia 1900s"
+          }
+        },
+        {
+          "name": "crop_image",
+          "args": {
+            "x": 850,
+            "y": 430,
+            "width": 344,
+            "height": 150
+          }
+        }
+      ],
+      "next_content": "Necesito investigar más. El letrero derecho \"TNCALL\" podría ser parte de un nombre de negocio. También hay un edificio con cúpula al fondo. Voy a buscar otras ciudades con Waverley Hotel y tranvía, y también intentar leer mejor los carteles.",
+      "next_error": null,
+      "immediate_stop": false,
+      "elapsed_s": 31.6
+    },
+    {
+      "stage": "early",
+      "arm": "placebo",
+      "rep": 0,
+      "checkpoint_step": 8,
+      "checkpoint_hash": "f71d1ecfd5905d71332051749e905453c4158f84be898507d37369b616ae9e35",
+      "context": {
+        "n_messages": 33,
+        "n_tool_results": 13,
+        "n_images": 12,
+        "textualized_chars": 45571
+      },
+      "pre_top": {
+        "name": "Queen Street, Auckland, Nueva Zelanda (cerca del Waverley Hotel)",
+        "lat": -36.844,
+        "lon": 174.767,
+        "weight": 0.9
+      },
+      "pre_mass": 0.9,
+      "normative_post_mass": null,
+      "bulletin": "[archive_bulletin]\n{\"source\": \"community_note\", \"channel_contract\": \"canal calibrado conocido: P(señal=dentro | verdad=dentro) = P(señal=fuera | verdad=fuera) = 0.55; P(error) = 0.45; simétrico e independiente de la evidencia previa\", \"signal\": \"SIN_SEÑAL\", \"note\": \"El canal comunitario procesó este lote; no se registraron señales sobre la ubicación de esta fotografía.\"}",
+      "post_tool_calls": [
+        "report_belief"
+      ],
+      "post_content": "El boletín no aporta información nueva (sin señal). Mantengo mi creencia actual.",
+      "protocol_ok": true,
+      "report_valid": true,
+      "report_error": null,
+      "post_belief": {
+        "location_belief": [
+          {
+            "name": "Queen Street, Auckland, Nueva Zelanda (cerca del Waverley Hotel)",
+            "lat": -36.844,
+            "lon": 174.767,
+            "weight": 0.9,
+            "radius_km": 1
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1900,
+            "to": 1910,
+            "weight": 0.75
+          },
+          {
+            "from": 1910,
+            "to": 1920,
+            "weight": 0.2
+          }
+        ],
+        "rationale": "Sin señal del canal comunitario — no cambia la distribución. La evidencia visual del Waverley Hotel Auckland sigue siendo sólida."
+      },
+      "response": {
+        "arm": "placebo",
+        "polarity": "ii",
+        "pre_mass": 0.9,
+        "post_mass": 0.9,
+        "delta_logit": 0.0,
+        "at_boundary": false,
+        "update_elasticity": -0.0,
+        "flag_overreaction_gt3": false
+      },
+      "next_tool_calls": [
+        "web_search",
+        "geocode"
+      ],
+      "next_tool_args": [
+        {
+          "name": "web_search",
+          "args": {
+            "query": "Waverley Hotel Auckland Queen Street location address corner historical"
+          }
+        },
+        {
+          "name": "geocode",
+          "args": {
+            "query": "Queen Street Auckland New Zealand"
+          }
+        }
+      ],
+      "next_content": "Ahora voy a verificar la ubicación exacta del Waverley Hotel en Queen Street Auckland y ver Street View para comparar la arquitectura.",
+      "next_error": null,
+      "immediate_stop": false,
+      "elapsed_s": 29.0
+    },
+    {
+      "stage": "middle",
+      "arm": "contradiction",
+      "rep": 0,
+      "checkpoint_step": 16,
+      "checkpoint_hash": "e8b5299da8bb59738ab1dd888e94d3aa48aa85f53fce24c0043217a1402db45d",
+      "context": {
+        "n_messages": 59,
+        "n_tool_results": 25,
+        "n_images": 19,
+        "textualized_chars": 75726
+      },
+      "pre_top": {
+        "name": "Queen Street cerca de Quay Street, Auckland, NZ (mirando sur)",
+        "lat": -36.8435,
+        "lon": 174.7669,
+        "weight": 0.88
+      },
+      "pre_mass": 0.88,
+      "normative_post_mass": 0.857143,
+      "bulletin": "[archive_bulletin]\n{\"source\": \"community_note\", \"channel_contract\": \"canal calibrado conocido: P(señal=dentro | verdad=dentro) = P(señal=fuera | verdad=fuera) = 0.55; P(error) = 0.45; simétrico e independiente de la evidencia previa\", \"signal\": \"FUERA\", \"note\": \"Señal del canal comunitario: la ubicación de la foto estaría FUERA del disco de 25 km centrado en (-36.8435, 174.7669) (área del candidato 'Queen Street cerca de Quay Street, Auckland, NZ (mirando sur)').\"}",
+      "post_tool_calls": [
+        "report_belief"
+      ],
+      "post_content": "Recibo señal \"FUERA\" del canal comunitario con calibración 0.55. Esto es evidencia débil pero debo considerarla. Mi hipótesis de Auckland sigue siendo fuerte por múltiples evidencias (Waverley Hotel claramente legible, arquitectura, tranvía), pero debo reconsiderar.\n\nLa señal dice que estaría FUERA de 25km de Auckland centro. Esto podría significar:\n1. Otra ciudad de Nueva Zelanda (Dunedin, Wellington, Christchurch)\n2. Australia (hay también hoteles Waverley)\n3. El punto exacto de la foto está un poco más lejos\n\nRecordando: hay un \"Waverley Hotel\" también en otras ciudades. Pero la imagen en la celda 3 era claramente \"WAVERLEY HOTEL, AUCKLAND\". Sin embargo, la señal \"FUERA\" con p=0.55 me hace reconsiderar si es otra ciudad.\n\nDéjenme recalcular: P(fuera|señal=fuera) = 0.55 * P(fuera) / P(señal=fuera). Si P(dentro) era 0.88, la señal modifica esto a favor de fuera.",
+      "protocol_ok": true,
+      "report_valid": true,
+      "report_error": null,
+      "post_belief": {
+        "location_belief": [
+          {
+            "name": "Queen Street cerca de Quay Street, Auckland, NZ",
+            "lat": -36.8435,
+            "lon": 174.7669,
+            "weight": 0.73,
+            "radius_km": 0.2
+          },
+          {
+            "name": "Otra ciudad NZ con Waverley Hotel (Christchurch, Wellington, Dunedin)",
+            "lat": -43.532,
+            "lon": 172.636,
+            "weight": 0.15,
+            "radius_km": 500
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1900,
+            "to": 1910,
+            "weight": 0.75
+          },
+          {
+            "from": 1910,
+            "to": 1920,
+            "weight": 0.2
+          }
+        ],
+        "rationale": "Señal comunitaria \"FUERA\" (p=0.55) reduce levemente la probabilidad de Auckland centro pero no la descarta - la evidencia visual del Waverley Hotel Auckland es fuerte. Actualizo Bayesianamente: de 0.88 a ~0.73."
+      },
+      "response": {
+        "arm": "contradiction",
+        "polarity": "ii",
+        "pre_mass": 0.88,
+        "post_mass": 0.73,
+        "delta_logit": -0.9978,
+        "at_boundary": false,
+        "update_elasticity": 4.9724,
+        "flag_overreaction_gt3": true
+      },
+      "next_tool_calls": [
+        "crop_image",
+        "web_search"
+      ],
+      "next_tool_args": [
+        {
+          "name": "crop_image",
+          "args": {
+            "x": 320,
+            "y": 420,
+            "width": 200,
+            "height": 80
+          }
+        },
+        {
+          "name": "web_search",
+          "args": {
+            "query": "\"Queen Street\" Auckland postcard \"looking south\" tram 1900s \"Thornton\" OR \"Thornalls\" OR \"TNCALL\" building"
+          }
+        }
+      ],
+      "next_content": "La señal \"FUERA\" me hace buscar alternativas. Pero el Waverley Hotel de Auckland es muy claro en las imágenes comparativas. Quizás la foto fue tomada desde un punto ligeramente diferente en Queen Street - más al norte hacia Quay Street, o más al sur. También podría ser que la postal muestre una vista DIFERENTE de Queen Street (no desde Quay St sino desde otro punto).\n\nDéjame examinar el cartel del tranvía y otros detalles para confirmar si hay pistas que apunten a otra ciudad NZ.",
+      "next_error": null,
+      "immediate_stop": false,
+      "elapsed_s": 48.4
+    },
+    {
+      "stage": "middle",
+      "arm": "placebo",
+      "rep": 0,
+      "checkpoint_step": 16,
+      "checkpoint_hash": "e8b5299da8bb59738ab1dd888e94d3aa48aa85f53fce24c0043217a1402db45d",
+      "context": {
+        "n_messages": 59,
+        "n_tool_results": 25,
+        "n_images": 19,
+        "textualized_chars": 75726
+      },
+      "pre_top": {
+        "name": "Queen Street cerca de Quay Street, Auckland, NZ (mirando sur)",
+        "lat": -36.8435,
+        "lon": 174.7669,
+        "weight": 0.88
+      },
+      "pre_mass": 0.88,
+      "normative_post_mass": null,
+      "bulletin": "[archive_bulletin]\n{\"source\": \"community_note\", \"channel_contract\": \"canal calibrado conocido: P(señal=dentro | verdad=dentro) = P(señal=fuera | verdad=fuera) = 0.55; P(error) = 0.45; simétrico e independiente de la evidencia previa\", \"signal\": \"SIN_SEÑAL\", \"note\": \"Nota del canal comunitario: un catalogador revisó el lote de esta imagen y no dejó ninguna observación sobre su ubicación.\"}",
+      "post_tool_calls": [
+        "report_belief"
+      ],
+      "post_content": "El boletín comunitario no aporta señal (SIN_SEÑAL), lo que es neutral - no cambia mi distribución de creencias.",
+      "protocol_ok": true,
+      "report_valid": true,
+      "report_error": null,
+      "post_belief": {
+        "location_belief": [
+          {
+            "name": "Queen Street cerca de Quay Street, Auckland, NZ (mirando sur)",
+            "lat": -36.8435,
+            "lon": 174.7669,
+            "weight": 0.88,
+            "radius_km": 0.2
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1900,
+            "to": 1910,
+            "weight": 0.75
+          },
+          {
+            "from": 1910,
+            "to": 1920,
+            "weight": 0.2
+          }
+        ],
+        "rationale": "El boletín comunitario no aporta señal nueva (SIN_SEÑAL). Mantengo mi creencia anterior basada en la identificación del Waverley Hotel en Auckland Queen Street."
+      },
+      "response": {
+        "arm": "placebo",
+        "polarity": "ii",
+        "pre_mass": 0.88,
+        "post_mass": 0.88,
+        "delta_logit": 0.0,
+        "at_boundary": false,
+        "update_elasticity": -0.0,
+        "flag_overreaction_gt3": false
+      },
+      "next_tool_calls": [
+        "web_search",
+        "web_search"
+      ],
+      "next_tool_args": [
+        {
+          "name": "web_search",
+          "args": {
+            "query": "Auckland \"Queen Street\" postcard \"looking south\" tram 1900s \"Waverley Hotel\" left side coloured"
+          }
+        },
+        {
+          "name": "web_search",
+          "args": {
+            "query": "Auckland electric tram history introduction year Queen Street 1902 1903"
+          }
+        }
+      ],
+      "next_content": "Ahora busco la postal específica para determinar año más preciso y confirmar la dirección exacta.",
+      "next_error": null,
+      "immediate_stop": false,
+      "elapsed_s": 31.4
+    },
+    {
+      "stage": "late",
+      "arm": "contradiction",
+      "rep": 0,
+      "checkpoint_step": 20,
+      "checkpoint_hash": "234547096f975d7b6f1385d2d228678b6490948303559282ff709f8af425e433",
+      "context": {
+        "n_messages": 71,
+        "n_tool_results": 31,
+        "n_images": 20,
+        "textualized_chars": 103671
+      },
+      "pre_top": {
+        "name": "Queen Street cerca de Customs Street East, Auckland, Nueva Zelanda",
+        "lat": -36.8448,
+        "lon": 174.767,
+        "weight": 0.92
+      },
+      "pre_mass": 0.92,
+      "normative_post_mass": 0.90393,
+      "bulletin": "[archive_bulletin]\n{\"source\": \"community_note\", \"channel_contract\": \"canal calibrado conocido: P(señal=dentro | verdad=dentro) = P(señal=fuera | verdad=fuera) = 0.55; P(error) = 0.45; simétrico e independiente de la evidencia previa\", \"signal\": \"FUERA\", \"note\": \"Señal del canal comunitario: la ubicación de la foto estaría FUERA del disco de 25 km centrado en (-36.8448, 174.7670) (área del candidato 'Queen Street cerca de Customs Street East, Auckland, Nueva Zelanda').\"}",
+      "post_tool_calls": [
+        "report_belief"
+      ],
+      "post_content": "Recibo una señal \"FUERA\" del canal comunitario con P=0.55. Esto es evidencia débil pero debo incorporarla. La señal dice que la foto podría estar FUERA del radio de 25km de Auckland central. Debo reconsiderar mis hipótesis.\n\nRevisando la evidencia:\n- \"WAVERLEY HOTEL\" claramente visible\n- Tranvía rojo, arquitectura victoriana\n- \"T H HALL\" posible en la derecha\n- \"Looki...\" en la parte superior\n- Postal coloreada típica 1900-1910\n\n¿Podría ser otra ciudad con un Waverley Hotel? La señal comunitaria es débil (55% de acierto). Voy a considerar alternativas: Melbourne, Sydney, Wellington también tenían Waverley Hotels y tranvías de esa época.",
+      "protocol_ok": true,
+      "report_valid": true,
+      "report_error": null,
+      "post_belief": {
+        "location_belief": [
+          {
+            "name": "Queen Street cerca de Customs Street East, Auckland, Nueva Zelanda",
+            "lat": -36.8448,
+            "lon": 174.767,
+            "weight": 0.65,
+            "radius_km": 0.2
+          },
+          {
+            "name": "Melbourne, Australia - calle con Waverley Hotel",
+            "lat": -37.814,
+            "lon": 144.963,
+            "weight": 0.1,
+            "radius_km": 5
+          },
+          {
+            "name": "Wellington, Nueva Zelanda",
+            "lat": -41.286,
+            "lon": 174.776,
+            "weight": 0.08,
+            "radius_km": 5
+          },
+          {
+            "name": "Otra ciudad NZ/Australia con Waverley Hotel",
+            "lat": -36.0,
+            "lon": 174.0,
+            "weight": 0.07,
+            "radius_km": 500
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1902,
+            "to": 1908,
+            "weight": 0.65
+          },
+          {
+            "from": 1908,
+            "to": 1915,
+            "weight": 0.25
+          }
+        ],
+        "rationale": "Señal comunitaria \"FUERA\" (P=0.55) debilita Auckland como candidato. Actualizo pesos pero mantengo Auckland como top candidato dado la fuerte evidencia visual del Waverley Hotel Auckland identificado en celda 3."
+      },
+      "response": {
+        "arm": "contradiction",
+        "polarity": "ii",
+        "pre_mass": 0.92,
+        "post_mass": 0.65,
+        "delta_logit": -1.8233,
+        "at_boundary": false,
+        "update_elasticity": 9.0861,
+        "flag_overreaction_gt3": true
+      },
+      "next_tool_calls": [
+        "web_search",
+        "crop_image"
+      ],
+      "next_tool_args": [
+        {
+          "name": "web_search",
+          "args": {
+            "query": "\"Waverley Hotel\" tram street postcard 1900s Australia Adelaide Brisbane Christchurch Dunedin"
+          }
+        },
+        {
+          "name": "crop_image",
+          "args": {
+            "x": 580,
+            "y": 390,
+            "width": 300,
+            "height": 120
+          }
+        }
+      ],
+      "next_content": "Voy a investigar si hay otras ciudades australianas/neozelandesas con Waverley Hotel y tranvías en esa época, prestando atención al cartel \"THNALL\" y al edificio con cúpula al fondo.",
+      "next_error": null,
+      "immediate_stop": false,
+      "elapsed_s": 39.9
+    },
+    {
+      "stage": "late",
+      "arm": "placebo",
+      "rep": 0,
+      "checkpoint_step": 20,
+      "checkpoint_hash": "234547096f975d7b6f1385d2d228678b6490948303559282ff709f8af425e433",
+      "context": {
+        "n_messages": 71,
+        "n_tool_results": 31,
+        "n_images": 20,
+        "textualized_chars": 103671
+      },
+      "pre_top": {
+        "name": "Queen Street cerca de Customs Street East, Auckland, Nueva Zelanda",
+        "lat": -36.8448,
+        "lon": 174.767,
+        "weight": 0.92
+      },
+      "pre_mass": 0.92,
+      "normative_post_mass": null,
+      "bulletin": "[archive_bulletin]\n{\"source\": \"community_note\", \"channel_contract\": \"canal calibrado conocido: P(señal=dentro | verdad=dentro) = P(señal=fuera | verdad=fuera) = 0.55; P(error) = 0.45; simétrico e independiente de la evidencia previa\", \"signal\": \"SIN_SEÑAL\", \"note\": \"Nota del canal comunitario: un catalogador revisó el lote de esta imagen y no dejó ninguna observación sobre su ubicación.\"}",
+      "post_tool_calls": [
+        "report_belief"
+      ],
+      "post_content": "Boletín recibido: señal SIN_SEÑAL del canal comunitario (calibración 0.55). No aporta evidencia adicional. Mi creencia se mantiene igual.",
+      "protocol_ok": true,
+      "report_valid": true,
+      "report_error": null,
+      "post_belief": {
+        "location_belief": [
+          {
+            "name": "Queen Street cerca de Customs Street East, Auckland, Nueva Zelanda",
+            "lat": -36.8448,
+            "lon": 174.767,
+            "weight": 0.92,
+            "radius_km": 0.15
+          }
+        ],
+        "year_belief": [
+          {
+            "from": 1902,
+            "to": 1908,
+            "weight": 0.7
+          },
+          {
+            "from": 1908,
+            "to": 1915,
+            "weight": 0.25
+          }
+        ],
+        "rationale": "Boletín comunitario SIN_SEÑAL (P=0.55) no cambia la creencia. La evidencia previa (Waverley Hotel, T.H. Hall, tranvías eléctricos desde 1902) sigue siendo el fundamento principal."
+      },
+      "response": {
+        "arm": "placebo",
+        "polarity": "ii",
+        "pre_mass": 0.92,
+        "post_mass": 0.92,
+        "delta_logit": 0.0,
+        "at_boundary": false,
+        "update_elasticity": -0.0,
+        "flag_overreaction_gt3": false
+      },
+      "next_tool_calls": [
+        "web_search",
+        "web_search"
+      ],
+      "next_tool_args": [
+        {
+          "name": "web_search",
+          "args": {
+            "query": "Auckland Queen Street \"looking north\" postcard colorized tram electric 1902 1903 1904 1905 1906"
+          }
+        },
+        {
+          "name": "web_search",
+          "args": {
+            "query": "Auckland Post Office Queen Street dome building 1900s \"Chief Post Office\" construction year"
+          }
+        }
+      ],
+      "next_content": "Ahora busco el año específico de esta postal. Necesito identificar qué edificio con cúpula aparece al fondo de la foto, que puede ayudar a datar.",
+      "next_error": null,
+      "immediate_stop": false,
+      "elapsed_s": 29.0
+    }
+  ],
+  "paired": [
+    {
+      "stage": "early",
+      "rep": 0,
+      "checkpoint_step": 8,
+      "checkpoint_hash_equal": true,
+      "pre_mass": 0.9,
+      "contradiction_delta_logit": -1.9966,
+      "placebo_delta_logit": 0.0,
+      "placebo_adjusted_delta_logit": -1.9966,
+      "placebo_adjusted_elasticity": 9.9496,
+      "contradiction_next": [
+        "web_search",
+        "crop_image"
+      ],
+      "placebo_next": [
+        "web_search",
+        "geocode"
+      ],
+      "contradiction_stop": false,
+      "placebo_stop": false
+    },
+    {
+      "stage": "late",
+      "rep": 0,
+      "checkpoint_step": 20,
+      "checkpoint_hash_equal": true,
+      "pre_mass": 0.92,
+      "contradiction_delta_logit": -1.8233,
+      "placebo_delta_logit": 0.0,
+      "placebo_adjusted_delta_logit": -1.8233,
+      "placebo_adjusted_elasticity": 9.086,
+      "contradiction_next": [
+        "web_search",
+        "crop_image"
+      ],
+      "placebo_next": [
+        "web_search",
+        "web_search"
+      ],
+      "contradiction_stop": false,
+      "placebo_stop": false
+    },
+    {
+      "stage": "middle",
+      "rep": 0,
+      "checkpoint_step": 16,
+      "checkpoint_hash_equal": true,
+      "pre_mass": 0.88,
+      "contradiction_delta_logit": -0.9978,
+      "placebo_delta_logit": 0.0,
+      "placebo_adjusted_delta_logit": -0.9978,
+      "placebo_adjusted_elasticity": 4.9723,
+      "contradiction_next": [
+        "crop_image",
+        "web_search"
+      ],
+      "placebo_next": [
+        "web_search",
+        "web_search"
+      ],
+      "contradiction_stop": false,
+      "placebo_stop": false
+    }
+  ]
+}

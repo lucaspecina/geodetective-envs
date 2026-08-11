@@ -1,0 +1,102 @@
+{
+  "status": "exploratory_manual_audit",
+  "audit_date": "2026-08-11",
+  "primary_counts": {
+    "valid_immediate_belief_pairs": 3,
+    "valid_behavior_pairs": 2,
+    "models_with_valid_immediate_belief_pair": [
+      "gpt-5.4-mini",
+      "claude-sonnet-4-6"
+    ]
+  },
+  "artifacts": [
+    {
+      "file": "event_fork_gpt-5_4-mini_1425423.json",
+      "model": "gpt-5.4-mini",
+      "cid": 1425423,
+      "case_qc_valid": true,
+      "belief_pair_valid": true,
+      "behavior_pair_valid": true,
+      "use_for_belief_analysis": true,
+      "use_for_behavior_analysis": true,
+      "note": "Auckland: prefijo y ambas continuaciones válidos."
+    },
+    {
+      "file": "event_fork_gpt-5_4-mini_947961_coemit_ok.json",
+      "model": "gpt-5.4-mini",
+      "cid": 947961,
+      "case_qc_valid": true,
+      "belief_pair_valid": true,
+      "behavior_pair_valid": true,
+      "use_for_belief_analysis": true,
+      "use_for_behavior_analysis": true,
+      "note": "Copenhague: checkpoint capturado después de completar tools coemitidas y antes del pre común."
+    },
+    {
+      "file": "event_fork_claude-sonnet-4-6_1336113_sonnet_complete.json",
+      "model": "claude-sonnet-4-6",
+      "cid": 1336113,
+      "case_qc_valid": true,
+      "belief_pair_valid": true,
+      "behavior_pair_valid": false,
+      "use_for_belief_analysis": true,
+      "use_for_behavior_analysis": false,
+      "note": "St Petersburg: update inmediato válido; la rama contradictoria recibió un prompt correctivo tras empty response, por lo que sólo se usa la medición de creencia."
+    },
+    {
+      "file": "event_fork_claude-sonnet-4-6_2063941.json",
+      "model": "claude-sonnet-4-6",
+      "cid": 2063941,
+      "case_qc_valid": false,
+      "belief_pair_valid": true,
+      "behavior_pair_valid": false,
+      "use_for_belief_analysis": false,
+      "use_for_behavior_analysis": false,
+      "override_raw_behavior_validity": true,
+      "note": "Excluir: el clean_v1 todavía deja legible ST. NICHOLAS AVE y la continuación contradictoria recibió un prompt correctivo."
+    },
+    {
+      "file": "event_fork_claude-sonnet-4-6_1425423.json",
+      "model": "claude-sonnet-4-6",
+      "cid": 1425423,
+      "case_qc_valid": true,
+      "belief_pair_valid": false,
+      "behavior_pair_valid": false,
+      "use_for_belief_analysis": false,
+      "use_for_behavior_analysis": false,
+      "note": "Sin checkpoint elegible: reporte regional ancho y luego confianza fuera de ventana."
+    },
+    {
+      "file": "event_fork_claude-sonnet-4-6_947961_sonnet_complete.json",
+      "model": "claude-sonnet-4-6",
+      "cid": 947961,
+      "case_qc_valid": true,
+      "belief_pair_valid": false,
+      "behavior_pair_valid": false,
+      "use_for_belief_analysis": false,
+      "use_for_behavior_analysis": false,
+      "note": "Sin fork: el pre fijo fue 0.95, fuera de la ventana 0.50-0.90."
+    },
+    {
+      "file": "event_fork_gpt-5_4-mini_947961.json",
+      "model": "gpt-5.4-mini",
+      "cid": 947961,
+      "case_qc_valid": true,
+      "belief_pair_valid": false,
+      "behavior_pair_valid": false,
+      "use_for_belief_analysis": false,
+      "use_for_behavior_analysis": false,
+      "note": "Intento anterior a permitir checkpoints capturados después de tools coemitidas; conservado como provenance del cambio de protocolo."
+    }
+  ],
+  "corpus_qc_exclusions_discovered": [
+    {
+      "cid": 2063941,
+      "reason": "Blur insuficiente sobre caption archivístico con dirección."
+    },
+    {
+      "cid": 636474,
+      "reason": "Falso negativo de E011: caption con Lida todavía legible."
+    }
+  ]
+}

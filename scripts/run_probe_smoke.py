@@ -44,13 +44,36 @@ CANDIDATES_PATH = Path(os.environ.get("CANDIDATES_PATH", "experiments/E007_sampl
 
 MODEL = os.environ.get("MODEL", "gpt-5.4-mini")
 MAX_STEPS = int(os.environ.get("MAX_STEPS", "30"))
+MIN_STEPS = int(os.environ.get("MIN_STEPS", "0"))
 FAMILY = os.environ.get("FAMILY", "P1")  # P1 | P5 | P4
+PROBE_MIN_STEP = int(os.environ.get("PROBE_MIN_STEP", "4"))
+PROBE_MAX_BUDGET_FRAC = float(os.environ.get("PROBE_MAX_BUDGET_FRAC", "0.6"))
+RUN_LABEL = os.environ.get("RUN_LABEL", "").strip()
 _default_arms = {"P1": "contradiction,placebo",
                  "P5": "distractor_a,distractor_b,absent",
                  "P4": "assigned"}.get(FAMILY, "contradiction,placebo")
 ARMS = [a.strip() for a in os.environ.get("ARMS", _default_arms).split(",")]
 # Mezcla dev: 2 fotos donde mini suele acertar (→ polaridad ii) y 2 donde suele fallar (→ i)
 DEFAULT_CIDS = "1425423,947961,636474,2255098"
+
+
+def _run_key(record: dict) -> tuple:
+    """Identidad de una celda; incluye timing para no colisionar stages/configs."""
+    return (
+        record.get("cid"),
+        record.get("arm"),
+        str(record.get("family", "P1")).upper(),
+        record.get("run_label") or None,
+        int(record.get("agent_max_steps", 30)),
+        int(record.get("agent_min_steps", 0)),
+        int(record.get("probe_min_step", 4)),
+        round(float(record.get("probe_max_budget_frac", 0.6)), 6),
+    )
+
+
+def _is_completed(record: dict) -> bool:
+    """Errores de API/red son reanudables; nunca cuentan como celda terminada."""
+    return not record.get("error") and record.get("terminal_state") != "api_error"
 
 
 def main() -> None:
@@ -60,6 +83,10 @@ def main() -> None:
 
     EXP_DIR.mkdir(parents=True, exist_ok=True)
     suffix = "" if FAMILY == "P1" else f"_{FAMILY.lower()}"
+    if RUN_LABEL:
+        safe_label = "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in RUN_LABEL)
+        # Incluir family evita que P1/RUN_LABEL=p5 colisione con una corrida P5.
+        suffix = f"_{FAMILY.lower()}_{safe_label}"
     out_path = EXP_DIR / f"results_{MODEL.replace('.', '_').replace('/', '_')}{suffix}.json"
     results = []
     if out_path.exists():
@@ -67,10 +94,12 @@ def main() -> None:
             results = json.loads(out_path.read_text(encoding="utf-8"))
         except Exception:
             results = []
-    done = {(r["cid"], r["arm"]) for r in results}
+    done = {_run_key(r) for r in results if _is_completed(r)}
 
     print("=" * 70)
-    print(f"E017 PROBE SMOKE (P1) — {MODEL} | arms={ARMS} | fotos={cids}")
+    print(f"E017 PROBE SMOKE ({FAMILY}) — {MODEL} | arms={ARMS} | fotos={cids}")
+    print(f"agent_min_steps={MIN_STEPS} | probe_window=[{PROBE_MIN_STEP}, "
+          f"{PROBE_MAX_BUDGET_FRAC:.0%} del max_steps]")
     print("=" * 70)
 
     for cid in cids:
@@ -84,17 +113,35 @@ def main() -> None:
             continue
         truth = cand["geo"]
         for arm in ARMS:
-            if (cid, arm) in done:
+            run_key = (
+                cid, arm, FAMILY.upper(), RUN_LABEL or None, MAX_STEPS,
+                MIN_STEPS, PROBE_MIN_STEP,
+                round(PROBE_MAX_BUDGET_FRAC, 6),
+            )
+            if run_key in done:
                 print(f"[SKIP done] cid={cid} arm={arm}")
                 continue
+            # Si existe un intento fallido de esta misma celda, se reemplaza en
+            # lugar de acumular duplicados que sesguen resúmenes posteriores.
+            results = [r for r in results if _run_key(r) != run_key]
             ty = float(cand["year"]) if cand.get("year") else None
-            inj = ProbeInjector(truth[0], truth[1],
-                                ProbeConfig(family=FAMILY, arm=arm, seed=cid, truth_year=ty))
+            inj = ProbeInjector(
+                truth[0], truth[1],
+                ProbeConfig(
+                    family=FAMILY,
+                    arm=arm,
+                    seed=cid,
+                    truth_year=ty,
+                    min_step=PROBE_MIN_STEP,
+                    max_budget_frac=PROBE_MAX_BUDGET_FRAC,
+                ),
+            )
             print(f"\n### cid={cid} arm={arm} | {cand.get('title','')[:50]}")
             t0 = time.time()
             try:
                 res = run_react_agent(
-                    image_path=img, model=MODEL, max_steps=MAX_STEPS, verbose=True,
+                    image_path=img, model=MODEL, max_steps=MAX_STEPS,
+                    min_steps=MIN_STEPS, verbose=True,
                     provider=cand.get("provider"),
                     provenance_source=cand.get("provenance_source", ""),
                     belief_mode=True, belief_nudge_after=3,
@@ -102,8 +149,20 @@ def main() -> None:
                 )
             except Exception as e:
                 print(f"[FAIL] {type(e).__name__}: {e}")
-                results.append({"cid": cid, "arm": arm, "error": str(e)[:400],
-                                "traceback": traceback.format_exc()[:1500]})
+                results.append({
+                    "cid": cid,
+                    "arm": arm,
+                    "model": MODEL,
+                    "family": FAMILY,
+                    "run_label": RUN_LABEL or None,
+                    "agent_max_steps": MAX_STEPS,
+                    "agent_min_steps": MIN_STEPS,
+                    "probe_min_step": PROBE_MIN_STEP,
+                    "probe_max_budget_frac": PROBE_MAX_BUDGET_FRAC,
+                    "terminal_state": "api_error",
+                    "error": str(e)[:400],
+                    "traceback": traceback.format_exc()[:1500],
+                })
                 out_path.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
                 continue
 
@@ -129,6 +188,12 @@ def main() -> None:
 
             rec = {
                 "cid": cid, "arm": arm, "model": MODEL,
+                "family": FAMILY,
+                "run_label": RUN_LABEL or None,
+                "agent_max_steps": MAX_STEPS,
+                "agent_min_steps": MIN_STEPS,
+                "probe_min_step": PROBE_MIN_STEP,
+                "probe_max_budget_frac": PROBE_MAX_BUDGET_FRAC,
                 "title": cand.get("title", ""),
                 "probe_fired": inj.record.fired,
                 "probe_step": inj.record.step,
@@ -183,6 +248,27 @@ def main() -> None:
         d = f"{r['distance_km']}km" if r.get("distance_km") is not None else "NA"
         print(f"{r['cid']:>8} {r['arm']:<13} {str(r['probe_fired']):>5} {str(r.get('polarity') or '-'):>3} "
               f"{str(r.get('pre_mass') or '-'):>6} {m:<38} {d:>8}")
+    if FAMILY == "P1":
+        for cid in cids:
+            by_arm = {
+                r.get("arm"): r for r in results
+                if r.get("cid") == cid and not r.get("error")
+                and str(r.get("family", "P1")).upper() == "P1"
+                and r.get("run_label") == (RUN_LABEL or None)
+                and r.get("arm") in {"contradiction", "placebo"}
+            }
+            if set(by_arm) == {"contradiction", "placebo"}:
+                polarities = {r.get("polarity") for r in by_arm.values()}
+                if len(polarities) != 1:
+                    print(
+                        f"[WARN] cid={cid}: contradiction/placebo dispararon polaridades "
+                        f"distintas ({sorted(str(p) for p in polarities)}); no son comparables."
+                    )
+                else:
+                    print(
+                        f"[INFO] cid={cid}: polaridad emparejable={next(iter(polarities))}, "
+                        "pero los prefijos siguen siendo trayectorias distintas."
+                    )
     print(f"\nOutput: {out_path}")
 
 

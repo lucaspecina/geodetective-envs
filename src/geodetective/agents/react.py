@@ -596,6 +596,14 @@ def run_react_agent(
     tool_budget: Optional[float] = None,
     tool_costs: Optional[dict[str, float]] = None,
     probe_injector=None,
+    bulletin_mode: bool = False,
+    checkpoint_observer=None,
+    capture_runtime_state: bool = False,
+    resume_messages: Optional[list[dict]] = None,
+    resume_tools: Optional[list[dict]] = None,
+    start_step: int = 0,
+    continuation_steps: Optional[int] = None,
+    llm_temperature: Optional[float] = None,
 ) -> ReActResult:
     """Correr el agente ReAct con todas las tools.
 
@@ -621,7 +629,34 @@ def run_react_agent(
       DEFAULT_TOOL_COSTS). Se cobra al invocar (también si la tool falla). Agotado
       el budget, las tools pagas se bloquean; report_belief y submit_answer son
       gratis y nunca se bloquean. None = sin budget (comportamiento canónico).
+
+    Hooks experimentales (no alteran el default):
+    - `bulletin_mode=True` documenta los canales de probes desde step 0 sin
+      inyectar ninguno; sirve para obtener una trayectoria base para forks.
+    - `checkpoint_observer(payload)` recibe una copia del prefijo completo al
+      final de cada step que contuvo un `report_belief`. El payload incluye
+      mensajes, tools y nombres de tools coemitidas; el callback no se persiste.
+      Con `capture_runtime_state=True` agrega una copia del cache mutable de
+      image_search para aislar ramas que reutilicen un `search_id`. Si devuelve
+      exactamente `True`, el loop se detiene en ese prefijo ya completo; esto
+      evita gastar el resto de una trayectoria base una vez hallado el fork.
+    - `resume_messages` + `resume_tools` reanudan desde un prefijo ya válido;
+      `start_step` es la cantidad de turns ya consumidos. Se usa para forks
+      experimentales exactos. Por ahora no admite `tool_budget` porque el estado
+      económico previo no está serializado.
+      `continuation_steps=N` corta esa rama tras N turns sin fingir que agotó el
+      budget original (`terminal_state='continuation_horizon_reached'`).
+    - `llm_temperature` fija el sampling del loop; None conserva el default del
+      provider. Útil para que las continuaciones de forks usen la misma política.
     """
+    if (resume_messages is None) != (resume_tools is None):
+        raise ValueError("resume_messages y resume_tools deben pasarse juntos")
+    if start_step < 0 or start_step >= max_steps:
+        raise ValueError("start_step debe cumplir 0 <= start_step < max_steps")
+    if resume_messages is not None and tool_budget is not None:
+        raise ValueError("resume mode todavía no admite tool_budget")
+    if continuation_steps is not None and continuation_steps <= 0:
+        raise ValueError("continuation_steps debe ser positivo")
     sys_prompt = system_prompt if system_prompt is not None else SYSTEM_PROMPT
     if belief_mode:
         sys_prompt = sys_prompt + "\n\n" + BELIEF_PROMPT_SECTION
@@ -631,7 +666,7 @@ def run_react_agent(
     # Vice probes (codebook v1.1): la doc de boletines entra al prompt desde el
     # step 0 cuando hay injector — así el boletín nunca es una anomalía. En el
     # confirmatorio la doc va en TODAS las corridas (probe o no).
-    if probe_injector is not None:
+    if probe_injector is not None or bulletin_mode:
         from ..probes import BULLETIN_DOC
         sys_prompt = sys_prompt + "\n\n" + BULLETIN_DOC
     p4_mode = probe_injector is not None and getattr(probe_injector.config, "family", "") == "P4"
@@ -720,6 +755,10 @@ def run_react_agent(
     if p4_mode:
         from ..probes import REPORT_VERIFICATION_TOOL
         tools.append(REPORT_VERIFICATION_TOOL)
+    if resume_messages is not None:
+        # Copia defensiva: las dos ramas de un fork nunca deben contaminarse.
+        messages = copy.deepcopy(resume_messages)
+        tools = copy.deepcopy(resume_tools)
     result = ReActResult()
     result.budget_total = tool_budget
     target_path_str = str(image_path)  # para hash perceptual
@@ -727,7 +766,12 @@ def run_react_agent(
     empty_response_attempts = 0  # retry-once de turnos vacíos (glitch transitorio)
     awaiting_post_probe_report = False  # R6: tras un boletín, el PRÓXIMO acto debe ser report_belief
 
-    for step in range(max_steps):
+    loop_end = (
+        min(max_steps, start_step + continuation_steps)
+        if continuation_steps is not None else max_steps
+    )
+    for step in range(start_step, loop_end):
+        checkpoint_stop_requested = False
         # Sliding-window cleanup de imágenes acumuladas. Azure tiene un límite hard
         # de 50 imágenes por request (no por tokens). Cuando se acerca, eliminamos
         # las más viejas EXCEPTO la foto target (primera image_url del historial).
@@ -779,6 +823,9 @@ def run_react_agent(
             # max_completion_tokens=8000: Claude con thinking mode puede gastar ~2-3K
             # tokens en thinking antes de emitir tool_use/text. Con 3000 algunos
             # turnos quedaban en empty_response (claude-sonnet-4-6 E009 Basel + Tomsk).
+            sampling_kwargs = (
+                {"temperature": llm_temperature} if llm_temperature is not None else {}
+            )
             response = llm_complete(
                 model=model,
                 messages=messages,
@@ -786,6 +833,7 @@ def run_react_agent(
                 tool_choice="auto",
                 max_completion_tokens=8000,
                 timeout=180.0,
+                **sampling_kwargs,
             )
         except Exception as e:
             result.error = f"API call failed at step {step + 1}: {e}"
@@ -887,6 +935,8 @@ def run_react_agent(
         # Pending images to inject as user message after tool results
         pending_image_injections: list[tuple[str, list[dict]]] = []  # (label, content_parts)
         belief_reported_this_step = False
+        belief_report_this_step: Optional[dict] = None
+        tool_names_this_step = [tc.function.name for tc in (msg.tool_calls or [])]
         step_charge = 0.0
         abort_episode = False  # terminación dura (ej: invalid_submit ×3)
         pending_probe_bulletin: Optional[str] = None  # boletín de probe a entregar este step
@@ -1424,6 +1474,7 @@ def run_react_agent(
                     result.belief_report_count += 1
                     result.belief_reports.append({"step": step + 1, "belief": args})
                     belief_reported_this_step = True
+                    belief_report_this_step = copy.deepcopy(args)
                     n_loc = len(args.get("location_belief", []))
                     n_yr = len(args.get("year_belief", []))
                     top = ""
@@ -1439,7 +1490,25 @@ def run_react_agent(
                     result.trace.append({"step": step + 1, "type": "report_belief", "belief": args})
                     awaiting_post_probe_report = False  # el report inmediato llegó
                     # Vice probe: chequear elegibilidad y disparar boletín (una vez por corrida).
-                    if probe_injector is not None:
+                    coemitted_probe_tools = [
+                        name for name in tool_names_this_step if name != "report_belief"
+                    ]
+                    if probe_injector is not None and coemitted_probe_tools:
+                        # Si el report comparte turn con otra tool, el resultado de
+                        # esa tool llegaría junto con el boletín. El cambio posterior
+                        # mezclaría evidencia natural e intervención. Deferimos hasta
+                        # un checkpoint report-only para mantener identificabilidad.
+                        result.trace.append({
+                            "step": step + 1,
+                            "type": "probe_deferred_coemitted_tools",
+                            "coemitted_tools": coemitted_probe_tools,
+                        })
+                        if verbose:
+                            print(
+                                "     ↪ PROBE deferred: report coemitido con "
+                                f"{coemitted_probe_tools}"
+                            )
+                    elif probe_injector is not None:
                         bulletin = probe_injector.maybe_fire(args, step + 1, max_steps)
                         if bulletin:
                             pending_probe_bulletin = bulletin
@@ -1564,13 +1633,49 @@ def run_react_agent(
         if belief_mode:
             steps_since_belief = 0 if belief_reported_this_step else steps_since_belief + 1
 
-        if result.submit_called or abort_episode:
+        # Hook de prefix-fork: capturamos después de TODO el epílogo del step
+        # (tool results, imágenes, boletín/saldo y contadores). Así el historial
+        # es exactamente el que recibiría el siguiente turn.
+        if belief_report_this_step is not None and checkpoint_observer is not None:
+            try:
+                payload = {
+                    "step": step + 1,
+                    "belief": belief_report_this_step,
+                    "messages": copy.deepcopy(messages),
+                    "tools": copy.deepcopy(tools),
+                    "coemitted_tools": [n for n in tool_names_this_step if n != "report_belief"],
+                    "max_steps": max_steps,
+                    "runtime_counters": {
+                        "steps_since_belief": steps_since_belief,
+                        "empty_response_attempts": empty_response_attempts,
+                        "awaiting_post_probe_report": awaiting_post_probe_report,
+                        "budget_spent": result.budget_spent,
+                    },
+                }
+                if capture_runtime_state:
+                    from ..tools.image_search import _searches as _image_search_cache
+                    payload["runtime_state"] = {
+                        "image_search_cache": copy.deepcopy(_image_search_cache),
+                    }
+                checkpoint_stop_requested = checkpoint_observer(payload) is True
+                if checkpoint_stop_requested and result.terminal_state is None:
+                    result.terminal_state = "checkpoint_observer_stop"
+            except Exception as e:
+                result.trace.append({
+                    "step": step + 1,
+                    "type": "checkpoint_observer_error",
+                    "error": f"{type(e).__name__}: {e}",
+                })
+
+        if result.submit_called or abort_episode or checkpoint_stop_requested:
             break
 
     # Si salimos del loop sin terminal_state seteado, fue por max_steps.
     if result.terminal_state is None:
         if result.submit_called:
             result.terminal_state = "submitted"
+        elif continuation_steps is not None and loop_end < max_steps:
+            result.terminal_state = "continuation_horizon_reached"
         else:
             result.terminal_state = "max_steps_no_submit"
 

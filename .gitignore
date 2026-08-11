@@ -307,6 +307,20 @@ experiments/E016_belief_pilot/*
 !experiments/E016_belief_pilot/results_*.slim.json
 !experiments/E016_belief_pilot/digest.md
 
+# E018 temporal belief pilot (derivado reproducible y liviano de E016)
+!experiments/E018_temporal_belief_pilot/
+experiments/E018_temporal_belief_pilot/*
+!experiments/E018_temporal_belief_pilot/analysis.json
+!experiments/E018_temporal_belief_pilot/report.md
+!experiments/E018_temporal_belief_pilot/prefix_forks_*.json
+
+# E019 forks de evento fijo (trazas sin binarios, incluye descartes auditables)
+!experiments/E019_event_fork_pilot/
+experiments/E019_event_fork_pilot/*
+!experiments/E019_event_fork_pilot/event_fork_*.json
+!experiments/E019_event_fork_pilot/audit.json
+!experiments/E019_event_fork_pilot/README.md
+
 # Métricas agregadas
 !experiments/metrics_summary.json
 
